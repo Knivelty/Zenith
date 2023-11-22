@@ -1,6 +1,6 @@
 [package]
 cairo-version = "2.3.0"
-name = "dojo_examples"
+name = "loot_auto_chess"
 version = "0.3.12"
 
 [cairo]
