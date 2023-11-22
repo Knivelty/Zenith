@@ -1,4 +1,4 @@
-use dojo_examples::models::{Direction};
+use loot_auto_chess::models::{Direction};
 
 // define the interface
 #[starknet::interface]
@@ -11,8 +11,8 @@ trait IActions<TContractState> {
 #[dojo::contract]
 mod actions {
     use starknet::{ContractAddress, get_caller_address};
-    use dojo_examples::models::{Position, Moves, Direction, Vec2};
-    use dojo_examples::utils::next_position;
+    use loot_auto_chess::models::{Position, Moves, Direction, Vec2};
+    use loot_auto_chess::utils::next_position;
     use super::IActions;
 
     // declaring custom event struct
@@ -98,8 +98,8 @@ mod tests {
     use dojo::test_utils::{spawn_test_world, deploy_contract};
 
     // import models
-    use dojo_examples::models::{position, moves};
-    use dojo_examples::models::{Position, Moves, Direction, Vec2};
+    use loot_auto_chess::models::{position, moves};
+    use loot_auto_chess::models::{Position, Moves, Direction, Vec2};
 
     // import actions
     use super::{actions, IActionsDispatcher, IActionsDispatcherTrait};

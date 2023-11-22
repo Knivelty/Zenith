@@ -1,4 +1,4 @@
-use dojo_examples::models::{Position, Direction};
+use loot_auto_chess::models::{Position, Direction};
 
 fn next_position(mut position: Position, direction: Direction) -> Position {
     match direction {
