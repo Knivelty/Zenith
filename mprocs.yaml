@@ -1,0 +1,9 @@
+procs:
+  contracts:
+    cwd: packages/contracts
+    shell: pnpm wait-port 5050; sozo migrate
+  client:
+    cwd: packages/client
+    shell: pnpm run dev
+  katana:
+    shell: katana

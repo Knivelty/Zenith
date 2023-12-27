@@ -2,7 +2,7 @@ import { defineContractComponents } from "./contractComponents";
 import { world } from "./world";
 import { DojoProvider } from "@dojoengine/core";
 import { Account, num } from "starknet";
-import dev_manifest from "../../../dojo-starter/target/dev/manifest.json";
+import dev_manifest from "../../../contracts/target/dev/manifest.json";
 import * as torii from "@dojoengine/torii-client";
 import { createBurner } from "./createBurner";
 
