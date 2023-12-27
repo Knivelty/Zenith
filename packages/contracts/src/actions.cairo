@@ -1,4 +1,4 @@
-use loot_auto_chess::models::{Direction};
+use dojo_examples::models::{Direction};
 
 // define the interface
 #[starknet::interface]
@@ -11,8 +11,8 @@ trait IActions<TContractState> {
 #[dojo::contract]
 mod actions {
     use starknet::{ContractAddress, get_caller_address};
-    use loot_auto_chess::models::{Position, Moves, Direction, Vec2};
-    use loot_auto_chess::utils::next_position;
+    use dojo_examples::models::{Position, Moves, Direction, Vec2};
+    use dojo_examples::utils::next_position;
     use super::IActions;
 
     // declaring custom event struct
@@ -52,7 +52,7 @@ mod actions {
             set!(
                 world,
                 (
-                    Moves { player, remaining: 100, last_direction: Direction::None(()) },
+                    Moves { player, remaining: 100, last_direction: Direction::None },
                     Position { player, vec: Vec2 { x: 10, y: 10 } },
                 )
             );
@@ -98,8 +98,8 @@ mod tests {
     use dojo::test_utils::{spawn_test_world, deploy_contract};
 
     // import models
-    use loot_auto_chess::models::{position, moves};
-    use loot_auto_chess::models::{Position, Moves, Direction, Vec2};
+    use dojo_examples::models::{position, moves};
+    use dojo_examples::models::{Position, Moves, Direction, Vec2};
 
     // import actions
     use super::{actions, IActionsDispatcher, IActionsDispatcherTrait};
@@ -125,13 +125,13 @@ mod tests {
         actions_system.spawn();
 
         // call move with direction right
-        actions_system.move(Direction::Right(()));
+        actions_system.move(Direction::Right);
 
         // Check world state
         let moves = get!(world, caller, Moves);
 
         // casting right direction
-        let right_dir_felt: felt252 = Direction::Right(()).into();
+        let right_dir_felt: felt252 = Direction::Right.into();
 
         // check moves
         assert(moves.remaining == 99, 'moves is wrong');
