@@ -1,4 +1,7 @@
-use dojo_examples::models::{Position, Direction};
+use autochessia::models::{Position, Direction};
+use starknet::{ContractAddress};
+use core::poseidon::{PoseidonTrait};
+
 
 fn next_position(mut position: Position, direction: Direction) -> Position {
     match direction {
@@ -10,3 +13,11 @@ fn next_position(mut position: Position, direction: Direction) -> Position {
     };
     position
 }
+
+
+// fn generate_pseudo_random_address() -> ContractAddress {
+//     ContractAddress
+
+//     PoseidonTrait.new();
+// }
+

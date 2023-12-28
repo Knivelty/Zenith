@@ -1,18 +1,18 @@
-use dojo_examples::models::{Direction};
+use autochessia::models::{Direction, Creature, InningBattle};
 
 // define the interface
 #[starknet::interface]
 trait IActions<TContractState> {
     fn spawn(self: @TContractState);
-    fn move(self: @TContractState, direction: Direction);
+    // fn startBattle(self: @TContractState);
 }
 
 // dojo decorator
 #[dojo::contract]
-mod actions {
+mod home {
     use starknet::{ContractAddress, get_caller_address};
-    use dojo_examples::models::{Position, Moves, Direction, Vec2};
-    use dojo_examples::utils::next_position;
+    use autochessia::models::{Creature, Position, Piece, Player, Moves, Direction, Vec2};
+    use autochessia::utils::next_position;
     use super::IActions;
 
     // declaring custom event struct
@@ -31,14 +31,81 @@ mod actions {
 
     // impl: implement functions specified in trait
     #[external(v0)]
-    impl ActionsImpl of IActions<ContractState> {
+    impl HomeImpl of IActions<ContractState> {
         // ContractState is defined by system decorator expansion
         fn spawn(self: @ContractState) {
             // Access the world dispatcher for reading.
             let world = self.world_dispatcher.read();
 
+            // initialize creature, these can be moved to other place later
+            set!(
+                world,
+                (Creature {
+                    tier: 1,
+                    rarity: 1,
+                    internal_index: 1,
+                    health: 600,
+                    attack: 50,
+                    defense: 5,
+                    range: 1,
+                    speed: 101,
+                    movement: 4
+                })
+            );
+
             // Get the address of the current caller, possibly the player's address.
             let player = get_caller_address();
+
+            // spawn player
+            set!(
+                world,
+                (
+                    Player {
+                        player,
+                        health: 30,
+                        heroesCount: 1,
+                        inventoryCount: 0,
+                        heroAltarCount: 0,
+                        tier: 1,
+                        coin: 0,
+                        streakCount: 0,
+                        locked: 0
+                    },
+                    Piece {
+                        owner: player,
+                        index: 1,
+                        tier: 1,
+                        rarity: 1,
+                        internal_index: 1,
+                        x_board: 1,
+                        y_board: 1,
+                        x_in_battle: 0,
+                        y_in_battle: 0,
+                        currentHealth: 600
+                    }
+                )
+            );
+
+            // spawn player's
+            // set!(world, (InningBattle { index: 1, health: 30, heroesCount: 1 }),);
+
+            // spawn player's enemy
+
+            // create battle
+            // set!(
+            //     world,
+            //     (Player { player, health: 30, heroesCount: 1 }),
+            //     Piece {
+            //         owner: player,
+            //         index: 1,
+            //         tier: 1,
+            //         rarity: 1,
+            //         internal_index: 1,
+            //         x_board: 1,
+            //         y_board: 1,
+            //         currentHealth: 600
+            //     }
+            // );
 
             // Retrieve the player's current position from the world.
             let position = get!(world, player, (Position));
@@ -57,33 +124,6 @@ mod actions {
                 )
             );
         }
-
-        // Implementation of the move function for the ContractState struct.
-        fn move(self: @ContractState, direction: Direction) {
-            // Access the world dispatcher for reading.
-            let world = self.world_dispatcher.read();
-
-            // Get the address of the current caller, possibly the player's address.
-            let player = get_caller_address();
-
-            // Retrieve the player's current position and moves data from the world.
-            let (mut position, mut moves) = get!(world, player, (Position, Moves));
-
-            // Deduct one from the player's remaining moves.
-            moves.remaining -= 1;
-
-            // Update the last direction the player moved in.
-            moves.last_direction = direction;
-
-            // Calculate the player's next position based on the provided direction.
-            let next = next_position(position, direction);
-
-            // Update the world state with the new moves data and position.
-            set!(world, (moves, next));
-
-            // Emit an event to the world to notify about the player's move.
-            emit!(world, Moved { player, direction });
-        }
     }
 }
 
@@ -98,8 +138,8 @@ mod tests {
     use dojo::test_utils::{spawn_test_world, deploy_contract};
 
     // import models
-    use dojo_examples::models::{position, moves};
-    use dojo_examples::models::{Position, Moves, Direction, Vec2};
+    use autochessia::models::{position, moves};
+    use autochessia::models::{Position, Moves, Direction, Vec2};
 
     // import actions
     use super::{actions, IActionsDispatcher, IActionsDispatcherTrait};

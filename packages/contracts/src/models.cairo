@@ -1,5 +1,62 @@
 use starknet::ContractAddress;
 
+
+#[derive(Model, Drop, Serde)]
+struct Player {
+    #[key]
+    player: ContractAddress,
+    health: u8,
+    streakCount: u8,
+    coin: u8,
+    tier: u8,
+    locked: u8,
+    // dojo does not support array for now
+    heroesCount: u8,
+    heroAltarCount: u8,
+    inventoryCount: u8,
+}
+
+#[derive(Model, Drop, Serde)]
+struct Creature {
+    #[key]
+    tier: u8,
+    #[key]
+    rarity: u8,
+    #[key]
+    internal_index: u8,
+    health: u16,
+    attack: u8,
+    range: u8,
+    defense: u8,
+    speed: u16,
+    movement: u8,
+}
+
+#[derive(Model, Drop, Serde)]
+struct Piece {
+    #[key]
+    owner: ContractAddress,
+    #[key]
+    index: u8,
+    tier: u8,
+    rarity: u8,
+    internal_index: u8,
+    x_board: u8,
+    y_board: u8,
+    x_in_battle: u8,
+    y_in_battle: u8,
+    currentHealth: u16
+}
+
+#[derive(Model, Drop, Serde)]
+struct InningBattle {
+    #[key]
+    index: u256,
+    homwPlayer: ContractAddress,
+    awayPlayer: ContractAddress
+}
+
+
 #[derive(Serde, Copy, Drop, Introspect)]
 enum Direction {
     None,
