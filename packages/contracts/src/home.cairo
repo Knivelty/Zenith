@@ -127,7 +127,6 @@ mod home {
                 )
             );
             // create battle
-
             set!(world, (InningBattle { index: 1, homePlayer: player, awayPlayer: enemy }),);
         }
     }
@@ -144,54 +143,43 @@ mod tests {
     use dojo::test_utils::{spawn_test_world, deploy_contract};
 
     // import models
-    use autochessia::models::{position, moves};
+    use autochessia::models::{Player, player, Piece, piece, InningBattle, inning_battle};
     use autochessia::models::{Position, Moves, Direction, Vec2};
 
-    // import actions
+    // import home
     use super::{home, IHomeDispatcher, IHomeDispatcherTrait};
+
+    use debug::PrintTrait;
 
     #[test]
     #[available_gas(30000000)]
-    fn test_move() {
-        // caller
+    fn test_spwan() { // caller
         let caller = starknet::contract_address_const::<0x0>();
 
         // models
-        let mut models = array![position::TEST_CLASS_HASH, moves::TEST_CLASS_HASH];
+        let mut models = array![
+            player::TEST_CLASS_HASH, piece::TEST_CLASS_HASH, inning_battle::TEST_CLASS_HASH
+        ];
 
         // deploy world with models
         let world = spawn_test_world(models);
+        // deploy systems contract
+        let contract_address = world
+            .deploy_contract('salt', home::TEST_CLASS_HASH.try_into().unwrap());
+        let home_system = IHomeDispatcher { contract_address };
 
-        // // deploy systems contract
-        // let contract_address = world
-        //     .deploy_contract('salt', actions::TEST_CLASS_HASH.try_into().unwrap());
-        // let actions_system = IActionsDispatcher { contract_address };
-
-        // // call spawn()
-        // actions_system.spawn();
-
-        // // call move with direction right
-        // actions_system.move(Direction::Right);
+        // call spawn()
+        home_system.spawn();
 
         // Check world state
-        let moves = get!(world, caller, Moves);
+        let player = get!(world, caller, Player);
 
-        // casting right direction
-        let right_dir_felt: felt252 = Direction::Right.into();
+        // check health
+        assert(player.health == 30, 'health not right');
 
-        // check moves
-        assert(moves.remaining == 99, 'moves is wrong');
+        // check inning battle
+        let iBattle = get!(world, 1, InningBattle);
 
-        // check last direction
-        assert(moves.last_direction.into() == right_dir_felt, 'last direction is wrong');
-
-        // get new_position
-        let new_position = get!(world, caller, Position);
-
-        // check new position x
-        assert(new_position.vec.x == 11, 'position x is wrong');
-
-        // check new position y
-        assert(new_position.vec.y == 10, 'position y is wrong');
+        assert(iBattle.homePlayer == caller, 'home player not true');
     }
 }

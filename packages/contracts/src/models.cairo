@@ -51,7 +51,7 @@ struct Piece {
 #[derive(Model, Drop, Serde)]
 struct InningBattle {
     #[key]
-    index: u256,
+    index: u32,
     homePlayer: ContractAddress,
     awayPlayer: ContractAddress
 }
