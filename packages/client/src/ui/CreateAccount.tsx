@@ -11,8 +11,8 @@ export const CreateAccount = () => {
             }`}
         >
             <div className="self-center border-2 p-4">
-                <h3 className="text-3xl mb-2">RPS</h3>
-                <h5 className="text-xl mb-4">Eat to survive</h5>
+                <h3 className="text-3xl mb-2">Auto Chess Battle</h3>
+                {/* <h5 className="text-xl mb-4">Auto battle</h5> */}
                 <div>
                     <ClickWrapper>
                         <div className="flex space-x-3 justify-between p-2 flex-wrap">

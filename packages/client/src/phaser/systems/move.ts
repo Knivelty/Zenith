@@ -13,7 +13,7 @@ export const move = (layer: PhaserLayer) => {
     const {
         world,
         scenes: {
-            Main: { objectPool, camera },
+            Main: { objectPool },
         },
         networkLayer: {
             components: { Position },
@@ -56,7 +56,7 @@ export const move = (layer: PhaserLayer) => {
             id: "position",
             once: (sprite: any) => {
                 sprite.setPosition(pixelPosition?.x, pixelPosition?.y);
-                camera.centerOn(pixelPosition?.x, pixelPosition?.y);
+                // camera.centerOn(pixelPosition?.x, pixelPosition?.y);
             },
         });
     });

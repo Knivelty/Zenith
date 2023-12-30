@@ -36,7 +36,7 @@ export const Spawn = () => {
                     setLoggedIn();
                 }}
             >
-                Spawn
+                Start
             </Button>
         </div>
     );

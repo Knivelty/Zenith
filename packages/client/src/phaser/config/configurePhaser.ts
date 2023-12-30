@@ -19,10 +19,10 @@ import {
 const ANIMATION_INTERVAL = 200;
 
 const mainMap = defineMapConfig({
-    chunkSize: TILE_WIDTH * 64, // tile size * tile amount
+    chunkSize: TILE_WIDTH, // tile size * tile amount
     tileWidth: TILE_WIDTH,
     tileHeight: TILE_HEIGHT,
-    backgroundTile: [Tileset.Land],
+    backgroundTile: [Tileset.Land], // 4 is undefined
     animationInterval: ANIMATION_INTERVAL,
     tileAnimations: TileAnimations,
     layers: {
@@ -63,36 +63,36 @@ export const phaserConfig = {
                 },
             },
             animations: [
-                {
-                    key: Animations.RockIdle,
-                    assetKey: Assets.MainAtlas,
-                    startFrame: 0,
-                    endFrame: 0,
-                    frameRate: 6,
-                    repeat: -1,
-                    prefix: "sprites/rock/",
-                    suffix: ".png",
-                },
-                {
-                    key: Animations.ScissorsIdle,
-                    assetKey: Assets.MainAtlas,
-                    startFrame: 0,
-                    endFrame: 0,
-                    frameRate: 6,
-                    repeat: -1,
-                    prefix: "sprites/scissors/",
-                    suffix: ".png",
-                },
-                {
-                    key: Animations.PaperIdle,
-                    assetKey: Assets.MainAtlas,
-                    startFrame: 0,
-                    endFrame: 0,
-                    frameRate: 6,
-                    repeat: -1,
-                    prefix: "sprites/paper/",
-                    suffix: ".png",
-                },
+                // {
+                //     key: Animations.RockIdle,
+                //     assetKey: Assets.MainAtlas,
+                //     startFrame: 0,
+                //     endFrame: 0,
+                //     frameRate: 6,
+                //     repeat: -1,
+                //     prefix: "sprites/rock/",
+                //     suffix: ".png",
+                // },
+                // {
+                //     key: Animations.ScissorsIdle,
+                //     assetKey: Assets.MainAtlas,
+                //     startFrame: 0,
+                //     endFrame: 0,
+                //     frameRate: 6,
+                //     repeat: -1,
+                //     prefix: "sprites/scissors/",
+                //     suffix: ".png",
+                // },
+                // {
+                //     key: Animations.PaperIdle,
+                //     assetKey: Assets.MainAtlas,
+                //     startFrame: 0,
+                //     endFrame: 0,
+                //     frameRate: 6,
+                //     repeat: -1,
+                //     prefix: "sprites/paper/",
+                //     suffix: ".png",
+                // },
             ],
             tilesets: {
                 Default: {
@@ -105,7 +105,9 @@ export const phaserConfig = {
     },
     scale: defineScaleConfig({
         parent: "phaser-game",
-        zoom: 1,
+        zoom: 2,
+        height: "32rem",
+        width: "32rem",
         mode: Phaser.Scale.NONE,
     }),
     cameraConfig: defineCameraConfig({
@@ -114,5 +116,5 @@ export const phaserConfig = {
         maxZoom: 3,
         minZoom: 1,
     }),
-    cullingChunkSize: TILE_HEIGHT * 16,
+    cullingChunkSize: TILE_HEIGHT,
 };
