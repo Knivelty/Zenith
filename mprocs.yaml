@@ -7,3 +7,5 @@ procs:
     shell: pnpm run dev
   katana:
     shell: katana
+  torii:
+    shell: torii --world "0x30d87b1462e33becf675f22517d2ff6d6b3b00ace2217a629a7eab770e467bc"
