@@ -52,7 +52,7 @@ struct Piece {
 struct InningBattle {
     #[key]
     index: u256,
-    homwPlayer: ContractAddress,
+    homePlayer: ContractAddress,
     awayPlayer: ContractAddress
 }
 

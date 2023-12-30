@@ -1,6 +1,10 @@
+use core::option::OptionTrait;
+use core::traits::Into;
+use core::traits::TryInto;
 use autochessia::models::{Position, Direction};
-use starknet::{ContractAddress};
-use core::poseidon::{PoseidonTrait};
+use starknet::{ContractAddress, contract_address_try_from_felt252};
+use core::poseidon::{PoseidonTrait, poseidon_hash_span};
+use core::hash::{HashStateTrait, HashStateExTrait};
 
 
 fn next_position(mut position: Position, direction: Direction) -> Position {
@@ -15,9 +19,9 @@ fn next_position(mut position: Position, direction: Direction) -> Position {
 }
 
 
-// fn generate_pseudo_random_address() -> ContractAddress {
-//     ContractAddress
+fn generate_pseudo_random_address(seed: felt252) -> ContractAddress {
+    let hash = PoseidonTrait::new().update(seed).finalize();
 
-//     PoseidonTrait.new();
-// }
+    return hash.try_into().unwrap();
+}
 

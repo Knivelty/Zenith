@@ -1,19 +1,27 @@
 use autochessia::models::{Direction, Creature, InningBattle};
 
+
 // define the interface
 #[starknet::interface]
-trait IActions<TContractState> {
+trait IHome<TContractState> {
     fn spawn(self: @TContractState);
-    // fn startBattle(self: @TContractState);
+// fn startBattle(self: @TContractState);
 }
 
+use starknet::{ContractAddress, contract_address_try_from_felt252, get_caller_address};
+
+
 // dojo decorator
+
 #[dojo::contract]
 mod home {
     use starknet::{ContractAddress, get_caller_address};
-    use autochessia::models::{Creature, Position, Piece, Player, Moves, Direction, Vec2};
-    use autochessia::utils::next_position;
-    use super::IActions;
+    use autochessia::models::{
+        Creature, Position, Piece, Player, Moves, Direction, Vec2, InningBattle
+    };
+    use autochessia::utils::{next_position, generate_pseudo_random_address};
+    use dojo::base;
+    use super::IHome;
 
     // declaring custom event struct
     #[event]
@@ -31,7 +39,7 @@ mod home {
 
     // impl: implement functions specified in trait
     #[external(v0)]
-    impl HomeImpl of IActions<ContractState> {
+    impl HomeImpl of IHome<ContractState> {
         // ContractState is defined by system decorator expansion
         fn spawn(self: @ContractState) {
             // Access the world dispatcher for reading.
@@ -85,44 +93,42 @@ mod home {
                     }
                 )
             );
+            // get player's enemy address
 
-            // spawn player's
-            // set!(world, (InningBattle { index: 1, health: 30, heroesCount: 1 }),);
+            let enemy = generate_pseudo_random_address(1);
 
             // spawn player's enemy
-
-            // create battle
-            // set!(
-            //     world,
-            //     (Player { player, health: 30, heroesCount: 1 }),
-            //     Piece {
-            //         owner: player,
-            //         index: 1,
-            //         tier: 1,
-            //         rarity: 1,
-            //         internal_index: 1,
-            //         x_board: 1,
-            //         y_board: 1,
-            //         currentHealth: 600
-            //     }
-            // );
-
-            // Retrieve the player's current position from the world.
-            let position = get!(world, player, (Position));
-
-            // Retrieve the player's move data, e.g., how many moves they have left.
-            let moves = get!(world, player, (Moves));
-
-            // Update the world state with the new data.
-            // 1. Set players moves to 10
-            // 2. Move the player's position 100 units in both the x and y direction.
             set!(
                 world,
                 (
-                    Moves { player, remaining: 100, last_direction: Direction::None },
-                    Position { player, vec: Vec2 { x: 10, y: 10 } },
+                    Player {
+                        player: enemy,
+                        health: 30,
+                        heroesCount: 1,
+                        inventoryCount: 0,
+                        heroAltarCount: 0,
+                        tier: 1,
+                        coin: 0,
+                        streakCount: 0,
+                        locked: 0
+                    },
+                    Piece {
+                        owner: enemy,
+                        index: 1,
+                        tier: 1,
+                        rarity: 1,
+                        internal_index: 1,
+                        x_board: 1,
+                        y_board: 1,
+                        x_in_battle: 0,
+                        y_in_battle: 0,
+                        currentHealth: 600
+                    }
                 )
             );
+            // create battle
+
+            set!(world, (InningBattle { index: 1, homePlayer: player, awayPlayer: enemy }),);
         }
     }
 }
@@ -142,7 +148,7 @@ mod tests {
     use autochessia::models::{Position, Moves, Direction, Vec2};
 
     // import actions
-    use super::{actions, IActionsDispatcher, IActionsDispatcherTrait};
+    use super::{home, IHomeDispatcher, IHomeDispatcherTrait};
 
     #[test]
     #[available_gas(30000000)]
@@ -156,16 +162,16 @@ mod tests {
         // deploy world with models
         let world = spawn_test_world(models);
 
-        // deploy systems contract
-        let contract_address = world
-            .deploy_contract('salt', actions::TEST_CLASS_HASH.try_into().unwrap());
-        let actions_system = IActionsDispatcher { contract_address };
+        // // deploy systems contract
+        // let contract_address = world
+        //     .deploy_contract('salt', actions::TEST_CLASS_HASH.try_into().unwrap());
+        // let actions_system = IActionsDispatcher { contract_address };
 
-        // call spawn()
-        actions_system.spawn();
+        // // call spawn()
+        // actions_system.spawn();
 
-        // call move with direction right
-        actions_system.move(Direction::Right);
+        // // call move with direction right
+        // actions_system.move(Direction::Right);
 
         // Check world state
         let moves = get!(world, caller, Moves);
