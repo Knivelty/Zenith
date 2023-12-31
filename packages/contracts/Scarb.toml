@@ -8,6 +8,7 @@ sierra-replace-ids = true
 
 [dependencies]
 dojo = { git = "https://github.com/dojoengine/dojo", version = "0.4.1" }
+alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
 
 [[target.dojo]]
 
