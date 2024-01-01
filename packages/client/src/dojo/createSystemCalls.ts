@@ -17,11 +17,11 @@ export function createSystemCalls(
         }
     };
 
-    const move = async (props: MoveSystemProps) => {
-        const { signer, direction } = props;
+    const startBattle = async (props: SystemSigner) => {
+        const { signer } = props;
 
         try {
-            await execute(signer, "actions", "move", [direction]);
+            await execute(signer, "autochessia::home::home", "startBattle", []);
         } catch (e) {
             console.log(e);
         }
@@ -29,6 +29,6 @@ export function createSystemCalls(
 
     return {
         spawn,
-        move,
+        startBattle,
     };
 }

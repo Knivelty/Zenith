@@ -7,7 +7,7 @@ import {
 } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { Animations, TILE_HEIGHT, TILE_WIDTH } from "../config/constants";
+import { TILE_HEIGHT, TILE_WIDTH } from "../config/constants";
 
 export const move = (layer: PhaserLayer) => {
     const {
@@ -16,7 +16,7 @@ export const move = (layer: PhaserLayer) => {
             Main: { objectPool },
         },
         networkLayer: {
-            components: { Piece },
+            components: { Piece, InningBattle },
         },
     } = layer;
 

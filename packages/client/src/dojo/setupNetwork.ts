@@ -5,6 +5,7 @@ import { Account, num } from "starknet";
 import dev_manifest from "../../../contracts/target/dev/manifest.json";
 import * as torii from "@dojoengine/torii-client";
 import { createBurner } from "./createBurner";
+import { ApolloClient, InMemoryCache } from "@apollo/client/core";
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
@@ -27,6 +28,22 @@ export async function setupNetwork() {
         worldAddress: VITE_PUBLIC_WORLD_ADDRESS,
     });
 
+    const graphqlClient = new ApolloClient<any>({
+        uri: `${VITE_PUBLIC_TORII}/graphql`,
+        // temp disable cache
+        cache: new InMemoryCache(),
+        defaultOptions: {
+            watchQuery: {
+                fetchPolicy: "no-cache",
+                errorPolicy: "ignore",
+            },
+            query: {
+                fetchPolicy: "no-cache",
+                errorPolicy: "all",
+            },
+        },
+    });
+
     const { account, burnerManager } = await createBurner();
 
     return {
@@ -37,6 +54,7 @@ export async function setupNetwork() {
         world,
 
         toriiClient,
+        graphqlClient,
         account,
         burnerManager,
 

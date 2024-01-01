@@ -182,7 +182,7 @@ mod home {
             emit!(
                 world,
                 PieceAction {
-                    order: 5, player: player, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
+                    order: 5, player: player, pieceId: 1, to_x: 5, to_y: 4, attackPieceId: 1,
                 },
             );
 
@@ -196,7 +196,7 @@ mod home {
             emit!(
                 world,
                 PieceAction {
-                    order: 7, player: player, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
+                    order: 7, player: player, pieceId: 1, to_x: 5, to_y: 4, attackPieceId: 1,
                 },
             );
 
@@ -210,7 +210,7 @@ mod home {
             emit!(
                 world,
                 PieceAction {
-                    order: 9, player: player, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
+                    order: 9, player: player, pieceId: 1, to_x: 5, to_y: 4, attackPieceId: 1,
                 },
             );
 

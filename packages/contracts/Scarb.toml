@@ -16,7 +16,15 @@ alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria.g
 initializer_class_hash = "0xbeef"
 
 [tool.dojo.env]
-rpc_url = "http://localhost:5050/"
+
+# development
 # Default account for katana with seed = 0
+rpc_url = "http://localhost:5050/"
 account_address = "0x517ececd29116499f4a1b64b094da79ba08dfd54a3edaa316134c41f8160973"
 private_key = "0x1800000000300000180000000000030000000000003006001800006600"
+
+
+# cartridge slot
+# rpc_url = "https://api.cartridge.gg/x/autochessia/katana"
+# account_address = "0x203cc34ba8519b3e090ee9036ed5a2a476b42655f60891781a94620ec10c00c"
+# private_key = ""
