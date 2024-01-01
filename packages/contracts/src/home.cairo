@@ -23,19 +23,6 @@ mod home {
     use dojo::base;
     use super::IHome;
 
-    // declaring custom event struct
-    #[event]
-    #[derive(Drop, starknet::Event)]
-    enum Event {
-        Moved: Moved,
-    }
-
-    // declaring custom event struct
-    #[derive(Drop, starknet::Event)]
-    struct Moved {
-        player: ContractAddress,
-        direction: Direction
-    }
 
     // impl: implement functions specified in trait
     #[external(v0)]
@@ -44,6 +31,9 @@ mod home {
         fn spawn(self: @ContractState) {
             // Access the world dispatcher for reading.
             let world = self.world_dispatcher.read();
+
+            // Get the address of the current caller, possibly the player's address.
+            let player = get_caller_address();
 
             // initialize creature, these can be moved to other place later
             set!(
@@ -60,9 +50,6 @@ mod home {
                     movement: 4
                 }
             );
-
-            // Get the address of the current caller, possibly the player's address.
-            let player = get_caller_address();
 
             // spawn player
             set!(

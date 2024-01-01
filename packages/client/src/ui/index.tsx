@@ -12,5 +12,10 @@ export const UI = () => {
 
     if (!layers.networkLayer || !layers.phaserLayer) return <></>;
 
-    return <ChessMain />;
+    return (
+        <div>
+            <CreateAccount />
+            <ChessMain />
+        </div>
+    );
 };

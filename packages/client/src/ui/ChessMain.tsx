@@ -1,6 +1,6 @@
 export function ChessMain() {
     return (
-        <div className=" text-whit bg-[url('assets/bg.png')] bg-no-repeat bg-cover bg-center	 fixed w-full h-screen">
+        <div className="">
             {/* <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
     
           <div className="fixed left-4 bottom-32">
