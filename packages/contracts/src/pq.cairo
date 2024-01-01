@@ -1,10 +1,35 @@
 
-trait PQTrait<V, T> {
-    fn new() -> V;
-    fn is_empty(self: @V) -> bool;
-    fn add_task(ref self: V, data: T, priority: u64);
-    fn pop_task(ref self: V) -> T;
-    fn clear(ref self: V);
+trait PQTrait<PQ, T> {
+    /// Create a new priority queue.
+    /// Returns
+    /// * PQ The new priority queue instance.
+    fn new() -> PQ;
+
+    /// Returns true if the priority queue is empty.
+    /// Parameters
+    /// * self The priority queue instance.
+    /// Returns
+    /// * bool True if the priority queue is empty.
+    fn is_empty(self: @PQ) -> bool;
+
+    /// Add a task to the priority queue.
+    /// Parameters
+    /// * self The priority queue instance.
+    /// * data The data to add to the priority queue.
+    /// * priority The priority of the data.
+    fn add_task(ref self: PQ, data: T, priority: u64);
+
+    /// Pop the highest priority task from the priority queue.
+    /// Parameters
+    /// * self The priority queue instance.
+    /// Returns
+    /// * T The highest priority task with the lowest priority value.
+    fn pop_task(ref self: PQ) -> T;
+
+    /// Clear the priority queue.
+    /// Parameters
+    /// * self The priority queue instance.
+    fn clear(ref self: PQ);
 }
 
 struct PQ<T> {
@@ -119,7 +144,6 @@ impl PQU64Impl of PQTrait<PQU64, u64> {
 #[available_gas(2000000)]
 fn test_pq() {
     let mut pq = PQTrait::<PQ<u64>, u64>::new();
-    // let mut pq = PQU64Trait::new();
     assert!(pq.is_empty());
     pq.add_task(1, 1);
     pq.add_task(2, 2);
