@@ -1,8 +1,15 @@
 trait Array2WayTrait<A, T> {
-    /// Creates a new V instance.
+    /// Creates a new A instance.
     /// Returns
     /// * A The new array instance.
     fn new() -> A;
+
+    /// Creates a new A instance with specific length
+    /// Parameters
+    /// * length The length of the array.
+    /// Returns
+    /// * A The new array instance.
+    fn new_with_length(length: usize) -> A;
 
     /// Returns the item at the given index, or panics if the index is out of bounds.
     /// Parameters
@@ -78,6 +85,10 @@ impl DestructArray2Way<T, +Drop<T>, +Felt252DictValue<T>> of Destruct<Array2Way<
 impl Array2WayImpl<T, +Drop<T>, +Copy<T>, +Felt252DictValue<T>> of Array2WayTrait<Array2Way<T>, T> {
     fn new() -> Array2Way<T> {
         Array2Way { left: TWO_TO_32, right: TWO_TO_32, items: Default::default() }
+    }
+
+    fn new_with_length(length: usize) -> Array2Way<T> {
+        Array2Way { left: TWO_TO_32, right: integer::u64_wrapping_add(TWO_TO_32, length.into()), items: Default::default() }
     }
 
     fn get(ref self: Array2Way<T>, index: usize) -> T {
