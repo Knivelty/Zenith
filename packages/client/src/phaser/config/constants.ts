@@ -33,6 +33,7 @@ export const ImagePaths: { [key in RPSSprites]: string } = {
 export enum Assets {
     MainAtlas = "MainAtlas",
     Tileset = "Tileset",
+    Hero = "Hero",
 }
 
 export enum Direction {

@@ -5,7 +5,7 @@ use autochessia::models::{Direction, Creature, InningBattle};
 #[starknet::interface]
 trait IHome<TContractState> {
     fn spawn(self: @TContractState);
-// fn startBattle(self: @TContractState);
+    fn startBattle(self: @TContractState);
 }
 
 use starknet::{ContractAddress, contract_address_try_from_felt252, get_caller_address};
@@ -22,6 +22,27 @@ mod home {
     use autochessia::utils::{next_position, generate_pseudo_random_address};
     use dojo::base;
     use super::IHome;
+
+
+    // declaring custom event struct
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+        PieceAction: PieceAction,
+    }
+
+    // declaring custom event struct
+    #[derive(Drop, starknet::Event)]
+    struct PieceAction {
+        // key
+        player: ContractAddress,
+        pieceId: u8,
+        // action order of this battle
+        order: u8,
+        to_x: u8,
+        to_y: u8,
+        attackPieceId: u8,
+    }
 
 
     // impl: implement functions specified in trait
@@ -115,6 +136,90 @@ mod home {
             );
             // create battle
             set!(world, (InningBattle { index: 1, homePlayer: player, awayPlayer: enemy }),);
+        }
+
+        fn startBattle(self: @ContractState) {
+            // Access the world dispatcher for reading.
+            let world = self.world_dispatcher.read();
+
+            // Get the address of the current caller, possibly the player's address.
+            let player = get_caller_address();
+
+            // get inning inning battle
+            let inningBattle = get!(world, 1, InningBattle);
+
+            let enemy = inningBattle.awayPlayer;
+
+            // mock move and attack while JPS is not done yet
+            emit!(
+                world,
+                PieceAction {
+                    order: 1, player: player, pieceId: 1, to_x: 1, to_y: 1, attackPieceId: 0,
+                }
+            );
+
+            emit!(
+                world,
+                PieceAction {
+                    order: 2, player: enemy, pieceId: 1, to_x: 7, to_y: 7, attackPieceId: 0,
+                },
+            );
+
+            emit!(
+                world,
+                PieceAction {
+                    order: 3, player: player, pieceId: 1, to_x: 5, to_y: 1, attackPieceId: 0,
+                },
+            );
+
+            emit!(
+                world,
+                PieceAction {
+                    order: 4, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 0,
+                },
+            );
+
+            emit!(
+                world,
+                PieceAction {
+                    order: 5, player: player, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
+                },
+            );
+
+            emit!(
+                world,
+                PieceAction {
+                    order: 6, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
+                },
+            );
+
+            emit!(
+                world,
+                PieceAction {
+                    order: 7, player: player, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
+                },
+            );
+
+            emit!(
+                world,
+                PieceAction {
+                    order: 8, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
+                },
+            );
+
+            emit!(
+                world,
+                PieceAction {
+                    order: 9, player: player, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
+                },
+            );
+
+            emit!(
+                world,
+                PieceAction {
+                    order: 10, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
+                }
+            );
         }
     }
 }

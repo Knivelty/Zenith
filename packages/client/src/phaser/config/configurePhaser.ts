@@ -43,6 +43,11 @@ export const phaserConfig = {
                     key: Assets.Tileset,
                     path: "assets/tilesets/land.png",
                 },
+                [Assets.Hero]: {
+                    type: AssetType.Image,
+                    key: Assets.Hero,
+                    path: "assets/tilesets/land.png",
+                },
                 [Assets.MainAtlas]: {
                     type: AssetType.MultiAtlas,
                     key: Assets.MainAtlas,

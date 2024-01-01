@@ -16,33 +16,33 @@ export const move = (layer: PhaserLayer) => {
             Main: { objectPool },
         },
         networkLayer: {
-            components: { Position },
+            components: { Piece },
         },
     } = layer;
 
-    defineEnterSystem(world, [Has(Position)], ({ entity }: any) => {
-        const playerObj = objectPool.get(entity.toString(), "Sprite");
+    // defineEnterSystem(world, [Has(Piece)], ({ entity }: any) => {
+    //     const playerObj = objectPool.get(entity.toString(), "Sprite");
 
-        console.log(playerObj);
+    //     console.log(playerObj);
 
-        playerObj.setComponent({
-            id: "animation",
-            once: (sprite: any) => {
-                console.log(sprite);
-                sprite.play(Animations.RockIdle);
-            },
-        });
-    });
+    //     playerObj.setComponent({
+    //         id: "animation",
+    //         once: (sprite: any) => {
+    //             console.log(sprite);
+    //             sprite.play(Animations.RockIdle);
+    //         },
+    //     });
+    // });
 
-    defineSystem(world, [Has(Position)], ({ entity }: any) => {
-        console.log(entity);
+    defineSystem(world, [Has(Piece)], ({ entity }: any) => {
+        console.log("entity: ", entity);
 
-        const position = getComponentValueStrict(
-            Position,
+        const piece = getComponentValueStrict(
+            Piece,
             entity.toString() as Entity
         );
 
-        const offsetPosition = { x: position?.vec.x, y: position?.vec.y };
+        const offsetPosition = { x: piece.x_board, y: piece.y_board };
 
         const pixelPosition = tileCoordToPixelCoord(
             offsetPosition,
@@ -50,12 +50,16 @@ export const move = (layer: PhaserLayer) => {
             TILE_HEIGHT
         );
 
-        const player = objectPool.get(entity, "Sprite");
+        const hero = objectPool.get(entity, "Sprite");
 
-        player.setComponent({
-            id: "position",
-            once: (sprite: any) => {
+        hero.setComponent({
+            id: "piece",
+            once: (sprite: Phaser.GameObjects.Sprite) => {
                 sprite.setPosition(pixelPosition?.x, pixelPosition?.y);
+                // sprite.setTexture()
+                // sprite.ima
+                // sprite.set
+                // sprite
                 // camera.centerOn(pixelPosition?.x, pixelPosition?.y);
             },
         });
