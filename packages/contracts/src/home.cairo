@@ -48,7 +48,7 @@ mod home {
             // initialize creature, these can be moved to other place later
             set!(
                 world,
-                (Creature {
+                Creature {
                     tier: 1,
                     rarity: 1,
                     internal_index: 1,
@@ -58,7 +58,7 @@ mod home {
                     range: 1,
                     speed: 101,
                     movement: 4
-                })
+                }
             );
 
             // Get the address of the current caller, possibly the player's address.
