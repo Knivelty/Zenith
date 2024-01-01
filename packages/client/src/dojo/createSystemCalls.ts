@@ -11,7 +11,7 @@ export function createSystemCalls(
     const spawn = async (props: SystemSigner) => {
         console.log(props.signer);
         try {
-            await execute(props.signer, "actions", "spawn", []);
+            await execute(props.signer, "autochessia::home::home", "spawn", []);
         } catch (e) {
             console.error(e);
         }
