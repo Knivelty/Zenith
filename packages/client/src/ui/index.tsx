@@ -1,4 +1,5 @@
 import { store } from "../store";
+import { ChessMain } from "./ChessMain";
 import { CreateAccount } from "./CreateAccount";
 
 export const UI = () => {
@@ -11,9 +12,5 @@ export const UI = () => {
 
     if (!layers.networkLayer || !layers.phaserLayer) return <></>;
 
-    return (
-        <div className="absolute inset-0 pointer-events-none">
-            <CreateAccount />
-        </div>
-    );
+    return <ChessMain />;
 };

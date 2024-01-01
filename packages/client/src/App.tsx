@@ -17,13 +17,13 @@ function App() {
 
     return (
         <div>
-            <div className="w-full h-screen bg-black text-white flex justify-center">
+            <div className="w-full h-screen bg-black text-white flex justify-center fixed">
                 <div className="self-center">
                     {!networkLayer && "loading..."}
                 </div>
             </div>
-            <PhaserLayer networkLayer={networkLayer} />
             <UI />
+            <PhaserLayer networkLayer={networkLayer} />
         </div>
     );
 }
