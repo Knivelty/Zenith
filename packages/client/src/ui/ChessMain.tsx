@@ -1,14 +1,14 @@
 import { Button } from "./button";
 import { useDojo } from "./hooks/useDojo";
 
-export function ChessMain() {
+export function ChessMain({fn}) {
     const {
         account: { account },
         systemCalls: { spawn, startBattle },
     } = useDojo();
 
     return (
-        <div className="absolute space-x-3 justify-between p-2 flex-wrap">
+        <div className="absolute flex-wrap justify-between p-2 space-x-3">
             {/* <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
     
           <div className="fixed left-4 bottom-32">
@@ -27,6 +27,7 @@ export function ChessMain() {
                     await startBattle({
                         signer: account,
                     });
+                    fn();
                 }}
             >
                 start battle

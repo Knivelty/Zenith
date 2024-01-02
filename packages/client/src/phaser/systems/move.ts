@@ -35,33 +35,33 @@ export const move = (layer: PhaserLayer) => {
     // });
 
     defineSystem(world, [Has(Piece)], ({ entity }: any) => {
-        console.log("entity: ", entity);
+        // console.log("entity: ", entity);
 
-        const piece = getComponentValueStrict(
-            Piece,
-            entity.toString() as Entity
-        );
+        // const piece = getComponentValueStrict(
+        //     Piece,
+        //     entity.toString() as Entity
+        // );
 
-        const offsetPosition = { x: piece.x_board, y: piece.y_board };
+        // const offsetPosition = { x: piece.x_board, y: piece.y_board };
 
-        const pixelPosition = tileCoordToPixelCoord(
-            offsetPosition,
-            TILE_WIDTH,
-            TILE_HEIGHT
-        );
+        // const pixelPosition = tileCoordToPixelCoord(
+        //     offsetPosition,
+        //     TILE_WIDTH,
+        //     TILE_HEIGHT
+        // );
 
-        const hero = objectPool.get(entity, "Sprite");
+        // const hero = objectPool.get(entity, "Sprite");
 
-        hero.setComponent({
-            id: "piece",
-            once: (sprite: Phaser.GameObjects.Sprite) => {
-                sprite.setPosition(pixelPosition?.x, pixelPosition?.y);
-                // sprite.setTexture()
-                // sprite.ima
-                // sprite.set
-                // sprite
-                // camera.centerOn(pixelPosition?.x, pixelPosition?.y);
-            },
-        });
+        // hero.setComponent({
+        //     id: "piece",
+        //     once: (sprite: Phaser.GameObjects.Sprite) => {
+        //         sprite.setPosition(pixelPosition?.x, pixelPosition?.y);
+        //         // sprite.setTexture()
+        //         // sprite.ima
+        //         // sprite.set
+        //         // sprite
+        //         // camera.centerOn(pixelPosition?.x, pixelPosition?.y);
+        //     },
+        // });
     });
 };

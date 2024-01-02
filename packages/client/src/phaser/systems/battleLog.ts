@@ -86,7 +86,7 @@ export async function battleLog(layer: PhaserLayer) {
             round: 1,
             monster: [
                 { id: 1, owner: true, hp: 300, x: 1, y: 1 },
-                { id: 1, owner: false, hp: 300, x: 7, y: 7 },
+                { id: 2, owner: false, hp: 300, x: 7, y: 7 },
             ],
         },
         {
@@ -94,7 +94,7 @@ export async function battleLog(layer: PhaserLayer) {
             round: 1,
             monster: [
                 { id: 1, owner: true, hp: 300, x: 5, y: 1 },
-                { id: 1, owner: false, hp: 300, x: 7, y: 7 },
+                { id: 2, owner: false, hp: 300, x: 7, y: 7 },
             ],
         },
         {
@@ -102,7 +102,7 @@ export async function battleLog(layer: PhaserLayer) {
             round: 1,
             monster: [
                 { id: 1, owner: true, hp: 300, x: 5, y: 1 },
-                { id: 1, owner: false, hp: 300, x: 5, y: 5 },
+                { id: 2, owner: false, hp: 300, x: 5, y: 2 },
             ],
         },
         {
@@ -110,7 +110,7 @@ export async function battleLog(layer: PhaserLayer) {
             round: 1,
             monster: [
                 { id: 1, owner: true, hp: 300, x: 5, y: 4 },
-                { id: 1, owner: false, hp: 250, x: 5, y: 5 },
+                { id: 2, owner: false, hp: 250, x: 5, y: 2 },
             ],
         },
         {
@@ -118,7 +118,7 @@ export async function battleLog(layer: PhaserLayer) {
             round: 1,
             monster: [
                 { id: 1, owner: true, hp: 250, x: 5, y: 4 },
-                { id: 1, owner: false, hp: 250, x: 5, y: 5 },
+                { id: 2, owner: false, hp: 250, x: 5, y: 2 },
             ],
         },
         {
@@ -126,7 +126,7 @@ export async function battleLog(layer: PhaserLayer) {
             round: 1,
             monster: [
                 { id: 1, owner: true, hp: 250, x: 5, y: 4 },
-                { id: 1, owner: false, hp: 200, x: 5, y: 5 },
+                { id: 2, owner: false, hp: 200, x: 5, y: 2 },
             ],
         },
         {
@@ -134,7 +134,7 @@ export async function battleLog(layer: PhaserLayer) {
             round: 1,
             monster: [
                 { id: 1, owner: true, hp: 200, x: 5, y: 4 },
-                { id: 1, owner: false, hp: 200, x: 5, y: 5 },
+                { id: 2, owner: false, hp: 200, x: 5, y: 2 },
             ],
         },
         {
@@ -142,7 +142,7 @@ export async function battleLog(layer: PhaserLayer) {
             round: 1,
             monster: [
                 { id: 1, owner: true, hp: 200, x: 5, y: 4 },
-                { id: 1, owner: false, hp: 150, x: 5, y: 5 },
+                { id: 2, owner: false, hp: 150, x: 5, y: 2 },
             ],
         },
         {
@@ -150,7 +150,7 @@ export async function battleLog(layer: PhaserLayer) {
             round: 1,
             monster: [
                 { id: 1, owner: true, hp: 150, x: 5, y: 4 },
-                { id: 1, owner: false, hp: 150, x: 5, y: 5 },
+                { id: 2, owner: false, hp: 150, x: 5, y: 2 },
             ],
         },
         {
@@ -158,7 +158,7 @@ export async function battleLog(layer: PhaserLayer) {
             round: 1,
             monster: [
                 { id: 1, owner: true, hp: 150, x: 5, y: 4 },
-                { id: 1, owner: false, hp: 100, x: 5, y: 5 },
+                { id: 2, owner: false, hp: 100, x: 5, y: 2 },
             ],
         },
         {
@@ -166,7 +166,7 @@ export async function battleLog(layer: PhaserLayer) {
             round: 1,
             monster: [
                 { id: 1, owner: true, hp: 100, x: 5, y: 4 },
-                { id: 1, owner: false, hp: 100, x: 5, y: 5 },
+                { id: 2, owner: false, hp: 100, x: 5, y: 2 },
             ],
         },
         {
@@ -174,7 +174,7 @@ export async function battleLog(layer: PhaserLayer) {
             round: 1,
             monster: [
                 { id: 1, owner: true, hp: 100, x: 5, y: 4 },
-                { id: 1, owner: false, hp: 50, x: 5, y: 5 },
+                { id: 2, owner: false, hp: 50, x: 5, y: 2 },
             ],
         },
         {
@@ -182,7 +182,7 @@ export async function battleLog(layer: PhaserLayer) {
             round: 1,
             monster: [
                 { id: 1, owner: true, hp: 50, x: 5, y: 4 },
-                { id: 1, owner: false, hp: 50, x: 5, y: 5 },
+                { id: 2, owner: false, hp: 50, x: 5, y: 2 },
             ],
         },
         {
@@ -190,7 +190,7 @@ export async function battleLog(layer: PhaserLayer) {
             round: 1,
             monster: [
                 { id: 1, owner: true, hp: 50, x: 5, y: 4 },
-                { id: 1, owner: false, hp: 0, x: 5, y: 5 },
+                { id: 2, owner: false, hp: 0, x: 5, y: 2 },
             ],
         },
     ];

@@ -19,7 +19,7 @@ const createContainer = () => {
 
 export const usePhaserLayer = ({ networkLayer }: Props) => {
     const parentRef = useRef<HTMLElement | null>(null);
-    const [{ width, height }] = useState({ width: 0, height: 0 });
+    const [{ width, height }] = useState({ width: 512, height: 512 });
 
     const { phaserLayerPromise, container } = useMemo(() => {
         if (!networkLayer) return { container: null, phaserLayerPromise: null };

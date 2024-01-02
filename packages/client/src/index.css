@@ -74,3 +74,61 @@
         @apply bg-background text-foreground;
     }
 }
+.mainBoard{
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        width: 32rem;
+        transform: translateX(-50%);
+        height: 32rem;
+}
+
+.monster {
+    position: absolute;
+    /* top: "26%";
+    left: "70%"; */
+    width:64px;
+    height:64px;
+    pointer-events: none;
+    transition: 2s;
+    background-size: 128px 64px;
+    background-image: url('assets/id-1.png');
+    background-repeat: no-repeat;
+    animation: monster-id1-animation 1s steps(1) infinite;
+}
+
+.monster2{
+    background-image: url('assets/id-2.png');
+
+}
+
+@keyframes monster-id1-animation {
+    0% { background-position: 0 0; }
+    50% { background-position: -64px 0; }
+}
+
+.health-bar-container {
+    width: 64px; /* 血条容器的宽度 */
+    height: 10px; /* 血条容器的高度 */
+    border: 2px solid #000; /* 边框 */
+    background-color: #fff; /* 背景色 */
+    border-radius: 5px; /* 边框圆角 */
+    position: absolute;
+}
+
+.health-bar {
+    height: 100%; /* 血条高度充满容器 */
+    width: 100%; /* 初始宽度为100% */
+    background-color: #f00; /* 血条颜色 */
+    border-radius: 3px; /* 血条边框圆角 */
+    text-align: center; /* 文本居中 */
+    line-height: 30px; /* 行高与容器高度相同以垂直居中文本 */
+    color: white; /* 文本颜色 */
+    transition: width 0.5s; /* 宽度变化的过渡效果 */
+}
+
+.health-bar2{
+    background-color: yellow; /* 血条颜色 */
+
+}
+

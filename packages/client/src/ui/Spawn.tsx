@@ -25,7 +25,7 @@ export const Spawn = () => {
     }
 
     return (
-        <div className="flex space-x-3 justify-between p-2 flex-wrap">
+        <div className="relative z-10 flex flex-wrap justify-between p-2 space-x-3">
             <Button
                 variant={"default"}
                 onClick={async () => {
