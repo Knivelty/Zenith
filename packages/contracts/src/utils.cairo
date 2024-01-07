@@ -38,9 +38,9 @@ fn two_to(mut power: usize) -> felt252 {
     result
 }
 
-fn exp_256(mut power: usize) -> felt252 {
-    assert(power < 32, 'Power too large');
-    let mut result = 1;
+fn exp_256(mut power: usize) -> u128 {
+    assert(power < 16, 'Power too large');
+    let mut result = 1_u128;
     loop {
         if power == 0 {
             break;
