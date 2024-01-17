@@ -25,3 +25,29 @@ fn generate_pseudo_random_address(seed: felt252) -> ContractAddress {
     return hash.try_into().unwrap();
 }
 
+fn two_to(mut power: usize) -> felt252 {
+    assert(power < 252, 'Power too large');
+    let mut result = 1;
+    loop {
+        if power == 0 {
+            break;
+        }
+        result *= 2;
+        power = integer::u32_wrapping_sub(power, 1);
+    };
+    result
+}
+
+fn exp_256(mut power: usize) -> u128 {
+    assert(power < 16, 'Power too large');
+    let mut result = 1_u128;
+    loop {
+        if power == 0 {
+            break;
+        }
+        result *= 256;
+        power = integer::u32_wrapping_sub(power, 1);
+    };
+    result
+}
+
