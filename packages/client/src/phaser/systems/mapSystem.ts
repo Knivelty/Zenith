@@ -23,7 +23,7 @@ export function mapSystem(layer: PhaserLayer) {
             //         100
             // );
 
-            putTileAt(coord, Tileset.Board, "Foreground");
+            putTileAt(coord, Tileset.Land, "Foreground");
         }
     }
 }
