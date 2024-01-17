@@ -1,149 +1,198 @@
+use autochessia::array2d::{Array2DTrait, Array2D};
 use autochessia::array2w::{Array2WayTrait, Array2Way, SimpleU8Array2Way};
-use autochessia::utils::exp_256;
 
-trait BoardTrait<B, T> {
-    fn new(x: usize, y: usize) -> B;
-    fn get(ref self: B, x: usize, y: usize) -> T;
-    fn len_x(ref self: B) -> usize;
-    fn len_y(ref self: B) -> usize;
-    fn set(ref self: B, x: usize, y: usize, val: T);
+trait ChessBoardTrait<CB, P> {
+    fn new(x: usize, y: usize, empty: P, boarder: P) -> CB;
+    fn get_empty(self: @CB) -> P;
+    fn get_boarder(self: @CB) -> P;
+    fn len(ref self: CB) -> (usize, usize);
+    fn get_piece(ref self: CB, x: usize, y: usize) -> P;
+    fn set_piece(ref self: CB, x: usize, y: usize, piece: P);
 }
 
-trait PathableBoardTrait<B, T, impl BoardImpl: BoardTrait<B, T>> {
-    fn add_borders(ref self: B) -> B;
-}
-
-impl BoardIndex<B, T, impl BoardTraitImpl: BoardTrait<B, T>> of Index<B, (usize, usize), T> {
+impl ChessBoardIndex<CB, P, +ChessBoardTrait<CB, P>> of Index<CB, (usize, usize), P> {
     #[inline(always)]
-    fn index(ref self: B, index: (usize, usize)) -> T {
+    fn index(ref self: CB, index: (usize, usize)) -> P {
         let (x, y) = index;
-        self.get(x, y)
+        self.get_piece(x, y)
     }
 }
 
-// type ColumnU128 = u128;
-
-// impl ColumnIndex of Index<ColumnU128, usize, u8> {
-//     #[inline(always)]
-//     fn index(ref self: ColumnU128, index: usize) -> u8 {
-//         self.get_y(index)
-//     }
-// }
-
-// #[generate_trait]
-// impl ChessColumnTrait of ColumnTrait {
-//     fn new_column() -> ColumnU128 {
-//         0_u128
-//     }
-
-//     fn get_y(ref self: ColumnU128, y: usize) -> u8 {
-//         assert(y < 16, 'Index out of bounds');
-//         let divisor: u128 = exp_256(y);
-//         ((self / divisor) % 0x100).try_into().unwrap()
-//     }
-
-//     fn len_y(self: @ColumnU128) -> usize {
-//         16
-//     }
-
-//     fn set_y(ref self: ColumnU128, y: usize, val: u8) {
-//         let original = self.get_y(y);
-//         let divisor = exp_256(y);
-//         let left = integer::u128_wrapping_sub(self, original.into() * divisor);
-//         self = integer::u128_wrapping_add(left, val.into() * divisor);
-//     }
-// }
-
-#[derive(Destruct)]
-struct ChessBoard {
-    board: Array2Way<Nullable<SimpleU8Array2Way>>,
-    // x == board.len(),
-    y: usize,
+trait ChessBoardUtilsTrait<CB, P> {
+    fn is_empty(ref self: CB, x: usize, y: usize) -> bool;
+    fn is_boarder(ref self: CB, x: usize, y: usize) -> bool;
+    fn remove_piece(ref self: CB, x: usize, y: usize);
+    fn move_piece(ref self: CB, from: (usize, usize), to: (usize, usize));
+    fn find_path_jps(ref self: CB, start: (usize, usize), end: (usize, usize)) -> Span<u64>;
 }
 
-impl ChessBoardImpl of BoardTrait<ChessBoard, u8> {
-    fn new(x: usize, y: usize) -> ChessBoard {
-        assert(x <= 16 && x > 0, 'Invalid argument x');
-        assert(y <= 16 && y > 0, 'Invalid argument y');
+impl ChessBoardUtils<CB, P, +Drop<P>, +Copy<P>, +PartialEq<P>, +ChessBoardTrait<CB, P>, +Destruct<CB>> of ChessBoardUtilsTrait<CB, P> {
+    fn is_empty(ref self: CB, x: usize, y: usize) -> bool {
+        self.get_piece(x, y) == self.get_empty()
+    }
+
+    fn is_boarder(ref self: CB, x: usize, y: usize) -> bool {
+        self.get_piece(x, y) == self.get_boarder()
+    }
+
+    fn remove_piece(ref self: CB, x: usize, y: usize) {
+        self.set_piece(x, y, self.get_empty());
+    }
+
+    fn move_piece(ref self: CB, from: (usize, usize), to: (usize, usize)) {
+        let (from_x, from_y) = from;
+        let (to_x, to_y) = to;
+        assert(!self.is_empty(from_x, from_y), 'No piece to move');
+        assert(self.is_empty(to_x, to_y), 'Destination not empty');
+        let piece = self.get_piece(from_x, from_y);
+        self.remove_piece(from_x, from_y);
+        self.set_piece(to_x, to_y, piece);
+    }
+
+    fn find_path_jps(ref self: CB, start: (usize, usize), end: (usize, usize)) -> Span<u64> {
+        // TODO: implement JPS
+        array![0].span()
+    }
+}
+
+struct ChessBoard<P> {
+    arr: Array2D<P>,
+    boarder: P,
+    empty: P,
+}
+
+impl DestructChessBoard<P, +Drop<P>, +Felt252DictValue<P>> of Destruct<ChessBoard<P>> {
+    fn destruct(self: ChessBoard<P>) nopanic {
+        self.arr.destruct();
+    }
+}
+
+impl ChessBoardTraitImpl<P, +Drop<P>, +Copy<P>, +Felt252DictValue<P>> of ChessBoardTrait<ChessBoard<P>, P> {
+    fn new(x: usize, y: usize, empty: P, boarder: P) -> ChessBoard<P> {
         ChessBoard {
-            board: Array2WayTrait::<Array2Way<Nullable<SimpleU8Array2Way>>, Nullable<SimpleU8Array2Way>>::new_with_length(x),
-            y: y,
+            arr: Array2DTrait::<Array2D<P>, P>::new(x, y),
+            boarder: boarder,
+            empty: empty
         }
     }
 
-    fn get(ref self: ChessBoard, x: usize, y: usize) -> u8 {
-        assert(x < self.board.len(), 'Index out of bounds');
-        let mut x_column = self.board.get(x).deref_or(Array2WayTrait::<SimpleU8Array2Way, u8>::new_with_length(self.y));
-        assert(y < x_column.len(), 'Index out of bounds');
-        x_column.get(y)
+    fn get_empty(self: @ChessBoard<P>) -> P {
+        *self.empty
     }
 
-    fn len_x(ref self: ChessBoard) -> usize {
-        self.board.len()
+    fn get_boarder(self: @ChessBoard<P>) -> P {
+        *self.boarder
     }
 
-    fn len_y(ref self: ChessBoard) -> usize {
-        let mut column_0 = self.board.get(0).deref_or(Array2WayTrait::<SimpleU8Array2Way, u8>::new_with_length(self.y));
-        column_0.len()
+    fn len(ref self: ChessBoard<P>) -> (usize, usize) {
+        (self.arr.x + 2, self.arr.y + 2)
     }
 
-    fn set(ref self: ChessBoard, x: usize, y: usize, val: u8) {
-        let mut x_column = self.board.get(x).deref_or(Array2WayTrait::<SimpleU8Array2Way, u8>::new_with_length(self.y));
-        x_column.set(y, val);
-        self.board.set(x, NullableTrait::new(x_column));
+    fn get_piece(ref self: ChessBoard<P>, x: usize, y: usize) -> P {
+        assert(x < self.arr.x + 2, 'Index out of bounds');
+        assert(y < self.arr.y + 2, 'Index out of bounds');
+        if x == 0 || x == self.arr.x + 1 || y == 0 || y == self.arr.y + 1 {
+            self.boarder
+        } else {
+            self.arr.get(x - 1, y - 1)
+        }
+    }
+
+    fn set_piece(ref self: ChessBoard<P>, x: usize, y: usize, piece: P) {
+        assert(x > 0, 'Index out of bounds');
+        assert(y > 0, 'Index out of bounds');
+        self.arr.set(x - 1, y - 1, piece);
     }
 }
 
-// impl ChessBoardPathableImpl of PathableBoardTrait<ChessBoard, u8, ChessBoardImpl> {
-//     fn add_borders(ref self: ChessBoard) -> ChessBoard {
-//         let x_len = integer::u32_wrapping_add(self.len_x(), 2);
-//         let y_len = integer::u32_wrapping_add(self.len_y(), 2);
-//         let mut new_board = ChessBoardImpl::new(x_len, y_len);
-//         let mut j = y_len;
-//         let mut left_border = 0_u128;
-//         loop {
-//             if j == 0 {
-//                 break;
-//             }
-//             j = integer::u32_wrapping_sub(j, 1);
-//             left_border = integer::u128_wrapping_add((left_border * 0x100), 1);
-//         };
-//         new_board.board.set(0, left_border);
-//         new_board.board.set(integer::u32_wrapping_sub(x_len, 1), left_border);
+// // following implementation cost 2x more gas than the above one
+// // since we have dictionary instead of array, using one single dict with structured key is more gas efficient 
+// #[derive(Destruct)]
+// struct ChessBoardBackup {
+//     board: Array2Way<Nullable<SimpleU8Array2Way>>,
+//     // x == board.len(),
+//     y: usize,
+//     boarder: u8,
+// }
 
-//         let mut ithColumn = 0_u128;
-//         let mut i = self.len_x();
-//         loop {
-//             if i == 0 {
-//                 break;
-//             }
-//             i = integer::u32_wrapping_sub(i, 1);
-//             ithColumn = self.board.get(i);
-//             ithColumn = integer::u128_wrapping_add((ithColumn * 0x100), 1);
-//             ithColumn = integer::u128_wrapping_add(ithColumn, exp_256(integer::u32_wrapping_sub(y_len, 1)));
-//             new_board.board.set(integer::u32_wrapping_add(i, 1), ithColumn);
-//         };
-//         new_board
+// impl ChessBoardBackupImpl of ChessBoardTrait<ChessBoardBackup, u8> {
+//     fn new(x: usize, y: usize, empty: u8, boarder: u8) -> ChessBoardBackup {
+//         assert(x <= 16 && x > 0, 'Invalid argument x');
+//         assert(y <= 16 && y > 0, 'Invalid argument y');
+//         ChessBoardBackup {
+//             board: Array2WayTrait::<Array2Way<Nullable<SimpleU8Array2Way>>, Nullable<SimpleU8Array2Way>>::new_with_length(x),
+//             y: y,
+//             boarder: boarder,
+//         }
+//     }
+
+//     fn len(ref self: ChessBoardBackup) -> (usize, usize) {
+//         (self.board.len() + 2, self.y + 2)
+//     }
+
+//     fn get_empty(self: @ChessBoardBackup) -> u8 {
+//         0
+//     }
+
+//     fn get_boarder(self: @ChessBoardBackup) -> u8 {
+//         *self.boarder
+//     }
+
+//     fn get_piece(ref self: ChessBoardBackup, x: usize, y: usize) -> u8 {
+//         assert(x < self.board.len() + 2, 'Index out of bounds');
+//         assert(y < self.y + 2, 'Index out of bounds');
+//         if x == 0 || x == self.board.len() + 1 || y == 0 || y == self.y + 1 {
+//             self.boarder
+//         } else {
+//             let mut x_column = self.board.get(x - 1).deref_or(Array2WayTrait::<SimpleU8Array2Way, u8>::new_with_length(self.y));
+//             x_column.get(y - 1)
+//         }
+//     }
+
+//     fn set_piece(ref self: ChessBoardBackup, x: usize, y: usize, piece: u8) {
+//         assert(x > 0, 'Index out of bounds');
+//         assert(y > 0, 'Index out of bounds');
+//         let mut x_column = self.board.get(x - 1).deref_or(Array2WayTrait::<SimpleU8Array2Way, u8>::new_with_length(self.y));
+//         x_column.set(y - 1, piece);
+//         self.board.set(x - 1, NullableTrait::new(x_column));
 //     }
 // }
 
 #[test]
 fn test_chess_board() {
-    let mut board = BoardTrait::<ChessBoard, u8>::new(8, 8);
-    assert!(board.len_x() == 8);
-    assert!(board.len_y() == 8);
-    assert!(board[(0, 0)] == 0);
-    assert!(board.get(1, 7) == 0);
-    board.set(1, 7, 1);
-    assert!(board[(1, 7)] == 1);
-    // let mut pathable_board = board.add_borders();
-    // assert!(pathable_board.len_x() == 10);
-    // assert!(pathable_board.len_y() == 10);
-    // assert!(pathable_board[(0, 0)] == 1);
-    // assert!(pathable_board[(0, 1)] == 1);
-    // assert!(pathable_board[(9, 9)] == 1);
-    // assert!(pathable_board[(9, 8)] == 1);
-    // assert!(pathable_board[(1, 9)] == 1);
-    // assert!(pathable_board[(9, 0)] == 1);
-    // assert!(pathable_board[(2, 8)] == 1);
+    let mut board = ChessBoardTrait::<ChessBoard<u8>, u8>::new(8, 8, 0, 255);
+    assert!(board.len() == (10, 10));
+    assert!(board.get_piece(0, 0) == 255);
+    assert!(board.get_piece(1, 1) == 0);
+    assert!(board.get_piece(8, 8) == 0);
+    assert!(board.get_piece(9, 9) == 255);
+    assert!(board.get_piece(0, 1) == 255);
+    assert!(board.get_piece(1, 0) == 255);
+    assert!(board.get_piece(9, 8) == 255);
+    assert!(board.get_piece(8, 9) == 255);
+    assert!(board.is_empty(1, 1));
+    assert!(board.is_empty(8, 8));
+    assert!(!board.is_empty(0, 1));
+    assert!(!board.is_empty(1, 0));
+    assert!(!board.is_empty(9, 8));
+    assert!(!board.is_empty(8, 9));
+    assert!(!board.is_boarder(1, 1));
+    assert!(!board.is_boarder(8, 8));
+    assert!(board.is_boarder(0, 0));
+    assert!(board.is_boarder(9, 9));
+    assert!(board.is_boarder(0, 1));
+    assert!(board.is_boarder(1, 0));
+    assert!(board.is_boarder(9, 8));
+    assert!(board.is_boarder(8, 9));
+    assert!(board.get_piece(1, 1) == 0);
+    board.set_piece(1, 1, 1);
+    assert!(board.get_piece(1, 1) == 1);
+    board.remove_piece(1, 1);
+    assert!(board.get_piece(1, 1) == 0);
+    board.set_piece(1, 1, 1);
+    board.move_piece((1, 1), (2, 2));
+    assert!(board.get_piece(1, 1) == 0);
+    assert!(board.get_piece(2, 2) == 1);
+    assert!(board.is_empty(1, 1));
+    assert!(!board.is_empty(2, 2));
 }
