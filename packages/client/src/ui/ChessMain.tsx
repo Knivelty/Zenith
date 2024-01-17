@@ -1,7 +1,7 @@
 import { Button } from "./button";
 import { useDojo } from "./hooks/useDojo";
 
-export function ChessMain({fn}) {
+export function ChessMain() {
     const {
         account: { account },
         systemCalls: { spawn, startBattle },
@@ -27,7 +27,6 @@ export function ChessMain({fn}) {
                     await startBattle({
                         signer: account,
                     });
-                    fn();
                 }}
             >
                 start battle

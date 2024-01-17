@@ -4,16 +4,17 @@ import {
     defineSystem,
     defineEnterSystem,
     getComponentValueStrict,
+    UpdateType,
 } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { TILE_HEIGHT, TILE_WIDTH } from "../config/constants";
+import { Sprites, TILE_HEIGHT, TILE_WIDTH } from "../config/constants";
 
 export const move = (layer: PhaserLayer) => {
     const {
         world,
         scenes: {
-            Main: { objectPool },
+            Main: { config, objectPool },
         },
         networkLayer: {
             components: { Piece, InningBattle },
@@ -34,34 +35,32 @@ export const move = (layer: PhaserLayer) => {
     //     });
     // });
 
-    defineSystem(world, [Has(Piece)], ({ entity }: any) => {
-        // console.log("entity: ", entity);
+    defineSystem(world, [Has(Piece)], ({ entity, type }) => {
+        if (type === UpdateType.Enter) {
+            console.log("entity: ", entity);
+            const piece = getComponentValueStrict(
+                Piece,
+                entity.toString() as Entity
+            );
+            const offsetPosition = { x: piece.x_board, y: piece.y_board };
+            const pixelPosition = tileCoordToPixelCoord(
+                offsetPosition,
+                TILE_WIDTH,
+                TILE_HEIGHT
+            );
+            const hero = objectPool.get(entity, "Sprite");
+            hero.setComponent({
+                id: "piece",
+                once: (sprite: Phaser.GameObjects.Sprite) => {
+                    sprite.setPosition(pixelPosition?.x, pixelPosition?.y);
 
-        // const piece = getComponentValueStrict(
-        //     Piece,
-        //     entity.toString() as Entity
-        // );
+                    sprite.play(config.animations[piece.internal_index]);
 
-        // const offsetPosition = { x: piece.x_board, y: piece.y_board };
-
-        // const pixelPosition = tileCoordToPixelCoord(
-        //     offsetPosition,
-        //     TILE_WIDTH,
-        //     TILE_HEIGHT
-        // );
-
-        // const hero = objectPool.get(entity, "Sprite");
-
-        // hero.setComponent({
-        //     id: "piece",
-        //     once: (sprite: Phaser.GameObjects.Sprite) => {
-        //         sprite.setPosition(pixelPosition?.x, pixelPosition?.y);
-        //         // sprite.setTexture()
-        //         // sprite.ima
-        //         // sprite.set
-        //         // sprite
-        //         // camera.centerOn(pixelPosition?.x, pixelPosition?.y);
-        //     },
-        // });
+                    // TODO: use lossless scale method
+                    const scale = 32 / sprite.width;
+                    sprite.setScale(scale);
+                },
+            });
+        }
     });
 };

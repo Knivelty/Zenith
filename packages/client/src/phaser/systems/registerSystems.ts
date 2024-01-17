@@ -10,5 +10,5 @@ export const registerSystems = (layer: PhaserLayer) => {
     controls(layer);
     mapSystem(layer);
     camera(layer);
-    battleLog(layer);
+    // battleLog(layer);
 };

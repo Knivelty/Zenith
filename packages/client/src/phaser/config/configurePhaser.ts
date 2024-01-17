@@ -15,6 +15,8 @@ import {
     TILE_WIDTH,
     Animations,
 } from "./constants";
+import { getSprites } from "./spriteConfig";
+import { getAnimations } from "./animationConfig";
 
 const ANIMATION_INTERVAL = 200;
 
@@ -43,16 +45,11 @@ export const phaserConfig = {
                     key: Assets.Tileset,
                     path: "assets/tilesets/land.png",
                 },
-                [Assets.Hero]: {
-                    type: AssetType.Image,
-                    key: Assets.Hero,
-                    path: "assets/tilesets/land.png",
-                },
                 [Assets.MainAtlas]: {
                     type: AssetType.MultiAtlas,
                     key: Assets.MainAtlas,
                     // Add a timestamp to the end of the path to prevent caching
-                    path: `assets/atlases/atlas.json?timestamp=${Date.now()}`,
+                    path: `assets/atlases/atlas.json`,
                     options: {
                         imagePath: "assets/atlases/",
                     },
@@ -61,44 +58,8 @@ export const phaserConfig = {
             maps: {
                 [Maps.Main]: mainMap,
             },
-            sprites: {
-                [Sprites.Soldier]: {
-                    assetKey: Assets.MainAtlas,
-                    frame: "sprites/soldier/idle/0.png",
-                },
-            },
-            animations: [
-                // {
-                //     key: Animations.RockIdle,
-                //     assetKey: Assets.MainAtlas,
-                //     startFrame: 0,
-                //     endFrame: 0,
-                //     frameRate: 6,
-                //     repeat: -1,
-                //     prefix: "sprites/rock/",
-                //     suffix: ".png",
-                // },
-                // {
-                //     key: Animations.ScissorsIdle,
-                //     assetKey: Assets.MainAtlas,
-                //     startFrame: 0,
-                //     endFrame: 0,
-                //     frameRate: 6,
-                //     repeat: -1,
-                //     prefix: "sprites/scissors/",
-                //     suffix: ".png",
-                // },
-                // {
-                //     key: Animations.PaperIdle,
-                //     assetKey: Assets.MainAtlas,
-                //     startFrame: 0,
-                //     endFrame: 0,
-                //     frameRate: 6,
-                //     repeat: -1,
-                //     prefix: "sprites/paper/",
-                //     suffix: ".png",
-                // },
-            ],
+            sprites: getSprites(),
+            animations: getAnimations(),
             tilesets: {
                 Default: {
                     assetKey: Assets.Tileset,

@@ -7,15 +7,15 @@ export enum Maps {
 }
 
 export enum Animations {
-    RockIdle = "RockIdle",
-    PaperIdle = "PaperIdle",
-    ScissorsIdle = "ScissorsIdle",
+    PegasusIdle = "PegasusIdle",
+    SpriteIdle = "SpriteIdle",
 }
 
 // image addresses
 
 export enum Sprites {
-    Soldier,
+    Pegasus,
+    Sprite,
 }
 
 export enum RPSSprites {
@@ -33,7 +33,6 @@ export const ImagePaths: { [key in RPSSprites]: string } = {
 export enum Assets {
     MainAtlas = "MainAtlas",
     Tileset = "Tileset",
-    Hero = "Hero",
 }
 
 export enum Direction {
