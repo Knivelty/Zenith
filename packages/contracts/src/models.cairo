@@ -86,10 +86,24 @@ struct Moves {
     last_direction: Direction
 }
 
-#[derive(Copy, Drop, Serde, Introspect)]
+#[derive(Clone, Copy, Drop, PartialEq, Serde, Introspect)]
 struct Vec2 {
     x: u32,
     y: u32
+}
+
+impl Vec2Felt252DictValueImpl of Felt252DictValue<Vec2> {
+    #[inline(always)]
+    fn zero_default() -> Vec2 nopanic {
+        Vec2 { x: 0, y: 0 }
+    }
+}
+
+impl Vec2Default of Default<Vec2> {
+    #[inline(always)]
+    fn default() -> Vec2 nopanic {
+        Vec2 { x: 0, y: 0 }
+    }
 }
 
 #[derive(Model, Copy, Drop, Serde)]
