@@ -106,6 +106,25 @@ impl Vec2Default of Default<Vec2> {
     }
 }
 
+impl Vec2IntoPos of Into<Vec2, Pos> {
+    #[inline(always)]
+    fn into(self: Vec2) -> Pos {
+        self.x.into() * 0x100000000_u64 + self.y.into()
+    }
+}
+
+type Pos = u64;
+
+impl PosIntoVec2 of Into<Pos, Vec2> {
+    #[inline(always)]
+    fn into(self: Pos) -> Vec2 {
+        Vec2 {
+            x: (self / 0x100000000_u64).try_into().unwrap(),
+            y: (self % 0x100000000_u64).try_into().unwrap(),
+        }
+    }
+}
+
 #[derive(Model, Copy, Drop, Serde)]
 struct Position {
     #[key]

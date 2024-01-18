@@ -1,7 +1,7 @@
 use autochessia::array2d::{Array2DTrait, Array2D};
 use autochessia::array2w::{Array2WayTrait, Array2Way, SimpleU8Array2Way};
 use autochessia::pq::{PQTrait, PQ};
-use autochessia::models::Vec2;
+use autochessia::models::{Vec2, Pos};
 
 trait ChessBoardTrait<CB, P> {
     fn new(x: usize, y: usize, empty: P, boarder: P) -> CB;
@@ -52,16 +52,17 @@ impl ChessBoardUtils<CB, P, +Drop<P>, +Copy<P>, +PartialEq<P>, +ChessBoardTrait<
     }
 
     fn find_path_jps(ref self: CB, start: Vec2, end: Vec2) -> Span<Vec2> {
-        let mut res: Array<Vec2> = array![Default::default()];
+        let mut res: Array<Vec2> = ArrayTrait::<Vec2>::new();
         let (x, y) = self.len();
-        let mut source = Array2DTrait::<Array2D<Vec2>, Vec2>::new(x, y);
-        let mut queue = PQTrait::<PQ<Vec2>, Vec2>::new();
+        let mut source = Array2DTrait::<Array2D<Pos>, Pos>::new(x, y);
+        let mut queue = PQTrait::<PQ<Pos>, Pos>::new();
         let mut field = ChessBoardTrait::<ChessBoard<u64>, u64>::new(x, y, 0, x.into() * y.into());
-        let (mut i, mut j) = (1_usize, 1_usize);
+        let mut i = 1;
         loop {
             if i == x - 1 {
                 break;
             }
+            let mut j = 1;
             loop {
                 if j == y - 1 {
                     break;
@@ -69,18 +70,18 @@ impl ChessBoardUtils<CB, P, +Drop<P>, +Copy<P>, +PartialEq<P>, +ChessBoardTrait<
                 if !self.is_empty(i, j) {
                     field.set_piece(i, j, field.get_boarder());
                 }
-                j = integer::u32_wrapping_sub(j, 1);
+                j = integer::u32_wrapping_add(j, 1);
             };
-            i = integer::u32_wrapping_sub(i, 1);
+            i = integer::u32_wrapping_add(i, 1);
         };
 
-        queue.add_task(start, 0);
+        queue.add_task(start.into(), 0);
 
         loop {
             if queue.is_empty() {
                 break;
             }
-            let jump_point = queue.pop_task();
+            let jump_point = queue.pop_task().into();
             if jps_explore_cardinal(ref field, ref source, ref queue, jump_point, end, 1, 0)
                 || jps_explore_cardinal(ref field, ref source, ref queue, jump_point, end, 2, 0)
                 || jps_explore_cardinal(ref field, ref source, ref queue, jump_point, end, 0, 1)
@@ -90,14 +91,14 @@ impl ChessBoardUtils<CB, P, +Drop<P>, +Copy<P>, +PartialEq<P>, +ChessBoardTrait<
                 || jps_explore_diagonal(ref field, ref source, ref queue, jump_point, end, 2, 1)
                 || jps_explore_diagonal(ref field, ref source, ref queue, jump_point, end, 2, 2)
             {
-                let mut prePos = source.get(end.x, end.y);
-                res.append(end);
+                let mut prePos = end;
+                res.append(prePos);
                 loop {
                     if prePos == start {
                         break;
                     }
+                    prePos = source.get(prePos.x, prePos.y).into();
                     res.append(prePos);
-                    prePos = source.get(prePos.x, prePos.y);
                 };
                 break;
             }
@@ -136,7 +137,7 @@ fn distance(from: Vec2, to: Vec2) -> usize {
     }
 }
 
-fn jps_explore_cardinal(ref field: ChessBoard<u64>, ref source: Array2D<Vec2>, ref pq: PQ<Vec2>, start: Vec2, end: Vec2, direction_x: u8, direction_y: u8) -> bool {
+fn jps_explore_cardinal(ref field: ChessBoard<u64>, ref source: Array2D<Pos>, ref pq: PQ<Pos>, start: Vec2, end: Vec2, direction_x: u8, direction_y: u8) -> bool {
     let mut res = false;
     let mut curPos = start;
     let mut curCost = field[(curPos.x, curPos.y)];
@@ -147,12 +148,12 @@ fn jps_explore_cardinal(ref field: ChessBoard<u64>, ref source: Array2D<Vec2>, r
         curCost = integer::u64_wrapping_add(curCost, 1);
         if curPos == end {
             field.set_piece(curPos.x, curPos.y, curCost);
-            source.set(curPos.x, curPos.y, prePos);
+            source.set(curPos.x, curPos.y, prePos.into());
             res = true;
             break;
         } else if field[(curPos.x, curPos.y)] == field.get_empty() {
             field.set_piece(curPos.x, curPos.y, curCost);
-            source.set(curPos.x, curPos.y, prePos);
+            source.set(curPos.x, curPos.y, prePos.into());
         } else {
             break;
         }
@@ -161,24 +162,24 @@ fn jps_explore_cardinal(ref field: ChessBoard<u64>, ref source: Array2D<Vec2>, r
             let next_y = next_value(curPos.y, direction_y);
             if field[(integer::u32_wrapping_add(curPos.x, 1), curPos.y)] == field.get_boarder()
                 && field[(integer::u32_wrapping_add(curPos.x, 1), next_y)] < field.get_boarder() {
-                pq.add_task(curPos, distance(curPos, end).into());
+                pq.add_task(curPos.into(), distance(curPos, end).into());
                 break;
             }
             if field[(integer::u32_wrapping_sub(curPos.x, 1), curPos.y)] == field.get_boarder()
                 && field[(integer::u32_wrapping_sub(curPos.x, 1), next_y)] < field.get_boarder() {
-                pq.add_task(curPos, distance(curPos, end).into());
+                pq.add_task(curPos.into(), distance(curPos, end).into());
                 break;
             }
         } else if direction_y == 0 {
             let next_x = next_value(curPos.x, direction_x);
             if field[(curPos.x, integer::u32_wrapping_add(curPos.y, 1))] == field.get_boarder()
                 && field[(next_x, integer::u32_wrapping_add(curPos.y, 1))] < field.get_boarder() {
-                pq.add_task(curPos, distance(curPos, end).into());
+                pq.add_task(curPos.into(), distance(curPos, end).into());
                 break;
             }
             if field[(curPos.x, integer::u32_wrapping_sub(curPos.y, 1))] == field.get_boarder()
                 && field[(next_x, integer::u32_wrapping_sub(curPos.y, 1))] < field.get_boarder() {
-                pq.add_task(curPos, distance(curPos, end).into());
+                pq.add_task(curPos.into(), distance(curPos, end).into());
                 break;
             }
         }
@@ -186,7 +187,7 @@ fn jps_explore_cardinal(ref field: ChessBoard<u64>, ref source: Array2D<Vec2>, r
     res
 }
 
-fn jps_explore_diagonal(ref field: ChessBoard<u64>, ref source: Array2D<Vec2>, ref pq: PQ<Vec2>, start: Vec2, end: Vec2, direction_x: u8, direction_y: u8) -> bool {
+fn jps_explore_diagonal(ref field: ChessBoard<u64>, ref source: Array2D<Pos>, ref pq: PQ<Pos>, start: Vec2, end: Vec2, direction_x: u8, direction_y: u8) -> bool {
     let mut res = false;
     let mut curPos = start;
     let mut curCost = field[(curPos.x, curPos.y)];
@@ -197,24 +198,24 @@ fn jps_explore_diagonal(ref field: ChessBoard<u64>, ref source: Array2D<Vec2>, r
         curCost = integer::u64_wrapping_add(curCost, 1);
         if curPos == end {
             field.set_piece(curPos.x, curPos.y, curCost);
-            source.set(curPos.x, curPos.y, prePos);
+            source.set(curPos.x, curPos.y, prePos.into());
             res = true;
             break;
         } else if field[(curPos.x, curPos.y)] == field.get_empty() {
             field.set_piece(curPos.x, curPos.y, curCost);
-            source.set(curPos.x, curPos.y, prePos);
+            source.set(curPos.x, curPos.y, prePos.into());
         } else {
             break;
         }
 
         if field[(prePos.x, curPos.y)] == field.get_boarder()
             && field[(prePos.x, next_value(curPos.y, direction_y))] < field.get_boarder() {
-            pq.add_task(curPos, distance(curPos, end).into());
+            pq.add_task(curPos.into(), distance(curPos, end).into());
             break;
         }
         if field[(curPos.x, prePos.y)] == field.get_boarder()
             && field[(next_value(curPos.x, direction_x), prePos.y)] < field.get_boarder() {
-            pq.add_task(curPos, distance(curPos, end).into());
+            pq.add_task(curPos.into(), distance(curPos, end).into());
             break;
         }
         if jps_explore_cardinal(ref field, ref source, ref pq, curPos, end, direction_x, 0) {
@@ -378,5 +379,16 @@ fn test_jps() {
     let mut board = ChessBoardTrait::<ChessBoard<u8>, u8>::new(5, 5, 0, 255);
     board.set_piece(2, 1, 1);
     board.set_piece(2, 2, 1);
-    board.find_path_jps(Vec2{x: 1, y: 1}, Vec2{x: 3, y: 1});
+    let res = board.find_path_jps(Vec2{x: 1, y: 1}, Vec2{x: 3, y: 1});
+    let len = res.len();
+    println!("len: {}", len);
+    let mut i = 0;
+    loop {
+        if i == len {
+            break;
+        }
+        let pos = *res.at(i);
+        println!("value: {} {}", pos.x, pos.y);
+        i += 1;
+    };
 }
