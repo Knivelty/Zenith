@@ -86,10 +86,43 @@ struct Moves {
     last_direction: Direction
 }
 
-#[derive(Copy, Drop, Serde, Introspect)]
+#[derive(Clone, Copy, Drop, PartialEq, Serde, Introspect)]
 struct Vec2 {
     x: u32,
     y: u32
+}
+
+impl Vec2Felt252DictValueImpl of Felt252DictValue<Vec2> {
+    #[inline(always)]
+    fn zero_default() -> Vec2 nopanic {
+        Vec2 { x: 0, y: 0 }
+    }
+}
+
+impl Vec2Default of Default<Vec2> {
+    #[inline(always)]
+    fn default() -> Vec2 nopanic {
+        Vec2 { x: 0, y: 0 }
+    }
+}
+
+impl Vec2IntoPos of Into<Vec2, Pos> {
+    #[inline(always)]
+    fn into(self: Vec2) -> Pos {
+        self.x.into() * 0x100000000_u64 + self.y.into()
+    }
+}
+
+type Pos = u64;
+
+impl PosIntoVec2 of Into<Pos, Vec2> {
+    #[inline(always)]
+    fn into(self: Pos) -> Vec2 {
+        Vec2 {
+            x: (self / 0x100000000_u64).try_into().unwrap(),
+            y: (self % 0x100000000_u64).try_into().unwrap(),
+        }
+    }
 }
 
 #[derive(Model, Copy, Drop, Serde)]
