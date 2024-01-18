@@ -53,18 +53,20 @@ impl ChessBoardUtils<CB, P, +Drop<P>, +Copy<P>, +PartialEq<P>, +ChessBoardTrait<
 
     fn find_path_jps(ref self: CB, start: Vec2, end: Vec2) -> Span<Vec2> {
         let mut res: Array<Vec2> = ArrayTrait::<Vec2>::new();
-        let (x, y) = self.len();
+        let (mut x, mut y) = self.len();
         let mut source = Array2DTrait::<Array2D<Pos>, Pos>::new(x, y);
         let mut queue = PQTrait::<PQ<Pos>, Pos>::new();
         let mut field = ChessBoardTrait::<ChessBoard<u64>, u64>::new(x, y, 0, x.into() * y.into());
         let mut i = 1;
+        x -= 1;
+        y -= 1;
         loop {
-            if i == x - 1 {
+            if i == x {
                 break;
             }
             let mut j = 1;
             loop {
-                if j == y - 1 {
+                if j == y {
                     break;
                 }
                 if !self.is_empty(i, j) {
@@ -247,7 +249,7 @@ impl ChessBoardTraitImpl<P, +Drop<P>, +Copy<P>, +Felt252DictValue<P>> of ChessBo
         assert(x > 2, 'invalid argument x');
         assert(y > 2, 'invalid argument y');
         ChessBoard {
-            arr: Array2DTrait::<Array2D<P>, P>::new(x - 2, y - 2),
+            arr: Array2DTrait::<Array2D<P>, P>::new(integer::u32_wrapping_sub(x, 2), integer::u32_wrapping_sub(y, 2)),
             boarder: boarder,
             empty: empty
         }
@@ -268,17 +270,17 @@ impl ChessBoardTraitImpl<P, +Drop<P>, +Copy<P>, +Felt252DictValue<P>> of ChessBo
     fn get_piece(ref self: ChessBoard<P>, x: usize, y: usize) -> P {
         assert(x < self.arr.x + 2, 'Index out of bounds');
         assert(y < self.arr.y + 2, 'Index out of bounds');
-        if x == 0 || x == self.arr.x + 1 || y == 0 || y == self.arr.y + 1 {
+        if x == 0 || x == integer::u32_wrapping_add(self.arr.x, 1) || y == 0 || y == integer::u32_wrapping_add(self.arr.y, 1) {
             self.boarder
         } else {
-            self.arr.get(x - 1, y - 1)
+            self.arr.get(integer::u32_wrapping_sub(x, 1), integer::u32_wrapping_sub(y, 1))
         }
     }
 
     fn set_piece(ref self: ChessBoard<P>, x: usize, y: usize, piece: P) {
         assert(x > 0, 'Index out of bounds');
         assert(y > 0, 'Index out of bounds');
-        self.arr.set(x - 1, y - 1, piece);
+        self.arr.set(integer::u32_wrapping_sub(x, 1), integer::u32_wrapping_sub(y, 1), piece);
     }
 }
 
@@ -375,11 +377,37 @@ fn test_chess_board() {
 }
 
 #[test]
-fn test_jps() {
+fn test_jps_33() {
     let mut board = ChessBoardTrait::<ChessBoard<u8>, u8>::new(5, 5, 0, 255);
     board.set_piece(2, 1, 1);
     board.set_piece(2, 2, 1);
     let res = board.find_path_jps(Vec2{x: 1, y: 1}, Vec2{x: 3, y: 1});
+    let len = res.len();
+    println!("len: {}", len);
+    let mut i = 0;
+    loop {
+        if i == len {
+            break;
+        }
+        let pos = *res.at(i);
+        println!("value: {} {}", pos.x, pos.y);
+        i += 1;
+    };
+}
+
+#[test]
+fn test_jps_88() {
+    let mut board = ChessBoardTrait::<ChessBoard<u8>, u8>::new(10, 10, 0, 255);
+    let mut i = 1;
+    loop {
+        if i == 8 {
+            break;
+        }
+        board.set_piece(3, i, 1);
+        board.set_piece(5, i, 1);
+        i += 1;
+    };
+    let res = board.find_path_jps(Vec2{x: 1, y: 1}, Vec2{x: 8, y: 1});
     let len = res.len();
     println!("len: {}", len);
     let mut i = 0;

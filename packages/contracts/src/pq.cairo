@@ -64,22 +64,23 @@ impl PQImpl<T, +Drop<T>, +Copy<T>, +Felt252DictValue<T>> of PQTrait<PQ<T>, T> {
             if i == 0 {
                 break;
             }
-            let ithPriority = self.priority.get((i-1).into());
+            let i_minus_1 = integer::u32_wrapping_sub(i, 1);
+            let ithPriority = self.priority.get(i_minus_1.into());
             if ithPriority >= priority {
                 break;
             }
             self.priority.insert(i.into(), ithPriority);
-            self.data.insert(i.into(), self.data.get((i-1).into()));
-            i -= 1;
+            self.data.insert(i.into(), self.data.get(i_minus_1.into()));
+            i = i_minus_1;
         };
         self.data.insert(i.into(), data);
         self.priority.insert(i.into(), priority);
-        self.num += 1;
+        self.num = integer::u32_wrapping_add(self.num, 1);
     }
 
     fn pop_task(ref self: PQ<T>) -> T {
         if self.num > 0 {
-            self.num -= 1;
+            self.num = integer::u32_wrapping_sub(self.num, 1);
             self.data.get(self.num.into())
         } else {
             panic!("pop from empty PQ")
@@ -115,20 +116,21 @@ impl PQU64Impl of PQTrait<PQU64, u64> {
             if i == 0 {
                 break;
             }
-            let ithDataPrio = self.dataPrio.get((i-1).into());
+            let i_minus_1 = integer::u32_wrapping_sub(i, 1);
+            let ithDataPrio = self.dataPrio.get(i_minus_1.into());
             if ithDataPrio / 0x10000000000000000_u128 >= priority.into() {
                 break;
             }
             self.dataPrio.insert(i.into(), ithDataPrio);
-            i -= 1;
+            i = i_minus_1;
         };
         self.dataPrio.insert(i.into(), data.into() * 0x10000000000000000_u128 + priority.into());
-        self.num += 1;
+        self.num = integer::u32_wrapping_add(self.num, 1);
     }
 
     fn pop_task(ref self: PQU64) -> u64 {
         if self.num > 0 {
-            self.num -= 1;
+            self.num = integer::u32_wrapping_sub(self.num, 1);
             (self.dataPrio.get(self.num.into()) % 0x10000000000000000_u128).try_into().unwrap()
         } else {
             panic!("pop from empty PQ")
