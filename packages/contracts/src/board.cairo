@@ -58,8 +58,8 @@ impl ChessBoardUtils<CB, P, +Drop<P>, +Copy<P>, +PartialEq<P>, +ChessBoardTrait<
         let mut queue = PQTrait::<PQ<Pos>, Pos>::new();
         let mut field = ChessBoardTrait::<ChessBoard<u64>, u64>::new(x, y, 0, x.into() * y.into());
         let mut i = 1;
-        x -= 1;
-        y -= 1;
+        x = integer::u32_wrapping_sub(x, 1);
+        y = integer::u32_wrapping_sub(y, 1);
         loop {
             if i == x {
                 break;
