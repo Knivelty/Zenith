@@ -1,0 +1,566 @@
+{
+	"textures": [
+		{
+			"image": "atlas.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 3202,
+				"h": 1906
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "golem/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 779,
+						"h": 900
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 779,
+						"h": 900
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 779,
+						"h": 900
+					}
+				},
+				{
+					"filename": "tarrasque/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 546,
+						"h": 489
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 546,
+						"h": 489
+					},
+					"frame": {
+						"x": 1,
+						"y": 903,
+						"w": 546,
+						"h": 489
+					}
+				},
+				{
+					"filename": "bear/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 782,
+						"y": 1,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "behemoth/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 1297,
+						"y": 1,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "berserker/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 1812,
+						"y": 1,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "chupacabra/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 2327,
+						"y": 1,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "manticore/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 2842,
+						"y": 1,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "colossus/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 782,
+						"y": 516,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "cyclops/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 1297,
+						"y": 516,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "dragon/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 1812,
+						"y": 516,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "ettin/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 2327,
+						"y": 516,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "mantis/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 2842,
+						"y": 362,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "nue/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 2842,
+						"y": 723,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "ogre/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 1,
+						"y": 1394,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "fairy/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 549,
+						"y": 1031,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "fenrir/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 1064,
+						"y": 1031,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "jiangshi/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 1579,
+						"y": 1031,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "qilin/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 362,
+						"y": 1546,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "rakshasa/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 723,
+						"y": 1546,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "satori/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 1084,
+						"y": 1546,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "skinwalker/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 1445,
+						"y": 1546,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "vampire/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 1806,
+						"y": 1546,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "warlock/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 2094,
+						"y": 1031,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "wendigo/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 2455,
+						"y": 1031,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "wraith/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 2816,
+						"y": 1084,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "wyvern/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 2167,
+						"y": 1392,
+						"w": 359,
+						"h": 359
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:91202c3b1065f8faa6a311f2fa1d6a94:482b92156d738fb132cb0a70fa50e9f2:cbce6b53f0f49e0bf15173c25c41f876$"
+	}
+}

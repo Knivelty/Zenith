@@ -80,9 +80,9 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>2048</int>
+            <int>4096</int>
             <key>height</key>
-            <int>2048</int>
+            <int>4096</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>
@@ -173,24 +173,59 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">assets/sprites/pegasus/0.png</key>
+            <key type="filename">assets/sprites/bear/0.png</key>
+            <key type="filename">assets/sprites/behemoth/0.png</key>
+            <key type="filename">assets/sprites/berserker/0.png</key>
+            <key type="filename">assets/sprites/chupacabra/0.png</key>
+            <key type="filename">assets/sprites/colossus/0.png</key>
+            <key type="filename">assets/sprites/cyclops/0.png</key>
+            <key type="filename">assets/sprites/dragon/0.png</key>
+            <key type="filename">assets/sprites/ettin/0.png</key>
+            <key type="filename">assets/sprites/fairy/0.png</key>
+            <key type="filename">assets/sprites/fenrir/0.png</key>
+            <key type="filename">assets/sprites/jiangshi/0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.481894,0.487465</point_f>
+                <point_f>0.5,0.5</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>90,90,179,179</rect>
+                <rect>128,128,257,257</rect>
                 <key>scale9Paddings</key>
-                <rect>90,90,179,179</rect>
+                <rect>128,128,257,257</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">assets/sprites/pegasus/1.png</key>
-            <key type="filename">assets/sprites/sprite/0.png</key>
-            <key type="filename">assets/sprites/sprite/1.png</key>
+            <key type="filename">assets/sprites/golem/0.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>195,225,389,450</rect>
+                <key>scale9Paddings</key>
+                <rect>195,225,389,450</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/sprites/manticore/0.png</key>
+            <key type="filename">assets/sprites/mantis/0.png</key>
+            <key type="filename">assets/sprites/nue/0.png</key>
+            <key type="filename">assets/sprites/ogre/0.png</key>
+            <key type="filename">assets/sprites/qilin/0.png</key>
+            <key type="filename">assets/sprites/rakshasa/0.png</key>
+            <key type="filename">assets/sprites/satori/0.png</key>
+            <key type="filename">assets/sprites/skinwalker/0.png</key>
+            <key type="filename">assets/sprites/vampire/0.png</key>
+            <key type="filename">assets/sprites/warlock/0.png</key>
+            <key type="filename">assets/sprites/wendigo/0.png</key>
+            <key type="filename">assets/sprites/wraith/0.png</key>
+            <key type="filename">assets/sprites/wyvern/0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -202,6 +237,21 @@
                 <rect>90,90,179,179</rect>
                 <key>scale9Paddings</key>
                 <rect>90,90,179,179</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/sprites/tarrasque/0.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>137,122,273,245</rect>
+                <key>scale9Paddings</key>
+                <rect>137,122,273,245</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -221,7 +271,9 @@
         <key>replaceList</key>
         <array/>
         <key>ignoredWarnings</key>
-        <array/>
+        <array>
+            <string>large-max-texture-size</string>
+        </array>
         <key>commonDivisorX</key>
         <uint>1</uint>
         <key>commonDivisorY</key>
