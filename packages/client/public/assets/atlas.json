@@ -136,7 +136,7 @@
 					}
 				},
 				{
-					"filename": "manticore/0.png",
+					"filename": "mantis/0.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -241,7 +241,7 @@
 					}
 				},
 				{
-					"filename": "mantis/0.png",
+					"filename": "minotaur/0.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -561,6 +561,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:91202c3b1065f8faa6a311f2fa1d6a94:482b92156d738fb132cb0a70fa50e9f2:cbce6b53f0f49e0bf15173c25c41f876$"
+		"smartupdate": "$TexturePacker:SmartUpdate:242bd2c3ea277bfc4ec91bfda80099b6:b11beb8d34c745de79dfe7a4a8042f2a:cbce6b53f0f49e0bf15173c25c41f876$"
 	}
 }

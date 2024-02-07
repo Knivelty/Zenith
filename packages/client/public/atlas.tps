@@ -213,8 +213,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">assets/sprites/manticore/0.png</key>
             <key type="filename">assets/sprites/mantis/0.png</key>
+            <key type="filename">assets/sprites/minotaur/0.png</key>
             <key type="filename">assets/sprites/nue/0.png</key>
             <key type="filename">assets/sprites/ogre/0.png</key>
             <key type="filename">assets/sprites/qilin/0.png</key>
