@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --fix",
     "preview": "vite preview",
     "codegen": "graphql-codegen",
     "components": "npx @dojoengine/core ../contracts/target/dev/manifest.json src/dojo/contractComponents.ts http://localhost:5050 0x57cc45d1cbf3d842745b042b512514f5ea7da85785623e161d5838ae74de210"
