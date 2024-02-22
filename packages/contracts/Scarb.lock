@@ -36,7 +36,7 @@ dependencies = [
 
 [[package]]
 name = "autochessia"
-version = "0.4.0"
+version = "0.0.1"
 dependencies = [
  "alexandria_math",
  "dojo",
@@ -44,8 +44,8 @@ dependencies = [
 
 [[package]]
 name = "dojo"
-version = "0.4.1"
-source = "git+https://github.com/dojoengine/dojo#3de37a62cfbd81063bd5eb1ad39f028b2d482049"
+version = "0.5.1"
+source = "git+https://github.com/dojoengine/dojo?tag=v0.5.1#4a6cad5f21d8da71714ae6ff48c9cc6ecaae642a"
 dependencies = [
  "dojo_plugin",
 ]

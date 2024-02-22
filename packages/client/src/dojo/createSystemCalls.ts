@@ -1,27 +1,34 @@
-import { SetupNetworkResult } from "./setupNetwork";
 import { ClientComponents } from "./createClientComponents";
 import { MoveSystemProps, SystemSigner } from "./types";
+import { IWorld } from "./generated/generated";
+import { Account } from "starknet";
+import { ContractComponents } from "./generated/contractComponents";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
-    { execute }: SetupNetworkResult,
+    { client }: { client: IWorld },
+    contractComponents: ContractComponents,
     { Position }: ClientComponents
 ) {
-    const spawn = async (props: SystemSigner) => {
-        console.log(props.signer);
+    const spawn = async (account: Account) => {
         try {
-            await execute(props.signer, "autochessia::home::home", "spawn", []);
+            const { transaction_hash: txHash } = await client.actions.spawn({
+                account,
+            });
+
+            const result =
+                await client.provider.provider.waitForTransaction(txHash);
+
+            console.log(result);
         } catch (e) {
             console.error(e);
         }
     };
 
-    const startBattle = async (props: SystemSigner) => {
-        const { signer } = props;
-
+    const startBattle = async (account: Account) => {
         try {
-            await execute(signer, "autochessia::home::home", "startBattle", []);
+            await client.actions.startBattle({ account });
         } catch (e) {
             console.log(e);
         }

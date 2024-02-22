@@ -14,6 +14,8 @@ import {
     TILE_HEIGHT,
     TILE_WIDTH,
     Animations,
+    TILE_IMAGE_WEIGHT,
+    TILE_IMAGE_HEIGHT,
 } from "./constants";
 import { getSprites } from "./spriteConfig";
 import { getAnimations } from "./animationConfig";
@@ -49,9 +51,9 @@ export const phaserConfig = {
                     type: AssetType.MultiAtlas,
                     key: Assets.MainAtlas,
                     // Add a timestamp to the end of the path to prevent caching
-                    path: `assets/atlases/atlas.json`,
+                    path: `/assets/atlas.json`,
                     options: {
-                        imagePath: "assets/atlases/",
+                        imagePath: "/assets/",
                     },
                 },
             },
@@ -63,18 +65,18 @@ export const phaserConfig = {
             tilesets: {
                 Default: {
                     assetKey: Assets.Tileset,
-                    tileWidth: TILE_WIDTH,
-                    tileHeight: TILE_HEIGHT,
+                    tileWidth: TILE_IMAGE_WEIGHT,
+                    tileHeight: TILE_IMAGE_HEIGHT,
                 },
             },
         }),
     },
     scale: defineScaleConfig({
         parent: "phaser-game",
-        zoom: 2,
-        height: "32rem",
-        width: "32rem",
-        mode: Phaser.Scale.NONE,
+        zoom: 0.25,
+        height: "64rem",
+        width: "64rem",
+        mode: Phaser.Scale.NO_ZOOM,
     }),
     cameraConfig: defineCameraConfig({
         pinchSpeed: 1,
@@ -83,4 +85,5 @@ export const phaserConfig = {
         minZoom: 1,
     }),
     cullingChunkSize: TILE_HEIGHT,
+    
 };

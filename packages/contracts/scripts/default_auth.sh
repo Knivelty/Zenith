@@ -19,6 +19,8 @@ COMPONENTS=("Creature" "Player" "Piece" "InningBattle")
 
 for component in ${COMPONENTS[@]}; do
     sozo auth writer $component $HOME_ADDRESS --world $WORLD_ADDRESS --rpc-url $RPC_URL
+    # necessary even in local development, to avoid nonce duplicate
+    sleep 1
 done
 
 echo "Default authorizations have been successfully set."

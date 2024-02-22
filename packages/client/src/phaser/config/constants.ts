@@ -7,6 +7,7 @@ export enum Maps {
 }
 
 export enum Animations {
+    Invalid = "Invalid",
     MinotaurIdle = "MinotaurIdle",
     ColossusIdle = "ColossusIdle",
     BehemothIdle = "BehemothIdle",
@@ -38,6 +39,7 @@ export enum Animations {
 // image addresses
 
 export enum Sprites {
+    Invalid,
     Minotaur,
     Colossus,
     Behemoth,
@@ -91,8 +93,11 @@ export enum Direction {
     Right,
 }
 
-export const TILE_HEIGHT = 32;
-export const TILE_WIDTH = 32;
+export const TILE_HEIGHT = 256;
+export const TILE_WIDTH = 256;
+
+export const TILE_IMAGE_HEIGHT = 32;
+export const TILE_IMAGE_WEIGHT = 32;
 
 // contract offset so we don't overflow
 export const ORIGIN_OFFSET = 100;

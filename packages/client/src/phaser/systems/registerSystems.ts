@@ -1,14 +1,15 @@
 import { PhaserLayer } from "..";
-import { move } from "./move";
+import { prepare } from "./prepare";
 import { controls } from "./controls";
 import { mapSystem } from "./mapSystem";
 import { camera } from "./camera";
-import { battleLog } from "./battleLog";
+import { battle } from "./battle";
 
 export const registerSystems = (layer: PhaserLayer) => {
-    move(layer);
+    prepare(layer);
     controls(layer);
     mapSystem(layer);
     camera(layer);
+    battle(layer);
     // battleLog(layer);
 };

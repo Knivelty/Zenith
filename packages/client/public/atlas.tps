@@ -184,6 +184,7 @@
             <key type="filename">assets/sprites/fairy/0.png</key>
             <key type="filename">assets/sprites/fenrir/0.png</key>
             <key type="filename">assets/sprites/jiangshi/0.png</key>
+            <key type="filename">assets/sprites/kitsune/0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>

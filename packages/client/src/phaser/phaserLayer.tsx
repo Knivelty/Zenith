@@ -14,8 +14,6 @@ export const PhaserLayer = ({ networkLayer }: Props) => {
     useEffect(() => {
         if (phaserLayer) {
             store.setState({ phaserLayer });
-
-            console.log("Setting phaser layer");
         }
     }, [phaserLayer, loggedIn]);
 

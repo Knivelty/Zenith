@@ -1,7 +1,7 @@
 use starknet::ContractAddress;
 
 
-#[derive(Model, Drop, Serde)]
+#[derive(Model, Copy, Drop, Serde)]
 struct Player {
     #[key]
     player: ContractAddress,
@@ -16,7 +16,7 @@ struct Player {
     inventoryCount: u8,
 }
 
-#[derive(Model, Drop, Serde)]
+#[derive(Model, Copy, Drop, Serde)]
 struct Creature {
     #[key]
     tier: u8,
@@ -32,7 +32,7 @@ struct Creature {
     movement: u8,
 }
 
-#[derive(Model, Drop, Serde)]
+#[derive(Model, Copy, Drop, Serde)]
 struct Piece {
     #[key]
     owner: ContractAddress,
@@ -48,7 +48,7 @@ struct Piece {
     currentHealth: u16
 }
 
-#[derive(Model, Drop, Serde)]
+#[derive(Model, Copy, Drop, Serde)]
 struct InningBattle {
     #[key]
     index: u32,

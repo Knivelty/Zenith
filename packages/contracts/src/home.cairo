@@ -1,5 +1,5 @@
-use autochessia::models::{Direction, Creature, InningBattle};
-
+// NOTE: should import all models used below 
+use autochessia::models::{Creature, Position, Piece, Player};
 
 // define the interface
 #[starknet::interface]
@@ -16,9 +16,7 @@ use starknet::{ContractAddress, contract_address_try_from_felt252, get_caller_ad
 #[dojo::contract]
 mod home {
     use starknet::{ContractAddress, get_caller_address};
-    use autochessia::models::{
-        Creature, Position, Piece, Player, Moves, Direction, Vec2, InningBattle
-    };
+    use autochessia::models::{Creature, Position, Piece, Player, InningBattle};
     use autochessia::utils::{next_position, generate_pseudo_random_address};
     use dojo::base;
     use super::IHome;
@@ -75,37 +73,37 @@ mod home {
             // spawn player
             set!(
                 world,
-                (
-                    Player {
-                        player,
-                        health: 30,
-                        heroesCount: 1,
-                        inventoryCount: 0,
-                        heroAltarCount: 0,
-                        tier: 1,
-                        coin: 0,
-                        streakCount: 0,
-                        locked: 0
-                    },
-                    Piece {
-                        owner: player,
-                        index: 1,
-                        tier: 1,
-                        rarity: 1,
-                        internal_index: 1,
-                        x_board: 1,
-                        y_board: 1,
-                        x_in_battle: 0,
-                        y_in_battle: 0,
-                        currentHealth: 600
-                    }
-                )
+                Player {
+                    player: player,
+                    health: 30,
+                    heroesCount: 1,
+                    inventoryCount: 0,
+                    heroAltarCount: 0,
+                    tier: 1,
+                    coin: 0,
+                    streakCount: 0,
+                    locked: 0
+                }
+            );
+            set!(
+                world,
+                Piece {
+                    owner: player,
+                    index: 1,
+                    tier: 1,
+                    rarity: 1,
+                    internal_index: 1,
+                    x_board: 1,
+                    y_board: 1,
+                    x_in_battle: 0,
+                    y_in_battle: 0,
+                    currentHealth: 600
+                }
             );
             // get player's enemy address
 
             let enemy = generate_pseudo_random_address(1);
-
-            // spawn player's enemy
+            // // // spawn player's enemy
             set!(
                 world,
                 (
@@ -135,8 +133,9 @@ mod home {
                 )
             );
             // create battle
-            set!(world, (InningBattle { index: 1, homePlayer: player, awayPlayer: enemy }),);
+            set!(world, (InningBattle { index: 1, homePlayer: player, awayPlayer: player }),);
         }
+
 
         fn startBattle(self: @ContractState) {
             // Access the world dispatcher for reading.
@@ -236,7 +235,7 @@ mod tests {
 
     // import models
     use autochessia::models::{Player, player, Piece, piece, InningBattle, inning_battle};
-    use autochessia::models::{Position, Moves, Direction, Vec2};
+    use autochessia::models::{Position,};
 
     // import home
     use super::{home, IHomeDispatcher, IHomeDispatcherTrait};
