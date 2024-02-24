@@ -21,7 +21,7 @@ export async function setup({ ...config }: DojoConfig) {
     const contractComponents = defineContractComponents(world);
 
     // create client components
-    const clientComponents = createClientComponents({ contractComponents });
+    const clientComponents = createClientComponents({ contractComponents,world });
 
     // fetch all existing entities from torii
     await getSyncEntities(toriiClient, contractComponents as any);

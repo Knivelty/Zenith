@@ -45,20 +45,6 @@ export const prepare = (layer: PhaserLayer) => {
                 entity.toString() as Entity
             );
 
-            console.log("account: ", getChecksumAddress(account.address));
-            console.log(
-                "computer entity: ",
-                getEntityIdFromKeys([BigInt(account.address), 0n])
-            );
-
-            console.log(
-                "entity: ",
-                entity,
-                "owner: ",
-                getChecksumAddress(piece.owner),
-                piece.index
-            );
-
             const offsetPosition = { x: piece.x_board, y: piece.y_board };
             const pixelPosition = tileCoordToPixelCoord(
                 offsetPosition,
@@ -66,10 +52,17 @@ export const prepare = (layer: PhaserLayer) => {
                 TILE_HEIGHT
             );
             const hero = objectPool.get(entity, "Sprite");
+
+            // remove non owned piece
+            if (piece.owner != BigInt(account.address)) {
+                return;
+            }
+
+            // console.log("prepare entity: ", entity);
+
             hero.setComponent({
-                id: "piece",
+                id: entity,
                 once: (sprite: Phaser.GameObjects.Sprite) => {
-                    console.log("pixelPosition: ", pixelPosition);
                     sprite.setPosition(pixelPosition?.x, pixelPosition?.y);
 
                     sprite.play(config.animations[piece.internal_index]);

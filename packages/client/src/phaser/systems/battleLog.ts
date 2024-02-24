@@ -51,8 +51,6 @@ export async function battleLog(layer: PhaserLayer) {
         },
     });
 
-    console.log("value: ", value);
-
     const logs = value.data.events.edges
         .map((v) => {
             return {

@@ -42,7 +42,7 @@ export const usePhaserLayer = ({ networkLayer }: Props) => {
                 },
             }),
         };
-    }, [networkLayer]);
+    }, [networkLayer, height, width]);
 
     useEffect(() => {
         return () => {

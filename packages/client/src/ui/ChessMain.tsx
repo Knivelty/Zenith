@@ -4,7 +4,7 @@ import { useDojo } from "./hooks/useDojo";
 export function ChessMain() {
     const {
         account: { account },
-        systemCalls: { spawn, startBattle },
+        systemCalls: { spawn, startBattle, playAnimation },
     } = useDojo();
 
     return (
@@ -24,12 +24,17 @@ export function ChessMain() {
             </div> */}
             <Button
                 onClick={async () => {
-                    await startBattle({
-                        signer: account,
-                    });
+                    await startBattle(account);
                 }}
             >
                 start battle
+            </Button>
+            <Button
+                onClick={async () => {
+                    await playAnimation();
+                }}
+            >
+                play animation
             </Button>
         </div>
     );

@@ -7,8 +7,6 @@ export const createBurner = async ({ ...config }: DojoConfig) => {
         nodeUrl: config.rpcUrl,
     });
 
-    console.log("config: ", config);
-
     const masterAccount = new Account(
         rpcProvider,
         config.masterAddress,
@@ -25,13 +23,10 @@ export const createBurner = async ({ ...config }: DojoConfig) => {
 
     if (burnerManager.list().length === 0) {
         try {
-            console.log("create");
-            const account = await burnerManager.create();
+            await burnerManager.create();
 
             // sleep 3s
             await new Promise((resolve) => setTimeout(resolve, 3000));
-
-            console.log("create finish", account);
         } catch (e) {
             console.error(e);
         }

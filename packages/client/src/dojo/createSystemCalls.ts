@@ -3,13 +3,15 @@ import { MoveSystemProps, SystemSigner } from "./types";
 import { IWorld } from "./generated/generated";
 import { Account } from "starknet";
 import { ContractComponents } from "./generated/contractComponents";
+import { setComponent, updateComponent } from "@dojoengine/recs";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
     { client }: { client: IWorld },
     contractComponents: ContractComponents,
-    { Position }: ClientComponents
+    { Position, InningBattlePlay }: ClientComponents
 ) {
     const spawn = async (account: Account) => {
         try {
@@ -17,10 +19,8 @@ export function createSystemCalls(
                 account,
             });
 
-            const result =
-                await client.provider.provider.waitForTransaction(txHash);
-
-            console.log(result);
+            // const result =
+            await client.provider.provider.waitForTransaction(txHash);
         } catch (e) {
             console.error(e);
         }
@@ -30,12 +30,20 @@ export function createSystemCalls(
         try {
             await client.actions.startBattle({ account });
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
+    };
+
+    const playAnimation = async () => {
+        const entity = getEntityIdFromKeys([1n]);
+        updateComponent(InningBattlePlay, entity, {
+            shouldPlay: true,
+        });
     };
 
     return {
         spawn,
         startBattle,
+        playAnimation,
     };
 }
