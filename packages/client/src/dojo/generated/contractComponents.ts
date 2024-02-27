@@ -32,19 +32,6 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
-    Moves: (() => {
-      return defineComponent(
-        world,
-        { player: RecsType.BigInt, remaining: RecsType.Number, last_direction: RecsType.Number },
-        {
-          metadata: {
-            name: "Moves",
-            types: ["contractaddress","u8","enum"],
-            customTypes: ["Direction"],
-          },
-        }
-      );
-    })(),
     Piece: (() => {
       return defineComponent(
         world,

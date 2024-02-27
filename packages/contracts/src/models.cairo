@@ -1,6 +1,5 @@
 use starknet::ContractAddress;
 
-
 #[derive(Model, Copy, Drop, Serde)]
 struct Player {
     #[key]
@@ -48,6 +47,7 @@ struct Piece {
     currentHealth: u16
 }
 
+
 #[derive(Model, Copy, Drop, Serde)]
 struct InningBattle {
     #[key]
@@ -78,13 +78,6 @@ impl DirectionIntoFelt252 of Into<Direction, felt252> {
     }
 }
 
-#[derive(Model, Drop, Serde)]
-struct Moves {
-    #[key]
-    player: ContractAddress,
-    remaining: u8,
-    last_direction: Direction
-}
 
 #[derive(Clone, Copy, Drop, PartialEq, Serde, Introspect)]
 struct Vec2 {

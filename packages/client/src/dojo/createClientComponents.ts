@@ -22,5 +22,9 @@ export function createClientComponents({
             shouldPlay: Type.Boolean,
             played: Type.Boolean,
         }),
+        BattleLogs: defineComponent(world, {
+            inningBattleId: Type.Number,
+            logs: Type.String,
+        }),
     };
 }

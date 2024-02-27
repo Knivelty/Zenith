@@ -20,7 +20,7 @@ export function createSystemCalls(
             });
 
             // const result =
-            await client.provider.provider.waitForTransaction(txHash);
+            // await client.provider.provider.waitForTransaction(txHash);
         } catch (e) {
             console.error(e);
         }
