@@ -5,13 +5,14 @@ import { Account } from "starknet";
 import { ContractComponents } from "./generated/contractComponents";
 import { setComponent, updateComponent } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { zeroEntity } from "../utils";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
     { client }: { client: IWorld },
     contractComponents: ContractComponents,
-    { Position, InningBattlePlay }: ClientComponents
+    { Position, GameStatus }: ClientComponents
 ) {
     const spawn = async (account: Account) => {
         try {
@@ -28,15 +29,15 @@ export function createSystemCalls(
 
     const startBattle = async (account: Account) => {
         try {
-            await client.actions.startBattle({ account });
+            return await client.actions.startBattle({ account });
         } catch (e) {
             console.error(e);
+            throw e;
         }
     };
 
     const playAnimation = async () => {
-        const entity = getEntityIdFromKeys([1n]);
-        updateComponent(InningBattlePlay, entity, {
+        updateComponent(GameStatus, zeroEntity, {
             shouldPlay: true,
         });
     };

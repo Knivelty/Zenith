@@ -18,9 +18,11 @@ export function createClientComponents({
     return {
         ...contractComponents,
         // Position: overridableComponent(contractComponents.Position),
-        InningBattlePlay: defineComponent(world, {
+        GameStatus: defineComponent(world, {
+            status: Type.Number,
             shouldPlay: Type.Boolean,
             played: Type.Boolean,
+            currentRound: Type.Number,
         }),
         BattleLogs: defineComponent(world, {
             inningBattleId: Type.Number,

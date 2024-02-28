@@ -53,7 +53,8 @@ struct InningBattle {
     #[key]
     index: u32,
     homePlayer: ContractAddress,
-    awayPlayer: ContractAddress
+    awayPlayer: ContractAddress,
+    end: bool
 }
 
 

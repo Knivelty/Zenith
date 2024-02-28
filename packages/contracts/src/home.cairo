@@ -120,7 +120,10 @@ mod home {
                 )
             );
             // create battle
-            set!(world, (InningBattle { index: 1, homePlayer: player, awayPlayer: enemy }),);
+            set!(
+                world,
+                (InningBattle { index: 1, homePlayer: player, awayPlayer: enemy, end: false }),
+            );
         }
 
 
@@ -207,6 +210,10 @@ mod home {
                         order: 10, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
                     }
                 );
+
+            set!(
+                world, InningBattle { index: 1, homePlayer: player, awayPlayer: enemy, end: true }
+            );
 
             // mock move and attack while JPS is not done yet
             emit!(world, PieceActions { battleId: 1, logs: logs });

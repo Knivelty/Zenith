@@ -36,13 +36,13 @@ export async function setup({ ...config }: DojoConfig) {
     // ws link
     const wsLink = new GraphQLWsLink(
         createClient({
-            url: `ws://localhost:8080/graphql/ws`,
+            url: `${config.toriiUrl.replace(/^http:\/\//, "ws://")}/graphql/ws`,
         })
     );
 
     // http link
     const httpLink = new HttpLink({
-        uri: "http://localhost:8080/graphql",
+        uri: `${config.toriiUrl}/graphql`,
     });
 
     // combine
@@ -87,7 +87,7 @@ export async function setup({ ...config }: DojoConfig) {
     // fetch all existing entities from torii
     await getSyncEntities(toriiClient, contractComponents as any);
 
-    await getCustomEvents(graphqlClient, clientComponents);
+    await syncCustomEvents(graphqlClient, clientComponents);
 
     // fetch custom event from graphql api
 
@@ -138,7 +138,7 @@ export type gqlRes = {
     };
 };
 
-async function getCustomEvents(
+async function syncCustomEvents(
     graphqlClient: ApolloClient<any>,
     { BattleLogs }: ClientComponents
 ) {

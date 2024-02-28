@@ -22,11 +22,11 @@ export function defineContractComponents(world: World) {
     InningBattle: (() => {
       return defineComponent(
         world,
-        { index: RecsType.Number, homePlayer: RecsType.BigInt, awayPlayer: RecsType.BigInt },
+        { index: RecsType.Number, homePlayer: RecsType.BigInt, awayPlayer: RecsType.BigInt, end: RecsType.Boolean },
         {
           metadata: {
             name: "InningBattle",
-            types: ["u32","contractaddress","contractaddress"],
+            types: ["u32","contractaddress","contractaddress","bool"],
             customTypes: [],
           },
         }

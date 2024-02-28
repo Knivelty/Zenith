@@ -2,15 +2,16 @@ import {
     Entity,
     Has,
     defineSystem,
-    defineEnterSystem,
     getComponentValueStrict,
     UpdateType,
+    getComponentValue,
 } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { Sprites, TILE_HEIGHT, TILE_WIDTH } from "../config/constants";
+import { TILE_HEIGHT, TILE_WIDTH } from "../config/constants";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { addAddressPadding, getChecksumAddress } from "starknet";
+import { defineSystemST, zeroEntity } from "../../utils";
+import { GameStatusEnum } from "../../dojo/types";
 
 export const prepare = (layer: PhaserLayer) => {
     const {
@@ -19,7 +20,7 @@ export const prepare = (layer: PhaserLayer) => {
             Main: { config, objectPool },
         },
         networkLayer: {
-            contractComponents: { Piece, InningBattle },
+            clientComponents: { Player, Piece, InningBattle, GameStatus },
             account,
         },
     } = layer;
@@ -38,46 +39,107 @@ export const prepare = (layer: PhaserLayer) => {
     //     });
     // });
 
-    defineSystem(world, [Has(Piece)], ({ entity, type }) => {
+    defineSystemST<typeof GameStatus.schema>(
+        world,
+        [Has(GameStatus)],
+        ({ entity, type, value: [v, preV] }) => {
+            // if switch to prepare, recover all piece to initial place
+
+            console.log("v: ", v);
+            if (v?.status === GameStatusEnum.Prepare) {
+                //
+                const player = getComponentValueStrict(
+                    Player,
+                    getEntityIdFromKeys([BigInt(account.address)])
+                );
+
+                console.log("count: ", player.heroesCount);
+
+                // spawn local players piece
+                for (let i = 1; i <= player.heroesCount; i++) {
+                    spawnPreparedPiece(
+                        getEntityIdFromKeys([
+                            BigInt(account.address),
+                            BigInt(i),
+                        ])
+                    );
+                }
+
+                // spawn enemy's piece
+                const inningBattle = getComponentValueStrict(
+                    InningBattle,
+                    getEntityIdFromKeys([BigInt(v.currentRound)])
+                );
+
+                const enemy = getComponentValueStrict(
+                    Player,
+                    getEntityIdFromKeys([inningBattle.awayPlayer])
+                );
+
+                // spawn local players piece
+                for (let i = 1; i <= enemy.heroesCount; i++) {
+                    spawnPreparedPiece(
+                        getEntityIdFromKeys([
+                            inningBattle.awayPlayer,
+                            BigInt(i),
+                        ])
+                    );
+                }
+            }
+        }
+    );
+
+    function spawnPreparedPiece(entity: Entity) {
         const piece = getComponentValueStrict(
             Piece,
             entity.toString() as Entity
         );
 
-        if (type === UpdateType.Enter) {
-            let offsetPosition = { x: piece.x_board, y: piece.y_board };
+        let offsetPosition = { x: piece.x_board, y: piece.y_board };
 
-            if (BigInt(account.address) !== piece.owner) {
-                console.log("offsetPosition: ", offsetPosition);
-                offsetPosition = {
-                    x: 8 - offsetPosition.x,
-                    y: 8 - offsetPosition.x,
-                };
-                console.log("offsetPosition: ", offsetPosition);
-            }
+        if (BigInt(account.address) !== piece.owner) {
+            console.log("offsetPosition: ", offsetPosition);
+            offsetPosition = {
+                x: 8 - offsetPosition.x,
+                y: 8 - offsetPosition.x,
+            };
+            console.log("offsetPosition: ", offsetPosition);
+        }
 
-            const pixelPosition = tileCoordToPixelCoord(
-                offsetPosition,
-                TILE_WIDTH,
-                TILE_HEIGHT
-            );
-            const hero = objectPool.get(entity, "Sprite");
+        const pixelPosition = tileCoordToPixelCoord(
+            offsetPosition,
+            TILE_WIDTH,
+            TILE_HEIGHT
+        );
+        const hero = objectPool.get(entity, "Sprite");
 
-            // console.log("prepare entity: ", entity);
+        hero.setComponent({
+            id: entity,
+            once: (sprite: Phaser.GameObjects.Sprite) => {
+                console.log("pixelPosition: ", pixelPosition);
+                sprite.setPosition(pixelPosition?.x, pixelPosition?.y);
 
-            hero.setComponent({
-                id: entity,
-                once: (sprite: Phaser.GameObjects.Sprite) => {
-                    console.log("pixelPosition: ", pixelPosition);
-                    sprite.setPosition(pixelPosition?.x, pixelPosition?.y);
+                sprite.play(config.animations[piece.internal_index]);
 
-                    sprite.play(config.animations[piece.internal_index]);
+                // TODO: use lossless scale method
+                const scale = TILE_WIDTH / sprite.width;
+                sprite.setScale(scale);
+            },
+        });
+    }
 
-                    // TODO: use lossless scale method
-                    const scale = TILE_WIDTH / sprite.width;
-                    sprite.setScale(scale);
-                },
-            });
+    defineSystem(world, [Has(Piece)], ({ entity, type }) => {
+        const gameStatus = getComponentValue(GameStatus, zeroEntity);
+
+        if (!gameStatus) {
+            return;
+        }
+
+        if (
+            type === UpdateType.Enter &&
+            gameStatus.status === GameStatusEnum.Prepare
+        ) {
+            spawnPreparedPiece(entity as Entity);
         }
     });
 };

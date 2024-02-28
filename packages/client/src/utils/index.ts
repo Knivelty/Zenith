@@ -1,5 +1,6 @@
 import {
     ComponentUpdate,
+    Entity,
     QueryFragment,
     Schema,
     UpdateType,
@@ -23,3 +24,6 @@ export function defineSystemST<S extends Schema = Schema, T = unknown>(
         options
     );
 }
+
+export const zeroEntity: Entity =
+    "0x0000000000000000000000000000000000000000000000000000000000000000" as Entity;

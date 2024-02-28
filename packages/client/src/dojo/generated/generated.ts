@@ -40,12 +40,16 @@ export async function setupWorld(provider: DojoProvider) {
 
         const startBattle = async ({ account }: { account: Account }) => {
             try {
-                return await provider.execute(
+                const { transaction_hash: txHash } = await provider.execute(
                     account,
                     contract_name,
                     "startBattle",
                     []
                 );
+
+                const receipt = provider.provider.waitForTransaction(txHash);
+
+                return { txHash, receipt };
             } catch (error) {
                 console.error("Error executing move:", error);
                 throw error;

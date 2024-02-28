@@ -14,10 +14,11 @@ import { tileCoordToPixelCoord, tween } from "@latticexyz/phaserx";
 import { TILE_HEIGHT, TILE_WIDTH } from "../config/constants";
 import { Sprite } from "@latticexyz/phaserx/src/types";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { defineSystemST } from "../../utils";
+import { defineSystemST, zeroEntity } from "../../utils";
 import { BattleLog, BattleLogsType } from "../../dojo/generated/setup";
 import { resolve } from "path";
 import { deferred } from "@latticexyz/utils";
+import { GameStatusEnum } from "../../dojo/types";
 
 export const battle = (layer: PhaserLayer) => {
     const {
@@ -28,7 +29,7 @@ export const battle = (layer: PhaserLayer) => {
         networkLayer: {
             clientComponents: {
                 Piece,
-                InningBattlePlay,
+                GameStatus,
                 InningBattle,
                 Player,
                 BattleLogs,
@@ -38,14 +39,31 @@ export const battle = (layer: PhaserLayer) => {
         },
     } = layer;
 
-    defineSystem(world, [Has(InningBattle)], ({ entity, type, value }) => {
-        if (type == UpdateType.Enter && value) {
-            setComponent(InningBattlePlay, entity, {
-                shouldPlay: false,
-                played: false,
-            });
+    defineSystemST<typeof InningBattle.schema>(
+        world,
+        [Has(InningBattle)],
+        ({ entity, type, value: [v, preV] }) => {
+            console.log("update: ", entity, type, [v, preV]);
+            if (!v) {
+                return;
+            }
+            if (type == UpdateType.Enter) {
+                setComponent(GameStatus, zeroEntity, {
+                    shouldPlay: false,
+                    played: false,
+                    status: GameStatusEnum.Invalid,
+                    currentRound: v.index,
+                });
+            }
+
+            if (v?.end == false) {
+                console.log("prepare: ");
+                updateComponent(GameStatus, zeroEntity, {
+                    status: GameStatusEnum.Prepare,
+                });
+            }
         }
-    });
+    );
 
     async function playBattle(logs: BattleLog[]) {
         for (const l of logs) {
@@ -103,17 +121,18 @@ export const battle = (layer: PhaserLayer) => {
         return promise;
     }
 
-    defineSystemST<typeof InningBattlePlay.schema>(
+    defineSystemST<typeof GameStatus.schema>(
         world,
-        [Has(InningBattlePlay)],
-        ({ entity, type, value }) => {
-            if (type == UpdateType.Update) {
-                const play = getComponentValue(InningBattlePlay, entity);
+        [Has(GameStatus)],
+        ({ entity, type, value: [v, preV] }) => {
+            // if change from false to true, play the animation
+            if (v?.shouldPlay === true && preV?.shouldPlay == false) {
+                const play = v;
 
                 if (play?.shouldPlay == true) {
                     const inningBattle = getComponentValueStrict(
                         InningBattle,
-                        entity
+                        getEntityIdFromKeys([BigInt(v.currentRound)])
                     );
 
                     const battleLogs = getComponentValueStrict(
@@ -125,11 +144,15 @@ export const battle = (layer: PhaserLayer) => {
 
                     playBattle(logs).then(() => {
                         console.log("play finish");
+
+                        // after play, set status back
+                        updateComponent(GameStatus, entity, {
+                            shouldPlay: false,
+                            played: true,
+                            status: GameStatusEnum.Prepare,
+                        });
                     });
                 }
-                // updateComponent(InningBattlePlay, entity, {
-                //     shouldPlay: false,
-                // });
             }
         }
     );

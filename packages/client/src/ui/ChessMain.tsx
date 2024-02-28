@@ -24,17 +24,21 @@ export function ChessMain() {
             </div> */}
             <Button
                 onClick={async () => {
-                    await startBattle(account);
+                    const { receipt } = await startBattle(account);
+
+                    receipt.then((v) => {
+                        playAnimation();
+                    });
                 }}
             >
                 start battle
             </Button>
             <Button
                 onClick={async () => {
-                    await playAnimation();
+                    location.reload();
                 }}
             >
-                play animation
+                refresh
             </Button>
         </div>
     );
