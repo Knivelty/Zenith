@@ -51,7 +51,7 @@ export const battle = (layer: PhaserLayer) => {
                 setComponent(GameStatus, zeroEntity, {
                     shouldPlay: false,
                     played: false,
-                    status: GameStatusEnum.Invalid,
+                    status: GameStatusEnum.Prepare,
                     currentRound: v.index,
                 });
             }
