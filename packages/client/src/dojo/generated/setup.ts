@@ -115,7 +115,7 @@ export type BattleLogsType = {
 };
 
 export type BattleLog = {
-    player: bigint;
+    player: string;
     order: number;
     pieceId: number;
     to_x: number;

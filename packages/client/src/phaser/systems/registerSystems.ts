@@ -5,6 +5,7 @@ import { mapSystem } from "./mapSystem";
 import { camera } from "./camera";
 import { battle } from "./battle";
 import { health } from "./health";
+import { attack } from "./attack";
 
 export const registerSystems = (layer: PhaserLayer) => {
     prepare(layer);
@@ -14,4 +15,5 @@ export const registerSystems = (layer: PhaserLayer) => {
     battle(layer);
     // battleLog(layer);
     health(layer);
+    attack(layer);
 };

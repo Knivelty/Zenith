@@ -31,6 +31,16 @@ export function createClientComponents({
         HealthBar: defineComponent(world, {
             x: Type.Number,
             y: Type.Number,
+            percentage: Type.Number,
+        }),
+        Health: defineComponent(world, {
+            pieceEntity: Type.String,
+            current: Type.Number,
+            max: Type.Number,
+        }),
+        Attack: defineComponent(world, {
+            attacker: Type.String,
+            attacked: Type.String,
         }),
     };
 }

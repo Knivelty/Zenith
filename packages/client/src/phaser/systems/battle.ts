@@ -38,6 +38,7 @@ export const battle = (layer: PhaserLayer) => {
                 InningBattle,
                 Player,
                 BattleLogs,
+                Attack,
             },
             account,
             graphqlClient,
@@ -98,12 +99,11 @@ export const battle = (layer: PhaserLayer) => {
         );
 
         const hero = objectPool.get(pieceEntity, "Sprite");
-        const health = objectPool.get(`${pieceEntity}-health`, "Sprite");
+        const health = objectPool.get(`${pieceEntity}-health-bar`, "Sprite");
 
         hero.setComponent({
             id: pieceEntity,
             now: async (sprite: Phaser.GameObjects.Sprite) => {
-                console.log("set tween", pixelPosition, pieceEntity);
                 const result = await tween(
                     {
                         targets: sprite,
@@ -119,7 +119,7 @@ export const battle = (layer: PhaserLayer) => {
                         onUpdate: () => {
                             // set health bar follow on tween
                             health.setComponent({
-                                id: `${pieceEntity}-health`,
+                                id: `${pieceEntity}-health-bar`,
                                 once: (health: Phaser.GameObjects.Sprite) => {
                                     health.setPosition(
                                         sprite.x,
@@ -131,6 +131,40 @@ export const battle = (layer: PhaserLayer) => {
                     },
                     { keepExistingTweens: true }
                 );
+
+                // if have attack piece, run attack
+                if (v.attackPieceId !== 0) {
+                    const game = getComponentValueStrict(
+                        GameStatus,
+                        zeroEntity
+                    );
+                    const inningBattle = getComponentValueStrict(
+                        InningBattle,
+                        getEntityIdFromKeys([BigInt(game.currentRound)])
+                    );
+
+                    let attacked: Entity;
+                    if (BigInt(v.player) === inningBattle.homePlayer) {
+                        attacked = getEntityIdFromKeys([
+                            inningBattle.awayPlayer,
+                            BigInt(v.attackPieceId),
+                        ]);
+                    } else {
+                        attacked = getEntityIdFromKeys([
+                            inningBattle.homePlayer,
+                            BigInt(v.attackPieceId),
+                        ]);
+                    }
+
+                    console.log("v.player", v.player, inningBattle.homePlayer);
+                    console.log("attacked: ", attacked);
+
+                    setComponent(
+                        Attack,
+                        `${inningBattle}-${v.order}` as Entity,
+                        { attacker: pieceEntity, attacked: attacked }
+                    );
+                }
 
                 resolve(result);
             },

@@ -18,11 +18,9 @@ struct Player {
 #[derive(Model, Copy, Drop, Serde)]
 struct Creature {
     #[key]
-    tier: u8,
-    #[key]
-    rarity: u8,
-    #[key]
     internal_index: u8,
+    tier: u8,
+    rarity: u8,
     health: u16,
     attack: u8,
     range: u8,
