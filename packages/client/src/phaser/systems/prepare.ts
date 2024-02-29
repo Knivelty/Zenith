@@ -5,6 +5,7 @@ import {
     getComponentValueStrict,
     UpdateType,
     getComponentValue,
+    setComponent,
 } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
@@ -20,7 +21,13 @@ export const prepare = (layer: PhaserLayer) => {
             Main: { config, objectPool },
         },
         networkLayer: {
-            clientComponents: { Player, Piece, InningBattle, GameStatus },
+            clientComponents: {
+                Player,
+                Piece,
+                InningBattle,
+                GameStatus,
+                HealthBar,
+            },
             account,
         },
     } = layer;
@@ -44,7 +51,6 @@ export const prepare = (layer: PhaserLayer) => {
         [Has(GameStatus)],
         ({ entity, type, value: [v, preV] }) => {
             // if switch to prepare, recover all piece to initial place
-
             console.log("v: ", v);
             if (v?.status === GameStatusEnum.Prepare) {
                 //
@@ -125,6 +131,12 @@ export const prepare = (layer: PhaserLayer) => {
                 const scale = TILE_WIDTH / sprite.width;
                 sprite.setScale(scale);
             },
+        });
+
+        // update health bar
+        setComponent(HealthBar, `${entity}-health` as Entity, {
+            x: pixelPosition.x,
+            y: pixelPosition.y,
         });
     }
 

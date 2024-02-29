@@ -144,28 +144,28 @@ mod home {
             logs
                 .append(
                     PieceAction {
-                        order: 1, player: player, pieceId: 1, to_x: 1, to_y: 1, attackPieceId: 0,
+                        order: 1, player: player, pieceId: 1, to_x: 1, to_y: 1, attackPieceId: 1,
                     },
                 );
 
             logs
                 .append(
                     PieceAction {
-                        order: 2, player: enemy, pieceId: 1, to_x: 7, to_y: 7, attackPieceId: 0,
+                        order: 2, player: enemy, pieceId: 1, to_x: 7, to_y: 7, attackPieceId: 1,
                     },
                 );
 
             logs
                 .append(
                     PieceAction {
-                        order: 3, player: player, pieceId: 1, to_x: 5, to_y: 1, attackPieceId: 0,
+                        order: 3, player: player, pieceId: 1, to_x: 5, to_y: 1, attackPieceId: 1,
                     },
                 );
 
             logs
                 .append(
                     PieceAction {
-                        order: 4, player: enemy, pieceId: 1, to_x: 5, to_y: 7, attackPieceId: 0,
+                        order: 4, player: enemy, pieceId: 1, to_x: 5, to_y: 7, attackPieceId: 1,
                     },
                 );
 

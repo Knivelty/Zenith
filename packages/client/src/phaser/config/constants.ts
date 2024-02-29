@@ -40,57 +40,38 @@ export enum Animations {
 
 export enum Sprites {
     Invalid,
-    Minotaur,
-    Colossus,
-    Behemoth,
-    Wyvern,
-    Berserker,
-    Golem,
-    Bear,
-    Kitsune,
-    Nue,
-    Cyclops,
-    Wraith,
-    Fairy,
-    Leprechaun,
-    Dragon,
-    Wendigo,
-    Rakshasa,
-    Vampire,
-    Fenrir,
-    Ogre,
-    Warlock,
-    Jiangshi,
-    Tarrasque,
-    Chupacabra,
-    Ettin,
-    Satori,
-    Mantis,
+    HealthBar,
+    // Minotaur,
+    // Colossus,
+    // Behemoth,
+    // Wyvern,
+    // Berserker,
+    // Golem,
+    // Bear,
+    // Kitsune,
+    // Nue,
+    // Cyclops,
+    // Wraith,
+    // Fairy,
+    // Leprechaun,
+    // Dragon,
+    // Wendigo,
+    // Rakshasa,
+    // Vampire,
+    // Fenrir,
+    // Ogre,
+    // Warlock,
+    // Jiangshi,
+    // Tarrasque,
+    // Chupacabra,
+    // Ettin,
+    // Satori,
+    // Mantis,
 }
-
-export enum RPSSprites {
-    Rock = "r",
-    Paper = "p",
-    Scissors = "s",
-}
-
-export const ImagePaths: { [key in RPSSprites]: string } = {
-    [RPSSprites.Rock]: "rock.png",
-    [RPSSprites.Paper]: "paper.png",
-    [RPSSprites.Scissors]: "scissors.png",
-};
 
 export enum Assets {
     MainAtlas = "MainAtlas",
     Tileset = "Tileset",
-}
-
-export enum Direction {
-    Unknown,
-    Up,
-    Down,
-    Left,
-    Right,
 }
 
 export const TILE_HEIGHT = 256;
@@ -103,3 +84,6 @@ export const TILE_IMAGE_WEIGHT = 32;
 export const ORIGIN_OFFSET = 100;
 
 export const MAP_AMPLITUDE = 16;
+
+export const HealthBarOffSetX = 0;
+export const HealthBarOffSetY = 15;

@@ -1,13 +1,13 @@
 import { Assets, Sprites } from "./constants";
 
 const baseSprites = {
-    [Sprites.Pegasus]: {
+    [Sprites.Invalid]: {
         assetKey: Assets.MainAtlas,
-        frame: "pegasus/0.png",
+        frame: "bar/health.png",
     },
-    [Sprites.Sprite]: {
+    [Sprites.HealthBar]: {
         assetKey: Assets.MainAtlas,
-        frame: "sprite/0.png",
+        frame: "bar/health.png",
     },
 } as Record<number | string, { assetKey: Assets; frame: string }>;
 

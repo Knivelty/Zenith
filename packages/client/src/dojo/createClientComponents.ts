@@ -28,5 +28,9 @@ export function createClientComponents({
             inningBattleId: Type.Number,
             logs: Type.String,
         }),
+        HealthBar: defineComponent(world, {
+            x: Type.Number,
+            y: Type.Number,
+        }),
     };
 }

@@ -173,6 +173,21 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">assets/sprites/bar/health.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>6,1,13,1</rect>
+                <key>scale9Paddings</key>
+                <rect>6,1,13,1</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">assets/sprites/bear/0.png</key>
             <key type="filename">assets/sprites/behemoth/0.png</key>
             <key type="filename">assets/sprites/berserker/0.png</key>
@@ -185,6 +200,7 @@
             <key type="filename">assets/sprites/fenrir/0.png</key>
             <key type="filename">assets/sprites/jiangshi/0.png</key>
             <key type="filename">assets/sprites/kitsune/0.png</key>
+            <key type="filename">assets/sprites/leprechaun/0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>

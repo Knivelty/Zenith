@@ -11,7 +11,12 @@ import {
 } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
 import { tileCoordToPixelCoord, tween } from "@latticexyz/phaserx";
-import { TILE_HEIGHT, TILE_WIDTH } from "../config/constants";
+import {
+    HealthBarOffSetY,
+    Sprites,
+    TILE_HEIGHT,
+    TILE_WIDTH,
+} from "../config/constants";
 import { Sprite } from "@latticexyz/phaserx/src/types";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { defineSystemST, zeroEntity } from "../../utils";
@@ -68,7 +73,7 @@ export const battle = (layer: PhaserLayer) => {
     async function playBattle(logs: BattleLog[]) {
         for (const l of logs) {
             await playSingleBattle(l);
-            await new Promise((resolve) => setTimeout(resolve, 2000));
+            await new Promise((resolve) => setTimeout(resolve, 500));
             console.log("next");
         }
     }
@@ -93,6 +98,7 @@ export const battle = (layer: PhaserLayer) => {
         );
 
         const hero = objectPool.get(pieceEntity, "Sprite");
+        const health = objectPool.get(`${pieceEntity}-health`, "Sprite");
 
         hero.setComponent({
             id: pieceEntity,
@@ -109,6 +115,18 @@ export const battle = (layer: PhaserLayer) => {
                         ease: Phaser.Math.Easing.Linear,
                         onComplete: () => {
                             console.log("complete");
+                        },
+                        onUpdate: () => {
+                            // set health bar follow on tween
+                            health.setComponent({
+                                id: `${pieceEntity}-health`,
+                                once: (health: Phaser.GameObjects.Sprite) => {
+                                    health.setPosition(
+                                        sprite.x,
+                                        sprite.y - HealthBarOffSetY
+                                    );
+                                },
+                            });
                         },
                     },
                     { keepExistingTweens: true }
