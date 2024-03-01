@@ -48,11 +48,11 @@ mod home {
                     rarity: 1,
                     internal_index: 1,
                     health: 600,
-                    attack: 50,
-                    defense: 5,
-                    range: 1,
-                    speed: 101,
-                    movement: 4
+                    attack: 48,
+                    armor: 40,
+                    range: 2,
+                    speed: 2,
+                    initiative: 90
                 }
             );
         }

@@ -24,10 +24,10 @@ struct Creature {
     rarity: u8,
     health: u16,
     attack: u8,
+    armor: u8,
     range: u8,
-    defense: u8,
-    speed: u16,
-    movement: u8,
+    speed: u8,
+    initiative: u8,
 }
 
 #[derive(Model, Copy, Drop, Serde)]

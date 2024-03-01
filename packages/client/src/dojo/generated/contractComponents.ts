@@ -9,11 +9,11 @@ export function defineContractComponents(world: World) {
     Creature: (() => {
       return defineComponent(
         world,
-        { internal_index: RecsType.Number, tier: RecsType.Number, rarity: RecsType.Number, health: RecsType.Number, attack: RecsType.Number, range: RecsType.Number, defense: RecsType.Number, speed: RecsType.Number, movement: RecsType.Number },
+        { internal_index: RecsType.Number, tier: RecsType.Number, rarity: RecsType.Number, health: RecsType.Number, attack: RecsType.Number, armor: RecsType.Number, range: RecsType.Number, speed: RecsType.Number, initiative: RecsType.Number },
         {
           metadata: {
             name: "Creature",
-            types: ["u8","u8","u8","u16","u8","u8","u8","u16","u8"],
+            types: ["u8","u8","u8","u16","u8","u8","u8","u8","u8"],
             customTypes: [],
           },
         }
