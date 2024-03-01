@@ -2,12 +2,15 @@ import { useDojo } from "./hooks/useDojo";
 import { Button } from "./button";
 import { useUIStore } from "../store";
 import { useEffect } from "react";
+import { useComponentValue } from "@dojoengine/react";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 export const Spawn = () => {
     const setLoggedIn = useUIStore((state: any) => state.setLoggedIn);
     const {
         account: { account, isDeploying },
         systemCalls: { spawn },
+        clientComponents: { Player },
     } = useDojo();
 
     useEffect(() => {

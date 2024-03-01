@@ -6,6 +6,7 @@ import {
     UpdateType,
     getComponentValue,
     setComponent,
+    updateComponent,
 } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
@@ -13,6 +14,7 @@ import { TILE_HEIGHT, TILE_WIDTH } from "../config/constants";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { defineSystemST, zeroEntity } from "../../utils";
 import { GameStatusEnum } from "../../dojo/types";
+import { Game } from "phaser";
 
 export const prepare = (layer: PhaserLayer) => {
     const {
@@ -29,10 +31,37 @@ export const prepare = (layer: PhaserLayer) => {
                 HealthBar,
                 Health,
                 Creature,
+                MatchState,
             },
             account,
         },
     } = layer;
+
+    defineSystemST<typeof Player.schema>(
+        world,
+        [Has(Player)],
+        ({ entity, type, value: [v, preV] }) => {
+            if (!v) {
+                return;
+            }
+
+            if (v.player === BigInt(account.address)) {
+                if (!getComponentValue(GameStatus, zeroEntity)) {
+                    setComponent(GameStatus, zeroEntity, {
+                        played: false,
+                        shouldPlay: false,
+                        status: GameStatusEnum.Prepare,
+                        currentRound: 1,
+                        currentMatch: v.inMatch,
+                    });
+                } else {
+                    updateComponent(GameStatus, zeroEntity, {
+                        currentMatch: v.inMatch,
+                    });
+                }
+            }
+        }
+    );
 
     defineSystemST<typeof GameStatus.schema>(
         world,
@@ -59,7 +88,10 @@ export const prepare = (layer: PhaserLayer) => {
                 // spawn enemy's piece
                 const inningBattle = getComponentValueStrict(
                     InningBattle,
-                    getEntityIdFromKeys([BigInt(v.currentRound)])
+                    getEntityIdFromKeys([
+                        BigInt(v.currentMatch),
+                        BigInt(v.currentRound),
+                    ])
                 );
 
                 const enemy = getComponentValueStrict(
@@ -109,6 +141,7 @@ export const prepare = (layer: PhaserLayer) => {
                 sprite.setPosition(pixelPosition.x, pixelPosition.y);
 
                 sprite.play(config.animations[piece.internal_index]);
+                sprite.setInteractive();
 
                 // TODO: use lossless scale method
                 const scale = TILE_WIDTH / sprite.width;

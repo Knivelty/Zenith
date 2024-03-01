@@ -15,7 +15,7 @@ echo home : $HOME_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 # enable system -> component authorizations
-COMPONENTS=("Creature" "Player" "Piece" "InningBattle")
+COMPONENTS=("Creature" "Player" "Piece" "InningBattle" "GlobalState" "MatchState")
 
 for component in ${COMPONENTS[@]}; do
     sozo auth writer $component $HOME_ADDRESS --world $WORLD_ADDRESS --rpc-url $RPC_URL
@@ -24,3 +24,7 @@ for component in ${COMPONENTS[@]}; do
 done
 
 echo "Default authorizations have been successfully set."
+
+# run intialize function
+sozo execute $HOME_ADDRESS "initialize"
+echo "Initialize successfully"

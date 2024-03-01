@@ -1,21 +1,23 @@
-use autochessia::models::{Creature, Position, Piece, Player};
+use autochessia::models::{Creature, Piece, Player};
 
 // define the interface
 #[starknet::interface]
 trait IHome<TContractState> {
+    fn initialize(self: @TContractState);
     fn spawn(self: @TContractState);
     fn startBattle(self: @TContractState);
+    fn nextRound(self: @TContractState);
 }
 
 use starknet::{ContractAddress, contract_address_try_from_felt252, get_caller_address};
 
 
-// dojo decorator
-
 #[dojo::contract]
 mod home {
     use starknet::{ContractAddress, get_caller_address};
-    use autochessia::models::{Creature, Position, Piece, Player, InningBattle};
+    use autochessia::models::{
+        Creature, Position, Piece, Player, InningBattle, GlobalState, MatchState
+    };
     use autochessia::utils::{next_position, generate_pseudo_random_address};
     use autochessia::customEvent::{PieceActions, PieceAction};
     use dojo::base;
@@ -33,15 +35,12 @@ mod home {
     // impl: implement functions specified in trait
     #[external(v0)]
     impl HomeImpl of IHome<ContractState> {
-        // ContractState is defined by system decorator expansion
-        fn spawn(self: @ContractState) {
+        // intialize all args
+        fn initialize(self: @ContractState) {
             // Access the world dispatcher for reading.
             let world = self.world_dispatcher.read();
 
-            // Get the address of the current caller, possibly the player's address.
-            let player = get_caller_address();
-
-            // initialize creature, these can be moved to other place later
+            // initialize creature
             set!(
                 world,
                 Creature {
@@ -56,6 +55,26 @@ mod home {
                     movement: 4
                 }
             );
+        }
+
+        // ContractState is defined by system decorator expansion
+        fn spawn(self: @ContractState) {
+            // Access the world dispatcher for reading.
+            let world = self.world_dispatcher.read();
+
+            // Get the address of the current caller, possibly the player's address.
+            let player = get_caller_address();
+
+            // create match
+            let globalState = get!(world, 1, GlobalState);
+            let currentMatch = globalState.totalMatch + 1;
+            set!(
+                world,
+                (
+                    MatchState { index: currentMatch, round: 1 },
+                    GlobalState { index: 1, totalMatch: currentMatch }
+                )
+            );
 
             // spawn player
             set!(
@@ -69,7 +88,8 @@ mod home {
                     tier: 1,
                     coin: 0,
                     streakCount: 0,
-                    locked: 0
+                    locked: 0,
+                    inMatch: currentMatch
                 }
             );
             set!(
@@ -103,7 +123,8 @@ mod home {
                         tier: 1,
                         coin: 0,
                         streakCount: 0,
-                        locked: 0
+                        locked: 0,
+                        inMatch: currentMatch
                     },
                     Piece {
                         owner: enemy,
@@ -122,7 +143,41 @@ mod home {
             // create battle
             set!(
                 world,
-                (InningBattle { index: 1, homePlayer: player, awayPlayer: enemy, end: false }),
+                (InningBattle {
+                    currentMatch: currentMatch,
+                    round: 1,
+                    homePlayer: player,
+                    awayPlayer: enemy,
+                    end: false
+                }),
+            );
+        }
+
+
+        fn nextRound(self: @ContractState) {
+            let world = self.world_dispatcher.read();
+            let playerAddr = get_caller_address();
+            let player = get!(world, playerAddr, Player);
+            let currentMatchState = get!(world, player.inMatch, MatchState);
+
+            let lastInningBattle = get!(
+                world, (player.inMatch, currentMatchState.round), InningBattle
+            );
+
+            let newRound = currentMatchState.round + 1;
+
+            set!(world, MatchState { index: currentMatchState.index, round: newRound });
+
+            // create battle
+            set!(
+                world,
+                (InningBattle {
+                    currentMatch: currentMatchState.index,
+                    round: newRound,
+                    homePlayer: playerAddr,
+                    awayPlayer: lastInningBattle.awayPlayer,
+                    end: false
+                }),
             );
         }
 
@@ -132,19 +187,31 @@ mod home {
             let world = self.world_dispatcher.read();
 
             // Get the address of the current caller, possibly the player's address.
-            let player = get_caller_address();
+            let playerAddr = get_caller_address();
+
+            let player = get!(world, playerAddr, Player);
+
+            let currentMatchState = get!(world, player.inMatch, MatchState);
 
             // get inning inning battle
-            let inningBattle = get!(world, 1, InningBattle);
+            let inningBattle = get!(
+                world, (currentMatchState.index, currentMatchState.round), InningBattle
+            );
 
             let enemy = inningBattle.awayPlayer;
 
             let mut logs = ArrayTrait::<PieceAction>::new();
 
+            // move period
             logs
                 .append(
                     PieceAction {
-                        order: 1, player: player, pieceId: 1, to_x: 1, to_y: 1, attackPieceId: 0,
+                        order: 1,
+                        player: playerAddr,
+                        pieceId: 1,
+                        to_x: 1,
+                        to_y: 1,
+                        attackPieceId: 0,
                     },
                 );
 
@@ -158,7 +225,12 @@ mod home {
             logs
                 .append(
                     PieceAction {
-                        order: 3, player: player, pieceId: 1, to_x: 5, to_y: 1, attackPieceId: 0,
+                        order: 3,
+                        player: playerAddr,
+                        pieceId: 1,
+                        to_x: 5,
+                        to_y: 1,
+                        attackPieceId: 0,
                     },
                 );
 
@@ -172,10 +244,16 @@ mod home {
             logs
                 .append(
                     PieceAction {
-                        order: 5, player: player, pieceId: 1, to_x: 5, to_y: 4, attackPieceId: 0,
+                        order: 5,
+                        player: playerAddr,
+                        pieceId: 1,
+                        to_x: 5,
+                        to_y: 4,
+                        attackPieceId: 0,
                     },
                 );
 
+            // attack period
             logs
                 .append(
                     PieceAction {
@@ -186,7 +264,12 @@ mod home {
             logs
                 .append(
                     PieceAction {
-                        order: 7, player: player, pieceId: 1, to_x: 5, to_y: 4, attackPieceId: 1,
+                        order: 7,
+                        player: playerAddr,
+                        pieceId: 1,
+                        to_x: 5,
+                        to_y: 4,
+                        attackPieceId: 1,
                     },
                 );
 
@@ -200,7 +283,12 @@ mod home {
             logs
                 .append(
                     PieceAction {
-                        order: 9, player: player, pieceId: 1, to_x: 5, to_y: 4, attackPieceId: 1,
+                        order: 9,
+                        player: playerAddr,
+                        pieceId: 1,
+                        to_x: 5,
+                        to_y: 4,
+                        attackPieceId: 1,
                     },
                 );
 
@@ -210,13 +298,62 @@ mod home {
                         order: 10, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
                     }
                 );
+            logs
+                .append(
+                    PieceAction {
+                        order: 11,
+                        player: playerAddr,
+                        pieceId: 1,
+                        to_x: 5,
+                        to_y: 4,
+                        attackPieceId: 1,
+                    }
+                );
+
+            logs
+                .append(
+                    PieceAction {
+                        order: 12, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
+                    }
+                );
+
+            logs
+                .append(
+                    PieceAction {
+                        order: 13,
+                        player: playerAddr,
+                        pieceId: 1,
+                        to_x: 5,
+                        to_y: 4,
+                        attackPieceId: 1,
+                    }
+                );
+
+            logs
+                .append(
+                    PieceAction {
+                        order: 14, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
+                    }
+                );
 
             set!(
-                world, InningBattle { index: 1, homePlayer: player, awayPlayer: enemy, end: true }
+                world,
+                InningBattle {
+                    currentMatch: currentMatchState.index,
+                    round: currentMatchState.round,
+                    homePlayer: playerAddr,
+                    awayPlayer: enemy,
+                    end: true
+                }
             );
 
             // mock move and attack while JPS is not done yet
-            emit!(world, PieceActions { battleId: 1, logs: logs });
+            emit!(
+                world,
+                PieceActions {
+                    matchId: currentMatchState.index, roundId: currentMatchState.round, logs: logs
+                }
+            );
         }
     }
 }
@@ -233,7 +370,6 @@ mod tests {
 
     // import models
     use autochessia::models::{Player, player, Piece, piece, InningBattle, inning_battle};
-    use autochessia::models::{Position,};
 
     // import home
     use super::{home, IHomeDispatcher, IHomeDispatcherTrait};

@@ -22,9 +22,11 @@ export function createClientComponents({
             status: Type.Number,
             shouldPlay: Type.Boolean,
             played: Type.Boolean,
+            currentMatch: Type.Number,
             currentRound: Type.Number,
         }),
         BattleLogs: defineComponent(world, {
+            matchId: Type.Number,
             inningBattleId: Type.Number,
             logs: Type.String,
         }),

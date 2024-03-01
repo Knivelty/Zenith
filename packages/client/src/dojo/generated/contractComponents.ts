@@ -9,7 +9,7 @@ export function defineContractComponents(world: World) {
     Creature: (() => {
       return defineComponent(
         world,
-        { tier: RecsType.Number, rarity: RecsType.Number, internal_index: RecsType.Number, health: RecsType.Number, attack: RecsType.Number, range: RecsType.Number, defense: RecsType.Number, speed: RecsType.Number, movement: RecsType.Number },
+        { internal_index: RecsType.Number, tier: RecsType.Number, rarity: RecsType.Number, health: RecsType.Number, attack: RecsType.Number, range: RecsType.Number, defense: RecsType.Number, speed: RecsType.Number, movement: RecsType.Number },
         {
           metadata: {
             name: "Creature",
@@ -19,14 +19,40 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    GlobalState: (() => {
+      return defineComponent(
+        world,
+        { index: RecsType.Number, totalMatch: RecsType.Number },
+        {
+          metadata: {
+            name: "GlobalState",
+            types: ["u32","u32"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
     InningBattle: (() => {
       return defineComponent(
         world,
-        { index: RecsType.Number, homePlayer: RecsType.BigInt, awayPlayer: RecsType.BigInt, end: RecsType.Boolean },
+        { currentMatch: RecsType.Number, round: RecsType.Number, homePlayer: RecsType.BigInt, awayPlayer: RecsType.BigInt, end: RecsType.Boolean },
         {
           metadata: {
             name: "InningBattle",
-            types: ["u32","contractaddress","contractaddress","bool"],
+            types: ["u32","u8","contractaddress","contractaddress","bool"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    MatchState: (() => {
+      return defineComponent(
+        world,
+        { index: RecsType.Number, round: RecsType.Number },
+        {
+          metadata: {
+            name: "MatchState",
+            types: ["u32","u8"],
             customTypes: [],
           },
         }
@@ -48,11 +74,11 @@ export function defineContractComponents(world: World) {
     Player: (() => {
       return defineComponent(
         world,
-        { player: RecsType.BigInt, health: RecsType.Number, streakCount: RecsType.Number, coin: RecsType.Number, tier: RecsType.Number, locked: RecsType.Number, heroesCount: RecsType.Number, heroAltarCount: RecsType.Number, inventoryCount: RecsType.Number },
+        { player: RecsType.BigInt, inMatch: RecsType.Number, health: RecsType.Number, streakCount: RecsType.Number, coin: RecsType.Number, tier: RecsType.Number, locked: RecsType.Number, heroesCount: RecsType.Number, heroAltarCount: RecsType.Number, inventoryCount: RecsType.Number },
         {
           metadata: {
             name: "Player",
-            types: ["contractaddress","u8","u8","u8","u8","u8","u8","u8","u8"],
+            types: ["contractaddress","u32","u8","u8","u8","u8","u8","u8","u8","u8"],
             customTypes: [],
           },
         }

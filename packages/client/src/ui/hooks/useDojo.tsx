@@ -29,5 +29,6 @@ export const useDojo = () => {
         },
         systemCalls: networkLayer.systemCalls,
         contractComponents: networkLayer.contractComponents,
+        clientComponents: networkLayer.clientComponents,
     };
 };

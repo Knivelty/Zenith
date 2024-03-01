@@ -22,6 +22,7 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 
 import { Entity, setComponent } from "@dojoengine/recs";
 import { getMainDefinition } from "@apollo/client/utilities";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
@@ -132,9 +133,29 @@ export const battleLogSubscription = gql`
     }
 `;
 
-export type gqlRes = {
+export const battleLogQuery = gql`
+    query ($keys: [String!]) {
+        events(keys: $keys) {
+            edges {
+                node {
+                    id
+                    keys
+                    data
+                }
+            }
+        }
+    }
+`;
+
+export type gqlSubRes = {
     eventEmitted: {
         data: string[];
+    };
+};
+
+export type gqlQueryRes = {
+    events: {
+        edges: { node: { id: string; keys: string[]; data: string[] } }[];
     };
 };
 
@@ -142,7 +163,59 @@ async function syncCustomEvents(
     graphqlClient: ApolloClient<any>,
     { BattleLogs }: ClientComponents
 ) {
-    const subscription = graphqlClient.subscribe<gqlRes>({
+    function syncEventToEntity(data: string[]) {
+        const output = [];
+        const matchId = parseInt(data[0], 16);
+        const battleId = parseInt(data[1], 16);
+        const length = parseInt(data[2], 16);
+
+        for (let i = 0; i < length; i++) {
+            output.push({
+                player: String(data[i * 6 + 3]),
+                order: parseInt(data[i * 6 + 4], 16),
+                pieceId: parseInt(data[i * 6 + 5]),
+                to_x: parseInt(data[i * 6 + 6]),
+                to_y: parseInt(data[i * 6 + 7]),
+                attackPieceId: parseInt(data[i * 6 + 8]),
+            });
+        }
+
+        console.log(
+            "entity: ",
+            getEntityIdFromKeys([BigInt(matchId), BigInt(battleId)])
+        );
+
+        setComponent(
+            BattleLogs,
+            getEntityIdFromKeys([BigInt(matchId), BigInt(battleId)]),
+            {
+                matchId: matchId,
+                inningBattleId: battleId,
+                logs: JSON.stringify(output),
+            }
+        );
+    }
+
+    const fetched = graphqlClient.query<gqlQueryRes>({
+        query: battleLogQuery,
+        variables: {
+            // TODO: compute keys rather hard code
+            keys: [
+                "0x43387f82393e71c11fb2201d319a49b2456307dcab561e935754e2c7759096",
+                "0x69004d77f08383338e5bd2af7cdf03669af92e195839a62598dcd58380076da",
+            ],
+        },
+    });
+
+    fetched.then((result) => {
+        console.log("fetched result", result.data.events.edges);
+        result.data.events.edges.forEach((v) => {
+            console.log("v.node.data: ", v.node.data);
+            syncEventToEntity(v.node.data);
+        });
+    });
+
+    const subscription = graphqlClient.subscribe<gqlSubRes>({
         query: battleLogSubscription,
         variables: {
             // TODO: compute keys rather hard code
@@ -160,27 +233,7 @@ async function syncCustomEvents(
             if (!data) {
                 return;
             }
-
-            const output = [];
-
-            const battleId = parseInt(data[0], 16);
-            const length = parseInt(data[1], 16);
-
-            for (let i = 0; i < length; i++) {
-                output.push({
-                    player: String(data[i * 6 + 2]),
-                    order: parseInt(data[i * 6 + 3], 16),
-                    pieceId: parseInt(data[i * 6 + 4]),
-                    to_x: parseInt(data[i * 6 + 5]),
-                    to_y: parseInt(data[i * 6 + 6]),
-                    attackPieceId: parseInt(data[i * 6 + 7]),
-                });
-            }
-
-            setComponent(BattleLogs, battleId.toString() as Entity, {
-                inningBattleId: battleId,
-                logs: JSON.stringify(output),
-            });
+            syncEventToEntity(data);
         },
     });
 }

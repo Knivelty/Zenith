@@ -36,6 +36,15 @@ export function createSystemCalls(
         }
     };
 
+    const nextRound = async (account: Account) => {
+        try {
+            return await client.actions.nextRound({ account });
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    };
+
     const playAnimation = async () => {
         updateComponent(GameStatus, zeroEntity, {
             shouldPlay: true,
@@ -46,5 +55,6 @@ export function createSystemCalls(
         spawn,
         startBattle,
         playAnimation,
+        nextRound,
     };
 }

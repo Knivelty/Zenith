@@ -10,20 +10,6 @@ export async function setupWorld(provider: DojoProvider) {
     function actions() {
         const contract_name = "home";
 
-        const echo = async ({ account }: { account: Account }) => {
-            try {
-                return await provider.execute(
-                    account,
-                    contract_name,
-                    "echo",
-                    []
-                );
-            } catch (error) {
-                console.error("Error executing echo:", error);
-                throw error;
-            }
-        };
-
         const spawn = async ({ account }: { account: Account }) => {
             try {
                 return await provider.execute(
@@ -55,7 +41,25 @@ export async function setupWorld(provider: DojoProvider) {
                 throw error;
             }
         };
-        return { spawn, startBattle, echo };
+
+        const nextRound = async ({ account }: { account: Account }) => {
+            try {
+                const { transaction_hash: txHash } = await provider.execute(
+                    account,
+                    contract_name,
+                    "nextRound",
+                    []
+                );
+
+                const receipt = provider.provider.waitForTransaction(txHash);
+
+                return { txHash, receipt };
+            } catch (error) {
+                console.error("Error executing move:", error);
+                throw error;
+            }
+        };
+        return { spawn, startBattle, nextRound };
     }
     return {
         actions: actions(),

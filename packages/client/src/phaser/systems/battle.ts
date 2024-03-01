@@ -54,11 +54,11 @@ export const battle = (layer: PhaserLayer) => {
                 return;
             }
             if (type == UpdateType.Enter) {
-                setComponent(GameStatus, zeroEntity, {
-                    shouldPlay: false,
-                    played: false,
-                    status: GameStatusEnum.Prepare,
-                    currentRound: v.index,
+                updateComponent(GameStatus, zeroEntity, {
+                    // shouldPlay: false,
+                    // played: false,
+                    // status: GameStatusEnum.Prepare,
+                    currentRound: v.round,
                 });
             }
 
@@ -66,6 +66,10 @@ export const battle = (layer: PhaserLayer) => {
                 console.log("prepare: ");
                 updateComponent(GameStatus, zeroEntity, {
                     status: GameStatusEnum.Prepare,
+                });
+            } else if (v.end == true) {
+                updateComponent(GameStatus, zeroEntity, {
+                    status: GameStatusEnum.InBattle,
                 });
             }
         }
@@ -114,7 +118,7 @@ export const battle = (layer: PhaserLayer) => {
                         },
                         ease: Phaser.Math.Easing.Linear,
                         onComplete: () => {
-                            console.log("complete");
+                            // console.log("complete");
                         },
                         onUpdate: () => {
                             // set health bar follow on tween
@@ -140,7 +144,10 @@ export const battle = (layer: PhaserLayer) => {
                     );
                     const inningBattle = getComponentValueStrict(
                         InningBattle,
-                        getEntityIdFromKeys([BigInt(game.currentRound)])
+                        getEntityIdFromKeys([
+                            BigInt(game.currentMatch),
+                            BigInt(game.currentRound),
+                        ])
                     );
 
                     let attacked: Entity;
@@ -184,15 +191,31 @@ export const battle = (layer: PhaserLayer) => {
                 if (play?.shouldPlay == true) {
                     const inningBattle = getComponentValueStrict(
                         InningBattle,
-                        getEntityIdFromKeys([BigInt(v.currentRound)])
+                        getEntityIdFromKeys([
+                            BigInt(v.currentMatch),
+                            BigInt(v.currentRound),
+                        ])
+                    );
+
+                    console.log(
+                        "geted entity: ",
+                        getEntityIdFromKeys([
+                            BigInt(inningBattle.currentMatch),
+                            BigInt(inningBattle.round),
+                        ])
                     );
 
                     const battleLogs = getComponentValueStrict(
                         BattleLogs,
-                        inningBattle.index.toString() as Entity
+                        getEntityIdFromKeys([
+                            BigInt(inningBattle.currentMatch),
+                            BigInt(inningBattle.round),
+                        ])
                     ) as BattleLogsType;
 
                     const logs = JSON.parse(battleLogs.logs) as BattleLog[];
+
+                    console.log("battleLogs: ", logs);
 
                     playBattle(logs).then(() => {
                         console.log("play finish");
@@ -201,7 +224,7 @@ export const battle = (layer: PhaserLayer) => {
                         updateComponent(GameStatus, entity, {
                             shouldPlay: false,
                             played: true,
-                            status: GameStatusEnum.Prepare,
+                            status: GameStatusEnum.WaitForNextRound,
                         });
                     });
                 }

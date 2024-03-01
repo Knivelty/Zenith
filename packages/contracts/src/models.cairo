@@ -4,6 +4,7 @@ use starknet::ContractAddress;
 struct Player {
     #[key]
     player: ContractAddress,
+    inMatch: u32,
     health: u8,
     streakCount: u8,
     coin: u8,
@@ -49,10 +50,26 @@ struct Piece {
 #[derive(Model, Copy, Drop, Serde)]
 struct InningBattle {
     #[key]
-    index: u32,
+    currentMatch: u32,
+    #[key]
+    round: u8,
     homePlayer: ContractAddress,
     awayPlayer: ContractAddress,
     end: bool
+}
+
+#[derive(Model, Copy, Drop, Serde)]
+struct GlobalState {
+    #[key]
+    index: u32,
+    totalMatch: u32,
+}
+
+#[derive(Model, Copy, Drop, Serde)]
+struct MatchState {
+    #[key]
+    index: u32,
+    round: u8,
 }
 
 

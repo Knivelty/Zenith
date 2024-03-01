@@ -23,8 +23,10 @@ struct PieceAction {
 // declaring custom event struct
 #[derive(Clone, Drop, starknet::Event)]
 struct PieceActions {
-    // key
-    battleId: u8,
+    // key: match
+    matchId: u32,
+    // key: round
+    roundId: u8,
     logs: Array<PieceAction>,
 }
 // Deprecated below
