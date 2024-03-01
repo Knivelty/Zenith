@@ -336,6 +336,25 @@ mod home {
                     }
                 );
 
+            logs
+                .append(
+                    PieceAction {
+                        order: 15,
+                        player: playerAddr,
+                        pieceId: 1,
+                        to_x: 5,
+                        to_y: 4,
+                        attackPieceId: 1,
+                    }
+                );
+
+            logs
+                .append(
+                    PieceAction {
+                        order: 16, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
+                    }
+                );
+
             set!(
                 world,
                 InningBattle {
