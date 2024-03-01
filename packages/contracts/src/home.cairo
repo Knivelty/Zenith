@@ -403,7 +403,7 @@ mod tests {
         assert(player.health == 30, 'health not right');
 
         // check inning battle
-        let iBattle = get!(world, 1, InningBattle);
+        let iBattle = get!(world, (1, 1), InningBattle);
 
         assert(iBattle.homePlayer == caller, 'home player not true');
     }
