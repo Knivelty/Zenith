@@ -1,0 +1,305 @@
+import {
+    Grid,
+    JumpPointFinder,
+    JPFNeverMoveDiagonally,
+    DiagonalMovement,
+} from "pathfinding";
+import { uniqWith } from "lodash";
+
+export type PieceInBattle = {
+    entity: string;
+    x: number;
+    y: number;
+    health: number;
+    attack: number;
+    armor: number;
+    speed: number;
+    range: number;
+    initiative: number;
+    isInHome: boolean;
+    dead: boolean;
+};
+
+export type PieceInBattleOrUndefined = PieceInBattle | undefined;
+
+function manhattanDistance(x0: number, y0: number, x1: number, y1: number) {
+    return Math.abs(x1 - x0) + Math.abs(y1 - y0);
+}
+
+// function get
+
+function getHomePiece(pieces: PieceInBattle[]) {
+    return pieces.filter((v) => v.isInHome === true);
+}
+
+function getAwayPiece(pieces: PieceInBattle[]) {
+    return pieces.filter((v) => v.isInHome === false);
+}
+
+function getAimedPiece(
+    actionP: PieceInBattle,
+    pieces: PieceInBattle[]
+): PieceInBattle {
+    let opposingP: PieceInBattle[] = [];
+
+    if (actionP.isInHome) {
+        opposingP = getAwayPiece(pieces);
+    } else {
+        opposingP = getHomePiece(pieces);
+    }
+
+    // get latest piece
+    const targetPiece = opposingP
+        .map((opp) => {
+            return {
+                ...opp,
+                distance: manhattanDistance(actionP.x, actionP.y, opp.x, opp.y),
+            };
+        })
+        .sort((a, b) => a.distance - b.distance)[0];
+
+    return targetPiece;
+}
+
+const ROWS = 8;
+const COLS = 8;
+
+export function calculateBattleLogs(pieces: PieceInBattle[]) {
+    for (let i = 0; i < 100; i++) {
+        battleForAStep(pieces);
+        if (isTurnEnd(pieces)) {
+            console.log("turn end");
+            break;
+        } else {
+            console.log("turn not end, continue");
+        }
+    }
+}
+
+function getFarthestAttackablePoint(x: number, y: number, k: number) {
+    const rawPoints: { x: number; y: number }[] = [];
+    for (let i = -k; i <= k; i++) {
+        const fromX = x + i;
+        const fromY1 = y + k - Math.abs(i);
+        const fromY2 = y - (k - Math.abs(i));
+
+        rawPoints.push({ x: fromX, y: fromY1 });
+
+        rawPoints.push({ x: fromX, y: fromY2 });
+    }
+
+    // Narrow the boundary
+    const points = rawPoints.map((point) => {
+        point.x = Math.min(7, point.x);
+        point.x = Math.max(0, point.x);
+
+        point.y = Math.min(7, point.y);
+        point.y = Math.max(0, point.y);
+
+        return point;
+    });
+
+    // filter the duplicated element
+    const uniqPoints = uniqWith(points, (a, b) => {
+        return a.x === b.x && a.y === b.y;
+    });
+
+    return uniqPoints;
+}
+
+function isTurnEnd(pieces: PieceInBattle[]) {
+    if (
+        getHomePiece(pieces).findIndex((v) => v.dead === false) === -1 ||
+        getHomePiece(pieces).findIndex((v) => v.dead === false) === -1
+    ) {
+        return true;
+    }
+    return false;
+}
+
+export function getTargetPoint(
+    grid: Grid,
+    fromX: number,
+    fromY: number,
+    toX: number,
+    toY: number,
+    range: number
+) {
+    if (manhattanDistance(fromX, fromY, toX, toY) <= range) {
+        return { x: undefined, y: undefined, needMove: false };
+    }
+
+    // get attachable point
+    const attackablePoint = getFarthestAttackablePoint(toX, toY, range);
+
+    // console.log("attackablePoint: ", attackablePoint);
+
+    // filter not walkable
+    // TODO: add more method to judge whether is walkable
+    const walkablePoints = attackablePoint.filter((v) => {
+        return grid.getNodeAt(v.x, v.y).walkable;
+    });
+
+    // console.log("walkablePoints: ", walkablePoints);
+
+    // get nearest point
+    const nearestPoint = walkablePoints
+        .map((v) => {
+            const dis = manhattanDistance(v.x, v.y, fromX, fromY);
+
+            return { x: v.x, y: v.y, dis };
+        })
+        .sort((a, b) => {
+            return a.dis - b.dis;
+        })[0];
+
+    // console.log("nearestPoint: ", nearestPoint);
+
+    return { x: nearestPoint.x, y: nearestPoint.y, needMove: true };
+}
+
+function findDoablePath(
+    grid: Grid,
+    finder: JPFNeverMoveDiagonally,
+    speed: number,
+    fromX: number,
+    fromY: number,
+    toX: number,
+    toY: number
+) {
+    // calculate path
+    const paths = finder.findPath(fromX, fromY, toX, toY, grid);
+
+    // console.log("paths: ", paths);
+
+    // calculate doable path
+    let totalDistance = 0;
+    const doablePath: { x: number; y: number }[] = [];
+    doablePath.push({ x: paths[0][0], y: paths[0][1] });
+    // get doable path
+    for (let index = 0; index < paths.length - 1; index++) {
+        const current = paths[index];
+        let next = paths[index + 1];
+        const dis = manhattanDistance(current[0], current[1], next[0], next[1]);
+
+        if (dis + totalDistance <= speed) {
+            totalDistance += dis;
+            doablePath.push({ x: next[0], y: next[1] });
+        } else {
+            const diff = speed - totalDistance;
+
+            if (diff === 0) {
+                break;
+            }
+
+            if (current[0] === next[1]) {
+                next = [next[0], current[1] + diff];
+            } else {
+                next = [current[0] + diff, current[1]];
+            }
+
+            doablePath.push({ x: next[0], y: next[1] });
+
+            break;
+        }
+    }
+
+    return doablePath;
+}
+
+export function battleForAStep(pieces: PieceInBattle[]) {
+    // put higher initiative in advance
+    pieces.sort((a, b) => b.initiative - a.initiative);
+
+    // each piece action by initiative
+    for (const p of pieces) {
+        if (p.dead || isTurnEnd(pieces)) {
+            return;
+        }
+
+        const undeadPiece = pieces.filter((v) => v.dead !== true);
+
+        // get aimed piece
+        const targetPiece = getAimedPiece(p, undeadPiece);
+
+        const grid = new Grid(8, 8);
+
+        // console.log("undeadPiece: ", undeadPiece);
+
+        // fill the map
+        undeadPiece.forEach((pp) => {
+            if (pp.entity === p.entity) {
+                return;
+            }
+            // console.log("pp: ", pp);
+            grid.setWalkableAt(pp.x, pp.y, false);
+        });
+
+        const finder = JumpPointFinder({
+            diagonalMovement: DiagonalMovement.Never,
+        });
+
+        const targetPoint = getTargetPoint(
+            grid,
+            p.x,
+            p.y,
+            targetPiece.x,
+            targetPiece.y,
+            p.range
+        );
+
+        // console.log("targetPoint: ", targetPoint);
+
+        if (targetPoint.x) {
+            // calculate target point
+            const doablePath = findDoablePath(
+                grid,
+                finder,
+                p.speed,
+                p.x,
+                p.y,
+                targetPoint.x,
+                targetPoint.y
+            );
+
+            // console.log("doablePath:", doablePath);
+
+            // move
+            p.x = doablePath[doablePath.length - 1].x;
+            p.y = doablePath[doablePath.length - 1].y;
+
+            console.log(
+                `piece ${p.entity} move from ${doablePath[0].x},${doablePath[0].y} to ${p.x},${p.y}`
+            );
+        }
+
+        // judge wether can attack
+        if (
+            manhattanDistance(p.x, p.y, targetPiece.x, targetPiece.y) <= p.range
+        ) {
+            const attackedPieceIndex = pieces.findIndex(
+                (v) => v.entity == targetPiece.entity
+            );
+            const attackedPiece = pieces[attackedPieceIndex];
+            if (attackedPiece) {
+                const damage = p.attack - attackedPiece.armor;
+                attackedPiece.health -= damage;
+
+                console.log(
+                    `piece ${p.entity} attack ${attackedPiece.entity} with damage ${damage}`
+                );
+
+                // if dead, set as death
+                if (attackedPiece.health <= 0) {
+                    // pieces.splice(index);
+                    attackedPiece.dead = true;
+                    console.log(`piece ${attackedPiece.entity} dead`);
+                }
+            } else {
+                console.error("calculate error");
+            }
+        } else {
+            // console.log("cannot attack");
+        }
+    }
+}
