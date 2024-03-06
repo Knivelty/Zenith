@@ -22,7 +22,12 @@ export type PieceInBattle = {
 
 export type PieceInBattleOrUndefined = PieceInBattle | undefined;
 
-export function manhattanDistance(x0: number, y0: number, x1: number, y1: number) {
+export function manhattanDistance(
+    x0: number,
+    y0: number,
+    x1: number,
+    y1: number
+) {
     return Math.abs(x1 - x0) + Math.abs(y1 - y0);
 }
 
@@ -87,7 +92,7 @@ export function calculateBattleLogs(pieces: PieceInBattle[]): BattleLogs {
     for (let i = 0; i < 100; i++) {
         const logs = battleForAStep(pieces, baseTurnOrder);
 
-        baseTurnOrder = logs[logs.length - 1].order + 1;
+        baseTurnOrder = logs.length ? logs[logs.length - 1].order + 1 : 1;
 
         pieceActions.push(...logs);
         if (isTurnEnd(pieces)) {
@@ -307,8 +312,6 @@ export function battleForAStep(
             targetPiece.y,
             p.range
         );
-
-        // console.log("targetPoint: ", targetPoint);
 
         let doablePath: { x: number; y: number }[] = [];
 

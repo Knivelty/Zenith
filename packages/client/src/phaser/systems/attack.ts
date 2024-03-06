@@ -38,7 +38,19 @@ export const attack = (layer: PhaserLayer) => {
                 getEntityIdFromKeys([BigInt(attacker.internal_index)])
             );
 
-            const damage = attackerCreature.attack * attacker.tier;
+            const attacked = getComponentValueStrict(
+                Piece,
+                v.attacked as Entity
+            );
+
+            const attackedCreature = getComponentValueStrict(
+                Creature,
+                getEntityIdFromKeys([BigInt(attacked.internal_index)])
+            );
+
+            const damage =
+                attackerCreature.attack * attacker.tier -
+                attackedCreature.armor;
 
             const attackedHealth = getComponentValueStrict(
                 Health,

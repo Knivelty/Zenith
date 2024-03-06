@@ -21,10 +21,16 @@ import {
 import { Sprite } from "@latticexyz/phaserx/src/types";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { defineSystemST, zeroEntity } from "../../utils";
-import { BattleLog, BattleLogsType } from "../../dojo/generated/setup";
+// import { BattleLog, BattleLogsType } from "../../dojo/generated/setup";
 import { Coord, deferred, sleep } from "@latticexyz/utils";
 import { GameStatusEnum } from "../../dojo/types";
-import { manhattanDistance } from "../../utils/jps";
+import {
+    BattleLogs,
+    PieceAction,
+    PieceInBattle,
+    calculateBattleLogs,
+    manhattanDistance,
+} from "../../utils/jps";
 
 export const battle = (layer: PhaserLayer) => {
     const {
@@ -40,6 +46,7 @@ export const battle = (layer: PhaserLayer) => {
                 Player,
                 BattleLogs,
                 Attack,
+                Creature,
             },
             account,
             graphqlClient,
@@ -72,11 +79,100 @@ export const battle = (layer: PhaserLayer) => {
                 updateComponent(GameStatus, zeroEntity, {
                     status: GameStatusEnum.InBattle,
                 });
+
+                // calculate battle log in the frontend
+
+                // get all piece
+                const allPieceInBattle = new Array<PieceInBattle>();
+
+                // get player piece
+                const player = getComponentValueStrict(
+                    Player,
+                    getEntityIdFromKeys([v.homePlayer])
+                );
+
+                for (let i = 1; i <= player.heroesCount; i++) {
+                    const pieceEntity = getEntityIdFromKeys([
+                        v.homePlayer,
+                        BigInt(i),
+                    ]);
+                    const piece = getComponentValueStrict(Piece, pieceEntity);
+
+                    const creature = getComponentValueStrict(
+                        Creature,
+                        getEntityIdFromKeys([BigInt(piece.internal_index)])
+                    );
+
+                    allPieceInBattle.push({
+                        player: getEntityIdFromKeys([v.homePlayer]),
+                        entity: pieceEntity,
+                        x: piece.x_board,
+                        y: piece.y_board,
+                        health: creature.health * piece.tier,
+                        attack: creature.attack * piece.tier,
+                        armor: creature.armor * piece.tier,
+                        speed: creature.speed * piece.tier,
+                        range: creature.range * piece.tier,
+                        isInHome: true,
+                        dead: false,
+                    });
+                }
+
+                // get enemy piece
+                const enemy = getComponentValueStrict(
+                    Player,
+                    getEntityIdFromKeys([v.awayPlayer])
+                );
+
+                for (let i = 1; i <= enemy.heroesCount; i++) {
+                    const pieceEntity = getEntityIdFromKeys([
+                        v.awayPlayer,
+                        BigInt(i),
+                    ]);
+                    const piece = getComponentValueStrict(Piece, pieceEntity);
+
+                    const creature = getComponentValueStrict(
+                        Creature,
+                        getEntityIdFromKeys([BigInt(piece.internal_index)])
+                    );
+
+                    allPieceInBattle.push({
+                        player: getEntityIdFromKeys([v.awayPlayer]),
+                        entity: pieceEntity,
+                        x: 7 - piece.x_board,
+                        y: 7 - piece.y_board,
+                        health: creature.health,
+                        attack: creature.attack,
+                        armor: creature.armor,
+                        speed: creature.speed,
+                        range: creature.range,
+                        isInHome: false,
+                        dead: false,
+                    });
+                }
+
+                const logs = calculateBattleLogs(allPieceInBattle);
+
+                console.log("logs: ", logs.logs);
+
+                setComponent(
+                    BattleLogs,
+                    getEntityIdFromKeys([
+                        BigInt(v.currentMatch),
+                        BigInt(v.round),
+                    ]),
+                    {
+                        matchId: v.currentMatch,
+                        inningBattleId: v.round,
+                        logs: JSON.stringify(logs),
+                    }
+                );
             }
         }
     );
 
-    async function playBattle(logs: BattleLog[]) {
+    async function playBattle(logs: PieceAction[]) {
+        console.log("logs: ", logs);
         for (const l of logs) {
             await playSingleBattle(l);
             // await new Promise((resolve) => setTimeout(resolve, 500));
@@ -152,19 +248,14 @@ export const battle = (layer: PhaserLayer) => {
         }
     }
 
-    async function playSingleBattle(v: BattleLog) {
+    async function playSingleBattle(v: PieceAction) {
         // const [resolve, , promise] = deferred<void>();
 
-        const pieceEntity = getEntityIdFromKeys([
-            BigInt(v.player),
-            BigInt(v.pieceId),
-        ]);
-
         // move first
-        await moveByPaths(pieceEntity, v.paths);
+        await moveByPaths(v.entity, v.paths);
 
         // then attack
-        if (v.attackPieceId !== 0) {
+        if (v.attackPiece) {
             // attack wait 0.2s
             await sleep(200);
 
@@ -178,24 +269,13 @@ export const battle = (layer: PhaserLayer) => {
                 ])
             );
 
-            let attacked: Entity;
-            if (BigInt(v.player) === inningBattle.homePlayer) {
-                attacked = getEntityIdFromKeys([
-                    inningBattle.awayPlayer,
-                    BigInt(v.attackPieceId),
-                ]);
-            } else {
-                attacked = getEntityIdFromKeys([
-                    inningBattle.homePlayer,
-                    BigInt(v.attackPieceId),
-                ]);
-            }
+            const attacked = v.attackPiece as Entity;
 
             console.log("v.player", v.player, inningBattle.homePlayer);
             console.log("attacked: ", attacked);
 
             setComponent(Attack, `${inningBattle}-${v.order}` as Entity, {
-                attacker: pieceEntity,
+                attacker: v.entity,
                 attacked: attacked,
             });
         }
@@ -233,13 +313,17 @@ export const battle = (layer: PhaserLayer) => {
                             BigInt(inningBattle.currentMatch),
                             BigInt(inningBattle.round),
                         ])
-                    ) as BattleLogsType;
+                    ) as {
+                        matchId: number;
+                        inningBattleId: number;
+                        logs: string;
+                    };
 
-                    const logs = JSON.parse(battleLogs.logs) as BattleLog[];
+                    const logs = JSON.parse(battleLogs.logs) as BattleLogs;
 
                     console.log("battleLogs: ", logs);
 
-                    playBattle(logs).then(() => {
+                    playBattle(logs.logs).then(() => {
                         console.log("play finish");
 
                         // after play, set status back
