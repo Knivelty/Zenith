@@ -15,7 +15,6 @@ export type PieceInBattle = {
     armor: number;
     speed: number;
     range: number;
-    initiative: number;
     isInHome: boolean;
     dead: boolean;
 };
@@ -64,16 +63,35 @@ function getAimedPiece(
 const ROWS = 8;
 const COLS = 8;
 
-export function calculateBattleLogs(pieces: PieceInBattle[]) {
+export type PieceAction = {
+    entity: string;
+    paths: { x: number; y: number }[];
+    attackPiece: string | undefined;
+};
+
+export type BattleLogs = {
+    logs: PieceAction[];
+};
+
+/**
+ * @dev "pieces" should be arranged in descending order of "initiative". 
+ * @param pieces 
+ * @returns 
+ */
+export function calculateBattleLogs(pieces: PieceInBattle[]): BattleLogs {
+    const pieceActions = new Array<PieceAction>();
     for (let i = 0; i < 100; i++) {
-        battleForAStep(pieces);
+        const logs = battleForAStep(pieces);
+
+        pieceActions.push(...logs);
         if (isTurnEnd(pieces)) {
             console.log("turn end");
             break;
         } else {
-            console.log("turn not end, continue");
+            console.log("next turn");
         }
     }
+    return { logs: pieceActions };
 }
 
 function getFarthestAttackablePoint(x: number, y: number, k: number) {
@@ -207,14 +225,47 @@ function findDoablePath(
     return doablePath;
 }
 
-export function battleForAStep(pieces: PieceInBattle[]) {
-    // put higher initiative in advance
-    pieces.sort((a, b) => b.initiative - a.initiative);
+function tryAttack(
+    pieces: PieceInBattle[],
+    p: PieceInBattle,
+    targetPiece: PieceInBattle
+): string | undefined {
+    // judge wether can attack
+    if (manhattanDistance(p.x, p.y, targetPiece.x, targetPiece.y) <= p.range) {
+        const attackedPieceIndex = pieces.findIndex(
+            (v) => v.entity == targetPiece.entity
+        );
+        const attackedPiece = pieces[attackedPieceIndex];
+        if (attackedPiece) {
+            const damage = p.attack - attackedPiece.armor;
+            attackedPiece.health -= damage;
+
+            console.log(
+                `piece ${p.entity} attack ${attackedPiece.entity} with damage ${damage}`
+            );
+
+            // if dead, set as death
+            if (attackedPiece.health <= 0) {
+                // pieces.splice(index);
+                attackedPiece.dead = true;
+                console.log(`piece ${attackedPiece.entity} dead`);
+            }
+            return attackedPiece.entity;
+        } else {
+            console.error("calculate error");
+        }
+    } else {
+        // console.log("cannot attack");
+    }
+}
+
+export function battleForAStep(pieces: PieceInBattle[]): PieceAction[] {
+    const actions = new Array<PieceAction>();
 
     // each piece action by initiative
     for (const p of pieces) {
         if (p.dead || isTurnEnd(pieces)) {
-            return;
+            continue;
         }
 
         const undeadPiece = pieces.filter((v) => v.dead !== true);
@@ -250,9 +301,11 @@ export function battleForAStep(pieces: PieceInBattle[]) {
 
         // console.log("targetPoint: ", targetPoint);
 
+        let doablePath: { x: number; y: number }[] = [];
+
         if (targetPoint.x) {
             // calculate target point
-            const doablePath = findDoablePath(
+            doablePath = findDoablePath(
                 grid,
                 finder,
                 p.speed,
@@ -273,33 +326,14 @@ export function battleForAStep(pieces: PieceInBattle[]) {
             );
         }
 
-        // judge wether can attack
-        if (
-            manhattanDistance(p.x, p.y, targetPiece.x, targetPiece.y) <= p.range
-        ) {
-            const attackedPieceIndex = pieces.findIndex(
-                (v) => v.entity == targetPiece.entity
-            );
-            const attackedPiece = pieces[attackedPieceIndex];
-            if (attackedPiece) {
-                const damage = p.attack - attackedPiece.armor;
-                attackedPiece.health -= damage;
+        const attackedEntity = tryAttack(pieces, p, targetPiece);
 
-                console.log(
-                    `piece ${p.entity} attack ${attackedPiece.entity} with damage ${damage}`
-                );
-
-                // if dead, set as death
-                if (attackedPiece.health <= 0) {
-                    // pieces.splice(index);
-                    attackedPiece.dead = true;
-                    console.log(`piece ${attackedPiece.entity} dead`);
-                }
-            } else {
-                console.error("calculate error");
-            }
-        } else {
-            // console.log("cannot attack");
-        }
+        actions.push({
+            entity: p.entity,
+            paths: doablePath,
+            attackPiece: attackedEntity,
+        });
     }
+
+    return actions;
 }
