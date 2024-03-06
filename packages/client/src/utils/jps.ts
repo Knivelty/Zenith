@@ -7,6 +7,7 @@ import {
 import { uniqWith } from "lodash";
 
 export type PieceInBattle = {
+    player: string;
     entity: string;
     x: number;
     y: number;
@@ -21,7 +22,7 @@ export type PieceInBattle = {
 
 export type PieceInBattleOrUndefined = PieceInBattle | undefined;
 
-function manhattanDistance(x0: number, y0: number, x1: number, y1: number) {
+export function manhattanDistance(x0: number, y0: number, x1: number, y1: number) {
     return Math.abs(x1 - x0) + Math.abs(y1 - y0);
 }
 
@@ -65,6 +66,8 @@ const COLS = 8;
 
 export type PieceAction = {
     entity: string;
+    player: string;
+    order: number;
     paths: { x: number; y: number }[];
     attackPiece: string | undefined;
 };
@@ -74,14 +77,17 @@ export type BattleLogs = {
 };
 
 /**
- * @dev "pieces" should be arranged in descending order of "initiative". 
- * @param pieces 
- * @returns 
+ * @dev "pieces" should be arranged in descending order of "initiative".
+ * @param pieces
+ * @returns
  */
 export function calculateBattleLogs(pieces: PieceInBattle[]): BattleLogs {
     const pieceActions = new Array<PieceAction>();
+    let baseTurnOrder = 1;
     for (let i = 0; i < 100; i++) {
-        const logs = battleForAStep(pieces);
+        const logs = battleForAStep(pieces, baseTurnOrder);
+
+        baseTurnOrder = logs[logs.length - 1].order + 1;
 
         pieceActions.push(...logs);
         if (isTurnEnd(pieces)) {
@@ -259,7 +265,10 @@ function tryAttack(
     }
 }
 
-export function battleForAStep(pieces: PieceInBattle[]): PieceAction[] {
+export function battleForAStep(
+    pieces: PieceInBattle[],
+    baseTurnOrder: number
+): PieceAction[] {
     const actions = new Array<PieceAction>();
 
     // each piece action by initiative
@@ -329,6 +338,11 @@ export function battleForAStep(pieces: PieceInBattle[]): PieceAction[] {
         const attackedEntity = tryAttack(pieces, p, targetPiece);
 
         actions.push({
+            player: p.player,
+            // order increase one by one
+            order: actions.length
+                ? actions[actions.length - 1].order + 1
+                : baseTurnOrder,
             entity: p.entity,
             paths: doablePath,
             attackPiece: attackedEntity,

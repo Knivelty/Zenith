@@ -13,6 +13,7 @@ import { PhaserLayer } from "..";
 import { tileCoordToPixelCoord, tween } from "@latticexyz/phaserx";
 import {
     HealthBarOffSetY,
+    MOVE_SPEED,
     Sprites,
     TILE_HEIGHT,
     TILE_WIDTH,
@@ -21,9 +22,9 @@ import { Sprite } from "@latticexyz/phaserx/src/types";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { defineSystemST, zeroEntity } from "../../utils";
 import { BattleLog, BattleLogsType } from "../../dojo/generated/setup";
-import { resolve } from "path";
-import { deferred } from "@latticexyz/utils";
+import { Coord, deferred, sleep } from "@latticexyz/utils";
 import { GameStatusEnum } from "../../dojo/types";
+import { manhattanDistance } from "../../utils/jps";
 
 export const battle = (layer: PhaserLayer) => {
     const {
@@ -78,106 +79,127 @@ export const battle = (layer: PhaserLayer) => {
     async function playBattle(logs: BattleLog[]) {
         for (const l of logs) {
             await playSingleBattle(l);
-            await new Promise((resolve) => setTimeout(resolve, 500));
+            // await new Promise((resolve) => setTimeout(resolve, 500));
             console.log("next");
         }
     }
 
+    async function moveByPaths(pieceEntity: string, paths: Coord[]) {
+        for (let i = 1; i < paths.length; i++) {
+            const point = paths[i];
+            const lastPath = paths[i - 1];
+            const moveLength = manhattanDistance(
+                lastPath.x,
+                lastPath.y,
+                point.x,
+                point.y
+            );
+
+            const pixelPosition = tileCoordToPixelCoord(
+                point,
+                TILE_WIDTH,
+                TILE_HEIGHT
+            );
+
+            console.log("move to :", pixelPosition);
+
+            const hero = objectPool.get(pieceEntity, "Sprite");
+            const health = objectPool.get(
+                `${pieceEntity}-health-bar`,
+                "Sprite"
+            );
+
+            const [resolve, , promise] = deferred<void>();
+
+            hero.setComponent({
+                id: pieceEntity,
+                now: async (sprite: Phaser.GameObjects.Sprite) => {
+                    await tween(
+                        {
+                            targets: sprite,
+                            duration: moveLength * MOVE_SPEED,
+                            props: {
+                                x: pixelPosition.x,
+                                y: pixelPosition.y,
+                            },
+                            ease: Phaser.Math.Easing.Linear,
+                            onComplete: () => {
+                                // console.log("complete");
+                                // resolve to allow next tween
+                                resolve();
+                            },
+                            onUpdate: () => {
+                                // set health bar follow on tween
+                                health.setComponent({
+                                    id: `${pieceEntity}-health-bar`,
+                                    once: (
+                                        health: Phaser.GameObjects.Sprite
+                                    ) => {
+                                        health.setPosition(
+                                            sprite.x,
+                                            sprite.y - HealthBarOffSetY
+                                        );
+                                    },
+                                });
+                            },
+                        },
+                        { keepExistingTweens: true }
+                    );
+                },
+            });
+
+            await promise;
+        }
+    }
+
     async function playSingleBattle(v: BattleLog) {
-        const [resolve, , promise] = deferred<void>();
+        // const [resolve, , promise] = deferred<void>();
 
         const pieceEntity = getEntityIdFromKeys([
             BigInt(v.player),
             BigInt(v.pieceId),
         ]);
 
-        const nextPos = {
-            x: v.to_x,
-            y: v.to_y,
-        };
+        // move first
+        await moveByPaths(pieceEntity, v.paths);
 
-        const pixelPosition = tileCoordToPixelCoord(
-            nextPos,
-            TILE_WIDTH,
-            TILE_HEIGHT
-        );
+        // then attack
+        if (v.attackPieceId !== 0) {
+            // attack wait 0.2s
+            await sleep(200);
 
-        const hero = objectPool.get(pieceEntity, "Sprite");
-        const health = objectPool.get(`${pieceEntity}-health-bar`, "Sprite");
+            // if have attack piece, run attack
+            const game = getComponentValueStrict(GameStatus, zeroEntity);
+            const inningBattle = getComponentValueStrict(
+                InningBattle,
+                getEntityIdFromKeys([
+                    BigInt(game.currentMatch),
+                    BigInt(game.currentRound),
+                ])
+            );
 
-        hero.setComponent({
-            id: pieceEntity,
-            now: async (sprite: Phaser.GameObjects.Sprite) => {
-                const result = await tween(
-                    {
-                        targets: sprite,
-                        duration: 500,
-                        props: {
-                            x: pixelPosition.x,
-                            y: pixelPosition.y,
-                        },
-                        ease: Phaser.Math.Easing.Linear,
-                        onComplete: () => {
-                            // console.log("complete");
-                        },
-                        onUpdate: () => {
-                            // set health bar follow on tween
-                            health.setComponent({
-                                id: `${pieceEntity}-health-bar`,
-                                once: (health: Phaser.GameObjects.Sprite) => {
-                                    health.setPosition(
-                                        sprite.x,
-                                        sprite.y - HealthBarOffSetY
-                                    );
-                                },
-                            });
-                        },
-                    },
-                    { keepExistingTweens: true }
-                );
+            let attacked: Entity;
+            if (BigInt(v.player) === inningBattle.homePlayer) {
+                attacked = getEntityIdFromKeys([
+                    inningBattle.awayPlayer,
+                    BigInt(v.attackPieceId),
+                ]);
+            } else {
+                attacked = getEntityIdFromKeys([
+                    inningBattle.homePlayer,
+                    BigInt(v.attackPieceId),
+                ]);
+            }
 
-                // if have attack piece, run attack
-                if (v.attackPieceId !== 0) {
-                    const game = getComponentValueStrict(
-                        GameStatus,
-                        zeroEntity
-                    );
-                    const inningBattle = getComponentValueStrict(
-                        InningBattle,
-                        getEntityIdFromKeys([
-                            BigInt(game.currentMatch),
-                            BigInt(game.currentRound),
-                        ])
-                    );
+            console.log("v.player", v.player, inningBattle.homePlayer);
+            console.log("attacked: ", attacked);
 
-                    let attacked: Entity;
-                    if (BigInt(v.player) === inningBattle.homePlayer) {
-                        attacked = getEntityIdFromKeys([
-                            inningBattle.awayPlayer,
-                            BigInt(v.attackPieceId),
-                        ]);
-                    } else {
-                        attacked = getEntityIdFromKeys([
-                            inningBattle.homePlayer,
-                            BigInt(v.attackPieceId),
-                        ]);
-                    }
-
-                    console.log("v.player", v.player, inningBattle.homePlayer);
-                    console.log("attacked: ", attacked);
-
-                    setComponent(
-                        Attack,
-                        `${inningBattle}-${v.order}` as Entity,
-                        { attacker: pieceEntity, attacked: attacked }
-                    );
-                }
-
-                resolve(result);
-            },
-        });
-
-        return promise;
+            setComponent(Attack, `${inningBattle}-${v.order}` as Entity, {
+                attacker: pieceEntity,
+                attacked: attacked,
+            });
+        }
+        // return promise;
     }
 
     defineSystemST<typeof GameStatus.schema>(

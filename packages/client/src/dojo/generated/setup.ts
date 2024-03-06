@@ -23,6 +23,8 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { Entity, setComponent } from "@dojoengine/recs";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { Coord } from "@latticexyz/utils";
+import { last } from "lodash";
 
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
@@ -117,10 +119,10 @@ export type BattleLogsType = {
 
 export type BattleLog = {
     player: string;
-    order: number;
     pieceId: number;
-    to_x: number;
-    to_y: number;
+    entity: string;
+    order: number;
+    paths: { x: number; y: number }[];
     attackPieceId: number;
 };
 
@@ -164,18 +166,36 @@ async function syncCustomEvents(
     { BattleLogs }: ClientComponents
 ) {
     function syncEventToEntity(data: string[]) {
-        const output = [];
+        const output = new Array<BattleLog>();
         const matchId = parseInt(data[0], 16);
         const battleId = parseInt(data[1], 16);
         const length = parseInt(data[2], 16);
 
+        // NOTE: include some hardcode, not generic for now
         for (let i = 0; i < length; i++) {
+            const player = String(data[i * 6 + 3]);
+            const pieceId = parseInt(data[i * 6 + 5]);
+            const toX = parseInt(data[i * 6 + 6]);
+            const toY = parseInt(data[i * 6 + 7]);
+            const paths = new Array<Coord>();
+
+            if (i === 0 || i === 1) {
+                paths.push({ x: toX, y: toY });
+            } else {
+                paths.push({
+                    x: last(output[i - 2].paths)!.x,
+                    y: last(output[i - 2].paths)!.y,
+                });
+
+                paths.push({ x: toX, y: toY });
+            }
+
             output.push({
-                player: String(data[i * 6 + 3]),
+                player: player,
                 order: parseInt(data[i * 6 + 4], 16),
-                pieceId: parseInt(data[i * 6 + 5]),
-                to_x: parseInt(data[i * 6 + 6]),
-                to_y: parseInt(data[i * 6 + 7]),
+                pieceId: pieceId,
+                entity: getEntityIdFromKeys([BigInt(player), BigInt(pieceId)]),
+                paths: paths,
                 attackPieceId: parseInt(data[i * 6 + 8]),
             });
         }

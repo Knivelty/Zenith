@@ -87,3 +87,5 @@ export const MAP_AMPLITUDE = 16;
 
 export const HealthBarOffSetX = 0;
 export const HealthBarOffSetY = 15;
+
+export const MOVE_SPEED = 200;
