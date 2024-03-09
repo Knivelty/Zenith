@@ -454,7 +454,7 @@ mod tests {
         let player = get!(world, caller, Player);
 
         // check health
-        assert(player.health == 30, 'health not right');
+        assert(player.health == 100, 'health not right');
 
         // check inning battle
         let iBattle = get!(world, (1, 1), InningBattle);
