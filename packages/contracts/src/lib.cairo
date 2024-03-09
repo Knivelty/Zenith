@@ -6,3 +6,4 @@ mod array2w;
 mod array2d;
 mod board;
 mod customEvent;
+mod customType;

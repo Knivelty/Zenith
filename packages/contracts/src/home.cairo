@@ -1,4 +1,4 @@
-use autochessia::models::{Creature, Piece, Player};
+use autochessia::models::{CreatureProfile, Piece, Player};
 
 // define the interface
 #[starknet::interface]
@@ -7,20 +7,26 @@ trait IHome<TContractState> {
     fn spawn(self: @TContractState);
     fn startBattle(self: @TContractState);
     fn nextRound(self: @TContractState);
+    fn refreshAltarAndBuy(self: @TContractState);
+    fn commitPreparation(self: @TContractState);
 }
 
-use starknet::{ContractAddress, contract_address_try_from_felt252, get_caller_address};
+use starknet::{
+    ContractAddress, contract_address_try_from_felt252, get_caller_address, get_block_info
+};
 
 
 #[dojo::contract]
 mod home {
-    use starknet::{ContractAddress, get_caller_address};
+    use starknet::{ContractAddress, get_caller_address, get_block_hash_syscall, get_block_info};
     use autochessia::models::{
-        Creature, Position, Piece, Player, InningBattle, GlobalState, MatchState
+        CreatureProfile, Position, Piece, Player, InningBattle, GlobalState, MatchState, Altar
     };
-    use autochessia::utils::{next_position, generate_pseudo_random_address};
+    use autochessia::utils::{next_position, generate_pseudo_random_address, get_felt_mod};
     use autochessia::customEvent::{PieceActions, PieceAction};
     use dojo::base;
+    use core::poseidon::{PoseidonTrait, poseidon_hash_span};
+    use core::hash::{HashStateTrait, HashStateExTrait};
     use super::IHome;
 
 
@@ -29,6 +35,40 @@ mod home {
     #[derive(Drop, starknet::Event)]
     enum Event {
         PieceActions: PieceActions,
+    }
+
+    fn refreshAlter(self: @ContractState, playerAddr: ContractAddress) {
+        let world = self.world_dispatcher.read();
+
+        let player = get!(world, playerAddr, Player);
+        let altar = get!(world, playerAddr, Altar);
+
+        // generate pseudo random number on block hash
+        let mut hash = get_block_hash_syscall(get_block_info().unbox().block_number - 10);
+
+        let mut r: felt252 = 0;
+
+        match hash {
+            Result::Ok(value) => { r = value.into() },
+            Result::Err(err) => { panic!("gr error") },
+        }
+
+        // filter the altar
+        let creatureCount: felt252 = get!(world, 1, GlobalState).totalCreature.into();
+
+        let slot1 = get_felt_mod(r, creatureCount);
+        r = PoseidonTrait::new().update(r.into()).finalize().into();
+
+        let slot2 = get_felt_mod(r, creatureCount);
+        r = PoseidonTrait::new().update(r.into()).finalize().into();
+
+        let slot3 = get_felt_mod(r, creatureCount);
+        r = PoseidonTrait::new().update(r.into()).finalize().into();
+
+        let slot4 = get_felt_mod(r, creatureCount);
+        r = PoseidonTrait::new().update(r.into()).finalize().into();
+
+        let slot5 = get_felt_mod(r, creatureCount);
     }
 
 
@@ -43,10 +83,10 @@ mod home {
             // initialize creature
             set!(
                 world,
-                Creature {
-                    tier: 1,
+                CreatureProfile {
+                    level: 1,
                     rarity: 1,
-                    internal_index: 1,
+                    creature_index: 1,
                     health: 600,
                     attack: 48,
                     armor: 40,
@@ -72,7 +112,9 @@ mod home {
                 world,
                 (
                     MatchState { index: currentMatch, round: 1 },
-                    GlobalState { index: 1, totalMatch: currentMatch }
+                    GlobalState {
+                        index: 1, totalMatch: currentMatch, totalCreature: globalState.totalCreature
+                    }
                 )
             );
 
@@ -81,36 +123,21 @@ mod home {
                 world,
                 Player {
                     player: player,
-                    health: 30,
-                    heroesCount: 1,
+                    health: 100,
+                    heroesCount: 0,
                     inventoryCount: 0,
-                    heroAltarCount: 0,
-                    tier: 1,
+                    level: 1,
                     coin: 0,
                     streakCount: 0,
                     locked: 0,
                     inMatch: currentMatch
                 }
             );
-            set!(
-                world,
-                Piece {
-                    owner: player,
-                    index: 1,
-                    tier: 1,
-                    rarity: 1,
-                    internal_index: 1,
-                    x_board: 1,
-                    y_board: 1,
-                    x_in_battle: 0,
-                    y_in_battle: 0,
-                    currentHealth: 600
-                }
-            );
-            // get player's enemy address
 
+            // get player's enemy address
             let enemy = generate_pseudo_random_address(1);
-            // // // spawn player's enemy
+
+            // spawn player's enemy and first round enemy
             set!(
                 world,
                 (
@@ -119,24 +146,22 @@ mod home {
                         health: 30,
                         heroesCount: 1,
                         inventoryCount: 0,
-                        heroAltarCount: 0,
-                        tier: 1,
+                        level: 1,
                         coin: 0,
                         streakCount: 0,
                         locked: 0,
                         inMatch: currentMatch
                     },
                     Piece {
+                        gid: 2,
                         owner: enemy,
-                        index: 1,
-                        tier: 1,
+                        idx: 1,
+                        slot: 0,
+                        level: 1,
                         rarity: 1,
-                        internal_index: 1,
-                        x_board: 1,
-                        y_board: 1,
-                        x_in_battle: 0,
-                        y_in_battle: 0,
-                        currentHealth: 600
+                        creature_index: 1,
+                        x: 1,
+                        y: 1,
                     }
                 )
             );
@@ -152,6 +177,16 @@ mod home {
                 }),
             );
         }
+
+
+        // commit preparation in one function
+        // include: buy, sell, refresh, move
+        // the contract side need to valid the validity
+        fn commitPreparation(self: @ContractState) {}
+
+
+        /// NOTE: in this case, there's a possibility that other player can see player's buy and sell confirmation in advance
+        fn refreshAltarAndBuy(self: @ContractState) {}
 
 
         fn nextRound(self: @ContractState) {

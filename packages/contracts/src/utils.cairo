@@ -25,6 +25,13 @@ fn generate_pseudo_random_address(seed: felt252) -> ContractAddress {
     return hash.try_into().unwrap();
 }
 
+fn get_felt_mod(divided: felt252, divid: felt252) -> u8 {
+    let y: u128 = divided.try_into().unwrap();
+    let x: u128 = divided.try_into().unwrap();
+
+    return (y % x).try_into().unwrap();
+}
+
 fn two_to(mut power: usize) -> felt252 {
     assert(power < 252, 'Power too large');
     let mut result = 1;

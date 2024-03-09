@@ -8,42 +8,59 @@ struct Player {
     health: u8,
     streakCount: u8,
     coin: u8,
-    tier: u8,
+    level: u8,
     locked: u8,
-    // dojo does not support array for now
+    // dojo does not support array for now, so it's used to traversal all pieces belong to player
     heroesCount: u8,
-    heroAltarCount: u8,
+    // hero count in inventory 
     inventoryCount: u8,
 }
 
+// hero altar of a player
 #[derive(Model, Copy, Drop, Serde)]
-struct Creature {
+struct Altar {
     #[key]
-    internal_index: u8,
-    tier: u8,
-    rarity: u8,
-    health: u16,
-    attack: u8,
-    armor: u8,
-    range: u8,
-    speed: u8,
-    initiative: u8,
+    player: ContractAddress,
+    #[key]
+    refreshOrder: u16,
+    slot1: u16,
+    slot2: u16,
+    slot3: u16,
+    slot4: u16,
+    slot5: u16
+}
+
+#[derive(Model, Copy, Drop, Serde)]
+struct PlayerPiece {
+    #[key]
+    owner: ContractAddress,
+    #[key]
+    idx: u8,
+    gid: u16,
+}
+
+#[derive(Model, Copy, Drop, Serde)]
+struct PlayerInvPiece {
+    #[key]
+    owner: ContractAddress,
+    #[key]
+    slot: u8,
+    gid: u16,
 }
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Piece {
+    // global id of this piece
     #[key]
+    gid: u16,
     owner: ContractAddress,
-    #[key]
-    index: u8,
-    tier: u8,
+    idx: u8,
+    slot: u8,
+    level: u8,
     rarity: u8,
-    internal_index: u8,
-    x_board: u8,
-    y_board: u8,
-    x_in_battle: u8,
-    y_in_battle: u8,
-    currentHealth: u16
+    creature_index: u8,
+    x: u8,
+    y: u8
 }
 
 
@@ -63,6 +80,7 @@ struct GlobalState {
     #[key]
     index: u32,
     totalMatch: u32,
+    totalCreature: u8,
 }
 
 #[derive(Model, Copy, Drop, Serde)]
@@ -70,6 +88,21 @@ struct MatchState {
     #[key]
     index: u32,
     round: u8,
+}
+
+#[derive(Model, Copy, Drop, Serde)]
+struct CreatureProfile {
+    #[key]
+    creature_index: u8,
+    #[key]
+    level: u8,
+    rarity: u8,
+    health: u16,
+    attack: u8,
+    armor: u8,
+    range: u8,
+    speed: u8,
+    initiative: u8,
 }
 
 
