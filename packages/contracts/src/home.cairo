@@ -1,14 +1,24 @@
 use autochessia::models::{CreatureProfile, Piece, Player};
+use autochessia::customType::{MoveChange, PlaceChange, PrepareChanges};
+
 
 // define the interface
 #[starknet::interface]
 trait IHome<TContractState> {
     fn initialize(self: @TContractState);
+
+
     fn spawn(self: @TContractState);
-    fn startBattle(self: @TContractState);
+    fn refreshAltar(self: @TContractState);
+    fn buyHero(self: @TContractState, slot: u8);
+    fn sellHero(self: @TContractState, gid: u16);
+    fn commitPreparation(
+        self: @TContractState, changes: Array<PrepareChanges<MoveChange, PlaceChange>>
+    );
     fn nextRound(self: @TContractState);
-    fn refreshAltarAndBuy(self: @TContractState);
-    fn commitPreparation(self: @TContractState);
+
+
+    fn startBattle(self: @TContractState);
 }
 
 use starknet::{
@@ -23,6 +33,8 @@ mod home {
         CreatureProfile, Position, Piece, Player, InningBattle, GlobalState, MatchState, Altar
     };
     use autochessia::utils::{next_position, generate_pseudo_random_address, get_felt_mod};
+    use autochessia::customType::{MoveChange, PlaceChange, PrepareChanges};
+
     use autochessia::customEvent::{PieceActions, PieceAction};
     use dojo::base;
     use core::poseidon::{PoseidonTrait, poseidon_hash_span};
@@ -37,7 +49,7 @@ mod home {
         PieceActions: PieceActions,
     }
 
-    fn refreshAlter(self: @ContractState, playerAddr: ContractAddress) {
+    fn _refreshAlter(self: @ContractState, playerAddr: ContractAddress) {
         let world = self.world_dispatcher.read();
 
         let player = get!(world, playerAddr, Player);
@@ -71,9 +83,13 @@ mod home {
         let slot5 = get_felt_mod(r, creatureCount);
     }
 
+    fn _validateMoveChange(moveChange: @MoveChange) {}
+
+    fn _validatePlaceChange(placeChange: @PlaceChange) {}
+
 
     // impl: implement functions specified in trait
-    #[external(v0)]
+    #[abi(embed_v0)]
     impl HomeImpl of IHome<ContractState> {
         // intialize all args
         fn initialize(self: @ContractState) {
@@ -103,7 +119,7 @@ mod home {
             let world = self.world_dispatcher.read();
 
             // Get the address of the current caller, possibly the player's address.
-            let player = get_caller_address();
+            let playerAddr = get_caller_address();
 
             // create match
             let globalState = get!(world, 1, GlobalState);
@@ -122,20 +138,23 @@ mod home {
             set!(
                 world,
                 Player {
-                    player: player,
+                    player: playerAddr,
                     health: 100,
                     heroesCount: 0,
                     inventoryCount: 0,
                     level: 1,
-                    coin: 0,
+                    coin: 1,
                     streakCount: 0,
                     locked: 0,
                     inMatch: currentMatch
                 }
             );
 
+            // refresh hero altar
+            _refreshAlter(self, playerAddr);
+
             // get player's enemy address
-            let enemy = generate_pseudo_random_address(1);
+            let enemy = generate_pseudo_random_address(playerAddr.into());
 
             // spawn player's enemy and first round enemy
             set!(
@@ -143,7 +162,7 @@ mod home {
                 (
                     Player {
                         player: enemy,
-                        health: 30,
+                        health: 10,
                         heroesCount: 1,
                         inventoryCount: 0,
                         level: 1,
@@ -153,7 +172,7 @@ mod home {
                         inMatch: currentMatch
                     },
                     Piece {
-                        gid: 2,
+                        gid: 1,
                         owner: enemy,
                         idx: 1,
                         slot: 0,
@@ -171,7 +190,7 @@ mod home {
                 (InningBattle {
                     currentMatch: currentMatch,
                     round: 1,
-                    homePlayer: player,
+                    homePlayer: playerAddr,
                     awayPlayer: enemy,
                     end: false
                 }),
@@ -180,14 +199,32 @@ mod home {
 
 
         // commit preparation in one function
-        // include: buy, sell, refresh, move
+        // include: refresh, move
         // the contract side need to valid the validity
-        fn commitPreparation(self: @ContractState) {}
+        fn commitPreparation(
+            self: @ContractState, changes: Array<PrepareChanges<MoveChange, PlaceChange>>
+        ) {
+            let mut idx = 0;
+            let length = changes.len();
 
+            loop {
+                // TODO: panic here
+                let change = changes.at(idx);
+                match change {
+                    PrepareChanges::MoveChange(val) => { _validateMoveChange(val) },
+                    PrepareChanges::PlaceChange(val) => { _validatePlaceChange(val) },
+                }
 
-        /// NOTE: in this case, there's a possibility that other player can see player's buy and sell confirmation in advance
-        fn refreshAltarAndBuy(self: @ContractState) {}
+                idx = idx + 1;
+                if (idx >= length) {
+                    break;
+                }
+            }
+        }
 
+        fn refreshAltar(self: @ContractState) {}
+        fn buyHero(self: @ContractState, slot: u8) {}
+        fn sellHero(self: @ContractState, gid: u16) {}
 
         fn nextRound(self: @ContractState) {
             let world = self.world_dispatcher.read();
