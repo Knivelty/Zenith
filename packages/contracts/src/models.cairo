@@ -21,13 +21,11 @@ struct Player {
 struct Altar {
     #[key]
     player: ContractAddress,
-    #[key]
-    refreshOrder: u16,
-    slot1: u16,
-    slot2: u16,
-    slot3: u16,
-    slot4: u16,
-    slot5: u16
+    slot1: u8,
+    slot2: u8,
+    slot3: u8,
+    slot4: u8,
+    slot5: u8,
 }
 
 #[derive(Model, Copy, Drop, Serde)]

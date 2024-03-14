@@ -1,6 +1,8 @@
 import { Account } from "starknet";
 import { store } from "../../store";
 import { useBurnerManager } from "@dojoengine/create-burner";
+import { Entity } from "@dojoengine/recs";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 export const useDojo = () => {
     const layers = store((state) => {
@@ -20,12 +22,17 @@ export const useDojo = () => {
         burnerManager: layers.networkLayer.burnerManager,
     });
 
+    const playerEntity: Entity = getEntityIdFromKeys([
+        BigInt(networkLayer.burnerManager.account!.address),
+    ]);
+
     return {
         networkLayer,
         phaserLayer,
         account: {
             ...burner,
             account: networkLayer.burnerManager.account as Account,
+            playerEntity,
         },
         systemCalls: networkLayer.systemCalls,
         contractComponents: networkLayer.contractComponents,

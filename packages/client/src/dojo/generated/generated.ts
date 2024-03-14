@@ -59,7 +59,26 @@ export async function setupWorld(provider: DojoProvider) {
                 throw error;
             }
         };
-        return { spawn, startBattle, nextRound };
+
+        const refreshAltar = async ({ account }: { account: Account }) => {
+            try {
+                const { transaction_hash: txHash } = await provider.execute(
+                    account,
+                    contract_name,
+                    "refreshAltar",
+                    []
+                );
+
+                const receipt = provider.provider.waitForTransaction(txHash);
+
+                return { txHash, receipt };
+            } catch (error) {
+                console.error("Error executing move:", error);
+                throw error;
+            }
+        };
+
+        return { spawn, startBattle, nextRound, refreshAltar };
     }
     return {
         actions: actions(),

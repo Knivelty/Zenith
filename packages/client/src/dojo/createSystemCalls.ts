@@ -45,6 +45,15 @@ export function createSystemCalls(
         }
     };
 
+    const refreshAltar = async (account: Account) => {
+        try {
+            return await client.actions.refreshAltar({ account });
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    };
+
     const playAnimation = async () => {
         updateComponent(GameStatus, zeroEntity, {
             shouldPlay: true,
@@ -56,5 +65,6 @@ export function createSystemCalls(
         startBattle,
         playAnimation,
         nextRound,
+        refreshAltar,
     };
 }

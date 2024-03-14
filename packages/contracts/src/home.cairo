@@ -28,7 +28,9 @@ use starknet::{
 
 #[dojo::contract]
 mod home {
-    use starknet::{ContractAddress, get_caller_address, get_block_hash_syscall, get_block_info};
+    use starknet::{
+        ContractAddress, get_caller_address, get_block_hash_syscall, get_block_info, get_tx_info
+    };
     use autochessia::models::{
         CreatureProfile, Position, Piece, Player, InningBattle, GlobalState, MatchState, Altar
     };
@@ -49,38 +51,42 @@ mod home {
         PieceActions: PieceActions,
     }
 
-    fn _refreshAlter(self: @ContractState, playerAddr: ContractAddress) {
+    fn _refreshAltar(self: @ContractState, playerAddr: ContractAddress) {
         let world = self.world_dispatcher.read();
 
         let player = get!(world, playerAddr, Player);
-        let altar = get!(world, playerAddr, Altar);
 
         // generate pseudo random number on block hash
-        let mut hash = get_block_hash_syscall(get_block_info().unbox().block_number - 10);
+        // let mut hash = get_block_hash_syscall(get_block_info().unbox().block_number - 10);
+        // TODO: change it later
+        let hash = get_tx_info().unbox().nonce;
 
-        let mut r: felt252 = 0;
+        let mut r: felt252 = hash;
 
-        match hash {
-            Result::Ok(value) => { r = value.into() },
-            Result::Err(err) => { panic!("gr error") },
-        }
+        // match hash {
+        //     Result::Ok(value) => { r = value.into() },
+        //     Result::Err(err) => { panic!("gr error") },
+        // }
 
         // filter the altar
         let creatureCount: felt252 = get!(world, 1, GlobalState).totalCreature.into();
 
-        let slot1 = get_felt_mod(r, creatureCount);
+        let slot1 = get_felt_mod(r, creatureCount) + 1;
         r = PoseidonTrait::new().update(r.into()).finalize().into();
 
-        let slot2 = get_felt_mod(r, creatureCount);
+        let slot2 = get_felt_mod(r, creatureCount) + 1;
         r = PoseidonTrait::new().update(r.into()).finalize().into();
 
-        let slot3 = get_felt_mod(r, creatureCount);
+        let slot3 = get_felt_mod(r, creatureCount) + 1;
         r = PoseidonTrait::new().update(r.into()).finalize().into();
 
-        let slot4 = get_felt_mod(r, creatureCount);
+        let slot4 = get_felt_mod(r, creatureCount) + 1;
         r = PoseidonTrait::new().update(r.into()).finalize().into();
 
-        let slot5 = get_felt_mod(r, creatureCount);
+        let slot5 = get_felt_mod(r, creatureCount) + 1;
+
+        // set altar
+        set!(world, Altar { player: playerAddr, slot1, slot2, slot3, slot4, slot5 });
     }
 
     fn _validateMoveChange(moveChange: @MoveChange) {}
@@ -111,6 +117,8 @@ mod home {
                     initiative: 90
                 }
             );
+
+            set!(world, GlobalState { index: 1, totalMatch: 0, totalCreature: 1, })
         }
 
         // ContractState is defined by system decorator expansion
@@ -151,7 +159,7 @@ mod home {
             );
 
             // refresh hero altar
-            _refreshAlter(self, playerAddr);
+            _refreshAltar(self, playerAddr);
 
             // get player's enemy address
             let enemy = generate_pseudo_random_address(playerAddr.into());
@@ -208,7 +216,6 @@ mod home {
             let length = changes.len();
 
             loop {
-                // TODO: panic here
                 let change = changes.at(idx);
                 match change {
                     PrepareChanges::MoveChange(val) => { _validateMoveChange(val) },
@@ -468,7 +475,7 @@ mod tests {
     use debug::PrintTrait;
 
     #[test]
-    #[available_gas(30000000)]
+    #[available_gas(60000000)]
     fn test_spwan() { // caller
         let caller = starknet::contract_address_const::<0x0>();
 
@@ -483,6 +490,9 @@ mod tests {
         let contract_address = world
             .deploy_contract('salt', home::TEST_CLASS_HASH.try_into().unwrap());
         let home_system = IHomeDispatcher { contract_address };
+
+        // initialize
+        home_system.initialize();
 
         // call spawn()
         home_system.spawn();

@@ -6,13 +6,26 @@ export type ContractComponents = Awaited<ReturnType<typeof defineContractCompone
 
 export function defineContractComponents(world: World) {
   return {
-    Creature: (() => {
+    Altar: (() => {
       return defineComponent(
         world,
-        { internal_index: RecsType.Number, tier: RecsType.Number, rarity: RecsType.Number, health: RecsType.Number, attack: RecsType.Number, armor: RecsType.Number, range: RecsType.Number, speed: RecsType.Number, initiative: RecsType.Number },
+        { player: RecsType.BigInt, slot1: RecsType.Number, slot2: RecsType.Number, slot3: RecsType.Number, slot4: RecsType.Number, slot5: RecsType.Number },
         {
           metadata: {
-            name: "Creature",
+            name: "Altar",
+            types: ["contractaddress","u8","u8","u8","u8","u8"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    CreatureProfile: (() => {
+      return defineComponent(
+        world,
+        { creature_index: RecsType.Number, level: RecsType.Number, rarity: RecsType.Number, health: RecsType.Number, attack: RecsType.Number, armor: RecsType.Number, range: RecsType.Number, speed: RecsType.Number, initiative: RecsType.Number },
+        {
+          metadata: {
+            name: "CreatureProfile",
             types: ["u8","u8","u8","u16","u8","u8","u8","u8","u8"],
             customTypes: [],
           },
@@ -22,11 +35,11 @@ export function defineContractComponents(world: World) {
     GlobalState: (() => {
       return defineComponent(
         world,
-        { index: RecsType.Number, totalMatch: RecsType.Number },
+        { index: RecsType.Number, totalMatch: RecsType.Number, totalCreature: RecsType.Number },
         {
           metadata: {
             name: "GlobalState",
-            types: ["u32","u32"],
+            types: ["u32","u32","u8"],
             customTypes: [],
           },
         }
@@ -61,11 +74,11 @@ export function defineContractComponents(world: World) {
     Piece: (() => {
       return defineComponent(
         world,
-        { owner: RecsType.BigInt, index: RecsType.Number, tier: RecsType.Number, rarity: RecsType.Number, internal_index: RecsType.Number, x_board: RecsType.Number, y_board: RecsType.Number, x_in_battle: RecsType.Number, y_in_battle: RecsType.Number, currentHealth: RecsType.Number },
+        { gid: RecsType.Number, owner: RecsType.BigInt, idx: RecsType.Number, slot: RecsType.Number, level: RecsType.Number, rarity: RecsType.Number, creature_index: RecsType.Number, x: RecsType.Number, y: RecsType.Number },
         {
           metadata: {
             name: "Piece",
-            types: ["contractaddress","u8","u8","u8","u8","u8","u8","u8","u8","u16"],
+            types: ["u16","contractaddress","u8","u8","u8","u8","u8","u8","u8"],
             customTypes: [],
           },
         }
@@ -74,11 +87,37 @@ export function defineContractComponents(world: World) {
     Player: (() => {
       return defineComponent(
         world,
-        { player: RecsType.BigInt, inMatch: RecsType.Number, health: RecsType.Number, streakCount: RecsType.Number, coin: RecsType.Number, tier: RecsType.Number, locked: RecsType.Number, heroesCount: RecsType.Number, heroAltarCount: RecsType.Number, inventoryCount: RecsType.Number },
+        { player: RecsType.BigInt, inMatch: RecsType.Number, health: RecsType.Number, streakCount: RecsType.Number, coin: RecsType.Number, level: RecsType.Number, locked: RecsType.Number, heroesCount: RecsType.Number, inventoryCount: RecsType.Number },
         {
           metadata: {
             name: "Player",
-            types: ["contractaddress","u32","u8","u8","u8","u8","u8","u8","u8","u8"],
+            types: ["contractaddress","u32","u8","u8","u8","u8","u8","u8","u8"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    PlayerInvPiece: (() => {
+      return defineComponent(
+        world,
+        { owner: RecsType.BigInt, slot: RecsType.Number, gid: RecsType.Number },
+        {
+          metadata: {
+            name: "PlayerInvPiece",
+            types: ["contractaddress","u8","u16"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    PlayerPiece: (() => {
+      return defineComponent(
+        world,
+        { owner: RecsType.BigInt, idx: RecsType.Number, gid: RecsType.Number },
+        {
+          metadata: {
+            name: "PlayerPiece",
+            types: ["contractaddress","u8","u16"],
             customTypes: [],
           },
         }

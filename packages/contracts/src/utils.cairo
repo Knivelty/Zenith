@@ -26,8 +26,13 @@ fn generate_pseudo_random_address(seed: felt252) -> ContractAddress {
 }
 
 fn get_felt_mod(divided: felt252, divid: felt252) -> u8 {
-    let y: u128 = divided.try_into().unwrap();
-    let x: u128 = divided.try_into().unwrap();
+    // println!("value: {}  {}", divided, divid);
+
+    let MASK_32: u256 = 0xffffffff;
+    let y: u32 = (divided.into() & MASK_32).try_into().unwrap();
+    let x: u32 = divid.try_into().unwrap();
+
+    // println!("value: {} {} {}", x, y, y % x);
 
     return (y % x).try_into().unwrap();
 }
