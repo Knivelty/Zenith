@@ -1,5 +1,6 @@
 import { useUIStore } from "../store";
 import { Debugger } from "./Debugger";
+import { Inventory } from "./Inventory";
 import Shop from "./Shop";
 
 export function ChessMain() {
@@ -14,6 +15,7 @@ export function ChessMain() {
             <Debugger />
             <div className="relative">
                 <Shop />
+                <Inventory />
             </div>
         </div>
     );

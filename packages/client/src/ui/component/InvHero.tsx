@@ -1,23 +1,26 @@
-import { HeroBaseAttr } from "../hooks/useHeroAttr";
+import { PieceAttr } from "../hooks/useHeroAttr";
 
-export const HeroCard = ({
-    heroAttr,
+export const InvHero = ({
+    pieceAttr,
     onClick,
 }: {
-    heroAttr: HeroBaseAttr | undefined;
+    pieceAttr: PieceAttr | undefined;
     onClick?: (...args: unknown[]) => unknown | Promise<unknown>;
 }) => {
     return (
-        <div
-            className={`${!heroAttr?.creature ? "invisible" : ""} `}
-            onClick={onClick}
-        >
-            <div className="flex flex-col border-1 items-start">
-                <div className="flex justify-center w-[95px] h-[130px] rounded-lg opacity-100 bg-contain bg-no-repeat bg-center bg-[url('assets/ui/hero_bg.png')] mx-2">
+        <div className={`${!pieceAttr?.creature ? "invisible" : ""} `}>
+            <div className="relative flex flex-col border-1 items-start group">
+                <button
+                    onClick={onClick}
+                    className="bg-red-500 hover:bg-red-600 text-white   w-4 h-4  text-xs absolute  right-3 top-1 group-hover:block hidden   rounded"
+                >
+                    x
+                </button>
+                <div className="flex justify-center w-[95px] h-[130px] rounded-lg opacity-100 bg-contain bg-no-repeat bg-center border-gray-300	border-2 mx-2">
                     <img
                         className="w-auto h-auto object-contain"
-                        src={heroAttr?.thumb}
-                        alt={heroAttr?.thumb}
+                        src={pieceAttr?.thumb}
+                        alt={pieceAttr?.thumb}
                     />
                 </div>
                 {/* show class and race */}

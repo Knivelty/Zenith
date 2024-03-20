@@ -54,6 +54,41 @@ export function createSystemCalls(
         }
     };
 
+    const getCoin = async (account: Account) => {
+        try {
+            return await client.actions.getCoin({ account });
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    };
+
+    const buyHero = async (
+        account: Account,
+        altarSlot: number,
+        invSlot: number
+    ) => {
+        try {
+            return await client.actions.buyHero({
+                account,
+                altarSlot,
+                invSlot,
+            });
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    };
+
+    const sellHero = async (account: Account, gid: number) => {
+        try {
+            return await client.actions.sellHero({ account, gid });
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    };
+
     const playAnimation = async () => {
         updateComponent(GameStatus, zeroEntity, {
             shouldPlay: true,
@@ -66,5 +101,8 @@ export function createSystemCalls(
         playAnimation,
         nextRound,
         refreshAltar,
+        getCoin,
+        buyHero,
+        sellHero,
     };
 }

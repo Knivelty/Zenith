@@ -88,6 +88,7 @@ export async function setup({ ...config }: DojoConfig) {
     });
 
     // fetch all existing entities from torii
+    // sync it asynchronously
     await getSyncEntities(toriiClient, contractComponents as any);
 
     await syncCustomEvents(graphqlClient, clientComponents);
@@ -170,7 +171,6 @@ async function syncCustomEvents(
     //     const matchId = parseInt(data[0], 16);
     //     const battleId = parseInt(data[1], 16);
     //     const length = parseInt(data[2], 16);
-
     //     // NOTE: include some hardcode, not generic for now
     //     for (let i = 0; i < length; i++) {
     //         const player = String(data[i * 6 + 3]);
@@ -178,7 +178,6 @@ async function syncCustomEvents(
     //         const toX = parseInt(data[i * 6 + 6]);
     //         const toY = parseInt(data[i * 6 + 7]);
     //         const paths = new Array<Coord>();
-
     //         if (i === 0 || i === 1) {
     //             paths.push({ x: toX, y: toY });
     //         } else {
@@ -186,10 +185,8 @@ async function syncCustomEvents(
     //                 x: last(output[i - 2].paths)!.x,
     //                 y: last(output[i - 2].paths)!.y,
     //             });
-
     //             paths.push({ x: toX, y: toY });
     //         }
-
     //         output.push({
     //             player: player,
     //             order: parseInt(data[i * 6 + 4], 16),
@@ -199,12 +196,10 @@ async function syncCustomEvents(
     //             attackPieceId: parseInt(data[i * 6 + 8]),
     //         });
     //     }
-
     //     console.log(
     //         "entity: ",
     //         getEntityIdFromKeys([BigInt(matchId), BigInt(battleId)])
     //     );
-
     //     setComponent(
     //         BattleLogs,
     //         getEntityIdFromKeys([BigInt(matchId), BigInt(battleId)]),
@@ -215,7 +210,6 @@ async function syncCustomEvents(
     //         }
     //     );
     // }
-
     // const fetched = graphqlClient.query<gqlQueryRes>({
     //     query: battleLogQuery,
     //     variables: {
@@ -226,7 +220,6 @@ async function syncCustomEvents(
     //         ],
     //     },
     // });
-
     // fetched.then((result) => {
     //     console.log("fetched result", result.data.events.edges);
     //     result.data.events.edges.forEach((v) => {
@@ -234,7 +227,6 @@ async function syncCustomEvents(
     //         syncEventToEntity(v.node.data);
     //     });
     // });
-
     // const subscription = graphqlClient.subscribe<gqlSubRes>({
     //     query: battleLogSubscription,
     //     variables: {
@@ -245,11 +237,9 @@ async function syncCustomEvents(
     //         ],
     //     },
     // });
-
     // subscription.subscribe({
     //     next(v) {
     //         const data = v.data?.eventEmitted.data;
-
     //         if (!data) {
     //             return;
     //         }

@@ -35,11 +35,11 @@ export function defineContractComponents(world: World) {
     GlobalState: (() => {
       return defineComponent(
         world,
-        { index: RecsType.Number, totalMatch: RecsType.Number, totalCreature: RecsType.Number },
+        { index: RecsType.Number, totalMatch: RecsType.Number, totalCreature: RecsType.Number, totalPieceCounter: RecsType.Number },
         {
           metadata: {
             name: "GlobalState",
-            types: ["u32","u32","u8"],
+            types: ["u32","u32","u8","u32"],
             customTypes: [],
           },
         }
@@ -78,7 +78,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: "Piece",
-            types: ["u16","contractaddress","u8","u8","u8","u8","u8","u8","u8"],
+            types: ["u32","contractaddress","u8","u8","u8","u8","u8","u8","u8"],
             customTypes: [],
           },
         }
@@ -104,7 +104,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: "PlayerInvPiece",
-            types: ["contractaddress","u8","u16"],
+            types: ["contractaddress","u8","u32"],
             customTypes: [],
           },
         }
@@ -117,7 +117,7 @@ export function defineContractComponents(world: World) {
         {
           metadata: {
             name: "PlayerPiece",
-            types: ["contractaddress","u8","u16"],
+            types: ["contractaddress","u8","u32"],
             customTypes: [],
           },
         }

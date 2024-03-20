@@ -10,7 +10,13 @@ import { zeroEntity } from "../utils";
 export function Debugger() {
     const {
         account: { account },
-        systemCalls: { nextRound, startBattle, playAnimation },
+        systemCalls: {
+            nextRound,
+            startBattle,
+            playAnimation,
+            getCoin,
+            refreshAltar,
+        },
         clientComponents: { MatchState, Player, GameStatus },
     } = useDojo();
 
@@ -70,7 +76,22 @@ export function Debugger() {
                 next round
             </Button>
             <Button>current Round: {matchState?.round}</Button>
+            <Button>coin: {player?.coin}</Button>
+            <Button
+                onClick={async () => {
+                    getCoin(account);
+                }}
+            >
+                Get Coin
+            </Button>
             <Button>status: {numToStatus(gameStatus?.status)}</Button>
+            <Button
+                onClick={async () => {
+                    refreshAltar(account);
+                }}
+            >
+                refresh altar
+            </Button>
             <Button
                 onClick={async () => {
                     location.reload();

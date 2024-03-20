@@ -8,4 +8,4 @@ procs:
   katana:
     shell: katana
   torii:
-    shell: torii --world "0x57cc45d1cbf3d842745b042b512514f5ea7da85785623e161d5838ae74de210"
+    shell: rm indexer.db && torii --world "0x57cc45d1cbf3d842745b042b512514f5ea7da85785623e161d5838ae74de210" --database indexer.db

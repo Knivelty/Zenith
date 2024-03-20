@@ -10,8 +10,8 @@ trait IHome<TContractState> {
 
     fn spawn(self: @TContractState);
     fn refreshAltar(self: @TContractState);
-    fn buyHero(self: @TContractState, slot: u8);
-    fn sellHero(self: @TContractState, gid: u16);
+    fn buyHero(self: @TContractState, altarSlot: u8, invSlot: u8);
+    fn sellHero(self: @TContractState, gid: u32);
     fn commitPreparation(
         self: @TContractState, changes: Array<PrepareChanges<MoveChange, PlaceChange>>
     );
@@ -19,6 +19,9 @@ trait IHome<TContractState> {
 
 
     fn startBattle(self: @TContractState);
+
+    // debug func
+    fn getCoin(self: @TContractState);
 }
 
 use starknet::{
@@ -32,7 +35,8 @@ mod home {
         ContractAddress, get_caller_address, get_block_hash_syscall, get_block_info, get_tx_info
     };
     use autochessia::models::{
-        CreatureProfile, Position, Piece, Player, InningBattle, GlobalState, MatchState, Altar
+        CreatureProfile, Position, Piece, Player, InningBattle, GlobalState, MatchState, Altar,
+        PlayerInvPiece
     };
     use autochessia::utils::{next_position, generate_pseudo_random_address, get_felt_mod};
     use autochessia::customType::{MoveChange, PlaceChange, PrepareChanges};
@@ -67,7 +71,6 @@ mod home {
         //     Result::Ok(value) => { r = value.into() },
         //     Result::Err(err) => { panic!("gr error") },
         // }
-
         // filter the altar
         let creatureCount: felt252 = get!(world, 1, GlobalState).totalCreature.into();
 
@@ -103,6 +106,8 @@ mod home {
             let world = self.world_dispatcher.read();
 
             // initialize creature
+
+            // Minotaur
             set!(
                 world,
                 CreatureProfile {
@@ -118,7 +123,154 @@ mod home {
                 }
             );
 
-            set!(world, GlobalState { index: 1, totalMatch: 0, totalCreature: 1, })
+            // Colossus
+            set!(
+                world,
+                CreatureProfile {
+                    level: 1,
+                    rarity: 1,
+                    creature_index: 2,
+                    health: 700,
+                    attack: 35,
+                    armor: 65,
+                    range: 2,
+                    speed: 1,
+                    initiative: 60
+                }
+            );
+
+            // Behemoth
+            set!(
+                world,
+                CreatureProfile {
+                    level: 1,
+                    rarity: 1,
+                    creature_index: 3,
+                    health: 550,
+                    attack: 45,
+                    armor: 60,
+                    range: 2,
+                    speed: 2,
+                    initiative: 85
+                }
+            );
+
+            // Wyvern
+            set!(
+                world,
+                CreatureProfile {
+                    level: 1,
+                    rarity: 1,
+                    creature_index: 4,
+                    health: 450,
+                    attack: 100,
+                    armor: 30,
+                    range: 3,
+                    speed: 4,
+                    initiative: 135
+                }
+            );
+
+            // Berserker
+            set!(
+                world,
+                CreatureProfile {
+                    level: 1,
+                    rarity: 1,
+                    creature_index: 5,
+                    health: 500,
+                    attack: 65,
+                    armor: 85,
+                    range: 2,
+                    speed: 3,
+                    initiative: 95
+                }
+            );
+
+            // Golem
+            set!(
+                world,
+                CreatureProfile {
+                    level: 1,
+                    rarity: 1,
+                    creature_index: 6,
+                    health: 600,
+                    attack: 65,
+                    armor: 50,
+                    range: 2,
+                    speed: 2,
+                    initiative: 110
+                }
+            );
+
+            // Bear
+            set!(
+                world,
+                CreatureProfile {
+                    level: 1,
+                    rarity: 1,
+                    creature_index: 7,
+                    health: 960,
+                    attack: 90,
+                    armor: 40,
+                    range: 2,
+                    speed: 2,
+                    initiative: 80
+                }
+            );
+
+            // Kitsune
+            set!(
+                world,
+                CreatureProfile {
+                    level: 1,
+                    rarity: 1,
+                    creature_index: 8,
+                    health: 420,
+                    attack: 70,
+                    armor: 35,
+                    range: 2,
+                    speed: 3,
+                    initiative: 115
+                }
+            );
+
+            // Nue
+            set!(
+                world,
+                CreatureProfile {
+                    level: 1,
+                    rarity: 1,
+                    creature_index: 9,
+                    health: 400,
+                    attack: 80,
+                    armor: 25,
+                    range: 2,
+                    speed: 4,
+                    initiative: 175
+                }
+            );
+
+            // Cyclops
+            set!(
+                world,
+                CreatureProfile {
+                    level: 1,
+                    rarity: 1,
+                    creature_index: 10,
+                    health: 300,
+                    attack: 125,
+                    armor: 40,
+                    range: 2,
+                    speed: 0,
+                    initiative: 150
+                }
+            );
+
+            set!(
+                world,
+                GlobalState { index: 1, totalMatch: 0, totalCreature: 10, totalPieceCounter: 0 }
+            )
         }
 
         // ContractState is defined by system decorator expansion
@@ -130,17 +282,11 @@ mod home {
             let playerAddr = get_caller_address();
 
             // create match
-            let globalState = get!(world, 1, GlobalState);
+            let mut globalState = get!(world, 1, GlobalState);
             let currentMatch = globalState.totalMatch + 1;
-            set!(
-                world,
-                (
-                    MatchState { index: currentMatch, round: 1 },
-                    GlobalState {
-                        index: 1, totalMatch: currentMatch, totalCreature: globalState.totalCreature
-                    }
-                )
-            );
+            globalState.totalMatch = currentMatch;
+
+            set!(world, (MatchState { index: currentMatch, round: 1 }, globalState));
 
             // spawn player
             set!(
@@ -229,9 +375,125 @@ mod home {
             }
         }
 
-        fn refreshAltar(self: @ContractState) {}
-        fn buyHero(self: @ContractState, slot: u8) {}
-        fn sellHero(self: @ContractState, gid: u16) {}
+        fn refreshAltar(self: @ContractState) {
+            let world = self.world_dispatcher.read();
+            let playerAddr = get_caller_address();
+
+            let mut player = get!(world, playerAddr, Player);
+
+            // player coin reduce by 2
+            player.coin -= 2;
+
+            set!(world, (player));
+
+            _refreshAltar(self, playerAddr);
+        }
+
+        fn buyHero(self: @ContractState, altarSlot: u8, invSlot: u8) {
+            let world = self.world_dispatcher.read();
+            let playerAddr = get_caller_address();
+
+            let mut player = get!(world, playerAddr, Player);
+            let mut altar = get!(world, playerAddr, Altar);
+            let mut globalState = get!(world, 1, GlobalState);
+            globalState.totalPieceCounter += 1;
+
+            // get creature Id
+            let creatureId = match altarSlot.into() {
+                0 => { 0 },
+                1 => {
+                    let creatureId = altar.slot1;
+                    altar.slot1 = 0;
+                    creatureId
+                },
+                2 => {
+                    let creatureId = altar.slot2;
+                    altar.slot2 = 0;
+                    creatureId
+                },
+                3 => {
+                    let creatureId = altar.slot3;
+                    altar.slot3 = 0;
+                    creatureId
+                },
+                4 => {
+                    let creatureId = altar.slot4;
+                    altar.slot4 = 0;
+                    creatureId
+                },
+                5 => {
+                    let creatureId = altar.slot5;
+                    altar.slot5 = 0;
+                    creatureId
+                },
+                _ => { 0 }
+            };
+            // check whether is empty
+            if (creatureId == 0) {
+                panic!("invalid creature");
+            }
+
+            // get creature profile
+            let creatureProfile = get!(world, (creatureId, 1), CreatureProfile);
+
+            // player coin minus 1
+            player.coin -= 1;
+            player.inventoryCount += 1;
+
+            // check wether this slot is full
+            let playerInvPiece = get!(world, (playerAddr, invSlot), PlayerInvPiece);
+            if (playerInvPiece.gid != 0) {
+                panic!("this slot occupied")
+            }
+
+            // spwan piece
+            set!(
+                world,
+                (
+                    Piece {
+                        gid: globalState.totalPieceCounter,
+                        owner: playerAddr,
+                        idx: 0,
+                        slot: invSlot,
+                        level: 1,
+                        rarity: creatureProfile.rarity,
+                        creature_index: creatureId,
+                        x: 0,
+                        y: 0
+                    },
+                    PlayerInvPiece {
+                        owner: playerAddr, slot: invSlot, gid: globalState.totalPieceCounter
+                    },
+                    altar,
+                    globalState,
+                    player
+                )
+            )
+        // 
+        }
+
+        fn sellHero(self: @ContractState, gid: u32) {
+            let world = self.world_dispatcher.read();
+            let playerAddr = get_caller_address();
+
+            let piece = get!(world, gid, Piece);
+            let mut invPiece = get!(world, (playerAddr, piece.slot), PlayerInvPiece);
+            let mut player = get!(world, playerAddr, Player);
+
+            // refund coin
+            // TODO: judge by level
+            player.coin += 1;
+
+            // by default, consider the piece are sold from inv
+            // TODO: delete! will break torii https://github.com/dojoengine/dojo/issues/1635
+            // delete!(world, (piece));
+
+            // set gid equal 0 to mark it as deleted
+            invPiece.gid = 0;
+            set!(world, (invPiece));
+
+            set!(world, (player));
+        }
 
         fn nextRound(self: @ContractState) {
             let world = self.world_dispatcher.read();
@@ -261,195 +523,28 @@ mod home {
         }
 
 
-        fn startBattle(self: @ContractState) {
-            // Access the world dispatcher for reading.
-            let world = self.world_dispatcher.read();
+        fn startBattle(self: @ContractState) {}
 
-            // Get the address of the current caller, possibly the player's address.
+        fn getCoin(self: @ContractState) {
+            let world = self.world_dispatcher.read();
             let playerAddr = get_caller_address();
 
             let player = get!(world, playerAddr, Player);
 
-            let currentMatchState = get!(world, player.inMatch, MatchState);
-
-            // get inning inning battle
-            let inningBattle = get!(
-                world, (currentMatchState.index, currentMatchState.round), InningBattle
-            );
-
-            let enemy = inningBattle.awayPlayer;
-
-            let mut logs = ArrayTrait::<PieceAction>::new();
-
-            // move period
-            logs
-                .append(
-                    PieceAction {
-                        order: 1,
-                        player: playerAddr,
-                        pieceId: 1,
-                        to_x: 1,
-                        to_y: 1,
-                        attackPieceId: 0,
-                    },
-                );
-
-            logs
-                .append(
-                    PieceAction {
-                        order: 2, player: enemy, pieceId: 1, to_x: 7, to_y: 7, attackPieceId: 0,
-                    },
-                );
-
-            logs
-                .append(
-                    PieceAction {
-                        order: 3,
-                        player: playerAddr,
-                        pieceId: 1,
-                        to_x: 5,
-                        to_y: 1,
-                        attackPieceId: 0,
-                    },
-                );
-
-            logs
-                .append(
-                    PieceAction {
-                        order: 4, player: enemy, pieceId: 1, to_x: 5, to_y: 7, attackPieceId: 0,
-                    },
-                );
-
-            logs
-                .append(
-                    PieceAction {
-                        order: 5,
-                        player: playerAddr,
-                        pieceId: 1,
-                        to_x: 5,
-                        to_y: 4,
-                        attackPieceId: 0,
-                    },
-                );
-
-            // attack period
-            logs
-                .append(
-                    PieceAction {
-                        order: 6, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
-                    },
-                );
-
-            logs
-                .append(
-                    PieceAction {
-                        order: 7,
-                        player: playerAddr,
-                        pieceId: 1,
-                        to_x: 5,
-                        to_y: 4,
-                        attackPieceId: 1,
-                    },
-                );
-
-            logs
-                .append(
-                    PieceAction {
-                        order: 8, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
-                    },
-                );
-
-            logs
-                .append(
-                    PieceAction {
-                        order: 9,
-                        player: playerAddr,
-                        pieceId: 1,
-                        to_x: 5,
-                        to_y: 4,
-                        attackPieceId: 1,
-                    },
-                );
-
-            logs
-                .append(
-                    PieceAction {
-                        order: 10, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
-                    }
-                );
-            logs
-                .append(
-                    PieceAction {
-                        order: 11,
-                        player: playerAddr,
-                        pieceId: 1,
-                        to_x: 5,
-                        to_y: 4,
-                        attackPieceId: 1,
-                    }
-                );
-
-            logs
-                .append(
-                    PieceAction {
-                        order: 12, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
-                    }
-                );
-
-            logs
-                .append(
-                    PieceAction {
-                        order: 13,
-                        player: playerAddr,
-                        pieceId: 1,
-                        to_x: 5,
-                        to_y: 4,
-                        attackPieceId: 1,
-                    }
-                );
-
-            logs
-                .append(
-                    PieceAction {
-                        order: 14, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
-                    }
-                );
-
-            logs
-                .append(
-                    PieceAction {
-                        order: 15,
-                        player: playerAddr,
-                        pieceId: 1,
-                        to_x: 5,
-                        to_y: 4,
-                        attackPieceId: 1,
-                    }
-                );
-
-            logs
-                .append(
-                    PieceAction {
-                        order: 16, player: enemy, pieceId: 1, to_x: 5, to_y: 5, attackPieceId: 1,
-                    }
-                );
-
             set!(
                 world,
-                InningBattle {
-                    currentMatch: currentMatchState.index,
-                    round: currentMatchState.round,
-                    homePlayer: playerAddr,
-                    awayPlayer: enemy,
-                    end: true
-                }
-            );
-
-            // mock move and attack while JPS is not done yet
-            emit!(
-                world,
-                PieceActions {
-                    matchId: currentMatchState.index, roundId: currentMatchState.round, logs: logs
+                Player {
+                    player: player.player,
+                    inMatch: player.inMatch,
+                    health: player.health,
+                    streakCount: player.streakCount,
+                    coin: player.coin + 10,
+                    level: player.level,
+                    locked: player.locked,
+                    // dojo does not support array for now, so it's used to traversal all pieces belong to player
+                    heroesCount: player.heroesCount,
+                    // hero count in inventory 
+                    inventoryCount: player.inventoryCount,
                 }
             );
         }

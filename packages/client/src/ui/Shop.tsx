@@ -3,6 +3,7 @@ import { useDojo } from "./hooks/useDojo";
 import { useComponentValue } from "@dojoengine/react";
 import { getHeroAttr, useHeroesAttr } from "./hooks/useHeroAttr";
 import { HeroCard } from "./component/HeroCard";
+import { useInv } from "./hooks/useInv";
 
 const SHOW_INFO_LIST = ["health", "attack", "defense", "range"] as const;
 
@@ -17,7 +18,7 @@ export const BG_COLOR = [
 const Shop = () => {
     const {
         clientComponents: { Player, Altar, CreatureProfile },
-        systemCalls: { refreshAltar },
+        systemCalls: { refreshAltar, buyHero },
         account: { playerEntity, account },
     } = useDojo();
     // const [messageApi, contextHolder] = message.useMessage();
@@ -41,19 +42,20 @@ const Shop = () => {
     const heroAltar = useComponentValue(Altar, playerEntity);
 
     console.log("heroAltar: ", heroAltar);
-    console.log("playerEntity: ", playerEntity);
 
-    // const buyHeroFn = (index: number, hero: HeroBaseAttr) => {
-    //     if (Number(hero.cost) + 1 > (playerValue?.coin as number)) {
-    //         messageApi.open({
-    //             type: "error",
-    //             content: "Not enough coins",
-    //         });
-    //         return;
-    //     } else {
-    //         buyHero(index);
-    //     }
-    // };
+    // console.log("heroAltar: ", heroAltar);
+    // console.log("playerEntity: ", playerEntity);
+
+    const { firstEmptyInv } = useInv();
+
+    console.log("firstEmptyInv: ", firstEmptyInv);
+
+    const buyHeroFn = useCallback(
+        (index: number) => {
+            buyHero(account, index, firstEmptyInv);
+        },
+        [account, buyHero, firstEmptyInv]
+    );
 
     return (
         <div className="flex justify-center mt-2">
@@ -66,30 +68,45 @@ const Shop = () => {
                                 id: heroAltar?.slot1,
                                 level: 1,
                             })}
+                            onClick={() => {
+                                buyHeroFn(1);
+                            }}
                         />
                         <HeroCard
                             heroAttr={getHeroAttr(CreatureProfile, {
                                 id: heroAltar?.slot2,
                                 level: 1,
                             })}
+                            onClick={() => {
+                                buyHeroFn(2);
+                            }}
                         />
                         <HeroCard
                             heroAttr={getHeroAttr(CreatureProfile, {
                                 id: heroAltar?.slot3,
                                 level: 1,
                             })}
+                            onClick={() => {
+                                buyHeroFn(3);
+                            }}
                         />
                         <HeroCard
                             heroAttr={getHeroAttr(CreatureProfile, {
                                 id: heroAltar?.slot4,
                                 level: 1,
                             })}
+                            onClick={() => {
+                                buyHeroFn(4);
+                            }}
                         />
                         <HeroCard
                             heroAttr={getHeroAttr(CreatureProfile, {
                                 id: heroAltar?.slot5,
                                 level: 1,
                             })}
+                            onClick={() => {
+                                buyHeroFn(5);
+                            }}
                         />
                     </div>
 

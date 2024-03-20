@@ -34,7 +34,7 @@ struct PlayerPiece {
     owner: ContractAddress,
     #[key]
     idx: u8,
-    gid: u16,
+    gid: u32,
 }
 
 #[derive(Model, Copy, Drop, Serde)]
@@ -43,14 +43,14 @@ struct PlayerInvPiece {
     owner: ContractAddress,
     #[key]
     slot: u8,
-    gid: u16,
+    gid: u32,
 }
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Piece {
     // global id of this piece
     #[key]
-    gid: u16,
+    gid: u32,
     owner: ContractAddress,
     idx: u8,
     slot: u8,
@@ -79,6 +79,7 @@ struct GlobalState {
     index: u32,
     totalMatch: u32,
     totalCreature: u8,
+    totalPieceCounter: u32,
 }
 
 #[derive(Model, Copy, Drop, Serde)]

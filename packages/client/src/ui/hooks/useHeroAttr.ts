@@ -8,12 +8,17 @@ import { ClientComponents } from "../../dojo/createClientComponents";
 export interface HeroBaseAttr {
     attack: number;
     cost: number;
+    level: number;
     creature: number;
     armor: number;
     health: number;
     speed: number;
     range: number;
     thumb: string;
+}
+
+export interface PieceAttr extends HeroBaseAttr {
+    gid: number;
 }
 
 export type CreatureKeys = {
@@ -29,8 +34,6 @@ export function getHeroAttr(
     creatureProfile: ClientComponents["CreatureProfile"],
     creature: CreatureKeys
 ): HeroBaseAttr | undefined {
-    console.log("creature: ", creature);
-
     if (!creature.id) {
         return undefined;
     }
@@ -48,6 +51,7 @@ export function getHeroAttr(
         speed: profile.speed,
         range: profile.range,
         cost: profile.level,
+        level: profile.level,
         thumb: getHeroThumb(profile.creature_index),
     };
 }
@@ -74,6 +78,7 @@ export function useHeroesAttr(creatures: CreatureKeys[]): HeroBaseAttr[] {
                     speed: creatureProfile.speed,
                     range: creatureProfile.range,
                     cost: creatureProfile.level,
+                    level: creatureProfile.level,
                     thumb: getHeroThumb(creatureProfile.creature_index),
                 };
             }) as HeroBaseAttr[]

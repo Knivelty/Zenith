@@ -78,7 +78,83 @@ export async function setupWorld(provider: DojoProvider) {
             }
         };
 
-        return { spawn, startBattle, nextRound, refreshAltar };
+        const getCoin = async ({ account }: { account: Account }) => {
+            try {
+                const { transaction_hash: txHash } = await provider.execute(
+                    account,
+                    contract_name,
+                    "getCoin",
+                    []
+                );
+
+                const receipt = provider.provider.waitForTransaction(txHash);
+
+                return { txHash, receipt };
+            } catch (error) {
+                console.error("Error executing move:", error);
+                throw error;
+            }
+        };
+
+        const buyHero = async ({
+            account,
+            altarSlot,
+            invSlot,
+        }: {
+            account: Account;
+            altarSlot: number;
+            invSlot: number;
+        }) => {
+            try {
+                const { transaction_hash: txHash } = await provider.execute(
+                    account,
+                    contract_name,
+                    "buyHero",
+                    [altarSlot, invSlot]
+                );
+
+                const receipt = provider.provider.waitForTransaction(txHash);
+
+                return { txHash, receipt };
+            } catch (error) {
+                console.error("Error executing move:", error);
+                throw error;
+            }
+        };
+
+        const sellHero = async ({
+            account,
+            gid,
+        }: {
+            account: Account;
+            gid: number;
+        }) => {
+            try {
+                const { transaction_hash: txHash } = await provider.execute(
+                    account,
+                    contract_name,
+                    "sellHero",
+                    [gid]
+                );
+
+                const receipt = provider.provider.waitForTransaction(txHash);
+
+                return { txHash, receipt };
+            } catch (error) {
+                console.error("Error executing move:", error);
+                throw error;
+            }
+        };
+
+        return {
+            spawn,
+            startBattle,
+            nextRound,
+            refreshAltar,
+            getCoin,
+            buyHero,
+            sellHero,
+        };
     }
     return {
         actions: actions(),
