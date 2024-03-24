@@ -3,6 +3,7 @@ import { createPhaserLayer } from "../../phaser";
 import { NetworkLayer } from "../../dojo/createNetworkLayer";
 import { phaserConfig } from "../../phaser/config/configurePhaser";
 import { usePromiseValue } from "./usePromiseValue";
+import { UIStore, useUIStore } from "../../store";
 
 type Props = {
     networkLayer: NetworkLayer | null;
@@ -20,6 +21,9 @@ const createContainer = () => {
 export const usePhaserLayer = ({ networkLayer }: Props) => {
     const parentRef = useRef<HTMLElement | null>(null);
     const [{ width, height }] = useState({ width: 512, height: 512 });
+
+    // read save phaser rect func
+    const setPhaserRect = useUIStore((state: UIStore) => state.setPhaserRect);
 
     const { phaserLayerPromise, container } = useMemo(() => {
         if (!networkLayer) return { container: null, phaserLayerPromise: null };
@@ -58,6 +62,13 @@ export const usePhaserLayer = ({ networkLayer }: Props) => {
     const ref = useCallback(
         (el: HTMLElement | null) => {
             parentRef.current = el;
+
+            // get rect and save
+            const rect = parentRef.current?.getBoundingClientRect();
+            if (rect) {
+                setPhaserRect(rect);
+            }
+
             if (container) {
                 if (parentRef.current) {
                     parentRef.current.appendChild(container);

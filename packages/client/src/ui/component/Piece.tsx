@@ -25,14 +25,15 @@ const DragItem = ({ data }: IDrap) => {
     const { src } = data;
     const dragRef = useRef(null);
 
-    useDrag(data, dragRef, {
-        onDragStart: (e) => {
-            console.log(e);
-        },
-        onDragEnd: (e) => {
-            console.log(e);
-        },
-    });
+    // useDrag(data, dragRef, {
+    //     onDragStart: (e) => {
+    //         e.dataTransfer.setData("text/plain", "1");
+    //         console.log("onDragStart: ", e);
+    //     },
+    //     onDragEnd: (e) => {
+    //         console.log("onDragEnd: ",e);
+    //     },
+    // });
 
     const srcImg = src || empty;
 

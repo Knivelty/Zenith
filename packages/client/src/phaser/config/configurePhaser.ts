@@ -74,8 +74,8 @@ export const phaserConfig = {
     scale: defineScaleConfig({
         parent: "phaser-game",
         zoom: 0.25,
-        height: "64rem",
-        width: "64rem",
+        height: "32rem",
+        width: "32rem",
         mode: Phaser.Scale.NO_ZOOM,
     }),
     cameraConfig: defineCameraConfig({
