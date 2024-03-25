@@ -52,7 +52,7 @@ export function Inventory() {
     //         } as PieceAttr;
     //     });
 
-    console.log("invPieces: ", invPieces);
+    // console.log("invPieces: ", invPieces);
 
     return (
         <div className="fixed bottom-[1%] text-center  w-screen  mx-auto flex justify-center mt-2">

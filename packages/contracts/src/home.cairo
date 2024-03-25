@@ -36,7 +36,7 @@ mod home {
     };
     use autochessia::models::{
         CreatureProfile, Position, Piece, Player, InningBattle, GlobalState, MatchState, Altar,
-        PlayerInvPiece
+        PlayerPiece, PlayerInvPiece, StageProfile, StageProfilePiece
     };
     use autochessia::utils::{next_position, generate_pseudo_random_address, get_felt_mod};
     use autochessia::customType::{MoveChange, PlaceChange, PrepareChanges};
@@ -101,8 +101,9 @@ mod home {
     #[abi(embed_v0)]
     impl HomeImpl of IHome<ContractState> {
         // intialize all args
+        // TODO: set as real args
+
         fn initialize(self: @ContractState) {
-            // Access the world dispatcher for reading.
             let world = self.world_dispatcher.read();
 
             // initialize creature
@@ -270,7 +271,37 @@ mod home {
             set!(
                 world,
                 GlobalState { index: 1, totalMatch: 0, totalCreature: 10, totalPieceCounter: 0 }
-            )
+            );
+
+            // intialize stage profile
+
+            // stage 1
+            set!(
+                world,
+                (
+                    StageProfile { stage: 1, pieceCount: 2, },
+                    StageProfilePiece {
+                        stage: 1, index: 1, x: 2, y: 3, creature_index: 1, level: 1,
+                    },
+                    StageProfilePiece {
+                        stage: 1, index: 2, x: 2, y: 6, creature_index: 1, level: 1,
+                    }
+                )
+            );
+
+            // stage 2
+            set!(
+                world,
+                (
+                    StageProfile { stage: 2, pieceCount: 2, },
+                    StageProfilePiece {
+                        stage: 2, index: 1, x: 1, y: 3, creature_index: 2, level: 1,
+                    },
+                    StageProfilePiece {
+                        stage: 2, index: 2, x: 4, y: 5, creature_index: 3, level: 1,
+                    }
+                )
+            );
         }
 
         // ContractState is defined by system decorator expansion
@@ -308,46 +339,71 @@ mod home {
             _refreshAltar(self, playerAddr);
 
             // get player's enemy address
-            let enemy = generate_pseudo_random_address(playerAddr.into());
+            let enemyAddr = generate_pseudo_random_address(playerAddr.into());
 
-            // spawn player's enemy and first round enemy
+            // get the first stage profile
+            let stageProfile = get!(world, 1, StageProfile);
+
+            // spawn enemy
             set!(
                 world,
-                (
-                    Player {
-                        player: enemy,
-                        health: 10,
-                        heroesCount: 1,
-                        inventoryCount: 0,
-                        level: 1,
-                        coin: 0,
-                        streakCount: 0,
-                        locked: 0,
-                        inMatch: currentMatch
-                    },
-                    Piece {
-                        gid: 1,
-                        owner: enemy,
-                        idx: 1,
-                        slot: 0,
-                        level: 1,
-                        rarity: 1,
-                        creature_index: 1,
-                        x: 1,
-                        y: 1,
-                    }
-                )
+                Player {
+                    player: enemyAddr,
+                    health: 10,
+                    heroesCount: stageProfile.pieceCount,
+                    inventoryCount: 0,
+                    level: 1,
+                    coin: 0,
+                    streakCount: 0,
+                    locked: 0,
+                    inMatch: currentMatch
+                }
             );
+
+            // spawn piece according to stage profile
+            let mut idx = 1;
+
+            loop {
+                let sp = get!(world, (1, idx), StageProfilePiece);
+                globalState.totalPieceCounter += 1;
+                set!(
+                    world,
+                    (
+                        PlayerPiece {
+                            owner: enemyAddr, idx: idx, gid: globalState.totalPieceCounter
+                        },
+                        Piece {
+                            gid: globalState.totalPieceCounter,
+                            owner: enemyAddr,
+                            idx: idx,
+                            slot: 0,
+                            level: sp.level,
+                            creature_index: sp.creature_index,
+                            x: sp.x,
+                            y: sp.y,
+                        }
+                    )
+                );
+
+                if (idx >= stageProfile.pieceCount) {
+                    break;
+                }
+                idx = idx + 1;
+            };
+
             // create battle
             set!(
                 world,
-                (InningBattle {
-                    currentMatch: currentMatch,
-                    round: 1,
-                    homePlayer: playerAddr,
-                    awayPlayer: enemy,
-                    end: false
-                }),
+                (
+                    InningBattle {
+                        currentMatch: currentMatch,
+                        round: 1,
+                        homePlayer: playerAddr,
+                        awayPlayer: enemyAddr,
+                        end: false
+                    },
+                    globalState
+                ),
             );
         }
 
@@ -456,7 +512,6 @@ mod home {
                         idx: 0,
                         slot: invSlot,
                         level: 1,
-                        rarity: creatureProfile.rarity,
                         creature_index: creatureId,
                         x: 0,
                         y: 0
@@ -483,6 +538,7 @@ mod home {
             // refund coin
             // TODO: judge by level
             player.coin += 1;
+            player.inventoryCount -= 1;
 
             // by default, consider the piece are sold from inv
             // TODO: delete! will break torii https://github.com/dojoengine/dojo/issues/1635

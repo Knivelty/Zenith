@@ -28,6 +28,27 @@ struct Altar {
     slot5: u8,
 }
 
+
+#[derive(Model, Copy, Drop, Serde)]
+struct StageProfile {
+    #[key]
+    stage: u8,
+    pieceCount: u8,
+}
+
+#[derive(Model, Copy, Drop, Serde)]
+struct StageProfilePiece {
+    #[key]
+    stage: u8,
+    #[key]
+    index: u8,
+    x: u8,
+    y: u8,
+    creature_index: u8,
+    level: u8,
+}
+
+
 #[derive(Model, Copy, Drop, Serde)]
 struct PlayerPiece {
     #[key]
@@ -55,7 +76,6 @@ struct Piece {
     idx: u8,
     slot: u8,
     level: u8,
-    rarity: u8,
     creature_index: u8,
     x: u8,
     y: u8

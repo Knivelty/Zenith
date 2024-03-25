@@ -4,6 +4,15 @@ import { useDrop, useDrag } from "ahooks";
 import { useDojo } from "../hooks/useDojo";
 import { usePhaserLayer } from "../hooks/usePhaserLayer";
 import { useUIStore } from "../../store";
+import { TILE_HEIGHT } from "../../phaser/config/constants";
+import {
+    getComponentValue,
+    getComponentValueStrict,
+    removeComponent,
+    setComponent,
+    updateComponent,
+} from "@dojoengine/recs";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 export const InvHero = ({
     pieceAttr,
@@ -20,7 +29,16 @@ export const InvHero = ({
                 },
             },
         },
-        networkLayer,
+        clientComponents: {
+            LocalPiece,
+            LocalPlayerInvPiece,
+            LocalPlayer,
+            LocalPlayerPiece,
+        },
+        account: {
+            playerEntity,
+            account: { address },
+        },
     } = useDojo();
     const dragRef = useRef(null);
 
@@ -36,6 +54,9 @@ export const InvHero = ({
         },
 
         onDragEnd: (e) => {
+            if (!pieceAttr) {
+                return;
+            }
             const rawCoord = phaserCamera.getWorldPoint(
                 e.clientX - phaserRect.left,
                 e.clientY - phaserRect.top
@@ -46,6 +67,53 @@ export const InvHero = ({
             const worldY = rawCoord.y * 4;
 
             console.log("world coord:", worldX, worldY);
+
+            const posX = Math.floor(worldX / TILE_HEIGHT);
+            const posY = Math.floor(worldY / TILE_HEIGHT);
+
+            const player = getComponentValueStrict(LocalPlayer, playerEntity);
+            const pieceEntity = getEntityIdFromKeys([BigInt(pieceAttr.gid)]);
+            const piece = getComponentValueStrict(LocalPiece, pieceEntity);
+
+            // delete the local inv piece
+            updateComponent(
+                LocalPlayerInvPiece,
+                getEntityIdFromKeys([player.player, BigInt(piece.slot)]),
+                { gid: 0 }
+            );
+
+            ++player.heroesCount;
+            --player.inventoryCount;
+
+            console.log("player.heroesCount: ", player.heroesCount);
+
+            // add to local player inv
+            setComponent(
+                LocalPlayerPiece,
+                getEntityIdFromKeys([
+                    player.player,
+                    BigInt(player.heroesCount),
+                ]),
+                {
+                    owner: player.player,
+                    idx: player.heroesCount,
+                    gid: piece.gid,
+                }
+            );
+
+            // update local piece
+            updateComponent(LocalPiece, pieceEntity, {
+                idx: player.heroesCount,
+                slot: 0,
+                x: posX,
+                y: posY,
+            });
+
+            // update local player's hero count and inv count
+            updateComponent(LocalPlayer, playerEntity, {
+                heroesCount: player.heroesCount,
+                inventoryCount: player.inventoryCount,
+            });
         },
     });
 

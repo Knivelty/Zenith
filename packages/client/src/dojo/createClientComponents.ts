@@ -17,6 +17,19 @@ export function createClientComponents({
 }) {
     return {
         ...contractComponents,
+        // create the corresponding local component
+        LocalPiece: defineComponent(world, {
+            ...contractComponents.Piece.schema,
+        }),
+        LocalPlayer: defineComponent(world, {
+            ...contractComponents.Player.schema,
+        }),
+        LocalPlayerPiece: defineComponent(world, {
+            ...contractComponents.PlayerPiece.schema,
+        }),
+        LocalPlayerInvPiece: defineComponent(world, {
+            ...contractComponents.PlayerInvPiece.schema,
+        }),
         // Position: overridableComponent(contractComponents.Position),
         GameStatus: defineComponent(world, {
             status: Type.Number,

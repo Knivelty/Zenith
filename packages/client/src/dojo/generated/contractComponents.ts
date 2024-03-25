@@ -74,11 +74,11 @@ export function defineContractComponents(world: World) {
     Piece: (() => {
       return defineComponent(
         world,
-        { gid: RecsType.Number, owner: RecsType.BigInt, idx: RecsType.Number, slot: RecsType.Number, level: RecsType.Number, rarity: RecsType.Number, creature_index: RecsType.Number, x: RecsType.Number, y: RecsType.Number },
+        { gid: RecsType.Number, owner: RecsType.BigInt, idx: RecsType.Number, slot: RecsType.Number, level: RecsType.Number, creature_index: RecsType.Number, x: RecsType.Number, y: RecsType.Number },
         {
           metadata: {
             name: "Piece",
-            types: ["u32","contractaddress","u8","u8","u8","u8","u8","u8","u8"],
+            types: ["u32","contractaddress","u8","u8","u8","u8","u8","u8"],
             customTypes: [],
           },
         }
@@ -132,6 +132,32 @@ export function defineContractComponents(world: World) {
             name: "Position",
             types: ["contractaddress","u32","u32"],
             customTypes: ["Vec2"],
+          },
+        }
+      );
+    })(),
+    StageProfile: (() => {
+      return defineComponent(
+        world,
+        { stage: RecsType.Number, pieceCount: RecsType.Number },
+        {
+          metadata: {
+            name: "StageProfile",
+            types: ["u8","u8"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    StageProfilePiece: (() => {
+      return defineComponent(
+        world,
+        { stage: RecsType.Number, index: RecsType.Number, x: RecsType.Number, y: RecsType.Number, creature_index: RecsType.Number, level: RecsType.Number },
+        {
+          metadata: {
+            name: "StageProfilePiece",
+            types: ["u8","u8","u8","u8","u8","u8"],
+            customTypes: [],
           },
         }
       );

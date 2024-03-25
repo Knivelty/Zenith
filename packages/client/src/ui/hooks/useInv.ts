@@ -7,7 +7,7 @@ import { HeroBaseAttr, PieceAttr, getHeroAttr } from "./useHeroAttr";
 
 export function useInv() {
     const {
-        clientComponents: { PlayerInvPiece, Piece, CreatureProfile },
+        clientComponents: { LocalPlayerInvPiece, LocalPiece, CreatureProfile },
         systemCalls: { buyHero },
         account: {
             playerEntity,
@@ -16,29 +16,31 @@ export function useInv() {
     } = useDojo();
 
     const inv1 = useComponentValue(
-        PlayerInvPiece,
+        LocalPlayerInvPiece,
         getEntityIdFromKeys([BigInt(playerAddr), 1n])
     );
 
+    console.log("inv1: ", inv1);
+
     const inv2 = useComponentValue(
-        PlayerInvPiece,
+        LocalPlayerInvPiece,
         getEntityIdFromKeys([BigInt(playerAddr), 2n])
     );
     const inv3 = useComponentValue(
-        PlayerInvPiece,
+        LocalPlayerInvPiece,
         getEntityIdFromKeys([BigInt(playerAddr), 3n])
     );
     const inv4 = useComponentValue(
-        PlayerInvPiece,
+        LocalPlayerInvPiece,
         getEntityIdFromKeys([BigInt(playerAddr), 4n])
     );
     const inv5 = useComponentValue(
-        PlayerInvPiece,
+        LocalPlayerInvPiece,
         getEntityIdFromKeys([BigInt(playerAddr), 5n])
     );
 
     const inv6 = useComponentValue(
-        PlayerInvPiece,
+        LocalPlayerInvPiece,
         getEntityIdFromKeys([BigInt(playerAddr), 6n])
     );
 
@@ -52,13 +54,12 @@ export function useInv() {
     ];
 
     const invPieces = useMemo(() => {
-        console.log("invGids: ", invGids);
         return invGids.map((gid) => {
             if (!gid) {
                 return undefined;
             }
             const piece = getComponentValueStrict(
-                Piece,
+                LocalPiece,
                 getEntityIdFromKeys([BigInt(gid)])
             );
 
@@ -70,7 +71,7 @@ export function useInv() {
                 gid: gid,
             } as PieceAttr;
         });
-    }, [CreatureProfile, Piece, Piece.update$.asObservable, invGids]);
+    }, [CreatureProfile, LocalPiece, LocalPiece.update$.asObservable, invGids]);
 
     const emptySlots = invGids
         .map((item, index) =>
