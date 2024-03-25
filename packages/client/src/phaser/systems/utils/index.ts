@@ -70,6 +70,33 @@ export const utils = (layer: PhaserLayer) => {
                 sprite.setScale(scale);
 
                 game.scene.getScene("Main")?.input.setDraggable(sprite);
+
+                sprite.off("dragstart");
+                sprite.on("dragstart", () => {
+                    sprite.setTint(0xff0000);
+                });
+
+                sprite.off("drag");
+                sprite.on(
+                    "drag",
+                    (
+                        p: Phaser.Input.Pointer,
+                        gameObj: Phaser.GameObjects.GameObject
+                    ) => {}
+                );
+
+                sprite.off("dragend");
+                sprite.on("dragend", (p: Phaser.Input.Pointer) => {
+                    console.log("drag end: ");
+                    const posX = Math.floor(p.worldX / TILE_HEIGHT);
+                    const posY = Math.floor(p.worldY / TILE_HEIGHT);
+
+                    updateComponent(LocalPiece, entity, {
+                        x: posX,
+                        y: posY,
+                    });
+                    sprite.clearTint(); // clear tint color
+                });
             },
         });
 

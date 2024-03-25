@@ -40,7 +40,7 @@ export function placeSystem(layer: PhaserLayer) {
 
     input.drag$.subscribe({
         next(value) {
-            console.log("value: ", value);
+            // console.log("value: ", value);
 
             // get start point piece
         },
