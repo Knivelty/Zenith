@@ -1,4 +1,4 @@
-use autochessia::models::{CreatureProfile, Piece, Player};
+use autochessia::models::{CreatureProfile, StageProfile, Piece, Player};
 use autochessia::customType::{PieceChange};
 
 
@@ -6,6 +6,11 @@ use autochessia::customType::{PieceChange};
 #[starknet::interface]
 trait IHome<TContractState> {
     fn initialize(self: @TContractState);
+
+
+    // set args
+    fn setCreatureProfile(self: @TContractState, p: CreatureProfile);
+    fn setStageProfile(self: @TContractState, p: StageProfile);
 
 
     fn spawn(self: @TContractState);
@@ -23,7 +28,7 @@ trait IHome<TContractState> {
 }
 
 use starknet::{
-    ContractAddress, contract_address_try_from_felt252, get_caller_address, get_block_info
+    ContractAddress, Zeroable, contract_address_try_from_felt252, get_caller_address, get_block_info
 };
 
 
@@ -337,7 +342,86 @@ mod home {
                     }
                 )
             );
+
+            // stage 3
+            set!(
+                world,
+                (
+                    StageProfile { stage: 3, pieceCount: 2, },
+                    StageProfilePiece {
+                        stage: 3, index: 1, x: 2, y: 2, creature_index: 4, level: 1,
+                    },
+                    StageProfilePiece {
+                        stage: 3, index: 2, x: 2, y: 7, creature_index: 5, level: 1,
+                    }
+                )
+            );
+
+            // stage 4
+            set!(
+                world,
+                (
+                    StageProfile { stage: 4, pieceCount: 3, },
+                    StageProfilePiece {
+                        stage: 4, index: 1, x: 1, y: 2, creature_index: 5, level: 1,
+                    },
+                    StageProfilePiece {
+                        stage: 4, index: 2, x: 2, y: 5, creature_index: 6, level: 1,
+                    },
+                    StageProfilePiece {
+                        stage: 4, index: 3, x: 3, y: 3, creature_index: 1, level: 1,
+                    }
+                )
+            );
+
+            // stage 5
+            set!(
+                world,
+                (
+                    StageProfile { stage: 5, pieceCount: 3, },
+                    StageProfilePiece {
+                        stage: 5, index: 1, x: 1, y: 5, creature_index: 2, level: 1,
+                    },
+                    StageProfilePiece {
+                        stage: 5, index: 2, x: 2, y: 3, creature_index: 3, level: 1,
+                    },
+                    StageProfilePiece {
+                        stage: 5, index: 3, x: 2, y: 7, creature_index: 3, level: 1,
+                    }
+                )
+            );
+
+            // stage 6
+            set!(
+                world,
+                (
+                    StageProfile { stage: 6, pieceCount: 1, },
+                    StageProfilePiece {
+                        stage: 6, index: 1, x: 2, y: 4, creature_index: 8, level: 1,
+                    },
+                )
+            );
+
+            // stage 7
+            set!(
+                world,
+                (
+                    StageProfile { stage: 7, pieceCount: 3, },
+                    StageProfilePiece {
+                        stage: 7, index: 1, x: 1, y: 5, creature_index: 2, level: 1,
+                    },
+                    StageProfilePiece {
+                        stage: 7, index: 2, x: 2, y: 1, creature_index: 8, level: 1,
+                    },
+                    StageProfilePiece {
+                        stage: 7, index: 3, x: 4, y: 4, creature_index: 9, level: 1,
+                    }
+                )
+            );
         }
+
+        fn setCreatureProfile(self: @ContractState, p: CreatureProfile) {}
+        fn setStageProfile(self: @ContractState, p: StageProfile) {}
 
         // ContractState is defined by system decorator expansion
         fn spawn(self: @ContractState) {
@@ -577,7 +661,7 @@ mod home {
             let world = self.world_dispatcher.read();
             let playerAddr = get_caller_address();
 
-            let piece = get!(world, gid, Piece);
+            let mut piece = get!(world, gid, Piece);
             let mut invPiece = get!(world, (playerAddr, piece.slot), PlayerInvPiece);
             let mut player = get!(world, playerAddr, Player);
 
@@ -592,7 +676,10 @@ mod home {
 
             // set gid equal 0 to mark it as deleted
             invPiece.gid = 0;
-            set!(world, (invPiece));
+            piece.slot = 0;
+            piece.idx = 0;
+            piece.owner = Zeroable::zero();
+            set!(world, (invPiece, piece));
 
             set!(world, (player));
         }
@@ -607,20 +694,84 @@ mod home {
                 world, (player.inMatch, currentMatchState.round), InningBattle
             );
 
-            let newRound = currentMatchState.round + 1;
+            let currentRound = currentMatchState.round;
+            let newRound = currentRound + 1;
 
-            set!(world, MatchState { index: currentMatchState.index, round: newRound });
+            // spawn new piece
+            let enemyAddr = lastInningBattle.awayPlayer;
+            let mut idx = 0;
 
-            // create battle
+            let stageProfile = get!(world, newRound, StageProfile);
+            let mut globalState = get!(world, 1, GlobalState);
+
+            loop {
+                let sp = get!(world, (newRound, idx), StageProfilePiece);
+                globalState.totalPieceCounter += 1;
+                set!(
+                    world,
+                    (
+                        PlayerPiece {
+                            owner: enemyAddr, idx: idx, gid: globalState.totalPieceCounter
+                        },
+                        Piece {
+                            gid: globalState.totalPieceCounter,
+                            owner: enemyAddr,
+                            idx: idx,
+                            slot: 0,
+                            level: sp.level,
+                            creature_index: sp.creature_index,
+                            x: sp.x,
+                            y: sp.y,
+                        }
+                    )
+                );
+
+                if (idx >= stageProfile.pieceCount) {
+                    break;
+                }
+                idx = idx + 1;
+            };
+
+            // delete old piece
+            let lastStageProfile = get!(world, currentRound, StageProfile);
+
+            let mut startIdx = stageProfile.pieceCount;
+            let lastPieceCount = lastStageProfile.pieceCount;
+
+            loop {
+                if (startIdx >= lastPieceCount) {
+                    break;
+                }
+                startIdx += 1;
+
+                // get old piece
+                let mut stalePlayerPiece = get!(world, (enemyAddr, startIdx), PlayerPiece);
+                let mut stalePiece = get!(world, (stalePlayerPiece.gid), Piece);
+
+                stalePlayerPiece.gid = 0;
+                stalePiece.owner = Zeroable::zero();
+
+                // NOTE: comment the next line because there's a migration error and idk why
+                // Difference in FunctionId { id: 68, debug_name: None }: Some(OrderedHashMap({Const: 173730})) != Some(OrderedHashMap({Const: 2260})).
+                // Difference in FunctionId { id: 68, debug_name: None }: Some(OrderedHashMap({Const: 173730})) != Some(OrderedHashMap({Const: 2260})).
+                // set!(world, (stalePlayerPiece));
+                set!(world, (stalePiece));
+            };
+
             set!(
                 world,
-                (InningBattle {
-                    currentMatch: currentMatchState.index,
-                    round: newRound,
-                    homePlayer: playerAddr,
-                    awayPlayer: lastInningBattle.awayPlayer,
-                    end: false
-                }),
+                (
+                    // update round info
+                    MatchState { index: currentMatchState.index, round: newRound },
+                    // create battle
+                    InningBattle {
+                        currentMatch: currentMatchState.index,
+                        round: newRound,
+                        homePlayer: playerAddr,
+                        awayPlayer: lastInningBattle.awayPlayer,
+                        end: false
+                    }
+                ),
             );
         }
 

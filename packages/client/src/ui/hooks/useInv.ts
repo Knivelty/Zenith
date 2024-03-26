@@ -101,8 +101,6 @@ export function useInv() {
         getEntityIdFromKeys([BigInt(playerAddr), 1n])
     );
 
-    console.log("inv1: ", inv1);
-
     const inv2 = useComponentValue(
         PlayerInvPiece,
         getEntityIdFromKeys([BigInt(playerAddr), 2n])

@@ -35,6 +35,7 @@ export function syncSystem(layer: PhaserLayer) {
                 LocalPiecesChangeTrack,
             },
             playerEntity,
+            account: { address },
         },
     } = layer;
 
@@ -95,17 +96,32 @@ export function syncSystem(layer: PhaserLayer) {
                 playerEntity
             );
 
-            // TODO: consider piece removed when delete is available
-            if (piecesTrack) {
-                const gids = piecesTrack.gids;
-                console.log("gids: ", piecesTrack, gids);
-                gids.push(v.gid);
-                updateComponent(LocalPiecesChangeTrack, playerEntity, { gids });
-            } else {
-                console.log("init: ", [v.gid]);
-                setComponent(LocalPiecesChangeTrack, playerEntity, {
-                    gids: [111],
-                });
+            if (v.owner == BigInt(address)) {
+                if (piecesTrack) {
+                    const gids = piecesTrack.gids;
+                    console.log("gids: ", piecesTrack, gids);
+                    gids.push(v.gid);
+                    updateComponent(LocalPiecesChangeTrack, playerEntity, {
+                        gids: [...new Set(gids)],
+                    });
+                } else {
+                    console.log("init: ", [v.gid]);
+                    setComponent(LocalPiecesChangeTrack, playerEntity, {
+                        gids: [v.gid],
+                    });
+                }
+            }
+
+            // piece sold, remove from array
+            if (preV?.owner === BigInt(address) && v.owner === 0n) {
+                // TODO: remove gids when user sell this piece
+
+                if (piecesTrack) {
+                    const gids = piecesTrack.gids;
+                    updateComponent(LocalPiecesChangeTrack, playerEntity, {
+                        gids: gids.filter((x) => x !== v.gid),
+                    });
+                }
             }
         }
     );
