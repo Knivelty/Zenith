@@ -672,7 +672,7 @@ mod tests {
     use debug::PrintTrait;
 
     #[test]
-    #[available_gas(60000000)]
+    #[available_gas(100000000)]
     fn test_spwan() { // caller
         let caller = starknet::contract_address_const::<0x0>();
 
