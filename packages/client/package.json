@@ -16,7 +16,7 @@
     "@dojoengine/core": "0.5.11-alpha.0",
     "@dojoengine/create-burner": "0.5.11-alpha.0",
     "@dojoengine/react": "0.5.11-alpha.0",
-    "@dojoengine/recs": "0.1.35",
+    "@dojoengine/recs": "0.1.35-modified",
     "@dojoengine/state": "0.5.11-alpha.0",
     "@dojoengine/torii-client": "0.5.11-alpha.0",
     "@dojoengine/torii-wasm": "0.5.11-alpha.0",
