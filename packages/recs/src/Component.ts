@@ -235,7 +235,11 @@ export function getComponentValue<S extends Schema, T = unknown>(
   for (const key of schemaKeys) {
     const val = component.values[key].get(entitySymbol);
 
-    if (typeof val === "object") {
+    if (Array.isArray(val)) {
+      // if val is array, just assign it
+      if (val === undefined && !OptionalTypes.includes(component.schema[key] as Type)) return undefined;
+      value[key] = val;
+    } else if (typeof val === "object") {
       // val is a nested schema so we need to recursive call getComponentValue
       const temp = getComponentValueImpl(component.schema[key] as Schema, entitySymbol, val as ComponentValue<S, T>);
 
