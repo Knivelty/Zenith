@@ -1,5 +1,5 @@
 use autochessia::models::{CreatureProfile, Piece, Player};
-use autochessia::customType::{MoveChange, PlaceChange, PrepareChanges};
+use autochessia::customType::{PieceChange};
 
 
 // define the interface
@@ -12,9 +12,7 @@ trait IHome<TContractState> {
     fn refreshAltar(self: @TContractState);
     fn buyHero(self: @TContractState, altarSlot: u8, invSlot: u8);
     fn sellHero(self: @TContractState, gid: u32);
-    fn commitPreparation(
-        self: @TContractState, changes: Array<PrepareChanges<MoveChange, PlaceChange>>
-    );
+    fn commitPreparation(self: @TContractState, changes: Array<PieceChange>);
     fn nextRound(self: @TContractState);
 
 
@@ -39,7 +37,7 @@ mod home {
         PlayerPiece, PlayerInvPiece, StageProfile, StageProfilePiece
     };
     use autochessia::utils::{next_position, generate_pseudo_random_address, get_felt_mod};
-    use autochessia::customType::{MoveChange, PlaceChange, PrepareChanges};
+    use autochessia::customType::{PieceChange};
 
     use autochessia::customEvent::{PieceActions, PieceAction};
     use dojo::base;
@@ -92,9 +90,46 @@ mod home {
         set!(world, Altar { player: playerAddr, slot1, slot2, slot3, slot4, slot5 });
     }
 
-    fn _validateMoveChange(moveChange: @MoveChange) {}
 
-    fn _validatePlaceChange(placeChange: @PlaceChange) {}
+    fn _validPieceChange(self: @ContractState, c: @PieceChange) {
+        let world = self.world_dispatcher.read();
+
+        let change = *c;
+
+        let mut oldPiece = get!(world, change.gid, Piece);
+
+        // TODO: add case by case check
+        let mut oldPlayerInvPiece = get!(world, (oldPiece.owner, oldPiece.slot), PlayerInvPiece);
+        let mut oldPlayerPiece = get!(world, (oldPiece.owner, oldPiece.idx), PlayerPiece);
+
+        let mut newPlayerInvPiece = get!(world, (oldPiece.owner, change.slot), PlayerInvPiece);
+        let mut newPlayerPiece = get!(world, (oldPiece.owner, change.idx), PlayerPiece);
+
+        // only piece move on board
+        if (oldPiece.slot == 0 && change.slot == 0) { // idx should be the same
+        } else if (oldPiece.slot != 0 && change.slot == 0) {
+            // move from inv to board
+
+            oldPlayerInvPiece.gid = 0;
+            newPlayerPiece.gid = change.gid;
+
+            set!(world, (oldPlayerInvPiece, newPlayerPiece));
+        } else if (oldPiece.slot == 0 && change.slot != 0) {
+            // move from board to inv
+            oldPlayerPiece.gid = 0;
+            newPlayerInvPiece.gid = change.gid;
+
+            set!(world, (oldPlayerPiece, newPlayerInvPiece));
+        }
+
+        // update piece attr
+        oldPiece.x = change.x;
+        oldPiece.y = change.y;
+        oldPiece.slot = change.slot;
+        oldPiece.idx = change.idx;
+
+        set!(world, (oldPiece));
+    }
 
 
     // impl: implement functions specified in trait
@@ -411,24 +446,35 @@ mod home {
         // commit preparation in one function
         // include: refresh, move
         // the contract side need to valid the validity
-        fn commitPreparation(
-            self: @ContractState, changes: Array<PrepareChanges<MoveChange, PlaceChange>>
-        ) {
+        fn commitPreparation(self: @ContractState, changes: Array<PieceChange>) {
+            let world = self.world_dispatcher.read();
+
+            let playerAddr = get_caller_address();
+
             let mut idx = 0;
             let length = changes.len();
 
+            // check each progress
             loop {
-                let change = changes.at(idx);
-                match change {
-                    PrepareChanges::MoveChange(val) => { _validateMoveChange(val) },
-                    PrepareChanges::PlaceChange(val) => { _validatePlaceChange(val) },
-                }
-
-                idx = idx + 1;
                 if (idx >= length) {
                     break;
                 }
-            }
+
+                let change = changes.at(idx);
+                _validPieceChange(self, change);
+
+                idx = idx + 1;
+            };
+
+            // mark battle as end
+
+            let player = get!(world, playerAddr, Player);
+            let matchState = get!(world, player.inMatch, MatchState);
+            let mut inningBattle = get!(world, (matchState.index, matchState.round), InningBattle);
+
+            inningBattle.end = true;
+
+            set!(world, (inningBattle));
         }
 
         fn refreshAltar(self: @ContractState) {

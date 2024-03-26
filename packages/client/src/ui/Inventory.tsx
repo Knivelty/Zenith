@@ -6,7 +6,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { HeroCard } from "./component/HeroCard";
 import { InvHero } from "./component/InvHero";
 import { useCallback } from "react";
-import { useInv } from "./hooks/useInv";
+import { useInv, useLocalInv } from "./hooks/useInv";
 
 export function Inventory() {
     const {
@@ -26,7 +26,7 @@ export function Inventory() {
         [account, sellHero]
     );
 
-    const { invPieces } = useInv();
+    const { invPieces } = useLocalInv();
 
     // const invPieces = [...Array(6).keys()]
     //     .map((x) => x + 1)

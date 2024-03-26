@@ -16,6 +16,14 @@ export enum GameStatusEnum {
     WaitForNextRound,
 }
 
+export type PieceChange = {
+    gid: number,
+    idx: number,
+    slot: number,
+    x: number,
+    y: number
+}
+
 export function numToStatus(n: GameStatusEnum | undefined): string {
     switch (n) {
         case GameStatusEnum.Prepare:
@@ -28,3 +36,4 @@ export function numToStatus(n: GameStatusEnum | undefined): string {
             return "Invalid";
     }
 }
+

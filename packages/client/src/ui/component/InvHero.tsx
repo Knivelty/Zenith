@@ -66,10 +66,13 @@ export const InvHero = ({
             const worldX = rawCoord.x * 4;
             const worldY = rawCoord.y * 4;
 
-            console.log("world coord:", worldX, worldY);
-
             const posX = Math.floor(worldX / TILE_HEIGHT);
             const posY = Math.floor(worldY / TILE_HEIGHT);
+
+            if (posX < 0 || posX > 3 || posY < 0 || posY > 7) {
+                console.warn("invalid dst place");
+                return;
+            }
 
             const player = getComponentValueStrict(LocalPlayer, playerEntity);
             const pieceEntity = getEntityIdFromKeys([BigInt(pieceAttr.gid)]);

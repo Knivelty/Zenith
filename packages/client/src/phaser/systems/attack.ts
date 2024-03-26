@@ -16,7 +16,7 @@ export const attack = (layer: PhaserLayer) => {
             Main: { config, objectPool },
         },
         networkLayer: {
-            clientComponents: { Attack, Piece, Creature, Health },
+            clientComponents: { Attack, Piece, CreatureProfile, Health },
         },
     } = layer;
 
@@ -34,8 +34,11 @@ export const attack = (layer: PhaserLayer) => {
             );
 
             const attackerCreature = getComponentValueStrict(
-                Creature,
-                getEntityIdFromKeys([BigInt(attacker.internal_index)])
+                CreatureProfile,
+                getEntityIdFromKeys([
+                    BigInt(attacker.creature_index),
+                    BigInt(attacker.level),
+                ])
             );
 
             const attacked = getComponentValueStrict(
@@ -44,13 +47,16 @@ export const attack = (layer: PhaserLayer) => {
             );
 
             const attackedCreature = getComponentValueStrict(
-                Creature,
-                getEntityIdFromKeys([BigInt(attacked.internal_index)])
+                CreatureProfile,
+                getEntityIdFromKeys([
+                    BigInt(attacked.creature_index),
+                    BigInt(attacked.level),
+                ])
             );
 
             const damage =
-                attackerCreature.attack * attacker.tier -
-                attackedCreature.armor;
+                attackerCreature.attack *
+                (attackedCreature.armor / (attackedCreature.armor + 1));
 
             const attackedHealth = getComponentValueStrict(
                 Health,

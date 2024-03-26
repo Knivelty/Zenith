@@ -13,6 +13,7 @@ export function Debugger() {
         systemCalls: {
             nextRound,
             startBattle,
+            commitPreparation,
             playAnimation,
             getCoin,
             refreshAltar,
@@ -56,7 +57,7 @@ export function Debugger() {
             </div> */}
             <Button
                 onClick={async () => {
-                    const { receipt } = await startBattle(account);
+                    const { receipt } = await commitPreparation(account);
                 }}
             >
                 start battle

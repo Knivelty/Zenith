@@ -44,7 +44,7 @@ function getAwayPiece(pieces: PieceInBattle[]) {
 function getAimedPiece(
     actionP: PieceInBattle,
     pieces: PieceInBattle[]
-): PieceInBattle {
+): PieceInBattle | undefined {
     let opposingP: PieceInBattle[] = [];
 
     if (actionP.isInHome) {
@@ -248,7 +248,8 @@ function tryAttack(
         );
         const attackedPiece = pieces[attackedPieceIndex];
         if (attackedPiece) {
-            const damage = p.attack - attackedPiece.armor;
+            const damage =
+                p.attack * (attackedPiece.armor / (1 + attackedPiece.armor));
             attackedPiece.health -= damage;
 
             console.log(
@@ -286,6 +287,11 @@ export function battleForAStep(
 
         // get aimed piece
         const targetPiece = getAimedPiece(p, undeadPiece);
+
+        if (!targetPiece) {
+            // no target piece means all enemy's piece are dead
+            continue;
+        }
 
         const grid = new Grid(8, 8);
 

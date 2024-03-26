@@ -30,6 +30,11 @@ export function createClientComponents({
         LocalPlayerInvPiece: defineComponent(world, {
             ...contractComponents.PlayerInvPiece.schema,
         }),
+        // save all the piece gids, for calculate diff
+        // entity equal player entity
+        LocalPiecesChangeTrack: defineComponent(world, {
+            gids: Type.NumberArray,
+        }),
         // Position: overridableComponent(contractComponents.Position),
         GameStatus: defineComponent(world, {
             status: Type.Number,

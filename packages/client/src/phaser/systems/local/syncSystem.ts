@@ -4,7 +4,12 @@ import { snoise } from "@dojoengine/utils";
 import { MAP_AMPLITUDE } from "../../config/constants";
 import { defineSystemST } from "../../../utils";
 import { world } from "../../../dojo/generated/world";
-import { Has, setComponent } from "@dojoengine/recs";
+import {
+    Has,
+    getComponentValue,
+    setComponent,
+    updateComponent,
+} from "@dojoengine/recs";
 
 export function syncSystem(layer: PhaserLayer) {
     const {
@@ -27,7 +32,9 @@ export function syncSystem(layer: PhaserLayer) {
                 LocalPlayerPiece,
                 PlayerInvPiece,
                 LocalPlayerInvPiece,
+                LocalPiecesChangeTrack,
             },
+            playerEntity,
         },
     } = layer;
 
@@ -81,6 +88,25 @@ export function syncSystem(layer: PhaserLayer) {
             }
 
             setComponent(LocalPiece, entity, v);
+
+            // add the gid to local pieces track
+            const piecesTrack = getComponentValue(
+                LocalPiecesChangeTrack,
+                playerEntity
+            );
+
+            // TODO: consider piece removed when delete is available
+            if (piecesTrack) {
+                const gids = piecesTrack.gids;
+                console.log("gids: ", piecesTrack, gids);
+                gids.push(v.gid);
+                updateComponent(LocalPiecesChangeTrack, playerEntity, { gids });
+            } else {
+                console.log("init: ", [v.gid]);
+                setComponent(LocalPiecesChangeTrack, playerEntity, {
+                    gids: [111],
+                });
+            }
         }
     );
 }

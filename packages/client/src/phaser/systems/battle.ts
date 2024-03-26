@@ -40,15 +40,19 @@ export const battle = (layer: PhaserLayer) => {
         },
         networkLayer: {
             clientComponents: {
-                Piece,
                 GameStatus,
                 InningBattle,
                 Player,
+                LocalPlayer,
+                Piece,
+                LocalPiece,
+                LocalPlayerPiece,
                 BattleLogs,
                 Attack,
-                Creature,
+                CreatureProfile,
             },
             account,
+            playerEntity,
             graphqlClient,
         },
     } = layer;
@@ -87,60 +91,83 @@ export const battle = (layer: PhaserLayer) => {
 
                 // get player piece
                 const player = getComponentValueStrict(
-                    Player,
+                    LocalPlayer,
                     getEntityIdFromKeys([v.homePlayer])
                 );
 
                 for (let i = 1; i <= player.heroesCount; i++) {
+                    const playerPiece = getComponentValueStrict(
+                        LocalPlayerPiece,
+                        getEntityIdFromKeys([v.homePlayer, BigInt(i)])
+                    );
+
                     const pieceEntity = getEntityIdFromKeys([
-                        v.homePlayer,
-                        BigInt(i),
+                        BigInt(playerPiece.gid),
                     ]);
-                    const piece = getComponentValueStrict(Piece, pieceEntity);
+
+                    const piece = getComponentValueStrict(
+                        LocalPiece,
+                        pieceEntity
+                    );
 
                     const creature = getComponentValueStrict(
-                        Creature,
-                        getEntityIdFromKeys([BigInt(piece.internal_index)])
+                        CreatureProfile,
+                        getEntityIdFromKeys([
+                            BigInt(piece.creature_index),
+                            BigInt(piece.level),
+                        ])
                     );
 
                     allPieceInBattle.push({
                         player: getEntityIdFromKeys([v.homePlayer]),
                         entity: pieceEntity,
-                        x: piece.x_board,
-                        y: piece.y_board,
-                        health: creature.health * piece.tier,
-                        attack: creature.attack * piece.tier,
-                        armor: creature.armor * piece.tier,
-                        speed: creature.speed * piece.tier,
-                        range: creature.range * piece.tier,
+                        x: piece.x,
+                        y: piece.y,
+                        health: creature.health,
+                        attack: creature.attack,
+                        armor: creature.armor,
+                        speed: creature.speed,
+                        range: creature.range,
                         isInHome: true,
                         dead: false,
                     });
                 }
 
+                // TODO: reverse home and player on PvP
                 // get enemy piece
                 const enemy = getComponentValueStrict(
-                    Player,
+                    LocalPlayer,
                     getEntityIdFromKeys([v.awayPlayer])
                 );
 
                 for (let i = 1; i <= enemy.heroesCount; i++) {
+                    const playerPiece = getComponentValueStrict(
+                        LocalPlayerPiece,
+                        getEntityIdFromKeys([v.awayPlayer, BigInt(i)])
+                    );
+
                     const pieceEntity = getEntityIdFromKeys([
-                        v.awayPlayer,
-                        BigInt(i),
+                        BigInt(playerPiece.gid),
                     ]);
-                    const piece = getComponentValueStrict(Piece, pieceEntity);
+
+                    const piece = getComponentValueStrict(
+                        LocalPiece,
+                        pieceEntity
+                    );
 
                     const creature = getComponentValueStrict(
-                        Creature,
-                        getEntityIdFromKeys([BigInt(piece.internal_index)])
+                        CreatureProfile,
+                        getEntityIdFromKeys([
+                            BigInt(piece.creature_index),
+                            BigInt(piece.level),
+                        ])
                     );
 
                     allPieceInBattle.push({
                         player: getEntityIdFromKeys([v.awayPlayer]),
                         entity: pieceEntity,
-                        x: 7 - piece.x_board,
-                        y: 7 - piece.y_board,
+                        x: 7 - piece.x,
+                        y: 7 - piece.y,
                         health: creature.health,
                         attack: creature.attack,
                         armor: creature.armor,
@@ -296,14 +323,6 @@ export const battle = (layer: PhaserLayer) => {
                         getEntityIdFromKeys([
                             BigInt(v.currentMatch),
                             BigInt(v.currentRound),
-                        ])
-                    );
-
-                    console.log(
-                        "geted entity: ",
-                        getEntityIdFromKeys([
-                            BigInt(inningBattle.currentMatch),
-                            BigInt(inningBattle.round),
                         ])
                     );
 

@@ -1,18 +1,25 @@
 import { ClientComponents } from "./createClientComponents";
-import { MoveSystemProps, SystemSigner } from "./types";
 import { IWorld } from "./generated/generated";
 import { Account } from "starknet";
 import { ContractComponents } from "./generated/contractComponents";
-import { setComponent, updateComponent } from "@dojoengine/recs";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { getComponentValueStrict, updateComponent } from "@dojoengine/recs";
 import { zeroEntity } from "../utils";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { isBoolean, isEqual, isNull, isUndefined } from "lodash";
+import { PieceChange } from "./types";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
     { client }: { client: IWorld },
     contractComponents: ContractComponents,
-    { Position, GameStatus }: ClientComponents
+    {
+        Position,
+        GameStatus,
+        LocalPiecesChangeTrack,
+        Piece,
+        LocalPiece,
+    }: ClientComponents
 ) {
     const spawn = async (account: Account) => {
         try {
@@ -30,6 +37,46 @@ export function createSystemCalls(
     const startBattle = async (account: Account) => {
         try {
             return await client.actions.startBattle({ account });
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    };
+
+    const commitPreparation = async (account: Account) => {
+        try {
+            // calculate the diff
+
+            const playerEntity = getEntityIdFromKeys([BigInt(account.address)]);
+
+            const piecesTrack = getComponentValueStrict(
+                LocalPiecesChangeTrack,
+                playerEntity
+            );
+
+            const changes: PieceChange[] = piecesTrack.gids
+                .map((gid) => {
+                    const entity = getEntityIdFromKeys([BigInt(gid)]);
+                    const local = getComponentValueStrict(LocalPiece, entity);
+                    const remote = getComponentValueStrict(Piece, entity);
+
+                    if (isEqual(local, remote)) {
+                        return undefined;
+                    } else {
+                        return {
+                            gid: gid,
+                            idx: local.idx,
+                            slot: local.slot,
+                            x: local.x,
+                            y: local.y,
+                        };
+                    }
+                })
+                .filter(Boolean) as PieceChange[];
+
+            console.log("changes:", changes);
+
+            return await client.actions.commitPreparation({ account, changes });
         } catch (e) {
             console.error(e);
             throw e;
@@ -104,5 +151,6 @@ export function createSystemCalls(
         getCoin,
         buyHero,
         sellHero,
+        commitPreparation,
     };
 }
