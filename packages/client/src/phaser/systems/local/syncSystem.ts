@@ -1,12 +1,13 @@
 import { Tileset } from "../../../assets/world";
 import { PhaserLayer } from "../..";
-import { snoise } from "@dojoengine/utils";
+import { getEntityIdFromKeys, snoise } from "@dojoengine/utils";
 import { MAP_AMPLITUDE } from "../../config/constants";
 import { defineSystemST } from "../../../utils";
 import { world } from "../../../dojo/generated/world";
 import {
     Has,
     getComponentValue,
+    removeComponent,
     setComponent,
     updateComponent,
 } from "@dojoengine/recs";
@@ -113,15 +114,21 @@ export function syncSystem(layer: PhaserLayer) {
             }
 
             // piece sold, remove from array
-            if (preV?.owner === BigInt(address) && v.owner === 0n) {
+            if (preV?.owner !== 0n && v.owner === 0n) {
                 // TODO: remove gids when user sell this piece
+
+                console.log("remove: ", v.gid);
 
                 if (piecesTrack) {
                     const gids = piecesTrack.gids;
                     updateComponent(LocalPiecesChangeTrack, playerEntity, {
-                        gids: gids.filter((x) => x !== v.gid),
+                        gids: [...new Set(gids.filter((x) => x !== v.gid))],
                     });
                 }
+
+                // remove the local piece entity
+                const pEntity = getEntityIdFromKeys([BigInt(v.gid)]);
+                removeComponent(LocalPiece, pEntity);
             }
         }
     );

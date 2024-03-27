@@ -25,6 +25,7 @@ trait IHome<TContractState> {
 
     // debug func
     fn getCoin(self: @TContractState);
+    fn exit(self: @TContractState);
 }
 
 use starknet::{
@@ -100,6 +101,8 @@ mod home {
         let world = self.world_dispatcher.read();
 
         let change = *c;
+        let playerAddr = get_caller_address();
+        let mut player = get!(world, playerAddr, Player);
 
         let mut oldPiece = get!(world, change.gid, Piece);
 
@@ -118,11 +121,17 @@ mod home {
             oldPlayerInvPiece.gid = 0;
             newPlayerPiece.gid = change.gid;
 
+            player.heroesCount += 1;
+            player.inventoryCount -= 1;
+
             set!(world, (oldPlayerInvPiece, newPlayerPiece));
         } else if (oldPiece.slot == 0 && change.slot != 0) {
             // move from board to inv
             oldPlayerPiece.gid = 0;
             newPlayerInvPiece.gid = change.gid;
+
+            player.heroesCount -= 1;
+            player.inventoryCount += 1;
 
             set!(world, (oldPlayerPiece, newPlayerInvPiece));
         }
@@ -133,7 +142,82 @@ mod home {
         oldPiece.slot = change.slot;
         oldPiece.idx = change.idx;
 
-        set!(world, (oldPiece));
+        set!(world, (oldPiece, player));
+    }
+
+
+    fn _spawnEnemyPiece(self: @ContractState, round: u8, enemyAddr: ContractAddress) {
+        let world = self.world_dispatcher.read();
+        let playerAddr = get_caller_address();
+
+        let mut globalState = get!(world, 1, GlobalState);
+
+        // get the current stage profile
+        let stageProfile = get!(world, round, StageProfile);
+
+        let lastRound = round - 1;
+        // delete old piece
+        let lastStageProfile = get!(world, lastRound, StageProfile);
+
+        let mut startIdx = 1;
+        let lastPieceCount = lastStageProfile.pieceCount;
+
+        loop {
+            if (startIdx > lastPieceCount) {
+                break;
+            }
+
+            // get old piece
+            let mut stalePlayerPiece = get!(world, (enemyAddr, startIdx), PlayerPiece);
+            let mut stalePiece = get!(world, (stalePlayerPiece.gid), Piece);
+
+            stalePlayerPiece.gid = 0;
+            stalePiece.owner = Zeroable::zero();
+
+            // TODO: fix the bug
+            // NOTE: comment the next line because there's a migration error and idk why
+            // Difference in FunctionId { id: 68, debug_name: None }: Some(OrderedHashMap({Const: 173730})) != Some(OrderedHashMap({Const: 2260})).
+            // Difference in FunctionId { id: 68, debug_name: None }: Some(OrderedHashMap({Const: 173730})) != Some(OrderedHashMap({Const: 2260})).
+            set!(world, (stalePlayerPiece));
+            set!(world, (stalePiece));
+
+            startIdx += 1;
+        };
+
+        // spawn piece according to stage profile
+        let mut idx = 1;
+
+        loop {
+            let sp = get!(world, (round, idx), StageProfilePiece);
+            globalState.totalPieceCounter += 1;
+            set!(
+                world,
+                (
+                    PlayerPiece { owner: enemyAddr, idx: idx, gid: globalState.totalPieceCounter },
+                    Piece {
+                        gid: globalState.totalPieceCounter,
+                        owner: enemyAddr,
+                        idx: idx,
+                        slot: 0,
+                        level: sp.level,
+                        creature_index: sp.creature_index,
+                        x: sp.x,
+                        y: sp.y,
+                    }
+                )
+            );
+
+            if (idx >= stageProfile.pieceCount) {
+                break;
+            }
+            idx = idx + 1;
+        };
+
+        // update heroCount
+        let mut enemy = get!(world, enemyAddr, Player);
+        enemy.heroesCount = stageProfile.pieceCount;
+
+        set!(world, (globalState, enemy));
     }
 
 
@@ -425,10 +509,7 @@ mod home {
 
         // ContractState is defined by system decorator expansion
         fn spawn(self: @ContractState) {
-            // Access the world dispatcher for reading.
             let world = self.world_dispatcher.read();
-
-            // Get the address of the current caller, possibly the player's address.
             let playerAddr = get_caller_address();
 
             // create match
@@ -479,36 +560,8 @@ mod home {
                 }
             );
 
-            // spawn piece according to stage profile
-            let mut idx = 1;
-
-            loop {
-                let sp = get!(world, (1, idx), StageProfilePiece);
-                globalState.totalPieceCounter += 1;
-                set!(
-                    world,
-                    (
-                        PlayerPiece {
-                            owner: enemyAddr, idx: idx, gid: globalState.totalPieceCounter
-                        },
-                        Piece {
-                            gid: globalState.totalPieceCounter,
-                            owner: enemyAddr,
-                            idx: idx,
-                            slot: 0,
-                            level: sp.level,
-                            creature_index: sp.creature_index,
-                            x: sp.x,
-                            y: sp.y,
-                        }
-                    )
-                );
-
-                if (idx >= stageProfile.pieceCount) {
-                    break;
-                }
-                idx = idx + 1;
-            };
+            // spawn enemy piece
+            _spawnEnemyPiece(self, 1, enemyAddr);
 
             // create battle
             set!(
@@ -521,7 +574,6 @@ mod home {
                         awayPlayer: enemyAddr,
                         end: false
                     },
-                    globalState
                 ),
             );
         }
@@ -699,64 +751,8 @@ mod home {
 
             // spawn new piece
             let enemyAddr = lastInningBattle.awayPlayer;
-            let mut idx = 0;
 
-            let stageProfile = get!(world, newRound, StageProfile);
-            let mut globalState = get!(world, 1, GlobalState);
-
-            loop {
-                let sp = get!(world, (newRound, idx), StageProfilePiece);
-                globalState.totalPieceCounter += 1;
-                set!(
-                    world,
-                    (
-                        PlayerPiece {
-                            owner: enemyAddr, idx: idx, gid: globalState.totalPieceCounter
-                        },
-                        Piece {
-                            gid: globalState.totalPieceCounter,
-                            owner: enemyAddr,
-                            idx: idx,
-                            slot: 0,
-                            level: sp.level,
-                            creature_index: sp.creature_index,
-                            x: sp.x,
-                            y: sp.y,
-                        }
-                    )
-                );
-
-                if (idx >= stageProfile.pieceCount) {
-                    break;
-                }
-                idx = idx + 1;
-            };
-
-            // delete old piece
-            let lastStageProfile = get!(world, currentRound, StageProfile);
-
-            let mut startIdx = stageProfile.pieceCount;
-            let lastPieceCount = lastStageProfile.pieceCount;
-
-            loop {
-                if (startIdx >= lastPieceCount) {
-                    break;
-                }
-                startIdx += 1;
-
-                // get old piece
-                let mut stalePlayerPiece = get!(world, (enemyAddr, startIdx), PlayerPiece);
-                let mut stalePiece = get!(world, (stalePlayerPiece.gid), Piece);
-
-                stalePlayerPiece.gid = 0;
-                stalePiece.owner = Zeroable::zero();
-
-                // NOTE: comment the next line because there's a migration error and idk why
-                // Difference in FunctionId { id: 68, debug_name: None }: Some(OrderedHashMap({Const: 173730})) != Some(OrderedHashMap({Const: 2260})).
-                // Difference in FunctionId { id: 68, debug_name: None }: Some(OrderedHashMap({Const: 173730})) != Some(OrderedHashMap({Const: 2260})).
-                // set!(world, (stalePlayerPiece));
-                set!(world, (stalePiece));
-            };
+            _spawnEnemyPiece(self, currentRound + 1, enemyAddr);
 
             set!(
                 world,
@@ -800,6 +796,21 @@ mod home {
                     inventoryCount: player.inventoryCount,
                 }
             );
+        }
+
+        // exit current game
+        fn exit(self: @ContractState) {
+            let world = self.world_dispatcher.read();
+            let playerAddr = get_caller_address();
+
+            let player = get!(world,playerAddr,Player);
+
+            // delete player inv piece
+
+            // delete player piece
+
+            // reset player attr
+
         }
     }
 }

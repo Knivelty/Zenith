@@ -104,6 +104,20 @@ export const InvHero = ({
                 }
             );
 
+            // update local player piece
+            setComponent(
+                LocalPlayerPiece,
+                getEntityIdFromKeys([
+                    player.player,
+                    BigInt(player.heroesCount),
+                ]),
+                {
+                    idx: player.heroesCount,
+                    owner: player.player,
+                    gid: piece.gid,
+                }
+            );
+
             // update local piece
             updateComponent(LocalPiece, pieceEntity, {
                 idx: player.heroesCount,

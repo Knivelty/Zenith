@@ -54,6 +54,8 @@ export function createSystemCalls(
                 playerEntity
             );
 
+            console.log("piecesTrack: ", piecesTrack);
+
             const changes: PieceChange[] = piecesTrack.gids
                 .map((gid) => {
                     const entity = getEntityIdFromKeys([BigInt(gid)]);
@@ -137,6 +139,9 @@ export function createSystemCalls(
     };
 
     const playAnimation = async () => {
+        updateComponent(GameStatus, zeroEntity, {
+            shouldPlay: false,
+        });
         updateComponent(GameStatus, zeroEntity, {
             shouldPlay: true,
         });

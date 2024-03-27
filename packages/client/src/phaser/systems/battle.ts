@@ -31,6 +31,8 @@ import {
     calculateBattleLogs,
     manhattanDistance,
 } from "../../utils/jps";
+import { battleAnimation } from "./utils/playBattle";
+import { Game } from "phaser";
 
 export const battle = (layer: PhaserLayer) => {
     const {
@@ -57,6 +59,8 @@ export const battle = (layer: PhaserLayer) => {
         },
     } = layer;
 
+    const { playBattle } = battleAnimation(layer);
+
     defineSystemST<typeof InningBattle.schema>(
         world,
         [Has(InningBattle)],
@@ -65,14 +69,14 @@ export const battle = (layer: PhaserLayer) => {
             if (!v) {
                 return;
             }
-            if (type == UpdateType.Enter) {
-                updateComponent(GameStatus, zeroEntity, {
-                    // shouldPlay: false,
-                    // played: false,
-                    // status: GameStatusEnum.Prepare,
-                    currentRound: v.round,
-                });
-            }
+
+            // sync current round
+            updateComponent(GameStatus, zeroEntity, {
+                // shouldPlay: false,
+                // played: false,
+                // status: GameStatusEnum.Prepare,
+                currentRound: v.round,
+            });
 
             if (v?.end == false) {
                 console.log("prepare: ");
@@ -150,6 +154,7 @@ export const battle = (layer: PhaserLayer) => {
                         BigInt(playerPiece.gid),
                     ]);
 
+                    console.log("piece: ", playerPiece);
                     const piece = getComponentValueStrict(
                         LocalPiece,
                         pieceEntity
@@ -180,7 +185,12 @@ export const battle = (layer: PhaserLayer) => {
 
                 const logs = calculateBattleLogs(allPieceInBattle);
 
-                console.log("logs: ", logs.logs);
+                console.log(
+                    "set battle logs: ",
+                    v.currentMatch,
+                    v.round,
+                    logs.logs
+                );
 
                 setComponent(
                     BattleLogs,
@@ -194,120 +204,16 @@ export const battle = (layer: PhaserLayer) => {
                         logs: JSON.stringify(logs),
                     }
                 );
+
+                setTimeout(() => {
+                    // play animation after calculate successfully
+                    updateComponent(GameStatus, zeroEntity, {
+                        shouldPlay: true,
+                    });
+                }, 1000);
             }
         }
     );
-
-    async function playBattle(logs: PieceAction[]) {
-        console.log("logs: ", logs);
-        for (const l of logs) {
-            await playSingleBattle(l);
-            // await new Promise((resolve) => setTimeout(resolve, 500));
-            console.log("next");
-        }
-    }
-
-    async function moveByPaths(pieceEntity: string, paths: Coord[]) {
-        for (let i = 1; i < paths.length; i++) {
-            const point = paths[i];
-            const lastPath = paths[i - 1];
-            const moveLength = manhattanDistance(
-                lastPath.x,
-                lastPath.y,
-                point.x,
-                point.y
-            );
-
-            const pixelPosition = tileCoordToPixelCoord(
-                point,
-                TILE_WIDTH,
-                TILE_HEIGHT
-            );
-
-            console.log("move to :", pixelPosition);
-
-            const hero = objectPool.get(pieceEntity, "Sprite");
-            const health = objectPool.get(
-                `${pieceEntity}-health-bar`,
-                "Sprite"
-            );
-
-            const [resolve, , promise] = deferred<void>();
-
-            hero.setComponent({
-                id: pieceEntity,
-                now: async (sprite: Phaser.GameObjects.Sprite) => {
-                    await tween(
-                        {
-                            targets: sprite,
-                            duration: moveLength * MOVE_SPEED,
-                            props: {
-                                x: pixelPosition.x,
-                                y: pixelPosition.y,
-                            },
-                            ease: Phaser.Math.Easing.Linear,
-                            onComplete: () => {
-                                // console.log("complete");
-                                // resolve to allow next tween
-                                resolve();
-                            },
-                            onUpdate: () => {
-                                // set health bar follow on tween
-                                health.setComponent({
-                                    id: `${pieceEntity}-health-bar`,
-                                    once: (
-                                        health: Phaser.GameObjects.Sprite
-                                    ) => {
-                                        health.setPosition(
-                                            sprite.x,
-                                            sprite.y - HealthBarOffSetY
-                                        );
-                                    },
-                                });
-                            },
-                        },
-                        { keepExistingTweens: true }
-                    );
-                },
-            });
-
-            await promise;
-        }
-    }
-
-    async function playSingleBattle(v: PieceAction) {
-        // const [resolve, , promise] = deferred<void>();
-
-        // move first
-        await moveByPaths(v.entity, v.paths);
-
-        // then attack
-        if (v.attackPiece) {
-            // attack wait 0.2s
-            await sleep(200);
-
-            // if have attack piece, run attack
-            const game = getComponentValueStrict(GameStatus, zeroEntity);
-            const inningBattle = getComponentValueStrict(
-                InningBattle,
-                getEntityIdFromKeys([
-                    BigInt(game.currentMatch),
-                    BigInt(game.currentRound),
-                ])
-            );
-
-            const attacked = v.attackPiece as Entity;
-
-            console.log("v.player", v.player, inningBattle.homePlayer);
-            console.log("attacked: ", attacked);
-
-            setComponent(Attack, `${inningBattle}-${v.order}` as Entity, {
-                attacker: v.entity,
-                attacked: attacked,
-            });
-        }
-        // return promise;
-    }
 
     defineSystemST<typeof GameStatus.schema>(
         world,
@@ -315,44 +221,42 @@ export const battle = (layer: PhaserLayer) => {
         ({ entity, type, value: [v, preV] }) => {
             // if change from false to true, play the animation
             if (v?.shouldPlay === true && preV?.shouldPlay == false) {
-                const play = v;
+                const inningBattle = getComponentValueStrict(
+                    InningBattle,
+                    getEntityIdFromKeys([
+                        BigInt(v.currentMatch),
+                        BigInt(v.currentRound),
+                    ])
+                );
 
-                if (play?.shouldPlay == true) {
-                    const inningBattle = getComponentValueStrict(
-                        InningBattle,
-                        getEntityIdFromKeys([
-                            BigInt(v.currentMatch),
-                            BigInt(v.currentRound),
-                        ])
-                    );
+                console.log(
+                    "get logs: ",
+                    inningBattle.currentMatch,
+                    inningBattle.round
+                );
 
-                    const battleLogs = getComponentValueStrict(
-                        BattleLogs,
-                        getEntityIdFromKeys([
-                            BigInt(inningBattle.currentMatch),
-                            BigInt(inningBattle.round),
-                        ])
-                    ) as {
-                        matchId: number;
-                        inningBattleId: number;
-                        logs: string;
-                    };
+                const battleLogs = getComponentValueStrict(
+                    BattleLogs,
+                    getEntityIdFromKeys([
+                        BigInt(inningBattle.currentMatch),
+                        BigInt(inningBattle.round),
+                    ])
+                );
 
-                    const logs = JSON.parse(battleLogs.logs) as BattleLogs;
+                const logs = JSON.parse(battleLogs.logs) as BattleLogs;
 
-                    console.log("battleLogs: ", logs);
+                console.log("battleLogs: ", logs);
 
-                    playBattle(logs.logs).then(() => {
-                        console.log("play finish");
+                playBattle(logs.logs).then(() => {
+                    console.log("play finish");
 
-                        // after play, set status back
-                        updateComponent(GameStatus, entity, {
-                            shouldPlay: false,
-                            played: true,
-                            status: GameStatusEnum.WaitForNextRound,
-                        });
+                    // after play, set status back
+                    updateComponent(GameStatus, entity, {
+                        shouldPlay: false,
+                        played: true,
+                        status: GameStatusEnum.WaitForNextRound,
                     });
-                }
+                });
             }
         }
     );

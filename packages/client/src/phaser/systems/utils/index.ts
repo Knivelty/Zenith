@@ -29,11 +29,39 @@ export const utils = (layer: PhaserLayer) => {
         },
     } = layer;
 
+    function removePieceOnBoard(gid: number) {
+        const entity = getEntityIdFromKeys([BigInt(gid)]);
+
+        const hero = objectPool.get(entity, "Sprite");
+
+        console.warn(`entity: ${entity} gid: ${gid} removed`);
+
+        hero.despawn();
+        // hero.setComponent({
+        //     id: entity,
+        //     now: (sprite: Phaser.GameObjects.Sprite) => {
+        //         sprite.destroy();
+        //     },
+        // });
+
+        // remove health bar
+        setComponent(Health, `${entity}-health` as Entity, {
+            pieceEntity: entity,
+            max: 0,
+            current: 0,
+        });
+    }
+
     function spawnPiece(playerAddr: bigint, index: bigint) {
-        const playerPiece = getComponentValueStrict(
+        const playerPiece = getComponentValue(
             LocalPlayerPiece,
             getEntityIdFromKeys([playerAddr, index])
         );
+
+        if (!playerPiece) {
+            console.warn("no piece for ", playerAddr, index);
+            return;
+        }
 
         const entity = getEntityIdFromKeys([BigInt(playerPiece.gid)]);
 
@@ -56,12 +84,10 @@ export const utils = (layer: PhaserLayer) => {
         );
 
         const hero = objectPool.get(entity, "Sprite");
-
         hero.setComponent({
             id: entity,
-            now: (sprite: Phaser.GameObjects.Sprite) => {
+            once: (sprite: Phaser.GameObjects.Sprite) => {
                 sprite.setPosition(pixelPosition.x, pixelPosition.y);
-
                 sprite.play(config.animations[piece.creature_index]);
                 sprite.setInteractive();
 
@@ -123,5 +149,5 @@ export const utils = (layer: PhaserLayer) => {
         });
     }
 
-    return { spawnPiece };
+    return { spawnPiece, removePieceOnBoard };
 };
