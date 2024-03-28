@@ -71,11 +71,11 @@ export const utils = (layer: PhaserLayer) => {
 
         const isEnemy = BigInt(account.address) !== piece.owner;
 
-        // if enemy, convert coord
-        if (isEnemy) {
+        // if self, convert coord
+        if (!isEnemy) {
             piecePosition = {
-                x: 8 - piecePosition.x,
-                y: piecePosition.y,
+                x: piecePosition.x,
+                y: 8 - piecePosition.y,
             };
         }
 
@@ -113,7 +113,7 @@ export const utils = (layer: PhaserLayer) => {
 
                     sprite.off("dragstart");
                     sprite.on("dragstart", () => {
-                        sprite.setTint(0x50DFB6);
+                        sprite.setTint(0x50dfb6);
                     });
 
                     sprite.off("drag");
@@ -129,13 +129,19 @@ export const utils = (layer: PhaserLayer) => {
                     sprite.on("dragend", (p: Phaser.Input.Pointer) => {
                         console.log("drag end: ");
                         const posX = Math.floor(p.worldX / TILE_HEIGHT);
-                        const posY = Math.floor(p.worldY / TILE_HEIGHT);
+                        const posY = 8 - Math.floor(p.worldY / TILE_HEIGHT);
+
+                        sprite.clearTint(); // clear tint color
+
+                        if (posY > 4) {
+                            console.warn("invalid dst");
+                            return;
+                        }
 
                         updateComponent(LocalPiece, entity, {
                             x: posX,
                             y: posY,
                         });
-                        sprite.clearTint(); // clear tint color
                     });
                 }
             },

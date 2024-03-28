@@ -22,11 +22,11 @@ export const PhaserLayer = ({ networkLayer }: Props) => {
             ref={ref}
             style={{
                 position: "absolute",
-                top: "20%",
+                top: "10%",
                 left: "50%",
-                width: "32rem",
+                width: "40rem",
                 transform: "translateX(-50%)",
-                height: "32rem",
+                height: "40rem",
             }}
         />
     );

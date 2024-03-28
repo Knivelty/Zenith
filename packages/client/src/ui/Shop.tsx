@@ -4,6 +4,7 @@ import { useComponentValue } from "@dojoengine/react";
 import { getHeroAttr, useHeroesAttr } from "./hooks/useHeroAttr";
 import { HeroCard } from "./component/HeroCard";
 import { useInv } from "./hooks/useInv";
+import { UIStore, useUIStore } from "../store";
 
 const SHOW_INFO_LIST = ["health", "attack", "defense", "range"] as const;
 
@@ -21,7 +22,8 @@ const Shop = () => {
         systemCalls: { refreshAltar, buyHero },
         account: { playerEntity, account },
     } = useDojo();
-    // const [messageApi, contextHolder] = message.useMessage();
+
+    const showShow = useUIStore((state: UIStore) => state.shopShow);
 
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -58,7 +60,7 @@ const Shop = () => {
     );
 
     return (
-        <div className="flex justify-center mt-2">
+        <div className={`flex justify-center mt-2 ${showShow ? "" : "hidden"}`}>
             {/* {contextHolder} */}
             <div className="flex justify-center items-start w-[800px] h-40 bg-contain bg-no-repeat bg-[url('/assets/ui/shop_bg.png')]">
                 <div className="flex">
@@ -115,7 +117,7 @@ const Shop = () => {
                             onClick={() => {
                                 buyRefreshHeroFn();
                             }}
-                            className="flex items-center justify-center refresh h-16 w-[102px] bg-contain bg-no-repeat bg-[url('assets/refresh.png')]"
+                            className="flex items-center justify-center refresh h-16 w-[102px] bg-contain bg-no-repeat bg-[url('assets/ui/refresh.png')]"
                         >
                             <div className="flex item-center justify-center w-4/5 h-auto text-black font-bold">
                                 {!loading && (
@@ -123,7 +125,7 @@ const Shop = () => {
                                         <div>Refresh</div>
                                         <div className="flex items-center justify-center">
                                             <div>2</div>
-                                            <div className="ml-2 -mt-1 w-4 h-4 bg-cover bg-[url('assets/gold.png')]" />
+                                            <div className="ml-2 -mt-1 w-4 h-4 bg-cover bg-[url('assets/ui/gold.png')]" />
                                         </div>
                                     </div>
                                 )}

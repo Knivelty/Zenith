@@ -11,6 +11,8 @@ export type Store = {
 export type UIStore = {
     loggedIn: boolean;
     setLoggedIn: () => void;
+    shopShow: boolean;
+    setShopShow: (show: boolean) => void;
     phaserRect: DOMRect;
     setPhaserRect: (rect: DOMRect) => void;
 };
@@ -23,6 +25,12 @@ export const store = create<Store>(() => ({
 export const useUIStore = create<UIStore>((set) => ({
     loggedIn: false,
     setLoggedIn: () => set(() => ({ loggedIn: true })),
+    shopShow: true,
+    setShopShow(show) {
+        set(() => ({
+            shopShow: show,
+        }));
+    },
     phaserRect: new DOMRect(0, 0, 0, 0),
     setPhaserRect: (rect: DOMRect) => set(() => ({ phaserRect: rect })),
 }));

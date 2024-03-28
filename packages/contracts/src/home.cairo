@@ -405,10 +405,10 @@ mod home {
                 (
                     StageProfile { stage: 1, pieceCount: 2, },
                     StageProfilePiece {
-                        stage: 1, index: 1, x: 2, y: 3, creature_index: 1, level: 1,
+                        stage: 1, index: 1, y: 2, x: 3, creature_index: 1, level: 1,
                     },
                     StageProfilePiece {
-                        stage: 1, index: 2, x: 2, y: 6, creature_index: 1, level: 1,
+                        stage: 1, index: 2, y: 2, x: 6, creature_index: 1, level: 1,
                     }
                 )
             );
@@ -419,10 +419,10 @@ mod home {
                 (
                     StageProfile { stage: 2, pieceCount: 2, },
                     StageProfilePiece {
-                        stage: 2, index: 1, x: 1, y: 3, creature_index: 2, level: 1,
+                        stage: 2, index: 1, y: 1, x: 3, creature_index: 2, level: 1,
                     },
                     StageProfilePiece {
-                        stage: 2, index: 2, x: 4, y: 5, creature_index: 3, level: 1,
+                        stage: 2, index: 2, y: 3, x: 5, creature_index: 3, level: 1,
                     }
                 )
             );
@@ -433,10 +433,10 @@ mod home {
                 (
                     StageProfile { stage: 3, pieceCount: 2, },
                     StageProfilePiece {
-                        stage: 3, index: 1, x: 2, y: 2, creature_index: 4, level: 1,
+                        stage: 3, index: 1, y: 2, x: 2, creature_index: 4, level: 1,
                     },
                     StageProfilePiece {
-                        stage: 3, index: 2, x: 2, y: 7, creature_index: 5, level: 1,
+                        stage: 3, index: 2, y: 2, x: 7, creature_index: 5, level: 1,
                     }
                 )
             );
@@ -447,13 +447,13 @@ mod home {
                 (
                     StageProfile { stage: 4, pieceCount: 3, },
                     StageProfilePiece {
-                        stage: 4, index: 1, x: 1, y: 2, creature_index: 5, level: 1,
+                        stage: 4, index: 1, y: 1, x: 2, creature_index: 5, level: 1,
                     },
                     StageProfilePiece {
-                        stage: 4, index: 2, x: 2, y: 5, creature_index: 6, level: 1,
+                        stage: 4, index: 2, y: 2, x: 5, creature_index: 6, level: 1,
                     },
                     StageProfilePiece {
-                        stage: 4, index: 3, x: 3, y: 3, creature_index: 1, level: 1,
+                        stage: 4, index: 3, y: 3, x: 3, creature_index: 1, level: 1,
                     }
                 )
             );
@@ -464,13 +464,13 @@ mod home {
                 (
                     StageProfile { stage: 5, pieceCount: 3, },
                     StageProfilePiece {
-                        stage: 5, index: 1, x: 1, y: 5, creature_index: 2, level: 1,
+                        stage: 5, index: 1, y: 1, x: 5, creature_index: 2, level: 1,
                     },
                     StageProfilePiece {
-                        stage: 5, index: 2, x: 2, y: 3, creature_index: 3, level: 1,
+                        stage: 5, index: 2, y: 2, x: 3, creature_index: 3, level: 1,
                     },
                     StageProfilePiece {
-                        stage: 5, index: 3, x: 2, y: 7, creature_index: 3, level: 1,
+                        stage: 5, index: 3, y: 2, x: 7, creature_index: 3, level: 1,
                     }
                 )
             );
@@ -481,7 +481,7 @@ mod home {
                 (
                     StageProfile { stage: 6, pieceCount: 1, },
                     StageProfilePiece {
-                        stage: 6, index: 1, x: 2, y: 4, creature_index: 8, level: 1,
+                        stage: 6, index: 1, y: 2, x: 4, creature_index: 8, level: 1,
                     },
                 )
             );
@@ -492,13 +492,13 @@ mod home {
                 (
                     StageProfile { stage: 7, pieceCount: 3, },
                     StageProfilePiece {
-                        stage: 7, index: 1, x: 1, y: 5, creature_index: 2, level: 1,
+                        stage: 7, index: 1, y: 1, x: 5, creature_index: 2, level: 1,
                     },
                     StageProfilePiece {
-                        stage: 7, index: 2, x: 2, y: 1, creature_index: 8, level: 1,
+                        stage: 7, index: 2, y: 2, x: 1, creature_index: 8, level: 1,
                     },
                     StageProfilePiece {
-                        stage: 7, index: 3, x: 4, y: 4, creature_index: 9, level: 1,
+                        stage: 7, index: 3, y: 3, x: 4, creature_index: 9, level: 1,
                     }
                 )
             );
@@ -803,13 +803,12 @@ mod home {
             let world = self.world_dispatcher.read();
             let playerAddr = get_caller_address();
 
-            let player = get!(world,playerAddr,Player);
+            let player = get!(world, playerAddr, Player);
+        // delete player inv piece
 
-            // delete player inv piece
+        // delete player piece
 
-            // delete player piece
-
-            // reset player attr
+        // reset player attr
 
         }
     }

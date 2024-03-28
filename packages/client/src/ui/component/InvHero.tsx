@@ -62,14 +62,18 @@ export const InvHero = ({
                 e.clientY - phaserRect.top
             );
 
+            console.log(e.clientX, phaserRect.left);
+
             // multiplied by 4 because there is a 4x zoom
             const worldX = rawCoord.x * 4;
             const worldY = rawCoord.y * 4;
 
             const posX = Math.floor(worldX / TILE_HEIGHT);
-            const posY = Math.floor(worldY / TILE_HEIGHT);
+            const posY = 8 - Math.floor(worldY / TILE_HEIGHT);
 
-            if (posX < 0 || posX > 3 || posY < 0 || posY > 7) {
+            console.log(posX, posY);
+
+            if (posX < 0 || posX > 7 || posY < 0 || posY > 3) {
                 console.warn("invalid dst place");
                 return;
             }

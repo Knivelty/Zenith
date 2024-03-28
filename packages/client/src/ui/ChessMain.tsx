@@ -1,22 +1,30 @@
+import { useComponentValue } from "@dojoengine/react";
 import { useUIStore } from "../store";
 import { Debugger } from "./Debugger";
 import { Inventory } from "./Inventory";
 import Shop from "./Shop";
+import { useDojo } from "./hooks/useDojo";
+import { Home } from "./Home";
+import { ShopButton } from "./ShopButton";
 
 export function ChessMain() {
-    const loggedIn = useUIStore((state: any) => state.loggedIn);
+    const {
+        clientComponents: { Player },
+        account: { playerEntity },
+    } = useDojo();
 
-    if (!loggedIn) {
-        return <div></div>;
+    const inGame = useComponentValue(Player, playerEntity)?.inMatch;
+
+    if (!inGame) {
+        return <Home />;
     }
 
     return (
-        <div>
+        <div className="relative w-screen h-screen overflow-hidden">
             <Debugger />
-            <div className="relative">
-                <Shop />
-                <Inventory />
-            </div>
+            <Shop />
+            <Inventory />
+            <ShopButton />
         </div>
     );
 }
