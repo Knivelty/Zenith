@@ -43,20 +43,20 @@ export const health = (layer: PhaserLayer) => {
                 console.warn(`${v.pieceEntity} removed`);
 
                 // TODO: delete ecs component and let a system to despawn
-                healthBar.despawn();
-                piece.despawn();
-                // healthBar.setComponent({
-                //     id: healthBarEntity,
-                //     once: async (rec: Phaser.GameObjects.Sprite) => {
-                //         rec.destroy();
-                //     },
-                // });
-                // piece.setComponent({
-                //     id: v.pieceEntity,
-                //     now: (sprite: Phaser.GameObjects.Sprite) => {
-                //         sprite.destroy();
-                //     },
-                // });
+                // healthBar.despawn();
+                // piece.despawn();
+                healthBar.setComponent({
+                    id: healthBarEntity,
+                    once: async (rec: Phaser.GameObjects.Sprite) => {
+                        rec.setVisible(false);
+                    },
+                });
+                piece.setComponent({
+                    id: v.pieceEntity,
+                    now: (sprite: Phaser.GameObjects.Sprite) => {
+                        sprite.setVisible(false);
+                    },
+                });
             }
         }
     );
@@ -72,9 +72,11 @@ export const health = (layer: PhaserLayer) => {
 
             const healthBar = objectPool.get(entity, "Sprite");
 
+            // spawn health bar
             healthBar.setComponent({
                 id: entity,
                 once: async (rec: Phaser.GameObjects.Sprite) => {
+                    rec.setVisible(true)
                     const healthBar = config.sprites[Sprites.HealthBar];
 
                     rec.setTexture(healthBar.assetKey, healthBar.frame);

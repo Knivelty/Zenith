@@ -83,10 +83,15 @@ export const utils = (layer: PhaserLayer) => {
             TILE_HEIGHT
         );
 
+        console.log(
+            `spawn ${playerAddr} ${index} ${piece.gid} at ${piecePosition} `
+        );
+
         const hero = objectPool.get(entity, "Sprite");
         hero.setComponent({
             id: entity,
             once: (sprite: Phaser.GameObjects.Sprite) => {
+                sprite.setVisible(true);
                 sprite.setPosition(pixelPosition.x, pixelPosition.y);
                 sprite.play(config.animations[piece.creature_index]);
                 sprite.setInteractive();
