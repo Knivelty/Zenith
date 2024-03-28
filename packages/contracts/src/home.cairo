@@ -1,5 +1,5 @@
 use autochessia::models::{CreatureProfile, StageProfile, Piece, Player};
-use autochessia::customType::{PieceChange};
+use autochessia::customType::{PieceChange, RoundResult};
 
 
 // define the interface
@@ -17,7 +17,7 @@ trait IHome<TContractState> {
     fn refreshAltar(self: @TContractState);
     fn buyHero(self: @TContractState, altarSlot: u8, invSlot: u8);
     fn sellHero(self: @TContractState, gid: u32);
-    fn commitPreparation(self: @TContractState, changes: Array<PieceChange>);
+    fn commitPreparation(self: @TContractState, changes: Array<PieceChange>, result: RoundResult);
     fn nextRound(self: @TContractState);
 
 
@@ -43,7 +43,7 @@ mod home {
         PlayerPiece, PlayerInvPiece, StageProfile, StageProfilePiece
     };
     use autochessia::utils::{next_position, generate_pseudo_random_address, get_felt_mod};
-    use autochessia::customType::{PieceChange};
+    use autochessia::customType::{PieceChange, RoundResult};
 
     use autochessia::customEvent::{PieceActions, PieceAction};
     use dojo::base;
@@ -572,7 +572,9 @@ mod home {
                         round: 1,
                         homePlayer: playerAddr,
                         awayPlayer: enemyAddr,
-                        end: false
+                        end: false,
+                        winner: Zeroable::zero(),
+                        healthDecrease: 0,
                     },
                 ),
             );
@@ -582,7 +584,9 @@ mod home {
         // commit preparation in one function
         // include: refresh, move
         // the contract side need to valid the validity
-        fn commitPreparation(self: @ContractState, changes: Array<PieceChange>) {
+        fn commitPreparation(
+            self: @ContractState, changes: Array<PieceChange>, result: RoundResult
+        ) {
             let world = self.world_dispatcher.read();
 
             let playerAddr = get_caller_address();
@@ -608,6 +612,12 @@ mod home {
             let matchState = get!(world, player.inMatch, MatchState);
             let mut inningBattle = get!(world, (matchState.index, matchState.round), InningBattle);
 
+            if (result.win) {
+                inningBattle.winner = inningBattle.homePlayer;
+            } else {
+                inningBattle.winner = inningBattle.awayPlayer;
+            }
+            inningBattle.healthDecrease = result.healthDecrease;
             inningBattle.end = true;
 
             set!(world, (inningBattle));
@@ -765,7 +775,9 @@ mod home {
                         round: newRound,
                         homePlayer: playerAddr,
                         awayPlayer: lastInningBattle.awayPlayer,
-                        end: false
+                        end: false,
+                        winner: Zeroable::zero(),
+                        healthDecrease: 0
                     }
                 ),
             );

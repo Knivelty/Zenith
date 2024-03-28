@@ -8,22 +8,24 @@ export function mapSystem(layer: PhaserLayer) {
         scenes: {
             Main: {
                 maps: {
-                    Main: { putTileAt },
+                    Main: { putTileAt, size, tiles, tileHeight, tileWidth },
                 },
             },
         },
     } = layer;
 
-    for (let x = 0; x < 8; x++) {
-        for (let y = 0; y < 8; y++) {
-            const coord = { x, y };
-            // Get a noise value between 0 and 100
-            // const seed = Math.floor(
-            //     ((snoise([x / MAP_AMPLITUDE, 0, y / MAP_AMPLITUDE]) + 1) / 2) *
-            //         100
-            // );
+    console.log("tiles: ", size());
 
-            putTileAt(coord, Tileset.Land, "Foreground");
-        }
-    }
+    // for (let x = 0; x < 8; x++) {
+    //     for (let y = 0; y < 8; y++) {
+    //         // const coord = { x, y };
+    //         // Get a noise value between 0 and 100
+    //         // const seed = Math.floor(
+    //         //     ((snoise([x / MAP_AMPLITUDE, 0, y / MAP_AMPLITUDE]) + 1) / 2) *
+    //         //         100
+    //         // );
+
+    //         // putTileAt(coord, Tileset.Land, "Background");
+    //     }
+    // }
 }

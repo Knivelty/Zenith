@@ -40,7 +40,7 @@ export const usePhaserLayer = ({ networkLayer }: Props) => {
                 scale: {
                     ...phaserConfig.scale,
                     parent: container,
-                    mode: Phaser.Scale.NONE,
+                    // mode: Phaser.Scale.NONE,
                     width,
                     height,
                 },
@@ -77,7 +77,7 @@ export const usePhaserLayer = ({ networkLayer }: Props) => {
                 }
             }
         },
-        [container]
+        [container, setPhaserRect]
     );
 
     return useMemo(() => ({ ref, phaserLayer }), [ref, phaserLayer]);

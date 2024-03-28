@@ -2,6 +2,7 @@ import { Button } from "antd";
 import { UIStore, useUIStore } from "../store";
 import { useDojo } from "./hooks/useDojo";
 import { useComponentValue } from "@dojoengine/react";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export function ShopButton() {
     const {
@@ -11,6 +12,10 @@ export function ShopButton() {
     const setShowShop = useUIStore((state: UIStore) => state.setShopShow);
     const shopShow = useUIStore((state: UIStore) => {
         return state.shopShow;
+    });
+
+    useHotkeys("p", () => {
+        setShowShop(!shopShow);
     });
 
     const player = useComponentValue(Player, playerEntity);

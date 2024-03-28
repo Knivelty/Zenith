@@ -23,7 +23,7 @@ import { getAnimations } from "./animationConfig";
 const ANIMATION_INTERVAL = 200;
 
 const mainMap = defineMapConfig({
-    chunkSize: TILE_WIDTH, // tile size * tile amount
+    chunkSize: TILE_WIDTH * 8,
     tileWidth: TILE_WIDTH,
     tileHeight: TILE_HEIGHT,
     backgroundTile: [Tileset.Land], // 4 is undefined
@@ -32,7 +32,6 @@ const mainMap = defineMapConfig({
     layers: {
         layers: {
             Background: { tilesets: ["Default"] },
-            Foreground: { tilesets: ["Default"] },
         },
         defaultLayer: "Background",
     },
@@ -58,7 +57,7 @@ export const phaserConfig = {
                 },
             },
             maps: {
-                [Maps.Main]: mainMap,
+                [Maps.Main]: mainMap,  
             },
             sprites: getSprites(),
             animations: getAnimations(),
@@ -73,10 +72,10 @@ export const phaserConfig = {
     },
     scale: defineScaleConfig({
         parent: "phaser-game",
-        zoom: 0.25,
-        height: "32rem",
-        width: "32rem",
-        mode: Phaser.Scale.NO_ZOOM,
+        mode: Phaser.Scale.NONE,
+        zoom: 1,
+        height: "40rem",
+        width: "40rem",
     }),
     cameraConfig: defineCameraConfig({
         pinchSpeed: 1,
@@ -84,6 +83,5 @@ export const phaserConfig = {
         maxZoom: 3,
         minZoom: 1,
     }),
-    cullingChunkSize: TILE_HEIGHT,
-    
+    cullingChunkSize: 8,
 };

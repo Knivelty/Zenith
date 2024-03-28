@@ -29,3 +29,9 @@ struct PieceChange {
     x: u8,
     y: u8
 }
+
+#[derive(Copy, Clone, Drop, Serde)]
+struct RoundResult {
+    win: bool,
+    healthDecrease: u8
+}

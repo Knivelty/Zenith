@@ -10,5 +10,5 @@ export const camera = (layer: PhaserLayer) => {
     } = layer;
 
     phaserCamera.centerOn(0, 0);
-    phaserCamera.setZoom(1.25);
+    phaserCamera.setZoom(0.3125);
 };

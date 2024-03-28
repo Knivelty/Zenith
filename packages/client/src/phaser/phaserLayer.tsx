@@ -25,8 +25,8 @@ export const PhaserLayer = ({ networkLayer }: Props) => {
                 top: "10%",
                 left: "50%",
                 width: "40rem",
-                transform: "translateX(-50%)",
                 height: "40rem",
+                transform: "translateX(-50%)",
             }}
         />
     );
