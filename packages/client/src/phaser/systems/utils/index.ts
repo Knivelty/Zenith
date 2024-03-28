@@ -69,8 +69,10 @@ export const utils = (layer: PhaserLayer) => {
 
         let piecePosition = { x: piece.x, y: piece.y };
 
+        const isEnemy = BigInt(account.address) !== piece.owner;
+
         // if enemy, convert coord
-        if (BigInt(account.address) !== piece.owner) {
+        if (isEnemy) {
             piecePosition = {
                 x: 8 - piecePosition.x,
                 y: piecePosition.y,
@@ -100,34 +102,42 @@ export const utils = (layer: PhaserLayer) => {
                 const scale = TILE_WIDTH / sprite.width;
                 sprite.setScale(scale);
 
-                game.scene.getScene("Main")?.input.setDraggable(sprite);
+                // set tint for enemy
+                if (isEnemy) {
+                    sprite.setTint(0xff4040);
+                }
 
-                sprite.off("dragstart");
-                sprite.on("dragstart", () => {
-                    sprite.setTint(0xff0000);
-                });
+                // set draggable for self piece
+                if (!isEnemy) {
+                    game.scene.getScene("Main")?.input.setDraggable(sprite);
 
-                sprite.off("drag");
-                sprite.on(
-                    "drag",
-                    (
-                        p: Phaser.Input.Pointer,
-                        gameObj: Phaser.GameObjects.GameObject
-                    ) => {}
-                );
-
-                sprite.off("dragend");
-                sprite.on("dragend", (p: Phaser.Input.Pointer) => {
-                    console.log("drag end: ");
-                    const posX = Math.floor(p.worldX / TILE_HEIGHT);
-                    const posY = Math.floor(p.worldY / TILE_HEIGHT);
-
-                    updateComponent(LocalPiece, entity, {
-                        x: posX,
-                        y: posY,
+                    sprite.off("dragstart");
+                    sprite.on("dragstart", () => {
+                        sprite.setTint(0x50DFB6);
                     });
-                    sprite.clearTint(); // clear tint color
-                });
+
+                    sprite.off("drag");
+                    sprite.on(
+                        "drag",
+                        (
+                            p: Phaser.Input.Pointer,
+                            gameObj: Phaser.GameObjects.GameObject
+                        ) => {}
+                    );
+
+                    sprite.off("dragend");
+                    sprite.on("dragend", (p: Phaser.Input.Pointer) => {
+                        console.log("drag end: ");
+                        const posX = Math.floor(p.worldX / TILE_HEIGHT);
+                        const posY = Math.floor(p.worldY / TILE_HEIGHT);
+
+                        updateComponent(LocalPiece, entity, {
+                            x: posX,
+                            y: posY,
+                        });
+                        sprite.clearTint(); // clear tint color
+                    });
+                }
             },
         });
 
