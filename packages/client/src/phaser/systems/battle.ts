@@ -24,15 +24,8 @@ import { defineSystemST, zeroEntity } from "../../utils";
 // import { BattleLog, BattleLogsType } from "../../dojo/generated/setup";
 import { Coord, deferred, sleep } from "@latticexyz/utils";
 import { GameStatusEnum } from "../../dojo/types";
-import {
-    BattleLogs,
-    PieceAction,
-    PieceInBattle,
-    calculateBattleLogs,
-    manhattanDistance,
-} from "../../utils/jps";
 import { battleAnimation } from "./utils/playBattle";
-import { Game } from "phaser";
+import { BattleResult } from "../../utils/jps";
 
 export const battle = (layer: PhaserLayer) => {
     const {
@@ -89,128 +82,6 @@ export const battle = (layer: PhaserLayer) => {
                 });
 
                 // calculate battle log in the frontend
-
-                // get all piece
-                const allPieceInBattle = new Array<PieceInBattle>();
-
-                // get player piece
-                const player = getComponentValueStrict(
-                    LocalPlayer,
-                    getEntityIdFromKeys([v.homePlayer])
-                );
-
-                for (let i = 1; i <= player.heroesCount; i++) {
-                    const playerPiece = getComponentValueStrict(
-                        LocalPlayerPiece,
-                        getEntityIdFromKeys([v.homePlayer, BigInt(i)])
-                    );
-
-                    const pieceEntity = getEntityIdFromKeys([
-                        BigInt(playerPiece.gid),
-                    ]);
-
-                    const piece = getComponentValueStrict(
-                        LocalPiece,
-                        pieceEntity
-                    );
-
-                    const creature = getComponentValueStrict(
-                        CreatureProfile,
-                        getEntityIdFromKeys([
-                            BigInt(piece.creature_index),
-                            BigInt(piece.level),
-                        ])
-                    );
-
-                    allPieceInBattle.push({
-                        player: getEntityIdFromKeys([v.homePlayer]),
-                        entity: pieceEntity,
-                        x: piece.x,
-                        y: piece.y,
-                        health: creature.health,
-                        attack: creature.attack,
-                        armor: creature.armor,
-                        speed: creature.speed,
-                        range: creature.range,
-                        isInHome: true,
-                        dead: false,
-                    });
-                }
-
-                // TODO: reverse home and player on PvP
-                // get enemy piece
-                const enemy = getComponentValueStrict(
-                    LocalPlayer,
-                    getEntityIdFromKeys([v.awayPlayer])
-                );
-
-                for (let i = 1; i <= enemy.heroesCount; i++) {
-                    const playerPiece = getComponentValueStrict(
-                        LocalPlayerPiece,
-                        getEntityIdFromKeys([v.awayPlayer, BigInt(i)])
-                    );
-
-                    const pieceEntity = getEntityIdFromKeys([
-                        BigInt(playerPiece.gid),
-                    ]);
-
-                    console.log("piece: ", playerPiece);
-                    const piece = getComponentValueStrict(
-                        LocalPiece,
-                        pieceEntity
-                    );
-
-                    const creature = getComponentValueStrict(
-                        CreatureProfile,
-                        getEntityIdFromKeys([
-                            BigInt(piece.creature_index),
-                            BigInt(piece.level),
-                        ])
-                    );
-
-                    allPieceInBattle.push({
-                        player: getEntityIdFromKeys([v.awayPlayer]),
-                        entity: pieceEntity,
-                        x: 7 - piece.x,
-                        y: 7 - piece.y,
-                        health: creature.health,
-                        attack: creature.attack,
-                        armor: creature.armor,
-                        speed: creature.speed,
-                        range: creature.range,
-                        isInHome: false,
-                        dead: false,
-                    });
-                }
-
-                const logs = calculateBattleLogs(allPieceInBattle);
-
-                console.log(
-                    "set battle logs: ",
-                    v.currentMatch,
-                    v.round,
-                    logs.logs
-                );
-
-                setComponent(
-                    BattleLogs,
-                    getEntityIdFromKeys([
-                        BigInt(v.currentMatch),
-                        BigInt(v.round),
-                    ]),
-                    {
-                        matchId: v.currentMatch,
-                        inningBattleId: v.round,
-                        logs: JSON.stringify(logs),
-                    }
-                );
-
-                setTimeout(() => {
-                    // play animation after calculate successfully
-                    updateComponent(GameStatus, zeroEntity, {
-                        shouldPlay: true,
-                    });
-                }, 1000);
             }
         }
     );
@@ -235,7 +106,7 @@ export const battle = (layer: PhaserLayer) => {
                     inningBattle.round
                 );
 
-                const battleLogs = getComponentValueStrict(
+                const battleLogs = getComponentValue(
                     BattleLogs,
                     getEntityIdFromKeys([
                         BigInt(inningBattle.currentMatch),
@@ -243,11 +114,18 @@ export const battle = (layer: PhaserLayer) => {
                     ])
                 );
 
-                const logs = JSON.parse(battleLogs.logs) as BattleLogs;
+                if (!battleLogs) {
+                    console.warn("no battle log");
+                    return;
+                }
+
+                const logs = JSON.parse(
+                    battleLogs.logs
+                ) as BattleResult["logs"];
 
                 console.log("battleLogs: ", logs);
 
-                playBattle(logs.logs).then(() => {
+                playBattle(logs).then(() => {
                     console.log("play finish");
 
                     // after play, set status back

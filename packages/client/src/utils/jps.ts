@@ -77,8 +77,14 @@ export type PieceAction = {
     attackPiece: string | undefined;
 };
 
-export type BattleLogs = {
+export type WinResult = {
+    win: boolean;
+    healthDecrease: number;
+};
+
+export type BattleResult = {
     logs: PieceAction[];
+    result: WinResult;
 };
 
 /**
@@ -86,10 +92,10 @@ export type BattleLogs = {
  * @param pieces
  * @returns
  */
-export function calculateBattleLogs(pieces: PieceInBattle[]): BattleLogs {
+export function calculateBattleLogs(pieces: PieceInBattle[]): BattleResult {
     const pieceActions = new Array<PieceAction>();
     let baseTurnOrder = 1;
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 500; i++) {
         const logs = battleForAStep(pieces, baseTurnOrder);
 
         baseTurnOrder = logs.length ? logs[logs.length - 1].order + 1 : 1;
@@ -102,7 +108,8 @@ export function calculateBattleLogs(pieces: PieceInBattle[]): BattleLogs {
             console.log("next turn");
         }
     }
-    return { logs: pieceActions };
+    const result = getResult(pieces);
+    return { logs: pieceActions, result };
 }
 
 function getFarthestAttackablePoint(x: number, y: number, k: number) {
@@ -139,11 +146,28 @@ function getFarthestAttackablePoint(x: number, y: number, k: number) {
 function isTurnEnd(pieces: PieceInBattle[]) {
     if (
         getHomePiece(pieces).findIndex((v) => v.dead === false) === -1 ||
-        getHomePiece(pieces).findIndex((v) => v.dead === false) === -1
+        getAwayPiece(pieces).findIndex((v) => v.dead === false) === -1
     ) {
         return true;
     }
     return false;
+}
+
+function getResult(pieces: PieceInBattle[]) {
+    console.log("getting result", pieces);
+
+    const remainHomePiece = getHomePiece(pieces).filter(
+        (v) => v.dead === false
+    ).length;
+    const remainAwayPiece = getAwayPiece(pieces).filter(
+        (v) => v.dead === false
+    ).length;
+    // TODO: check exception
+    if (!remainHomePiece) {
+        return { win: false, healthDecrease: remainAwayPiece };
+    } else {
+        return { win: true, healthDecrease: remainAwayPiece };
+    }
 }
 
 export function getTargetPoint(

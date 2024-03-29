@@ -46,6 +46,8 @@ export function createClientComponents({
         BattleLogs: defineComponent(world, {
             matchId: Type.Number,
             inningBattleId: Type.Number,
+            winner: Type.BigInt,
+            healthDecrease: Type.Number,
             logs: Type.String,
         }),
         HealthBar: defineComponent(world, {

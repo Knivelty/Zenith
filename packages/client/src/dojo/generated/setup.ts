@@ -106,6 +106,7 @@ export async function setup({ ...config }: DojoConfig) {
         systemCalls: createSystemCalls(
             { client },
             contractComponents,
+            clientComponents,
             clientComponents
         ),
         config,

@@ -220,6 +220,29 @@ mod home {
         set!(world, (globalState, enemy));
     }
 
+    fn _giveRoundCoinReward(self: @ContractState) {
+        let world = self.world_dispatcher.read();
+        let playerAddr = get_caller_address();
+
+        let mut player = get!(world, playerAddr, Player);
+
+        // get interest
+        let interest = player.coin / 10;
+
+        // get streak reward 
+        let streakReward = player.winStreak + player.loseStreak;
+
+        // get round base reward
+        let matchState = get!(world, player.inMatch, MatchState);
+        let roundBaseReward = matchState.round / 10;
+
+        let totalIncome = interest + streakReward + roundBaseReward;
+
+        player.coin += totalIncome;
+
+        set!(world, (player));
+    }
+
 
     // impl: implement functions specified in trait
     #[abi(embed_v0)]
@@ -529,7 +552,8 @@ mod home {
                     inventoryCount: 0,
                     level: 1,
                     coin: 1,
-                    streakCount: 0,
+                    winStreak: 0,
+                    loseStreak: 0,
                     locked: 0,
                     inMatch: currentMatch
                 }
@@ -554,7 +578,8 @@ mod home {
                     inventoryCount: 0,
                     level: 1,
                     coin: 0,
-                    streakCount: 0,
+                    winStreak: 0,
+                    loseStreak: 0,
                     locked: 0,
                     inMatch: currentMatch
                 }
@@ -607,20 +632,43 @@ mod home {
             };
 
             // mark battle as end
-
-            let player = get!(world, playerAddr, Player);
+            let mut player = get!(world, playerAddr, Player);
             let matchState = get!(world, player.inMatch, MatchState);
             let mut inningBattle = get!(world, (matchState.index, matchState.round), InningBattle);
 
             if (result.win) {
                 inningBattle.winner = inningBattle.homePlayer;
+
+                // update streak 
+                if (player.winStreak != 0) {
+                    player.winStreak += 1;
+                    player.loseStreak = 0;
+                } else {
+                    player.winStreak = 1;
+                    player.loseStreak = 0;
+                }
             } else {
                 inningBattle.winner = inningBattle.awayPlayer;
+                // decrease health
+                if (player.health > result.healthDecrease) {
+                    player.health -= result.healthDecrease
+                } else {
+                    player.health = 0;
+                }
+
+                // update streak 
+                if (player.winStreak != 0) {
+                    player.winStreak = 1;
+                    player.loseStreak = 0;
+                } else {
+                    player.winStreak = 0;
+                    player.loseStreak += 1;
+                }
             }
             inningBattle.healthDecrease = result.healthDecrease;
             inningBattle.end = true;
 
-            set!(world, (inningBattle));
+            set!(world, (inningBattle, player));
         }
 
         fn refreshAltar(self: @ContractState) {
@@ -761,7 +809,6 @@ mod home {
 
             // spawn new piece
             let enemyAddr = lastInningBattle.awayPlayer;
-
             _spawnEnemyPiece(self, currentRound + 1, enemyAddr);
 
             set!(
@@ -781,6 +828,8 @@ mod home {
                     }
                 ),
             );
+            // add more coin
+            _giveRoundCoinReward(self);
         }
 
 
@@ -790,24 +839,10 @@ mod home {
             let world = self.world_dispatcher.read();
             let playerAddr = get_caller_address();
 
-            let player = get!(world, playerAddr, Player);
+            let mut player = get!(world, playerAddr, Player);
+            player.coin += 10;
 
-            set!(
-                world,
-                Player {
-                    player: player.player,
-                    inMatch: player.inMatch,
-                    health: player.health,
-                    streakCount: player.streakCount,
-                    coin: player.coin + 10,
-                    level: player.level,
-                    locked: player.locked,
-                    // dojo does not support array for now, so it's used to traversal all pieces belong to player
-                    heroesCount: player.heroesCount,
-                    // hero count in inventory 
-                    inventoryCount: player.inventoryCount,
-                }
-            );
+            set!(world, (player));
         }
 
         // exit current game

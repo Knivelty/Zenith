@@ -3,7 +3,7 @@ import { Assets, Sprites } from "./constants";
 const baseSprites = {
     [Sprites.Invalid]: {
         assetKey: Assets.MainAtlas,
-        frame: "bar/health.png",
+        frame: "/",
     },
     [Sprites.HealthBar]: {
         assetKey: Assets.MainAtlas,

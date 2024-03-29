@@ -90,7 +90,6 @@ export const utils = (layer: PhaserLayer) => {
         );
 
         const hero = objectPool.get(entity, "Sprite");
-        hero.spawn();
         hero.setComponent({
             id: entity,
             once: (sprite: Phaser.GameObjects.Sprite) => {
@@ -165,8 +164,8 @@ export const utils = (layer: PhaserLayer) => {
 
         // initialize health
         setComponent(Health, `${entity}-health` as Entity, {
-            max: creature.health * piece.level,
-            current: creature.health * piece.level,
+            max: creature.health,
+            current: creature.health,
             pieceEntity: entity,
         });
     }

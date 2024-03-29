@@ -76,11 +76,10 @@ export const health = (layer: PhaserLayer) => {
             healthBar.setComponent({
                 id: entity,
                 once: async (rec: Phaser.GameObjects.Sprite) => {
-                    rec.setVisible(true)
+                    rec.setVisible(true);
                     const healthBar = config.sprites[Sprites.HealthBar];
 
                     rec.setTexture(healthBar.assetKey, healthBar.frame);
-                    // rec.setLineWidth(TILE_WIDTH);
                     rec.setPosition(v.x, v.y - HealthBarOffSetY);
                     // rec.setDepth(10);
 

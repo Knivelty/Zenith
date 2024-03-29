@@ -7,18 +7,21 @@ import { zeroEntity } from "../utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { isBoolean, isEqual, isNull, isUndefined } from "lodash";
 import { PieceChange } from "./types";
+import { processBattle } from "../phaser/systems/utils/processBattleLogs";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
     { client }: { client: IWorld },
     contractComponents: ContractComponents,
+    clientComponents: ClientComponents,
     {
         Position,
         GameStatus,
         LocalPiecesChangeTrack,
         Piece,
         LocalPiece,
+        BattleLogs,
     }: ClientComponents
 ) {
     const spawn = async (account: Account) => {
@@ -76,12 +79,19 @@ export function createSystemCalls(
                 })
                 .filter(Boolean) as PieceChange[];
 
-            console.log("changes:", changes);
+            const { processBattleLogs } = processBattle(clientComponents);
+
+            const { result } = processBattleLogs();
+
+            console.log("battle result", result);
 
             return await client.actions.commitPreparation({
                 account,
                 changes,
-                result: { win: true, healthDecrease: 0 },
+                result: {
+                    win: result.win,
+                    healthDecrease: result.healthDecrease,
+                },
             });
         } catch (e) {
             console.error(e);

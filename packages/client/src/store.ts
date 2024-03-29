@@ -25,7 +25,7 @@ export const store = create<Store>(() => ({
 export const useUIStore = create<UIStore>((set) => ({
     loggedIn: false,
     setLoggedIn: () => set(() => ({ loggedIn: true })),
-    shopShow: true,
+    shopShow: false,
     setShopShow(show) {
         set(() => ({
             shopShow: show,

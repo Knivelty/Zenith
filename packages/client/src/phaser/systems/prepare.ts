@@ -71,7 +71,10 @@ export const prepare = (layer: PhaserLayer) => {
         [Has(GameStatus)],
         ({ entity, type, value: [v, preV] }) => {
             // if switch to prepare, recover all piece to initial place
-            if (v?.status === GameStatusEnum.Prepare) {
+            if (
+                preV?.status !== GameStatusEnum.Prepare &&
+                v?.status === GameStatusEnum.Prepare
+            ) {
                 //
                 const player = getComponentValueStrict(
                     Player,

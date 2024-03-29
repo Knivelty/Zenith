@@ -50,14 +50,14 @@ export const phaserConfig = {
                     type: AssetType.MultiAtlas,
                     key: Assets.MainAtlas,
                     // Add a timestamp to the end of the path to prevent caching
-                    path: `/assets/atlas.json`,
+                    path: `assets/atlas.json`,
                     options: {
-                        imagePath: "/assets/",
+                        imagePath: "assets/",
                     },
                 },
             },
             maps: {
-                [Maps.Main]: mainMap,  
+                [Maps.Main]: mainMap,
             },
             sprites: getSprites(),
             animations: getAnimations(),
