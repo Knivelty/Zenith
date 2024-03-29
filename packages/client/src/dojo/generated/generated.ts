@@ -3,7 +3,7 @@
 // TODO: learn how to generate it
 import { Account, CallData } from "starknet";
 import { DojoProvider } from "@dojoengine/core";
-import { PieceChange } from "../types";
+import { PieceChange, RoundResult } from "../types";
 
 export type IWorld = Awaited<ReturnType<typeof setupWorld>>;
 
@@ -46,16 +46,18 @@ export async function setupWorld(provider: DojoProvider) {
         const commitPreparation = async ({
             account,
             changes,
+            result,
         }: {
             account: Account;
             changes: PieceChange[];
+            result: RoundResult;
         }) => {
             try {
                 const { transaction_hash: txHash } = await provider.execute(
                     account,
                     contract_name,
                     "commitPreparation",
-                    CallData.compile({ changes: changes })
+                    CallData.compile({ changes: changes, result: result })
                 );
 
                 const receipt = provider.provider.waitForTransaction(txHash);

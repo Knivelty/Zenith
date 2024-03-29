@@ -17,12 +17,17 @@ export enum GameStatusEnum {
 }
 
 export type PieceChange = {
-    gid: number,
-    idx: number,
-    slot: number,
-    x: number,
-    y: number
-}
+    gid: number;
+    idx: number;
+    slot: number;
+    x: number;
+    y: number;
+};
+
+export type RoundResult = {
+    win: boolean;
+    healthDecrease: number;
+};
 
 export function numToStatus(n: GameStatusEnum | undefined): string {
     switch (n) {
@@ -36,4 +41,3 @@ export function numToStatus(n: GameStatusEnum | undefined): string {
             return "Invalid";
     }
 }
-

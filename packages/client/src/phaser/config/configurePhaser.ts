@@ -83,5 +83,5 @@ export const phaserConfig = {
         maxZoom: 3,
         minZoom: 1,
     }),
-    cullingChunkSize: 8,
+    cullingChunkSize: 256,
 };

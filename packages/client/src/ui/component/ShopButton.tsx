@@ -1,6 +1,6 @@
 import { Button } from "antd";
-import { UIStore, useUIStore } from "../store";
-import { useDojo } from "./hooks/useDojo";
+import { UIStore, useUIStore } from "../../store";
+import { useDojo } from "../hooks/useDojo";
 import { useComponentValue } from "@dojoengine/react";
 import { useHotkeys } from "react-hotkeys-hook";
 

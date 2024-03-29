@@ -64,12 +64,12 @@ export const InvHero = ({
 
             console.log(e.clientX, phaserRect.left);
 
-            // multiplied by 4 because there is a 4x zoom
-            const worldX = rawCoord.x * 4;
-            const worldY = rawCoord.y * 4;
+            // no multiplied because no zoom
+            const worldX = rawCoord.x;
+            const worldY = rawCoord.y;
 
             const posX = Math.floor(worldX / TILE_HEIGHT);
-            const posY = 8 - Math.floor(worldY / TILE_HEIGHT);
+            const posY = 7 - Math.floor(worldY / TILE_HEIGHT);
 
             console.log(posX, posY);
 
@@ -108,19 +108,11 @@ export const InvHero = ({
                 }
             );
 
-            // update local player piece
-            setComponent(
-                LocalPlayerPiece,
-                getEntityIdFromKeys([
-                    player.player,
-                    BigInt(player.heroesCount),
-                ]),
-                {
-                    idx: player.heroesCount,
-                    owner: player.player,
-                    gid: piece.gid,
-                }
-            );
+            // update local player's hero count and inv count
+            updateComponent(LocalPlayer, playerEntity, {
+                heroesCount: player.heroesCount,
+                inventoryCount: player.inventoryCount,
+            });
 
             // update local piece
             updateComponent(LocalPiece, pieceEntity, {
@@ -128,12 +120,6 @@ export const InvHero = ({
                 slot: 0,
                 x: posX,
                 y: posY,
-            });
-
-            // update local player's hero count and inv count
-            updateComponent(LocalPlayer, playerEntity, {
-                heroesCount: player.heroesCount,
-                inventoryCount: player.inventoryCount,
             });
         },
     });

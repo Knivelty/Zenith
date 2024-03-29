@@ -78,7 +78,11 @@ export function createSystemCalls(
 
             console.log("changes:", changes);
 
-            return await client.actions.commitPreparation({ account, changes });
+            return await client.actions.commitPreparation({
+                account,
+                changes,
+                result: { win: true, healthDecrease: 0 },
+            });
         } catch (e) {
             console.error(e);
             throw e;

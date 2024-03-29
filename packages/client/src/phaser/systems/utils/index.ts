@@ -75,7 +75,7 @@ export const utils = (layer: PhaserLayer) => {
         if (!isEnemy) {
             piecePosition = {
                 x: piecePosition.x,
-                y: 8 - piecePosition.y,
+                y: 7 - piecePosition.y,
             };
         }
 
@@ -86,10 +86,11 @@ export const utils = (layer: PhaserLayer) => {
         );
 
         console.log(
-            `spawn ${playerAddr} ${index} ${piece.gid} at ${piecePosition} `
+            `spawn ${playerAddr} ${index} ${piece.gid} at ${piecePosition.x}, ${piecePosition.y} `
         );
 
         const hero = objectPool.get(entity, "Sprite");
+        hero.spawn();
         hero.setComponent({
             id: entity,
             once: (sprite: Phaser.GameObjects.Sprite) => {
@@ -129,11 +130,11 @@ export const utils = (layer: PhaserLayer) => {
                     sprite.on("dragend", (p: Phaser.Input.Pointer) => {
                         console.log("drag end: ");
                         const posX = Math.floor(p.worldX / TILE_HEIGHT);
-                        const posY = 8 - Math.floor(p.worldY / TILE_HEIGHT);
+                        const posY = 7 - Math.floor(p.worldY / TILE_HEIGHT);
 
                         sprite.clearTint(); // clear tint color
 
-                        if (posY > 4) {
+                        if (posY > 3 || posY < 0 || posX < 0 || posX > 7) {
                             console.warn("invalid dst");
                             return;
                         }

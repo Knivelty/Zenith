@@ -4,8 +4,9 @@ import { Inventory } from "./Inventory";
 import Shop from "./Shop";
 import { useDojo } from "./hooks/useDojo";
 import { Home } from "./Home";
-import { ShopButton } from "./ShopButton";
+import { ShopButton } from "./component/ShopButton";
 import { TopBar } from "./TopBar";
+import { CommitButton } from "./component/CommitButton";
 
 export function ChessMain() {
     const {
@@ -24,6 +25,7 @@ export function ChessMain() {
             <TopBar />
             <Debugger />
             <Shop />
+            <CommitButton />
             <Inventory />
             <ShopButton />
         </div>
