@@ -16,7 +16,7 @@ echo home : $HOME_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 # enable system -> component authorizations
-COMPONENTS=("Creature" "Player" "Piece" "InningBattle" "GlobalState" "MatchState" "Altar" "PlayerPiece" "PlayerInvPiece" "CreatureProfile" "StageProfile" "StageProfilePiece")
+COMPONENTS=("Creature" "Player" "Piece" "InningBattle" "GlobalState" "MatchState" "Altar" "PlayerPiece" "PlayerInvPiece" "CreatureProfile" "StageProfile" "StageProfilePiece" "LevelConfig")
 
 for component in ${COMPONENTS[@]}; do
     sozo auth writer $component $HOME_ADDRESS --world $WORLD_ADDRESS --rpc-url $RPC_URL
