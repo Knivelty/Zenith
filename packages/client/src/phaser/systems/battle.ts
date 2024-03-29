@@ -65,7 +65,7 @@ export const battle = (layer: PhaserLayer) => {
 
             // ignore irrelevant inning battle
             if (
-                v.homePlayer !== BigInt(address) ||
+                v.homePlayer !== BigInt(address) &&
                 v.awayPlayer !== BigInt(address)
             ) {
                 return;

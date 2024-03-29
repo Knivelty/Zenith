@@ -1,8 +1,6 @@
-import { Tileset } from "../../../assets/world";
 import { PhaserLayer } from "../..";
 import { getEntityIdFromKeys, snoise } from "@dojoengine/utils";
-import { MAP_AMPLITUDE } from "../../config/constants";
-import { defineSystemST } from "../../../utils";
+import { defineSystemST, zeroEntity } from "../../../utils";
 import { world } from "../../../dojo/generated/world";
 import {
     Has,
@@ -34,6 +32,8 @@ export function syncSystem(layer: PhaserLayer) {
                 PlayerInvPiece,
                 LocalPlayerInvPiece,
                 LocalPiecesChangeTrack,
+                GameStatus,
+                InningBattle,
             },
             playerEntity,
             account: { address },
@@ -89,7 +89,24 @@ export function syncSystem(layer: PhaserLayer) {
                 return;
             }
 
-            setComponent(LocalPiece, entity, v);
+            const status = getComponentValue(GameStatus, zeroEntity);
+            const inningBattle = getComponentValue(
+                InningBattle,
+                getEntityIdFromKeys([
+                    BigInt(status?.currentMatch || 0),
+                    BigInt(status?.currentRound || 0),
+                ])
+            );
+
+            // sync relevant piece
+            if (
+                v.owner == BigInt(address) ||
+                v.owner == inningBattle?.awayPlayer ||
+                // zero means piece removed
+                v.owner === 0n
+            ) {
+                setComponent(LocalPiece, entity, v);
+            }
 
             // add the gid to local pieces track
             const piecesTrack = getComponentValue(

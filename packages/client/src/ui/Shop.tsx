@@ -62,7 +62,7 @@ const Shop = () => {
     return (
         <div className={`flex justify-center mt-16 ${showShow ? "" : "invisible"}`}>
             {/* {contextHolder} */}
-            <div className="flex justify-center items-start w-[800px] h-40 bg-contain bg-no-repeat bg-[url('//assets/ui/shop_bg.png')]">
+            <div className="flex justify-center items-start w-[800px] h-40 bg-contain bg-no-repeat bg-[url('/assets/ui/shop_bg.png')]">
                 <div className="flex">
                     <div className="flex items-center justify-around ml-4 mt-4">
                         <HeroCard
