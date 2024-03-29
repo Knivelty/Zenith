@@ -42,19 +42,7 @@ export function Debugger() {
 
     return (
         <div className="flex absolute gap-4 flex-wrap flex-col justify-between p-2 space-x-3 z-10">
-            {/* <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
-    
-          <div className="fixed left-4 bottom-32">
-            <Button type="primary" onClick={() => setOpen(true)}>
-              How To Play
-            </Button>
-          </div> */}
-            {/* <GameStatusBar />
-            <ShopCom />
-            <div className="handle-area">
-                <Chessboard setAcHeroFn={setAcHeroFn} />
-                <Inventory setAcHeroFn={setAcHeroFn} />
-            </div> */}
+            <Button>Debug Buttons</Button>
             <Button
                 onClick={async () => {
                     const { receipt } = await commitPreparation(account);
