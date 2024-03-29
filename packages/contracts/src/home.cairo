@@ -16,6 +16,7 @@ trait IHome<TContractState> {
     fn spawn(self: @TContractState);
     fn refreshAltar(self: @TContractState);
     fn buyHero(self: @TContractState, altarSlot: u8, invSlot: u8);
+    fn buyExp(self: @TContractState);
     fn sellHero(self: @TContractState, gid: u32);
     fn commitPreparation(self: @TContractState, changes: Array<PieceChange>, result: RoundResult);
     fn nextRound(self: @TContractState);
@@ -40,8 +41,9 @@ mod home {
     };
     use autochessia::models::{
         CreatureProfile, Position, Piece, Player, InningBattle, GlobalState, MatchState, Altar,
-        PlayerPiece, PlayerInvPiece, StageProfile, StageProfilePiece
+        PlayerPiece, PlayerInvPiece, StageProfile, StageProfilePiece, LevelConfig
     };
+
     use autochessia::utils::{next_position, generate_pseudo_random_address, get_felt_mod};
     use autochessia::customType::{PieceChange, RoundResult};
 
@@ -62,7 +64,7 @@ mod home {
     fn _refreshAltar(self: @ContractState, playerAddr: ContractAddress) {
         let world = self.world_dispatcher.read();
 
-        let player = get!(world, playerAddr, Player);
+        let mut player = get!(world, playerAddr, Player);
 
         // generate pseudo random number on block hash
         // let mut hash = get_block_hash_syscall(get_block_info().unbox().block_number - 10);
@@ -92,8 +94,16 @@ mod home {
 
         let slot5 = get_felt_mod(r, creatureCount) + 1;
 
+        // use the free refresh chance or pay
+        if (!player.refreshed) {
+            player.refreshed = true;
+        } else {
+            // player coin minus 1
+            player.coin -= 2;
+        }
+
         // set altar
-        set!(world, Altar { player: playerAddr, slot1, slot2, slot3, slot4, slot5 });
+        set!(world, (Altar { player: playerAddr, slot1, slot2, slot3, slot4, slot5 }, player));
     }
 
 
@@ -239,6 +249,9 @@ mod home {
         let totalIncome = interest + streakReward + roundBaseReward;
 
         player.coin += totalIncome;
+
+        // give the free refresh change
+        player.refreshed = false;
 
         set!(world, (player));
     }
@@ -525,6 +538,17 @@ mod home {
                     }
                 )
             );
+
+            // set level up config
+            set!(world, (LevelConfig { current: 1, expForNext: 2 }));
+            set!(world, (LevelConfig { current: 2, expForNext: 2 }));
+            set!(world, (LevelConfig { current: 3, expForNext: 6 }));
+            set!(world, (LevelConfig { current: 4, expForNext: 10 }));
+            set!(world, (LevelConfig { current: 5, expForNext: 24 }));
+            set!(world, (LevelConfig { current: 6, expForNext: 42 }));
+            set!(world, (LevelConfig { current: 7, expForNext: 64 }));
+            set!(world, (LevelConfig { current: 8, expForNext: 90 }));
+            set!(world, (LevelConfig { current: 9, expForNext: 144 }));
         }
 
         fn setCreatureProfile(self: @ContractState, p: CreatureProfile) {}
@@ -552,10 +576,12 @@ mod home {
                     inventoryCount: 0,
                     level: 1,
                     coin: 1,
+                    exp: 0,
                     winStreak: 0,
                     loseStreak: 0,
                     locked: 0,
-                    inMatch: currentMatch
+                    inMatch: currentMatch,
+                    refreshed: false,
                 }
             );
 
@@ -578,10 +604,12 @@ mod home {
                     inventoryCount: 0,
                     level: 1,
                     coin: 0,
+                    exp: 0,
                     winStreak: 0,
                     loseStreak: 0,
                     locked: 0,
-                    inMatch: currentMatch
+                    inMatch: currentMatch,
+                    refreshed: true
                 }
             );
 
@@ -668,6 +696,14 @@ mod home {
             inningBattle.healthDecrease = result.healthDecrease;
             inningBattle.end = true;
 
+            // update exp and try level up
+            player.exp += 2;
+            let levelConfig = get!(world, player.level, LevelConfig);
+            if (player.exp >= levelConfig.expForNext) {
+                player.level += 1;
+                player.exp -= levelConfig.expForNext;
+            }
+
             set!(world, (inningBattle, player));
         }
 
@@ -683,6 +719,22 @@ mod home {
             set!(world, (player));
 
             _refreshAltar(self, playerAddr);
+        }
+
+        fn buyExp(self: @ContractState) {
+            let world = self.world_dispatcher.read();
+            let playerAddr = get_caller_address();
+            let mut player = get!(world, playerAddr, Player);
+
+            player.exp += 4;
+            player.coin -= 4;
+            let levelConfig = get!(world, player.level, LevelConfig);
+            if (player.exp >= levelConfig.expForNext) {
+                player.level += 1;
+                player.exp -= levelConfig.expForNext;
+            }
+
+            set!(world, (player));
         }
 
         fn buyHero(self: @ContractState, altarSlot: u8, invSlot: u8) {

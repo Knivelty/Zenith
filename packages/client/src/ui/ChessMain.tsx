@@ -7,6 +7,8 @@ import { Home } from "./Home";
 import { ShopButton } from "./component/ShopButton";
 import { TopBar } from "./TopBar";
 import { CommitButton } from "./component/CommitButton";
+import { ExpButton } from "./component/ExpButton";
+import { PieceLimit } from "./component/PieceLimit";
 
 export function ChessMain() {
     const {
@@ -26,7 +28,9 @@ export function ChessMain() {
             <Debugger />
             <Shop />
             <CommitButton />
+            <PieceLimit />
             <Inventory />
+            <ExpButton />
             <ShopButton />
         </div>
     );

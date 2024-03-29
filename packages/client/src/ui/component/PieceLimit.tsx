@@ -1,0 +1,29 @@
+import { Button } from "antd";
+import { useDojo } from "../hooks/useDojo";
+import { useComponentValue } from "@dojoengine/react";
+import { zeroEntity } from "../../utils";
+
+export function PieceLimit() {
+    let visible = "";
+    const {
+        clientComponents: { LocalPlayer, GameStatus },
+        account: { playerEntity },
+    } = useDojo();
+
+    const status = useComponentValue(GameStatus, zeroEntity);
+    const player = useComponentValue(LocalPlayer, playerEntity);
+
+    if (status?.status !== 1) {
+        visible = "invisible";
+    }
+
+    return (
+        <div className={`flex justify-center mt-5 ${visible}`}>
+            <div className="bg-[#9A9A9A]/50 w-80 h-10 text-white/50 text-lg rounded-lg flex flex-col justify-center">
+                <div className="self-center">
+                    Piece: {player?.heroesCount} / {player?.level}
+                </div>
+            </div>
+        </div>
+    );
+}

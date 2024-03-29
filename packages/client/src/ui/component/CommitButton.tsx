@@ -69,9 +69,9 @@ export function OperationButton({
     visible?: string;
 }) {
     return (
-        <div className={`flex justify-center mt-20 ${visible}`}>
+        <div className={`flex justify-center mt-5 ${visible}`}>
             <Button
-                className="bg-white/75 text-black hover:bg-slate-200/50"
+                className="bg-white/75 text-black/50 hover:bg-slate-200/50"
                 onClick={onClick}
             >
                 {text}

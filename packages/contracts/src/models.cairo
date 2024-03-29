@@ -9,12 +9,23 @@ struct Player {
     winStreak: u8,
     loseStreak: u8,
     coin: u8,
+    exp: u8,
     level: u8,
     locked: u8,
     // dojo does not support array for now, so it's used to traversal all pieces belong to player
     heroesCount: u8,
     // hero count in inventory 
     inventoryCount: u8,
+        // a free refresh opportunity for each round
+    refreshed: bool,
+}
+
+
+#[derive(Model, Copy, Drop, Serde)]
+struct LevelConfig {
+    #[key]
+    current: u8,
+    expForNext: u8
 }
 
 // hero altar of a player

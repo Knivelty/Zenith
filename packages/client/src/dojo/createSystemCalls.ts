@@ -147,6 +147,17 @@ export function createSystemCalls(
         }
     };
 
+    const buyExp = async (account: Account) => {
+        try {
+            return await client.actions.buyExp({
+                account,
+            });
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    };
+
     const sellHero = async (account: Account, gid: number) => {
         try {
             return await client.actions.sellHero({ account, gid });
@@ -173,6 +184,7 @@ export function createSystemCalls(
         refreshAltar,
         getCoin,
         buyHero,
+        buyExp,
         sellHero,
         commitPreparation,
     };

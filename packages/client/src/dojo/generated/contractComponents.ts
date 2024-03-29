@@ -58,6 +58,19 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    LevelConfig: (() => {
+      return defineComponent(
+        world,
+        { current: RecsType.Number, expForNext: RecsType.Number },
+        {
+          metadata: {
+            name: "LevelConfig",
+            types: ["u8","u8"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
     MatchState: (() => {
       return defineComponent(
         world,
@@ -87,11 +100,11 @@ export function defineContractComponents(world: World) {
     Player: (() => {
       return defineComponent(
         world,
-        { player: RecsType.BigInt, inMatch: RecsType.Number, health: RecsType.Number, winStreak: RecsType.Number, loseStreak: RecsType.Number, coin: RecsType.Number, level: RecsType.Number, locked: RecsType.Number, heroesCount: RecsType.Number, inventoryCount: RecsType.Number },
+        { player: RecsType.BigInt, inMatch: RecsType.Number, health: RecsType.Number, winStreak: RecsType.Number, loseStreak: RecsType.Number, coin: RecsType.Number, exp: RecsType.Number, level: RecsType.Number, locked: RecsType.Number, heroesCount: RecsType.Number, inventoryCount: RecsType.Number, refreshed: RecsType.Boolean },
         {
           metadata: {
             name: "Player",
-            types: ["contractaddress","u32","u8","u8","u8","u8","u8","u8","u8","u8"],
+            types: ["contractaddress","u32","u8","u8","u8","u8","u8","u8","u8","u8","u8","bool"],
             customTypes: [],
           },
         }

@@ -123,6 +123,24 @@ export async function setupWorld(provider: DojoProvider) {
             }
         };
 
+        const buyExp = async ({ account }: { account: Account }) => {
+            try {
+                const { transaction_hash: txHash } = await provider.execute(
+                    account,
+                    contract_name,
+                    "buyExp",
+                    []
+                );
+
+                const receipt = provider.provider.waitForTransaction(txHash);
+
+                return { txHash, receipt };
+            } catch (error) {
+                console.error("Error executing buyExp:", error);
+                throw error;
+            }
+        };
+
         const buyHero = async ({
             account,
             altarSlot,
@@ -180,6 +198,7 @@ export async function setupWorld(provider: DojoProvider) {
             refreshAltar,
             getCoin,
             buyHero,
+            buyExp,
             sellHero,
             commitPreparation,
         };

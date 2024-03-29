@@ -43,8 +43,6 @@ const Shop = () => {
     const playerValue = useComponentValue(Player, playerEntity);
     const heroAltar = useComponentValue(Altar, playerEntity);
 
-    console.log("heroAltar: ", heroAltar);
-
     // console.log("heroAltar: ", heroAltar);
     // console.log("playerEntity: ", playerEntity);
 
@@ -60,7 +58,9 @@ const Shop = () => {
     );
 
     return (
-        <div className={`flex justify-center mt-16 ${showShow ? "" : "invisible"}`}>
+        <div
+            className={`flex justify-center mt-16 ${showShow ? "" : "invisible"}`}
+        >
             {/* {contextHolder} */}
             <div className="flex justify-center items-start w-[800px] h-40 bg-contain bg-no-repeat bg-[url('/assets/ui/shop_bg.png')]">
                 <div className="flex">
@@ -124,7 +124,9 @@ const Shop = () => {
                                     <div className="flex flex-col">
                                         <div>Refresh</div>
                                         <div className="flex items-center justify-center">
-                                            <div>2</div>
+                                            <div className="text-xs">
+                                                {playerValue?.refreshed ? 2 : 0}
+                                            </div>
                                             <div className="ml-2 -mt-1 w-4 h-4 bg-cover bg-[url('/assets/ui/gold.png')]" />
                                         </div>
                                     </div>
