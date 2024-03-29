@@ -18,7 +18,7 @@ function App() {
 
     return (
         <div>
-            <div className="w-full h-screen  bg-[url('assets/bg.png')] bg-no-repeat bg-cover bg-center	 text-white flex justify-center fixed">
+            <div className="w-full h-screen  bg-[url('/assets/bg.png')] bg-no-repeat bg-cover bg-center	 text-white flex justify-center fixed">
                 <div className="self-center">
                     {!networkLayer && "loading..."}
                 </div>

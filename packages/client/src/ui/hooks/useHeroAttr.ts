@@ -67,7 +67,7 @@ export function useHeroesAttr(creatures: CreatureKeys[]): HeroBaseAttr[] {
             creatures.map((c) => {
                 const creatureProfile = getComponentValueStrict(
                     CreatureProfile,
-                    getEntityIdFromKeys([BigInt(c.id), BigInt(c.level)])
+                    getEntityIdFromKeys([BigInt(c.id || 0), BigInt(c.level)])
                 );
 
                 return {

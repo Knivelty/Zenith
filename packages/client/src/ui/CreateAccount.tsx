@@ -1,6 +1,6 @@
 import { useUIStore } from "../store";
-import { ClickWrapper } from "./ClickWrapper";
 import { Spawn } from "./Spawn";
+import { ClickWrapper } from "./clickWrapper";
 
 export const CreateAccount = () => {
     const loggedIn = useUIStore((state: any) => state.loggedIn);

@@ -7,7 +7,6 @@ export const controls = (layer: PhaserLayer) => {
             Main: { input },
         },
         networkLayer: {
-            systemCalls: { move },
             account: signer,
         },
     } = layer;
