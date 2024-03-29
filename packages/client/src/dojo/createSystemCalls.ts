@@ -2,7 +2,11 @@ import { ClientComponents } from "./createClientComponents";
 import { IWorld } from "./generated/generated";
 import { Account } from "starknet";
 import { ContractComponents } from "./generated/contractComponents";
-import { getComponentValueStrict, updateComponent } from "@dojoengine/recs";
+import {
+    getComponentValue,
+    getComponentValueStrict,
+    updateComponent,
+} from "@dojoengine/recs";
 import { zeroEntity } from "../utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { isBoolean, isEqual, isNull, isUndefined } from "lodash";
@@ -52,14 +56,14 @@ export function createSystemCalls(
 
             const playerEntity = getEntityIdFromKeys([BigInt(account.address)]);
 
-            const piecesTrack = getComponentValueStrict(
+            const piecesTrack = getComponentValue(
                 LocalPiecesChangeTrack,
                 playerEntity
             );
 
             console.log("piecesTrack: ", piecesTrack);
 
-            const changes: PieceChange[] = piecesTrack.gids
+            const changes: PieceChange[] = piecesTrack?.gids
                 .map((gid) => {
                     const entity = getEntityIdFromKeys([BigInt(gid)]);
                     const local = getComponentValueStrict(LocalPiece, entity);

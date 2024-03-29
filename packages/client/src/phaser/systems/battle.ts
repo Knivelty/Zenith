@@ -46,7 +46,7 @@ export const battle = (layer: PhaserLayer) => {
                 Attack,
                 CreatureProfile,
             },
-            account,
+            account: { address },
             playerEntity,
             graphqlClient,
         },
@@ -60,6 +60,14 @@ export const battle = (layer: PhaserLayer) => {
         ({ entity, type, value: [v, preV] }) => {
             console.log("update: ", entity, type, [v, preV]);
             if (!v) {
+                return;
+            }
+
+            // ignore irrelevant inning battle
+            if (
+                v.homePlayer !== BigInt(address) ||
+                v.awayPlayer !== BigInt(address)
+            ) {
                 return;
             }
 

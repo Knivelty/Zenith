@@ -16,8 +16,6 @@ export function ChessMain() {
 
     const inGame = useComponentValue(Player, playerEntity)?.inMatch;
 
-    console.log("inGame: ",inGame)
-
     if (!inGame) {
         return <Home />;
     }

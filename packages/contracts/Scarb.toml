@@ -26,7 +26,7 @@ private_key = "0x1800000000300000180000000000030000000000003006001800006600"
 
 # cartridge slot
 # rpc_url = "https://api.cartridge.gg/x/autochessia/katana"
-# account_address = "0x203cc34ba8519b3e090ee9036ed5a2a476b42655f60891781a94620ec10c00c"
+# account_address = "0x5f6bb0775b07f7b74e0648334e395a633d22ea76a90457a0fbc45b6c8a08790"
 # private_key = ""
 
 

@@ -3,6 +3,7 @@ import { useNetworkLayer } from "./ui/hooks/useNetworkLayer";
 import { PhaserLayer } from "./phaser/phaserLayer";
 import { store } from "./store";
 import { UI } from "./ui";
+import { SelectNetwork } from "./ui/SelectNetwork";
 
 function App() {
     const networkLayer = useNetworkLayer();
@@ -22,6 +23,7 @@ function App() {
                     {!networkLayer && "loading..."}
                 </div>
             </div>
+            <SelectNetwork networkLayer={networkLayer} />
             <PhaserLayer networkLayer={networkLayer} />
             <UI />
         </div>

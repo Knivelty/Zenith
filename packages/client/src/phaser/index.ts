@@ -3,6 +3,7 @@ import { NetworkLayer } from "../dojo/createNetworkLayer";
 import { registerSystems } from "./systems/registerSystems";
 import { namespaceWorld } from "@dojoengine/recs";
 import { TILE_HEIGHT, TILE_WIDTH } from "./config/constants";
+import { sleep } from "@latticexyz/utils";
 
 export type PhaserLayer = Awaited<ReturnType<typeof createPhaserLayer>>;
 type PhaserEngineConfig = Parameters<typeof createPhaserEngine>[0];
@@ -35,6 +36,8 @@ export const createPhaserLayer = async (
         scenes,
         components,
     };
+
+    await sleep(1000);
 
     registerSystems(layer);
 
