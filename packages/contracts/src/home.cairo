@@ -696,14 +696,6 @@ mod home {
             inningBattle.healthDecrease = result.healthDecrease;
             inningBattle.end = true;
 
-            // update exp and try level up
-            player.exp += 2;
-            let levelConfig = get!(world, player.level, LevelConfig);
-            if (player.exp >= levelConfig.expForNext) {
-                player.level += 1;
-                player.exp -= levelConfig.expForNext;
-            }
-
             set!(world, (inningBattle, player));
         }
 
@@ -849,7 +841,7 @@ mod home {
         fn nextRound(self: @ContractState) {
             let world = self.world_dispatcher.read();
             let playerAddr = get_caller_address();
-            let player = get!(world, playerAddr, Player);
+            let mut player = get!(world, playerAddr, Player);
             let currentMatchState = get!(world, player.inMatch, MatchState);
 
             let lastInningBattle = get!(
@@ -880,6 +872,16 @@ mod home {
                     }
                 ),
             );
+
+            // update exp and try level up
+            player.exp += 2;
+            let levelConfig = get!(world, player.level, LevelConfig);
+            if (player.exp >= levelConfig.expForNext) {
+                player.level += 1;
+                player.exp -= levelConfig.expForNext;
+            }
+            set!(world, (player));
+
             // add more coin
             _giveRoundCoinReward(self);
         }

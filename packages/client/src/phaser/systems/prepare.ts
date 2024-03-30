@@ -7,12 +7,12 @@ import {
     updateComponent,
 } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { TILE_HEIGHT, TILE_WIDTH } from "../config/constants";
+
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { defineSystemST, zeroEntity } from "../../utils";
 import { GameStatusEnum } from "../../dojo/types";
 import { utils } from "./utils";
+import { getComponentValueUtilNotNull } from "../../ui/lib/utils";
 
 export const prepare = (layer: PhaserLayer) => {
     const {
@@ -69,7 +69,7 @@ export const prepare = (layer: PhaserLayer) => {
     defineSystemST<typeof GameStatus.schema>(
         world,
         [Has(GameStatus)],
-        ({ entity, type, value: [v, preV] }) => {
+        async ({ entity, type, value: [v, preV] }) => {
             // if switch to prepare, recover all piece to initial place
             if (
                 preV?.status !== GameStatusEnum.Prepare &&
@@ -88,7 +88,7 @@ export const prepare = (layer: PhaserLayer) => {
                 }
 
                 // spawn enemy's piece
-                const inningBattle = getComponentValueStrict(
+                const inningBattle = await getComponentValueUtilNotNull(
                     InningBattle,
                     getEntityIdFromKeys([
                         BigInt(v.currentMatch),

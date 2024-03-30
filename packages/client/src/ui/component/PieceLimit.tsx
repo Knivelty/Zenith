@@ -1,7 +1,7 @@
-import { Button } from "antd";
 import { useDojo } from "../hooks/useDojo";
 import { useComponentValue } from "@dojoengine/react";
 import { zeroEntity } from "../../utils";
+import { GameStatusEnum } from "../../dojo/types";
 
 export function PieceLimit() {
     let visible = "";
@@ -13,7 +13,7 @@ export function PieceLimit() {
     const status = useComponentValue(GameStatus, zeroEntity);
     const player = useComponentValue(LocalPlayer, playerEntity);
 
-    if (status?.status !== 1) {
+    if (status?.status !== GameStatusEnum.Prepare) {
         visible = "invisible";
     }
 

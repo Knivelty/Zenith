@@ -1,7 +1,5 @@
-import { Tileset } from "../../../assets/world";
 import { PhaserLayer } from "../..";
-import { snoise } from "@dojoengine/utils";
-import { MAP_AMPLITUDE } from "../../config/constants";
+
 import { defineSystemST } from "../../../utils";
 import { world } from "../../../dojo/generated/world";
 import { Has, UpdateType } from "@dojoengine/recs";
@@ -14,6 +12,7 @@ export function placeSystem(layer: PhaserLayer) {
         },
         networkLayer: {
             clientComponents: { LocalPiece, LocalPlayerPiece },
+            account: { address },
         },
     } = layer;
 
@@ -28,11 +27,12 @@ export function placeSystem(layer: PhaserLayer) {
                 v &&
                 (type === UpdateType.Enter || type === UpdateType.Update)
             ) {
-                console.log("v: ", v, "preV: ", preV, "type: ", type);
-                if (v.owner !== 0n && v.idx !== 0) {
-                    console.log("place")
+                // only dynamic sync player's piece
+                if (v.owner == BigInt(address) && v.idx !== 0) {
+                    console.log("place: ", v.owner, v.idx);
                     spawnPiece(v.owner, BigInt(v.idx));
-                } else {
+                }
+                if (v.owner === 0n) {
                     removePieceOnBoard(v.gid);
                 }
             }

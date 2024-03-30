@@ -1,31 +1,18 @@
 import {
-    Entity,
     Has,
-    UpdateType,
-    defineSystem,
     getComponentValue,
     getComponentValueStrict,
-    setComponent,
     updateComponent,
-    ComponentValue,
 } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
-import { tileCoordToPixelCoord, tween } from "@latticexyz/phaserx";
-import {
-    HealthBarOffSetY,
-    MOVE_SPEED,
-    Sprites,
-    TILE_HEIGHT,
-    TILE_WIDTH,
-} from "../config/constants";
-import { Sprite } from "@latticexyz/phaserx/src/types";
+
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { defineSystemST, zeroEntity } from "../../utils";
 // import { BattleLog, BattleLogsType } from "../../dojo/generated/setup";
-import { Coord, deferred, sleep } from "@latticexyz/utils";
 import { GameStatusEnum } from "../../dojo/types";
 import { battleAnimation } from "./utils/playBattle";
 import { BattleResult } from "../../utils/jps";
+import { processBattle } from "./utils/processBattleLogs";
 
 export const battle = (layer: PhaserLayer) => {
     const {
@@ -46,6 +33,7 @@ export const battle = (layer: PhaserLayer) => {
                 Attack,
                 CreatureProfile,
             },
+            clientComponents,
             account: { address },
             playerEntity,
             graphqlClient,
@@ -58,7 +46,6 @@ export const battle = (layer: PhaserLayer) => {
         world,
         [Has(InningBattle)],
         ({ entity, type, value: [v, preV] }) => {
-            console.log("update: ", entity, type, [v, preV]);
             if (!v) {
                 return;
             }
@@ -71,25 +58,40 @@ export const battle = (layer: PhaserLayer) => {
                 return;
             }
 
-            // sync current round
+            const status = getComponentValueStrict(GameStatus, zeroEntity);
+
+            // ignore stale update
+            if (v.round < status?.currentRound) {
+                console.warn("stale inning battle update");
+                return;
+            }
+
+            console.log("InningBattle update: ", entity, type, [v, preV]);
+
             updateComponent(GameStatus, zeroEntity, {
-                // shouldPlay: false,
-                // played: false,
-                // status: GameStatusEnum.Prepare,
                 currentRound: v.round,
             });
 
-            if (v?.end == false) {
-                console.log("prepare: ");
+            if (Boolean(v.end) === false) {
                 updateComponent(GameStatus, zeroEntity, {
                     status: GameStatusEnum.Prepare,
                 });
-            } else if (v.end == true) {
+            } else if (Boolean(v.end) === true) {
                 updateComponent(GameStatus, zeroEntity, {
                     status: GameStatusEnum.InBattle,
                 });
 
-                // calculate battle log in the frontend
+                setTimeout(() => {
+                    // delay to confirm is in battle
+                    // calculate battle log in the frontend
+                    const status = getComponentValueStrict(
+                        GameStatus,
+                        zeroEntity
+                    );
+                    if (status.status === GameStatusEnum.InBattle) {
+                        processBattle(clientComponents).processBattleLogs();
+                    }
+                }, 1000);
             }
         }
     );
@@ -98,8 +100,8 @@ export const battle = (layer: PhaserLayer) => {
         world,
         [Has(GameStatus)],
         ({ entity, type, value: [v, preV] }) => {
-            // if change from false to true, play the animation
-            if (v?.shouldPlay === true && preV?.shouldPlay == false) {
+            // if change from other to true, play the animation
+            if (v?.shouldPlay === true && preV?.shouldPlay !== true) {
                 const inningBattle = getComponentValueStrict(
                     InningBattle,
                     getEntityIdFromKeys([

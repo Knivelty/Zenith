@@ -15,7 +15,7 @@ export const createNetworkLayer = async () => {
     const network = urlParams.get("network");
     const config = supportedNetworks[network || "slot"];
 
-    const dojoConfig = { ...dojoRawConfig, ...config, name: network };
+    const dojoConfig = { ...dojoRawConfig, ...config, name: network || "slot" };
 
     // setup world
     const setupWorld = await setup(dojoConfig);
