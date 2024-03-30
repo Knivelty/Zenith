@@ -88,6 +88,17 @@ export function Debugger() {
             >
                 refresh
             </Button>
+            <Button
+                onClick={async () => {
+                    const keyJson = localStorage.getItem("burners");
+                    if (keyJson) {
+                        navigator.clipboard.writeText(keyJson);
+                        alert("private key copied");
+                    }
+                }}
+            >
+                copy private key
+            </Button>
         </div>
     );
 }
