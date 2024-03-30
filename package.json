@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "mprocs",
-    "deploy": "cd packages/client && pnpm build && cd ../.. && vercel --prod"
+    "deploy": "cd packages/client && pnpm build && cd dist && vercel --prod"
   },
   "keywords": [],
   "author": "",
