@@ -104,7 +104,7 @@ export const utils = (layer: PhaserLayer) => {
 
                 // set tint for enemy
                 if (isEnemy) {
-                    sprite.setTint(0xff4040);
+                    sprite.setTintFill(0xff4e4e);
                 }
 
                 // set draggable for self piece
