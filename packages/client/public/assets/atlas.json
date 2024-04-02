@@ -598,7 +598,7 @@
 					}
 				},
 				{
-					"filename": "bar/health.png",
+					"filename": "healthbar/green.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -617,6 +617,27 @@
 						"w": 25,
 						"h": 2
 					}
+				},
+				{
+					"filename": "healthbar/red.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 25,
+						"h": 2
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 25,
+						"h": 2
+					},
+					"frame": {
+						"x": 3357,
+						"y": 1,
+						"w": 25,
+						"h": 2
+					}
 				}
 			]
 		}
@@ -624,6 +645,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:05c5d0d3ece7ec404b6d8b7b9df0d41b:6661f99d01f68277275d0431b3368bb5:cbce6b53f0f49e0bf15173c25c41f876$"
+		"smartupdate": "$TexturePacker:SmartUpdate:6c9aded3ce0d8eb06d4ec2c1a181cf5a:b794b8bad3dd1933e79a9e63ca3e2ec7:cbce6b53f0f49e0bf15173c25c41f876$"
 	}
 }

@@ -1,14 +1,11 @@
 import { useRef } from "react";
 import { PieceAttr } from "../hooks/useHeroAttr";
-import { useDrop, useDrag } from "ahooks";
+import { useDrag } from "ahooks";
 import { useDojo } from "../hooks/useDojo";
-import { usePhaserLayer } from "../hooks/usePhaserLayer";
 import { useUIStore } from "../../store";
 import { TILE_HEIGHT } from "../../phaser/config/constants";
 import {
-    getComponentValue,
     getComponentValueStrict,
-    removeComponent,
     setComponent,
     updateComponent,
 } from "@dojoengine/recs";
@@ -42,10 +39,16 @@ export const InvHero = ({
     } = useDojo();
     const dragRef = useRef(null);
 
+    const dragImageRef = useRef(null);
+
     const phaserRect = useUIStore((s) => s.phaserRect);
 
     useDrag(pieceAttr, dragRef, {
         onDragStart: (e) => {
+            // if (dragImageRef.current) {
+            //     // 设置自定义的拖动图像
+            //     e.dataTransfer.setDragImage(dragImageRef.current, 0, 0);
+            // }
             // e.dataTransfer.setData(
             //     "text/plain",
             //     pieceAttr?.gid.toString() || ""
@@ -54,6 +57,8 @@ export const InvHero = ({
         },
 
         onDragEnd: (e) => {
+            e.preventDefault();
+            console.log("E: ", e);
             if (!pieceAttr) {
                 return;
             }
@@ -134,10 +139,11 @@ export const InvHero = ({
                     x
                 </button>
                 <div
-                    ref={dragRef}
+                    draggable={true}
                     className="flex justify-center w-[95px] h-[130px] rounded-lg opacity-100 bg-contain bg-no-repeat bg-center border-gray-300	border-2 mx-2"
                 >
                     <img
+                        ref={dragRef}
                         className="w-auto h-auto object-contain"
                         src={pieceAttr?.thumb}
                         alt={pieceAttr?.thumb}

@@ -40,7 +40,8 @@ export enum Animations {
 
 export enum Sprites {
     Invalid,
-    HealthBar,
+    PlayerHealthBar,
+    EnemyHealthBar
 }
 
 export enum Monster {

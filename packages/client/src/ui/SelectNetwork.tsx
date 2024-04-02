@@ -13,8 +13,6 @@ export function SelectNetwork({
 
     const { config } = networkLayer;
 
-    console.log("config: ", config);
-
     const onChange = (value: string) => {
         const searchParams = new URLSearchParams(window.location.search);
         searchParams.set("network", value);

@@ -5,9 +5,13 @@ const baseSprites = {
         assetKey: Assets.MainAtlas,
         frame: "/",
     },
-    [Sprites.HealthBar]: {
+    [Sprites.PlayerHealthBar]: {
         assetKey: Assets.MainAtlas,
-        frame: "bar/health.png",
+        frame: "healthbar/green.png",
+    },
+    [Sprites.EnemyHealthBar]: {
+        assetKey: Assets.MainAtlas,
+        frame: "healthbar/red.png",
     },
 } as Record<number | string, { assetKey: Assets; frame: string }>;
 

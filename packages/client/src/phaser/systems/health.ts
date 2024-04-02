@@ -2,6 +2,7 @@ import { Has, updateComponent } from "@dojoengine/recs";
 import { defineSystemST } from "../../utils";
 import { PhaserLayer } from "..";
 import { HealthBarOffSetY, Sprites } from "../config/constants";
+import { Assets, Sprite } from "@latticexyz/phaserx/src/types";
 
 export const health = (layer: PhaserLayer) => {
     const {
@@ -77,7 +78,13 @@ export const health = (layer: PhaserLayer) => {
                 id: entity,
                 once: async (rec: Phaser.GameObjects.Sprite) => {
                     rec.setVisible(true);
-                    const healthBar = config.sprites[Sprites.HealthBar];
+
+                    let healthBar: Sprite<Assets>;
+                    if (v.isPlayer) {
+                        healthBar = config.sprites[Sprites.PlayerHealthBar];
+                    } else {
+                        healthBar = config.sprites[Sprites.EnemyHealthBar];
+                    }
 
                     rec.setTexture(healthBar.assetKey, healthBar.frame);
                     rec.setPosition(v.x, v.y - HealthBarOffSetY);

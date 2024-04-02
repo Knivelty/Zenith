@@ -54,6 +54,7 @@ export function createClientComponents({
             x: Type.Number,
             y: Type.Number,
             percentage: Type.Number,
+            isPlayer: Type.Boolean,
         }),
         Health: defineComponent(world, {
             pieceEntity: Type.String,

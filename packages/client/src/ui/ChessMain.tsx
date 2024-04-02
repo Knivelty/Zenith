@@ -23,7 +23,12 @@ export function ChessMain() {
     }
 
     return (
-        <div className="relative w-screen h-screen overflow-hidden">
+        <div
+            onDragOver={(e) => {
+                e.preventDefault();
+            }}
+            className="relative w-screen h-screen overflow-hidden"
+        >
             <TopBar />
             <Debugger />
             <Shop />

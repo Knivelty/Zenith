@@ -152,6 +152,7 @@ export const utils = (layer: PhaserLayer) => {
             x: pixelPosition.x,
             y: pixelPosition.y,
             percentage: 100,
+            isPlayer: !isEnemy,
         });
 
         const creature = getComponentValueStrict(
