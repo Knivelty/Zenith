@@ -24,6 +24,7 @@ export const utils = (layer: PhaserLayer) => {
                 CreatureProfile,
                 LocalPlayerPiece,
                 LocalPiece,
+                LocalPieceOccupation,
             },
             account,
         },
@@ -135,6 +136,24 @@ export const utils = (layer: PhaserLayer) => {
 
                         if (posY > 3 || posY < 0 || posX < 0 || posX > 7) {
                             console.warn("invalid dst");
+                            return;
+                        }
+
+                        // check whether is occupied
+
+                        const occupiedEntity = getEntityIdFromKeys([
+                            BigInt(posX),
+                            BigInt(posY),
+                        ]);
+                        const pieceOccu = getComponentValue(
+                            LocalPieceOccupation,
+                            occupiedEntity
+                        );
+
+                        console.log("pieceOccu: ", pieceOccu);
+
+                        if (pieceOccu?.occupied) {
+                            console.warn("pos occupied");
                             return;
                         }
 

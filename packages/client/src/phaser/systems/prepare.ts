@@ -101,7 +101,7 @@ export const prepare = (layer: PhaserLayer) => {
                     getEntityIdFromKeys([inningBattle.awayPlayer])
                 );
 
-                console.log("enemy: ", enemy.heroesCount);
+                console.log("enemy: ", enemy.heroesCount, enemy.player);
 
                 // spawn enemy's piece
                 for (let i = 1; i <= enemy.heroesCount; i++) {

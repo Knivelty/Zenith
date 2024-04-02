@@ -558,13 +558,23 @@ mod home {
         fn spawn(self: @ContractState) {
             let world = self.world_dispatcher.read();
             let playerAddr = get_caller_address();
+            // get player's enemy address
+            let enemyAddr = generate_pseudo_random_address(playerAddr.into());
 
             // create match
             let mut globalState = get!(world, 1, GlobalState);
             let currentMatch = globalState.totalMatch + 1;
             globalState.totalMatch = currentMatch;
 
-            set!(world, (MatchState { index: currentMatch, round: 1 }, globalState));
+            set!(
+                world,
+                (
+                    MatchState {
+                        index: currentMatch, round: 1, player1: playerAddr, player2: enemyAddr
+                    },
+                    globalState
+                )
+            );
 
             // spawn player
             set!(
@@ -587,9 +597,6 @@ mod home {
 
             // refresh hero altar
             _refreshAltar(self, playerAddr);
-
-            // get player's enemy address
-            let enemyAddr = generate_pseudo_random_address(playerAddr.into());
 
             // get the first stage profile
             let stageProfile = get!(world, 1, StageProfile);
@@ -842,7 +849,7 @@ mod home {
             let world = self.world_dispatcher.read();
             let playerAddr = get_caller_address();
             let mut player = get!(world, playerAddr, Player);
-            let currentMatchState = get!(world, player.inMatch, MatchState);
+            let mut currentMatchState = get!(world, player.inMatch, MatchState);
 
             let lastInningBattle = get!(
                 world, (player.inMatch, currentMatchState.round), InningBattle
@@ -850,16 +857,17 @@ mod home {
 
             let currentRound = currentMatchState.round;
             let newRound = currentRound + 1;
+            currentMatchState.round = newRound;
 
-            // spawn new piece
+            // get new piece
             let enemyAddr = lastInningBattle.awayPlayer;
             _spawnEnemyPiece(self, currentRound + 1, enemyAddr);
 
             set!(
                 world,
                 (
-                    // update round info
-                    MatchState { index: currentMatchState.index, round: newRound },
+                    // update match state
+                    currentMatchState,
                     // create battle
                     InningBattle {
                         currentMatch: currentMatchState.index,

@@ -121,6 +121,8 @@ struct MatchState {
     #[key]
     index: u32,
     round: u8,
+    player1: ContractAddress,
+    player2: ContractAddress,
 }
 
 #[derive(Model, Copy, Drop, Serde)]

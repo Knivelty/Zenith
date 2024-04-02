@@ -35,6 +35,11 @@ export function createClientComponents({
         LocalPiecesChangeTrack: defineComponent(world, {
             gids: Type.NumberArray,
         }),
+        LocalPieceOccupation: defineComponent(world, {
+            x: Type.Number,
+            y: Type.Number,
+            occupied: Type.Boolean,
+        }),
         // Position: overridableComponent(contractComponents.Position),
         GameStatus: defineComponent(world, {
             status: Type.Number,

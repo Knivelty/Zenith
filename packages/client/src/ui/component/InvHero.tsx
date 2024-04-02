@@ -87,17 +87,23 @@ export const InvHero = ({
             const pieceEntity = getEntityIdFromKeys([BigInt(pieceAttr.gid)]);
             const piece = getComponentValueStrict(LocalPiece, pieceEntity);
 
+            ++player.heroesCount;
+            --player.inventoryCount;
+
+            if (player.heroesCount > player.level) {
+                alert("piece exceed limit");
+                console.warn("piece exceed limit");
+                return;
+            }
+
+            console.log("player.heroesCount: ", player.heroesCount);
+
             // delete the local inv piece
             updateComponent(
                 LocalPlayerInvPiece,
                 getEntityIdFromKeys([player.player, BigInt(piece.slot)]),
                 { gid: 0 }
             );
-
-            ++player.heroesCount;
-            --player.inventoryCount;
-
-            console.log("player.heroesCount: ", player.heroesCount);
 
             // add to local player inv
             setComponent(

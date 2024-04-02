@@ -8,6 +8,7 @@ import { health } from "./health";
 import { attack } from "./attack";
 import { placeSystem } from "./local/placeSystem";
 import { syncSystem } from "./local/syncSystem";
+import { coordOccupationSystem } from "./local/coordOccupationSystem";
 
 export const registerSystems = (layer: PhaserLayer) => {
     prepare(layer);
@@ -19,8 +20,8 @@ export const registerSystems = (layer: PhaserLayer) => {
     health(layer);
     attack(layer);
 
-
     // local component
     placeSystem(layer);
     syncSystem(layer);
+    coordOccupationSystem(layer);
 };

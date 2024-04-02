@@ -32,8 +32,7 @@ export function syncSystem(layer: PhaserLayer) {
                 PlayerInvPiece,
                 LocalPlayerInvPiece,
                 LocalPiecesChangeTrack,
-                GameStatus,
-                InningBattle,
+                MatchState,
             },
             playerEntity,
             account: { address },
@@ -89,10 +88,23 @@ export function syncSystem(layer: PhaserLayer) {
                 return;
             }
 
-            // sync relevant piece
+            // const player = getComponentValue(Player, playerEntity);
+
+            // if (!player) {
+            //     console.warn("no play");
+            //     return;
+            // }
+
+            // const mathState = await getComponentValueUtilNotNull(
+            //     MatchState,
+            //     getEntityIdFromKeys([BigInt(player.inMatch)])
+            // );
+
+            // // only sync relevant piece
             // if (
             //     v.owner == BigInt(address) ||
-            //     v.owner == inningBattle?.awayPlayer ||
+            //     v.owner == mathState.player1 ||
+            //     v.owner == mathState.player2 ||
             //     // zero means piece removed
             //     v.owner === 0n
             // ) {

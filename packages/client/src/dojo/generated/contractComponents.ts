@@ -74,11 +74,11 @@ export function defineContractComponents(world: World) {
     MatchState: (() => {
       return defineComponent(
         world,
-        { index: RecsType.Number, round: RecsType.Number },
+        { index: RecsType.Number, round: RecsType.Number, player1: RecsType.BigInt, player2: RecsType.BigInt },
         {
           metadata: {
             name: "MatchState",
-            types: ["u32","u8"],
+            types: ["u32","u8","contractaddress","contractaddress"],
             customTypes: [],
           },
         }
