@@ -23,8 +23,8 @@ export function ShopButton() {
     return (
         <div className="absolute right-[10%] bottom-[10%]">
             <Button
-                className="w-20 h-20 bg-white border-black	 text-black  rounded-full
-                hover:bg-gray-300 transition duration-300"
+                className="w-32 h-32 bg-white border-black  text-black  rounded-full
+                hover:bg-gray-300 transition duration-300 text-lg"
                 onClick={async () => {
                     setShowShop(!shopShow);
                 }}
