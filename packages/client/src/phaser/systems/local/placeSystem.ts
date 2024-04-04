@@ -23,10 +23,7 @@ export function placeSystem(layer: PhaserLayer) {
         world,
         [Has(LocalPiece)],
         ({ entity, type, value: [v, preV] }) => {
-            if (
-                v &&
-                (type === UpdateType.Enter || type === UpdateType.Update)
-            ) {
+            if (v) {
                 // only dynamic sync player's piece
                 if (v.owner == BigInt(address) && v.idx !== 0) {
                     console.log("place: ", v.owner, v.idx);

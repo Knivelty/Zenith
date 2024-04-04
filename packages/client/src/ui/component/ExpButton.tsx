@@ -20,10 +20,8 @@ export function ExpButton() {
 
     const percent = ((player?.exp || 0) / (levelConfig?.expForNext || 1)) * 100;
 
-    console.log("percent: ", percent);
-
     return (
-        <div className="absolute flex  flex-col left-[10%] bottom-[10%]">
+        <div className="absolute flex  flex-col left-[10%] bottom-[10%] select-none">
             <div className="mb-2 self-center">
                 EXP : {player?.exp} / {levelConfig?.expForNext}
             </div>

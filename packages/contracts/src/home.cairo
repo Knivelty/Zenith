@@ -728,6 +728,13 @@ mod home {
             player.exp += 4;
             player.coin -= 4;
             let levelConfig = get!(world, player.level, LevelConfig);
+
+            // loop twice
+            if (player.exp >= levelConfig.expForNext) {
+                player.level += 1;
+                player.exp -= levelConfig.expForNext;
+            }
+
             if (player.exp >= levelConfig.expForNext) {
                 player.level += 1;
                 player.exp -= levelConfig.expForNext;
