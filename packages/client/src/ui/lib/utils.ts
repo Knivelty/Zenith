@@ -41,3 +41,39 @@ export async function getComponentValueUtilNotNull<
 
     return value;
 }
+
+export function generateColor(str: string): string {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash += str.charCodeAt(i);
+    }
+
+    const red = (hash & 0xff0000) >> 16;
+    const green = (hash & 0x00ff00) >> 8;
+    const blue = hash & 0x0000ff;
+
+    return `rgb(${red}, ${green}, ${blue})`;
+}
+
+export function generateAvatar(address: string): string {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = 200;
+    canvas.height = 200;
+
+    if (!ctx) {
+        throw new Error("Failed to get canvas context");
+    }
+
+    ctx.fillStyle = generateColor(address);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 48px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(address.slice(0, 6), 100, 100);
+
+    return canvas.toDataURL();
+}
