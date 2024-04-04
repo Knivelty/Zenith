@@ -18,7 +18,7 @@ export function PieceLimit() {
     }
 
     return (
-        <div className={`flex justify-center mt-5 ${visible}`}>
+        <div className={`flex justify-center mt-5 ${visible} select-none`}>
             <div className="bg-[#9A9A9A]/50 w-80 h-10 text-white/50 text-lg rounded-lg flex flex-col justify-center">
                 <div className="self-center">
                     Piece: {player?.heroesCount} / {player?.level}

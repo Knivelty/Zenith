@@ -1,15 +1,14 @@
 import {
     Entity,
-    Has,
     getComponentValueStrict,
     getComponentValue,
     setComponent,
     updateComponent,
 } from "@dojoengine/recs";
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { PhaserLayer } from "../..";
-import { TILE_HEIGHT, TILE_WIDTH } from "../../config/constants";
+import { TILE_WIDTH } from "../../config/constants";
+import { chainToWorldCoord, worldToChainCoord } from "./coorConvert";
 
 export const utils = (layer: PhaserLayer) => {
     const {
@@ -68,26 +67,12 @@ export const utils = (layer: PhaserLayer) => {
 
         const piece = getComponentValueStrict(LocalPiece, entity);
 
-        let piecePosition = { x: piece.x, y: piece.y };
-
         const isEnemy = BigInt(account.address) !== piece.owner;
 
-        // if self, convert coord
-        if (!isEnemy) {
-            piecePosition = {
-                x: piecePosition.x,
-                y: 7 - piecePosition.y,
-            };
-        }
-
-        const pixelPosition = tileCoordToPixelCoord(
-            piecePosition,
-            TILE_WIDTH,
-            TILE_HEIGHT
-        );
+        const { worldX, worldY } = chainToWorldCoord(piece.x, piece.y, isEnemy);
 
         console.log(
-            `spawn ${playerAddr} ${index} ${piece.gid} at ${piecePosition.x}, ${piecePosition.y} `
+            `spawn ${playerAddr} ${index} ${piece.gid} at ${worldX}, ${worldY} `
         );
 
         const hero = objectPool.get(entity, "Sprite");
@@ -95,7 +80,7 @@ export const utils = (layer: PhaserLayer) => {
             id: entity,
             once: (sprite: Phaser.GameObjects.Sprite) => {
                 sprite.setVisible(true);
-                sprite.setPosition(pixelPosition.x, pixelPosition.y);
+                sprite.setPosition(worldX, worldY);
                 sprite.play(config.animations[piece.creature_index]);
                 sprite.setInteractive();
 
@@ -129,12 +114,14 @@ export const utils = (layer: PhaserLayer) => {
                     sprite.off("dragend");
                     sprite.on("dragend", (p: Phaser.Input.Pointer) => {
                         console.log("drag end: ");
-                        const posX = Math.floor(p.worldX / TILE_HEIGHT);
-                        const posY = 7 - Math.floor(p.worldY / TILE_HEIGHT);
+                        const { posX, posY } = worldToChainCoord(
+                            p.worldX,
+                            p.worldY
+                        );
 
                         sprite.clearTint(); // clear tint color
 
-                        if (posY > 3 || posY < 0 || posX < 0 || posX > 7) {
+                        if (posY > 4 || posY < 1 || posX < 1 || posX > 8) {
                             console.warn("invalid dst");
                             return;
                         }
@@ -168,8 +155,8 @@ export const utils = (layer: PhaserLayer) => {
 
         // initialize health bar
         setComponent(HealthBar, `${entity}-health-bar` as Entity, {
-            x: pixelPosition.x,
-            y: pixelPosition.y,
+            x: worldX,
+            y: worldY,
             percentage: 100,
             isPlayer: !isEnemy,
         });

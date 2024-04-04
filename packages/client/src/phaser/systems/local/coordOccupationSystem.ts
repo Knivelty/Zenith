@@ -8,20 +8,11 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 export function coordOccupationSystem(layer: PhaserLayer) {
     const {
-        scenes: {
-            Main: { input },
-        },
         networkLayer: {
-            clientComponents: {
-                LocalPiece,
-                LocalPlayerPiece,
-                LocalPieceOccupation,
-            },
+            clientComponents: { LocalPiece, LocalPieceOccupation },
             account: { address },
         },
     } = layer;
-
-    const { spawnPiece, removePieceOnBoard } = utils(layer);
 
     // follow local piece location
     defineSystemST<typeof LocalPiece.schema>(
@@ -50,7 +41,6 @@ export function coordOccupationSystem(layer: PhaserLayer) {
                     BigInt(v.x),
                     BigInt(v.y),
                 ]);
-                console.log("set occu", v);
 
                 setComponent(LocalPieceOccupation, occupiedEntity, {
                     x: v.x,

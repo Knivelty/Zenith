@@ -10,6 +10,7 @@ import {
     updateComponent,
 } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { worldToChainCoord } from "../../phaser/systems/utils/coorConvert";
 
 export const InvHero = ({
     pieceAttr,
@@ -73,12 +74,11 @@ export const InvHero = ({
             const worldX = rawCoord.x;
             const worldY = rawCoord.y;
 
-            const posX = Math.floor(worldX / TILE_HEIGHT);
-            const posY = 7 - Math.floor(worldY / TILE_HEIGHT);
+            const { posX, posY } = worldToChainCoord(worldX, worldY);
 
             console.log(posX, posY);
 
-            if (posX < 0 || posX > 7 || posY < 0 || posY > 3) {
+            if (posX < 1 || posX > 8 || posY < 1 || posY > 4) {
                 console.warn("invalid dst place");
                 return;
             }

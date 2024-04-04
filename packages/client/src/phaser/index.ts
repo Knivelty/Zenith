@@ -23,7 +23,7 @@ export const createPhaserLayer = async (
     const { camera } = scenes.Main;
 
     camera.phaserCamera.setBounds(0, 0, TILE_WIDTH * 8, TILE_HEIGHT * 8);
-    camera.phaserCamera.centerOn(0, 0);
+    // camera.phaserCamera.centerOn(0, 0);
     camera.centerOn(0, 0);
     camera.setZoom(0.3125);
 
