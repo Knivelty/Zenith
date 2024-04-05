@@ -87,6 +87,8 @@ export function createSystemCalls(
 
             const { result } = processBattleLogs();
 
+            console.log("commit changes: ", changes);
+
             return await client.actions.commitPreparation({
                 account,
                 changes,

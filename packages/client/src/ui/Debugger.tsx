@@ -6,10 +6,11 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useUIStore } from "../store";
 import { numToStatus } from "../dojo/types";
 import { zeroEntity } from "../utils";
+import { getComponentValueStrict } from "@dojoengine/recs";
 
 export function Debugger() {
     const {
-        account: { account },
+        account: { account, playerEntity },
         systemCalls: {
             nextRound,
             startBattle,
@@ -18,7 +19,7 @@ export function Debugger() {
             getCoin,
             refreshAltar,
         },
-        clientComponents: { MatchState, Player, GameStatus },
+        clientComponents: { MatchState, Player, GameStatus, LocalPlayer },
     } = useDojo();
 
     const player = useComponentValue(
@@ -64,29 +65,12 @@ export function Debugger() {
             >
                 next round
             </Button>
-            <Button>current Round: {matchState?.round}</Button>
-            <Button>coin: {player?.coin}</Button>
             <Button
                 onClick={async () => {
                     getCoin(account);
                 }}
             >
                 Get Coin
-            </Button>
-            <Button>status: {numToStatus(gameStatus?.status)}</Button>
-            <Button
-                onClick={async () => {
-                    refreshAltar(account);
-                }}
-            >
-                refresh altar
-            </Button>
-            <Button
-                onClick={async () => {
-                    location.reload();
-                }}
-            >
-                refresh
             </Button>
             <Button
                 onClick={async () => {
@@ -98,6 +82,16 @@ export function Debugger() {
                 }}
             >
                 copy private key
+            </Button>
+            <Button
+                onClick={async () => {
+                    const player = getComponentValueStrict(
+                        LocalPlayer,
+                        playerEntity
+                    );
+                }}
+            >
+                log values
             </Button>
         </div>
     );

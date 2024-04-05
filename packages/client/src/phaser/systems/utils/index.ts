@@ -9,6 +9,8 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { PhaserLayer } from "../..";
 import { TILE_WIDTH } from "../../config/constants";
 import { chainToWorldCoord, worldToChainCoord } from "./coorConvert";
+import { zeroEntity } from "../../../utils";
+import { debug } from "../../../ui/lib/utils";
 
 export const utils = (layer: PhaserLayer) => {
     const {
@@ -24,6 +26,7 @@ export const utils = (layer: PhaserLayer) => {
                 LocalPlayerPiece,
                 LocalPiece,
                 LocalPieceOccupation,
+                UserOperation,
             },
             account,
         },
@@ -34,7 +37,7 @@ export const utils = (layer: PhaserLayer) => {
 
         const hero = objectPool.get(entity, "Sprite");
 
-        console.warn(`entity: ${entity} gid: ${gid} removed`);
+        console.warn(`removed piece, entity: ${entity} gid: ${gid}`);
 
         hero.despawn();
         // hero.setComponent({
@@ -62,6 +65,8 @@ export const utils = (layer: PhaserLayer) => {
             console.warn("no piece for ", playerAddr, index);
             return;
         }
+
+        console.log("get piece", playerPiece);
 
         const entity = getEntityIdFromKeys([BigInt(playerPiece.gid)]);
 
@@ -100,6 +105,12 @@ export const utils = (layer: PhaserLayer) => {
                     sprite.off("dragstart");
                     sprite.on("dragstart", () => {
                         sprite.setTint(0x50dfb6);
+
+                        // set dragging to true
+                        setComponent(UserOperation, zeroEntity, {
+                            dragging: true,
+                            gid: piece.gid,
+                        });
                     });
 
                     sprite.off("drag");
@@ -113,14 +124,19 @@ export const utils = (layer: PhaserLayer) => {
 
                     sprite.off("dragend");
                     sprite.on("dragend", (p: Phaser.Input.Pointer) => {
-                        console.log("drag end: ");
+                        debug("drag end");
+                        sprite.clearTint(); // clear tint color
+
+                        // set dragging to false
+                        setComponent(UserOperation, zeroEntity, {
+                            dragging: false,
+                            gid: 0,
+                        });
+
                         const { posX, posY } = worldToChainCoord(
                             p.worldX,
                             p.worldY
                         );
-
-                        sprite.clearTint(); // clear tint color
-
                         if (posY > 4 || posY < 1 || posX < 1 || posX > 8) {
                             console.warn("invalid dst");
                             return;
@@ -136,8 +152,6 @@ export const utils = (layer: PhaserLayer) => {
                             LocalPieceOccupation,
                             occupiedEntity
                         );
-
-                        console.log("pieceOccu: ", pieceOccu);
 
                         if (pieceOccu?.occupied) {
                             console.warn("pos occupied");

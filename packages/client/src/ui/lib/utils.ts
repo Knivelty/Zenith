@@ -9,6 +9,7 @@ import {
 import { sleep } from "@latticexyz/utils";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import d from "debug";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -77,3 +78,5 @@ export function generateAvatar(address: string): string {
 
     return canvas.toDataURL();
 }
+
+export const debug = d("game");

@@ -123,10 +123,18 @@ mod home {
         let mut newPlayerInvPiece = get!(world, (oldPiece.owner, change.slot), PlayerInvPiece);
         let mut newPlayerPiece = get!(world, (oldPiece.owner, change.idx), PlayerPiece);
 
+        if (change.gid == 0) {
+            panic!("change gid = 0, panic");
+        }
+
         // only piece move on board
         if (oldPiece.slot == 0 && change.slot == 0) { // idx should be the same
         } else if (oldPiece.slot != 0 && change.slot == 0) {
             // move from inv to board
+
+            if (change.idx == 0) {
+                panic!("invalid change");
+            }
 
             oldPlayerInvPiece.gid = 0;
             newPlayerPiece.gid = change.gid;
@@ -137,6 +145,11 @@ mod home {
             set!(world, (oldPlayerInvPiece, newPlayerPiece));
         } else if (oldPiece.slot == 0 && change.slot != 0) {
             // move from board to inv
+
+            if (change.idx != 0) {
+                panic!("invalid change");
+            }
+
             oldPlayerPiece.gid = 0;
             newPlayerInvPiece.gid = change.gid;
 
@@ -144,6 +157,18 @@ mod home {
             player.inventoryCount += 1;
 
             set!(world, (oldPlayerPiece, newPlayerInvPiece));
+        } else if (oldPiece.slot != 0 && change.slot != 0) {
+            // move between two inventory slot
+
+            if (change.idx != 0) {
+                panic!("invalid change");
+            }
+
+            oldPlayerInvPiece.gid = 0;
+            newPlayerInvPiece.gid = change.gid;
+            set!(world, (oldPlayerInvPiece, newPlayerInvPiece));
+        } else {
+            panic!("unknown change");
         }
 
         // update piece attr

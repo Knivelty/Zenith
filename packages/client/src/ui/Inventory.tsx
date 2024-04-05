@@ -1,12 +1,9 @@
-import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "./hooks/useDojo";
-import { HeroBaseAttr, PieceAttr, getHeroAttr } from "./hooks/useHeroAttr";
-import { getComponentValue, getComponentValueStrict } from "@dojoengine/recs";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { HeroCard } from "./component/HeroCard";
+import { PieceAttr } from "./hooks/useHeroAttr";
 import { InvHero } from "./component/InvHero";
 import { useCallback } from "react";
-import { useInv, useLocalInv } from "./hooks/useInv";
+import { useLocalInv } from "./hooks/useInv";
+import { DraggableImg } from "./component/DraggableImg";
 
 export function Inventory() {
     const {
@@ -62,6 +59,7 @@ export function Inventory() {
                     (hero: PieceAttr | undefined, index: number) => (
                         <div key={index}>
                             <InvHero
+                                id={index + 1}
                                 pieceAttr={hero}
                                 onClick={() => {
                                     if (hero?.gid) {
@@ -73,6 +71,7 @@ export function Inventory() {
                     )
                 )}
             </div>
+            <DraggableImg />
         </div>
     );
 }

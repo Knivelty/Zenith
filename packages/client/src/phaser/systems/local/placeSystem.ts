@@ -26,10 +26,13 @@ export function placeSystem(layer: PhaserLayer) {
             if (v) {
                 // only dynamic sync player's piece
                 if (v.owner == BigInt(address) && v.idx !== 0) {
-                    console.log("place: ", v.owner, v.idx);
+                    console.log("place: ",v, v.owner, v.idx);
                     spawnPiece(v.owner, BigInt(v.idx));
                 }
                 if (v.owner === 0n) {
+                    removePieceOnBoard(v.gid);
+                }
+                if (v.x === 0 || v.y === 0) {
                     removePieceOnBoard(v.gid);
                 }
             }

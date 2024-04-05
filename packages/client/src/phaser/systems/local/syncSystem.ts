@@ -74,8 +74,23 @@ export function syncSystem(layer: PhaserLayer) {
                 return;
             }
 
-            // TODO: resolve conflict case by case
-            setComponent(LocalPlayer, entity, v);
+            const localP = getComponentValue(LocalPlayer, playerEntity);
+
+            if (entity === playerEntity) {
+                if (!localP) {
+                    // TODO: resolve conflict case by case
+                    setComponent(LocalPlayer, entity, v);
+                } else {
+                    // don't update heroes count
+                    updateComponent(LocalPlayer, entity, {
+                        ...v,
+                        heroesCount: localP.heroesCount,
+                    });
+                }
+            } else {
+                // update all other player
+                setComponent(LocalPlayer, entity, v);
+            }
         }
     );
 

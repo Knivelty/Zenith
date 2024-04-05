@@ -1,21 +1,25 @@
-import { useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { PieceAttr } from "../hooks/useHeroAttr";
-import { useDrag } from "ahooks";
+import { useDrag, useDrop } from "ahooks";
 import { useDojo } from "../hooks/useDojo";
 import { useUIStore } from "../../store";
-import { TILE_HEIGHT } from "../../phaser/config/constants";
 import {
+    getComponentValue,
     getComponentValueStrict,
     setComponent,
     updateComponent,
 } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { worldToChainCoord } from "../../phaser/systems/utils/coorConvert";
+import { useComponentValue } from "@dojoengine/react";
+import { zeroEntity } from "../../utils";
 
 export const InvHero = ({
+    id,
     pieceAttr,
     onClick,
 }: {
+    id: number;
     pieceAttr: PieceAttr | undefined;
     onClick?: (...args: unknown[]) => unknown | Promise<unknown>;
 }) => {
@@ -32,6 +36,7 @@ export const InvHero = ({
             LocalPlayerInvPiece,
             LocalPlayer,
             LocalPlayerPiece,
+            UserOperation,
         },
         account: {
             playerEntity,
@@ -39,8 +44,6 @@ export const InvHero = ({
         },
     } = useDojo();
     const dragRef = useRef(null);
-
-    const dragImageRef = useRef(null);
 
     const phaserRect = useUIStore((s) => s.phaserRect);
 
@@ -59,7 +62,6 @@ export const InvHero = ({
 
         onDragEnd: (e) => {
             e.preventDefault();
-            console.log("E: ", e);
             if (!pieceAttr) {
                 return;
             }
@@ -67,8 +69,6 @@ export const InvHero = ({
                 e.clientX - phaserRect.left,
                 e.clientY - phaserRect.top
             );
-
-            console.log(e.clientX, phaserRect.left);
 
             // no multiplied because no zoom
             const worldX = rawCoord.x;
@@ -135,8 +135,183 @@ export const InvHero = ({
         },
     });
 
+    const dropRef = useRef(null);
+    const userO = useComponentValue(UserOperation, zeroEntity);
+
+    // useDrop(dropRef, {
+    //     onDragEnter: (e) => {
+    //         console.log("onDragEnter: ", e);
+    //     },
+    //     onDragOver: (e) => {
+    //         e?.preventDefault();
+    //         console.log("onDragOver: ", e);
+    //     },
+    //     onDragLeave(e) {
+    //         console.log("onDragLeave: ", e);
+    //     },
+    // });
+
+    const handleMouseUp = useCallback(
+        (e: MouseEvent) => {
+            if (!dropRef.current) {
+                console.warn("no drop ref");
+                return;
+            }
+            const rect = dropRef.current.getBoundingClientRect();
+            const clientX = e.clientX;
+            const clientY = e.clientY;
+
+            if (
+                clientX >= rect.left &&
+                clientX <= rect.right &&
+                clientY >= rect.top &&
+                clientY <= rect.bottom
+            ) {
+                console.log("in my side", id);
+
+                // handle place back
+
+                const userOp = getComponentValueStrict(
+                    UserOperation,
+                    zeroEntity
+                );
+
+                // check whether this slot is occupied
+                const localPlayerInvPieceEntity = getEntityIdFromKeys([
+                    BigInt(address),
+                    BigInt(id),
+                ]);
+                const playerInvPiece = getComponentValue(
+                    LocalPlayerInvPiece,
+                    localPlayerInvPieceEntity
+                );
+
+                console.log("playerInvPiece: ", playerInvPiece);
+
+                if (playerInvPiece?.gid && playerInvPiece?.gid !== 0) {
+                    console.warn("slot occupied");
+                    return;
+                }
+
+                const pieceGid = userOp.gid;
+                const pieceEntity = getEntityIdFromKeys([BigInt(pieceGid)]);
+
+                // set to player local piece
+                if (playerInvPiece) {
+                    updateComponent(
+                        LocalPlayerInvPiece,
+                        localPlayerInvPieceEntity,
+                        { gid: pieceGid }
+                    );
+                } else {
+                    // if not exist before, set
+                    setComponent(
+                        LocalPlayerInvPiece,
+                        localPlayerInvPieceEntity,
+                        { owner: BigInt(address), slot: id, gid: pieceGid }
+                    );
+                }
+
+                // remove from player piece
+                const pieceV = getComponentValueStrict(LocalPiece, pieceEntity);
+
+                const playerV = getComponentValueStrict(
+                    LocalPlayer,
+                    playerEntity
+                );
+
+                if (pieceV.idx === playerV.heroesCount) {
+                    // it means the piece is the last one of player
+                    updateComponent(
+                        LocalPlayerPiece,
+                        getEntityIdFromKeys([
+                            BigInt(address),
+                            BigInt(playerV.heroesCount),
+                        ]),
+                        { gid: 0 }
+                    );
+                } else {
+                    // if not, should switch the last piece
+                    const lastPiece = getComponentValueStrict(
+                        LocalPlayerPiece,
+                        getEntityIdFromKeys([
+                            BigInt(address),
+                            BigInt(playerV.heroesCount),
+                        ])
+                    );
+
+                    // update player piece
+                    updateComponent(
+                        LocalPlayerPiece,
+                        getEntityIdFromKeys([
+                            BigInt(address),
+                            BigInt(pieceV.idx),
+                        ]),
+                        { gid: lastPiece.gid }
+                    );
+
+                    console.log("update last piece", lastPiece);
+
+                    // update piece
+                    updateComponent(
+                        LocalPiece,
+                        getEntityIdFromKeys([BigInt(lastPiece.gid)]),
+                        { idx: pieceV.idx }
+                    );
+
+                    console.log("playerV:", playerV);
+
+                    // set last to zero
+                    updateComponent(
+                        LocalPlayerPiece,
+                        getEntityIdFromKeys([
+                            BigInt(address),
+                            BigInt(playerV.heroesCount),
+                        ]),
+                        { gid: 0 }
+                    );
+                }
+
+                // update count for the player
+                updateComponent(LocalPlayer, playerEntity, {
+                    heroesCount: playerV.heroesCount - 1,
+                    inventoryCount: playerV.inventoryCount + 1,
+                });
+
+                // update piece entity
+                updateComponent(LocalPiece, pieceEntity, {
+                    x: 0,
+                    y: 0,
+                    idx: 0,
+                    slot: id,
+                });
+            }
+        },
+        [
+            LocalPlayerInvPiece,
+            LocalPlayerPiece,
+            LocalPiece,
+            LocalPlayer,
+            UserOperation,
+            address,
+            playerEntity,
+            id,
+        ]
+    );
+
+    useEffect(() => {
+        if (userO?.dragging) {
+            document.addEventListener("mouseup", handleMouseUp);
+        } else {
+            document.removeEventListener("mouseup", handleMouseUp);
+        }
+        return () => {
+            document.removeEventListener("mouseup", handleMouseUp);
+        };
+    }, [userO, handleMouseUp]);
+
     return (
-        <div className={`${!pieceAttr?.creature ? "invisible" : ""} `}>
+        <div>
             <div className="relative flex flex-col border-1 items-start group">
                 <button
                     onClick={onClick}
@@ -146,30 +321,16 @@ export const InvHero = ({
                 </button>
                 <div
                     draggable={true}
+                    ref={dropRef}
                     className="flex justify-center w-[95px] h-[130px] rounded-lg opacity-100 bg-contain bg-no-repeat bg-center border-gray-300	border-2 mx-2"
                 >
                     <img
                         ref={dragRef}
-                        className="w-auto h-auto object-contain"
+                        className={`w-auto h-auto object-contain ${!pieceAttr?.creature ? "invisible" : ""} `}
                         src={pieceAttr?.thumb}
                         alt={pieceAttr?.thumb}
                     />
                 </div>
-                {/* show class and race */}
-                {/* <div className="flex flex-row -mt-8 ml-7">
-                    <img
-                        className="w-[20px] h-[20px] mx-1"
-                        // src={getRaceImage(
-                        //     hero.race as number
-                        // )}
-                    ></img>
-                    <img
-                        className="w-[20px] h-[20px] mx-1"
-                        // src={getClassImage(
-                        //     hero.class as number
-                        // )}
-                    ></img>
-                </div> */}
             </div>
         </div>
     );

@@ -70,5 +70,9 @@ export function createClientComponents({
             attacker: Type.String,
             attacked: Type.String,
         }),
+        UserOperation: defineComponent(world, {
+            dragging: Type.Boolean,
+            gid: Type.Number,
+        }),
     };
 }
