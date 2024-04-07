@@ -25,32 +25,6 @@ export function Inventory() {
 
     const { invPieces } = useLocalInv();
 
-    // const invPieces = [...Array(6).keys()]
-    //     .map((x) => x + 1)
-    //     .map((i) => {
-    //         const invP = getComponentValue(
-    //             PlayerInvPiece,
-    //             getEntityIdFromKeys([BigInt(address), BigInt(i)])
-    //         );
-    //         if (!invP) {
-    //             return undefined;
-    //         }
-    //         const piece = getComponentValueStrict(
-    //             Piece,
-    //             getEntityIdFromKeys([BigInt(invP.gid)])
-    //         );
-
-    //         return {
-    //             ...getHeroAttr(CreatureProfile, {
-    //                 id: piece.creature_index,
-    //                 level: piece.level,
-    //             }),
-    //             gid: invP.gid,
-    //         } as PieceAttr;
-    //     });
-
-    // console.log("invPieces: ", invPieces);
-
     return (
         <div className="fixed bottom-[1%] text-center  w-screen  mx-auto flex justify-center mt-2">
             {/* <Synergy /> */}

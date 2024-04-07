@@ -55,10 +55,13 @@ export function useLocalInv() {
             if (!gid) {
                 return undefined;
             }
-            const piece = getComponentValueStrict(
+            const piece = getComponentValue(
                 LocalPiece,
                 getEntityIdFromKeys([BigInt(gid)])
             );
+            if (!piece) {
+                return undefined;
+            }
 
             return {
                 ...getHeroAttr(CreatureProfile, {
@@ -89,9 +92,7 @@ export function useLocalInv() {
 export function useInv() {
     const {
         clientComponents: { PlayerInvPiece, Piece, CreatureProfile },
-        systemCalls: { buyHero },
         account: {
-            playerEntity,
             account: { address: playerAddr },
         },
     } = useDojo();
@@ -100,7 +101,6 @@ export function useInv() {
         PlayerInvPiece,
         getEntityIdFromKeys([BigInt(playerAddr), 1n])
     );
-
     const inv2 = useComponentValue(
         PlayerInvPiece,
         getEntityIdFromKeys([BigInt(playerAddr), 2n])
@@ -117,7 +117,6 @@ export function useInv() {
         PlayerInvPiece,
         getEntityIdFromKeys([BigInt(playerAddr), 5n])
     );
-
     const inv6 = useComponentValue(
         PlayerInvPiece,
         getEntityIdFromKeys([BigInt(playerAddr), 6n])

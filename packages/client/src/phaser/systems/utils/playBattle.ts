@@ -1,13 +1,7 @@
 import {
     Entity,
-    Has,
-    UpdateType,
-    defineSystem,
-    getComponentValue,
     getComponentValueStrict,
     setComponent,
-    updateComponent,
-    ComponentValue,
 } from "@dojoengine/recs";
 import { tileCoordToPixelCoord, tween } from "@latticexyz/phaserx";
 import {
@@ -18,16 +12,14 @@ import {
 } from "../../config/constants";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { zeroEntity } from "../../../utils";
-// import { BattleLog, BattleLogsType } from "../../dojo/generated/setup";
 import { Coord, deferred, sleep } from "@latticexyz/utils";
 import { PieceAction, manhattanDistance } from "../../../utils/jps";
 import { PhaserLayer } from "../..";
 
 export const battleAnimation = (layer: PhaserLayer) => {
     const {
-        world,
         scenes: {
-            Main: { config, objectPool },
+            Main: { objectPool },
         },
         networkLayer: {
             clientComponents: { GameStatus, InningBattle, Attack },

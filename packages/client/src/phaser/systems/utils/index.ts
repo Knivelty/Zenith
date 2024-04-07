@@ -11,12 +11,13 @@ import { TILE_WIDTH } from "../../config/constants";
 import { chainToWorldCoord, worldToChainCoord } from "./coorConvert";
 import { zeroEntity } from "../../../utils";
 import { debug } from "../../../ui/lib/utils";
+import { isEqual } from "lodash";
 
 export const utils = (layer: PhaserLayer) => {
     const {
         game,
         scenes: {
-            Main: { config, objectPool, input },
+            Main: { config, objectPool },
         },
         networkLayer: {
             clientComponents: {
@@ -37,7 +38,10 @@ export const utils = (layer: PhaserLayer) => {
 
         const hero = objectPool.get(entity, "Sprite");
 
-        console.warn(`removed piece, entity: ${entity} gid: ${gid}`);
+        if (isEqual(hero.position, { x: 0, y: 0 })) {
+            return;
+        }
+        debug(`removed piece, entity: ${entity} gid: ${gid}`);
 
         hero.despawn();
         // hero.setComponent({
@@ -62,21 +66,23 @@ export const utils = (layer: PhaserLayer) => {
         );
 
         if (!playerPiece) {
-            console.warn("no piece for ", playerAddr, index);
+            debug("no piece for ", playerAddr, index);
             return;
         }
 
-        console.log("get piece", playerPiece);
-
         const entity = getEntityIdFromKeys([BigInt(playerPiece.gid)]);
 
-        const piece = getComponentValueStrict(LocalPiece, entity);
+        debug(`try get piece ${playerAddr} ${index} ${playerPiece.gid}`);
+        const piece = getComponentValue(LocalPiece, entity);
+        if (!piece) {
+            throw Error(`try get piece ${playerAddr} ${index} ${playerPiece.gid}`);
+        }
 
         const isEnemy = BigInt(account.address) !== piece.owner;
 
         const { worldX, worldY } = chainToWorldCoord(piece.x, piece.y, isEnemy);
 
-        console.log(
+        debug(
             `spawn ${playerAddr} ${index} ${piece.gid} at ${worldX}, ${worldY} `
         );
 

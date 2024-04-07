@@ -24,19 +24,11 @@ export const battle = (layer: PhaserLayer) => {
             clientComponents: {
                 GameStatus,
                 InningBattle,
-                Player,
-                LocalPlayer,
-                Piece,
-                LocalPiece,
-                LocalPlayerPiece,
+
                 BattleLogs,
-                Attack,
-                CreatureProfile,
             },
             clientComponents,
             account: { address },
-            playerEntity,
-            graphqlClient,
         },
     } = layer;
 

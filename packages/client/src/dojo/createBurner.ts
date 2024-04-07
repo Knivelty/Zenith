@@ -20,21 +20,7 @@ export const createBurner = async ({ ...config }: DojoConfig) => {
         feeTokenAddress: config.feeTokenAddress,
     });
 
-    // const current = burnerManager.getActiveAccount();
-
-    if (burnerManager.list().length === 0) {
-        try {
-            await burnerManager.init();
-            await burnerManager.create();
-
-            // sleep 3s
-            await new Promise((resolve) => setTimeout(resolve, 3000));
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
-    // await burnerManager.init();
+    await burnerManager.init();
 
     return {
         burnerManager,

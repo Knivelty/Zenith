@@ -101,7 +101,6 @@ export async function setup({
         contractComponents,
         systemCalls: createSystemCalls(
             { client },
-            contractComponents,
             clientComponents,
             clientComponents
         ),

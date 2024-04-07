@@ -5,6 +5,7 @@ import {
     DiagonalMovement,
 } from "pathfinding";
 import { uniqWith } from "lodash";
+import { logJps } from "../ui/lib/utils";
 
 export type PieceInBattle = {
     player: string;
@@ -326,7 +327,7 @@ export function battleForAStep(
             if (pp.entity === p.entity) {
                 return;
             }
-            // console.log("pp: ", pp);
+            logJps(`try set ${pp.x} ${pp.y} as workable`)
             grid.setWalkableAt(pp.x, pp.y, false);
         });
 

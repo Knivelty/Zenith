@@ -9,18 +9,10 @@ import {
     setComponent,
     updateComponent,
 } from "@dojoengine/recs";
+import { localPlayerInv } from "../utils/localPlayerInv";
 
 export function syncSystem(layer: PhaserLayer) {
     const {
-        scenes: {
-            Main: {
-                maps: {
-                    Main: { putTileAt },
-                },
-                phaserScene,
-                input,
-            },
-        },
         networkLayer: {
             clientComponents: {
                 Player,
@@ -39,6 +31,8 @@ export function syncSystem(layer: PhaserLayer) {
         },
     } = layer;
 
+    const { getFirstEmptyLocalInvSlot } = localPlayerInv(layer);
+
     // sync inventory if buy or sell
     defineSystemST<typeof PlayerInvPiece.schema>(
         world,
@@ -48,7 +42,54 @@ export function syncSystem(layer: PhaserLayer) {
                 return;
             }
             // TODO: allow inv drag and find accurate slot
-            setComponent(LocalPlayerInvPiece, entity, v);
+
+            // ignore irrelevant piece
+            if (
+                v.owner !== BigInt(address) &&
+                preV?.owner !== BigInt(address)
+            ) {
+                return;
+            }
+
+            // delete player inv piece operation
+            if (v.gid === 0) {
+                setComponent(LocalPlayerInvPiece, entity, v);
+                return;
+            }
+
+            // check whether is occupied on frontend
+            const lpip = getComponentValue(
+                LocalPlayerInvPiece,
+                getEntityIdFromKeys([BigInt(address), BigInt(v.slot)])
+            );
+
+            // if not occupied, set
+            if (!lpip || lpip.gid === 0) {
+                console.log(`not occupied, set slot ${v.slot}`);
+                setComponent(LocalPlayerInvPiece, entity, v);
+            } else {
+                if (lpip.gid === v.gid) {
+                    console.log("already set");
+                    return;
+                }
+
+                const slot = getFirstEmptyLocalInvSlot();
+                console.log(`occupied, try set to slot ${slot}`);
+
+                if (slot !== 0) {
+                    setComponent(
+                        LocalPlayerInvPiece,
+                        getEntityIdFromKeys([BigInt(address), BigInt(slot)]),
+                        {
+                            owner: BigInt(address),
+                            slot: slot,
+                            gid: v.gid,
+                        }
+                    );
+                } else {
+                    console.error("place logic error");
+                }
+            }
         }
     );
 

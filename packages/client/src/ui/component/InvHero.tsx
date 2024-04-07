@@ -13,6 +13,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { worldToChainCoord } from "../../phaser/systems/utils/coorConvert";
 import { useComponentValue } from "@dojoengine/react";
 import { zeroEntity } from "../../utils";
+import { logPlayerAction } from "../lib/utils";
 
 export const InvHero = ({
     id,
@@ -53,10 +54,10 @@ export const InvHero = ({
             //     // 设置自定义的拖动图像
             //     e.dataTransfer.setDragImage(dragImageRef.current, 0, 0);
             // }
-            // e.dataTransfer.setData(
-            //     "text/plain",
-            //     pieceAttr?.gid.toString() || ""
-            // );
+            e.dataTransfer.setData(
+                "text/plain",
+                pieceAttr?.gid.toString() || ""
+            );
             // console.log("onDragStart: ", e);
         },
 
@@ -132,24 +133,67 @@ export const InvHero = ({
                 x: posX,
                 y: posY,
             });
+
+            logPlayerAction(
+                `move piece ${piece.gid} from slot ${id} to ${posX},${posY}`
+            );
         },
     });
 
     const dropRef = useRef(null);
     const userO = useComponentValue(UserOperation, zeroEntity);
 
-    // useDrop(dropRef, {
-    //     onDragEnter: (e) => {
-    //         console.log("onDragEnter: ", e);
-    //     },
-    //     onDragOver: (e) => {
-    //         e?.preventDefault();
-    //         console.log("onDragOver: ", e);
-    //     },
-    //     onDragLeave(e) {
-    //         console.log("onDragLeave: ", e);
-    //     },
-    // });
+    useDrop(dropRef, {
+        onDragEnter: (e) => {
+            console.log("onDragEnter: ", e);
+        },
+        onDrop(e) {
+            const gid = Number(e?.dataTransfer.getData("text/plain"));
+            if (!gid) {
+                return;
+            }
+
+            const invPiece = getComponentValue(
+                LocalPlayerInvPiece,
+                getEntityIdFromKeys([BigInt(address), BigInt(id)])
+            );
+
+            if (!invPiece || invPiece.gid !== 0) {
+                console.warn("slot occupied");
+                return;
+            }
+
+            const prePiece = getComponentValueStrict(
+                LocalPiece,
+                getEntityIdFromKeys([BigInt(gid)])
+            );
+
+            const preSlot = prePiece.slot;
+
+            // set new  inv piece
+            setComponent(
+                LocalPlayerInvPiece,
+                getEntityIdFromKeys([BigInt(address), BigInt(id)]),
+                { owner: BigInt(address), slot: id, gid: gid }
+            );
+
+            // update pre inv piece
+            updateComponent(
+                LocalPlayerInvPiece,
+                getEntityIdFromKeys([BigInt(address), BigInt(preSlot)]),
+                { gid: 0 }
+            );
+
+            // update  piece
+            updateComponent(LocalPiece, getEntityIdFromKeys([BigInt(gid)]), {
+                slot: id,
+            });
+            logPlayerAction(`move piece ${gid} from ${preSlot} to ${id}`);
+        },
+        onDragLeave(e) {
+            console.log("onDragLeave: ", e);
+        },
+    });
 
     const handleMouseUp = useCallback(
         (e: MouseEvent) => {
@@ -320,7 +364,6 @@ export const InvHero = ({
                     x
                 </button>
                 <div
-                    draggable={true}
                     ref={dropRef}
                     className="flex justify-center w-[95px] h-[130px] rounded-lg opacity-100 bg-contain bg-no-repeat bg-center border-gray-300	border-2 mx-2"
                 >
