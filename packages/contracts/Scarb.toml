@@ -26,8 +26,9 @@ world_address = "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0
 
 # cartridge slot
 # rpc_url = "https://api.cartridge.gg/x/autochessia/katana"
-# account_address = "0x63da8dd5256712ad603d66ff58e05633ae71b7861f5f8e0bd776f3d4b927d2f"
+# account_address = "0x7f0abaf78fa1ba06d21db0b816089305bfcf67963df164b68ff6098ca7a3cab"
 # private_key = ""
+# world_address = "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0"
 
 
 [tool.dojo.world]

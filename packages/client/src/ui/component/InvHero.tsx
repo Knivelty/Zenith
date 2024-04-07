@@ -140,7 +140,7 @@ export const InvHero = ({
         },
     });
 
-    const dropRef = useRef(null);
+    const dropRef = useRef<HTMLDivElement>(null);
     const userO = useComponentValue(UserOperation, zeroEntity);
 
     useDrop(dropRef, {

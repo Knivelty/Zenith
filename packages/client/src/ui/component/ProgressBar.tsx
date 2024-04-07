@@ -1,4 +1,12 @@
-export function ProgressBar({ size, strokeWidth, percentage }) {
+export function ProgressBar({
+    size,
+    strokeWidth,
+    percentage,
+}: {
+    size: number;
+    strokeWidth: number;
+    percentage: number;
+}) {
     const radius = size / 2;
     const normalizedRadius = radius - strokeWidth * 2;
     const circumference = normalizedRadius * 2 * Math.PI;
