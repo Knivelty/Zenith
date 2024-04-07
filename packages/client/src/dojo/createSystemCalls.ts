@@ -1,6 +1,6 @@
 import { ClientComponents } from "./createClientComponents";
 import { IWorld } from "./generated/generated";
-import { Account } from "starknet";
+import { AccountInterface } from "starknet";
 import { ContractComponents } from "./generated/contractComponents";
 import {
     getComponentValue,
@@ -28,7 +28,7 @@ export function createSystemCalls(
         BattleLogs,
     }: ClientComponents
 ) {
-    const spawn = async (account: Account) => {
+    const spawn = async (account: AccountInterface) => {
         try {
             const { transaction_hash: txHash } = await client.actions.spawn({
                 account,
@@ -41,7 +41,7 @@ export function createSystemCalls(
         }
     };
 
-    const startBattle = async (account: Account) => {
+    const startBattle = async (account: AccountInterface) => {
         try {
             return await client.actions.startBattle({ account });
         } catch (e) {
@@ -50,7 +50,7 @@ export function createSystemCalls(
         }
     };
 
-    const commitPreparation = async (account: Account) => {
+    const commitPreparation = async (account: AccountInterface) => {
         try {
             // calculate the diff
 
@@ -103,7 +103,7 @@ export function createSystemCalls(
         }
     };
 
-    const nextRound = async (account: Account) => {
+    const nextRound = async (account: AccountInterface) => {
         try {
             return await client.actions.nextRound({ account });
         } catch (e) {
@@ -112,7 +112,7 @@ export function createSystemCalls(
         }
     };
 
-    const refreshAltar = async (account: Account) => {
+    const refreshAltar = async (account: AccountInterface) => {
         try {
             return await client.actions.refreshAltar({ account });
         } catch (e) {
@@ -121,7 +121,7 @@ export function createSystemCalls(
         }
     };
 
-    const getCoin = async (account: Account) => {
+    const getCoin = async (account: AccountInterface) => {
         try {
             return await client.actions.getCoin({ account });
         } catch (e) {
@@ -131,7 +131,7 @@ export function createSystemCalls(
     };
 
     const buyHero = async (
-        account: Account,
+        account: AccountInterface,
         altarSlot: number,
         invSlot: number
     ) => {
@@ -147,7 +147,7 @@ export function createSystemCalls(
         }
     };
 
-    const buyExp = async (account: Account) => {
+    const buyExp = async (account: AccountInterface) => {
         try {
             return await client.actions.buyExp({
                 account,
@@ -158,7 +158,7 @@ export function createSystemCalls(
         }
     };
 
-    const sellHero = async (account: Account, gid: number) => {
+    const sellHero = async (account: AccountInterface, gid: number) => {
         try {
             return await client.actions.sellHero({ account, gid });
         } catch (e) {

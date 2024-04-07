@@ -7,7 +7,7 @@ version = "0.0.1"
 sierra-replace-ids = true
 
 [dependencies]
-dojo = { git = "https://github.com/dojoengine/dojo", tag = "v0.5.1" }
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v0.6.0" }
 alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria.git" }
 
 [[target.dojo]]
@@ -22,11 +22,11 @@ initializer_class_hash = "0xbeef"
 rpc_url = "http://localhost:5050/"
 account_address = "0x6162896d1d7ab204c7ccac6dd5f8e9e7c25ecd5ae4fcb4ad32e57786bb46e03"
 private_key = "0x1800000000300000180000000000030000000000003006001800006600"
-
+world_address = "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0"
 
 # cartridge slot
 # rpc_url = "https://api.cartridge.gg/x/autochessia/katana"
-# account_address = "0x5f6bb0775b07f7b74e0648334e395a633d22ea76a90457a0fbc45b6c8a08790"
+# account_address = "0x63da8dd5256712ad603d66ff58e05633ae71b7861f5f8e0bd776f3d4b927d2f"
 # private_key = ""
 
 

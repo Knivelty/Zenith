@@ -17,12 +17,14 @@ export const createBurner = async ({ ...config }: DojoConfig) => {
         masterAccount,
         accountClassHash: config.accountClassHash,
         rpcProvider,
+        feeTokenAddress: config.feeTokenAddress,
     });
 
     // const current = burnerManager.getActiveAccount();
 
     if (burnerManager.list().length === 0) {
         try {
+            await burnerManager.init();
             await burnerManager.create();
 
             // sleep 3s
@@ -31,8 +33,6 @@ export const createBurner = async ({ ...config }: DojoConfig) => {
             console.error(e);
         }
     }
-
-    await burnerManager.init();
 
     // await burnerManager.init();
 

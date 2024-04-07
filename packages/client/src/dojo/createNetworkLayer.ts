@@ -26,7 +26,7 @@ export const createNetworkLayer = async () => {
     const { burnerManager } = await createBurner(dojoConfig);
 
     if (!burnerManager.account) {
-        location.reload();
+        // location.reload();
         throw new Error("reload");
     }
 

@@ -1,6 +1,6 @@
 import { PhaserLayer } from "../..";
-import { getEntityIdFromKeys, snoise } from "@dojoengine/utils";
-import { defineSystemST, zeroEntity } from "../../../utils";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { defineSystemST } from "../../../utils";
 import { world } from "../../../dojo/generated/world";
 import {
     Has,

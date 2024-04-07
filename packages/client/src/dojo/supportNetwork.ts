@@ -6,7 +6,7 @@ export const supportedNetworks: Record<
         rpcUrl: "http://localhost:5050",
         toriiUrl: "http://localhost:8080",
         worldAddress:
-            "0x69004d77f08383338e5bd2af7cdf03669af92e195839a62598dcd58380076da",
+            "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0",
     },
     slot: {
         rpcUrl: "https://api.cartridge.gg/x/autochessia/katana",

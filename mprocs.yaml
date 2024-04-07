@@ -1,11 +1,11 @@
 procs:
   contracts:
     cwd: packages/contracts
-    shell: sozo build && pnpm wait-port 5050 && sozo migrate && bash scripts/default_auth.sh
+    shell: sozo build && pnpm wait-port 5050 && sozo migrate plan && sozo migrate apply && bash scripts/default_auth.sh
   client:
     cwd: packages/client
     shell: pnpm run dev
   katana:
     shell: katana
   torii:
-    shell: rm indexer.db && torii --world "0x57cc45d1cbf3d842745b042b512514f5ea7da85785623e161d5838ae74de210" --database indexer.db
+    shell: rm indexer.db && torii --world "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0" --database indexer.db

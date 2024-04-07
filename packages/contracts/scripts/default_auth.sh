@@ -5,9 +5,9 @@ pushd $(dirname "$0")/..
 export RPC_URL="http://localhost:5050"
 # export RPC_URL="https://api.cartridge.gg/x/autochessia/katana"
 
-export WORLD_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.world.address')
+export WORLD_ADDRESS=$(cat ./manifests/dev/manifest.json | jq -r '.world.address')
 
-export HOME_ADDRESS=$(cat ./target/dev/manifest.json | jq -r '.contracts[] | select(.name == "autochessia::home::home" ).address')
+export HOME_ADDRESS=$(cat ./manifests/dev/manifest.json | jq -r '.contracts[] | select(.kind == "DojoContract" ).address')
 
 echo "---------------------------------------------------------------------------"
 echo world : $WORLD_ADDRESS
@@ -16,16 +16,19 @@ echo home : $HOME_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 # enable system -> component authorizations
-COMPONENTS=("Creature" "Player" "Piece" "InningBattle" "GlobalState" "MatchState" "Altar" "PlayerPiece" "PlayerInvPiece" "CreatureProfile" "StageProfile" "StageProfilePiece" "LevelConfig")
+MODELS=("Player" "Piece" "InningBattle" "GlobalState" "MatchState" "Altar" "PlayerPiece" "PlayerInvPiece" "CreatureProfile" "StageProfile" "StageProfilePiece" "LevelConfig")
 
-for component in ${COMPONENTS[@]}; do
-    sozo auth writer $component $HOME_ADDRESS --world $WORLD_ADDRESS --rpc-url $RPC_URL
-    # necessary even in local development, to avoid nonce duplicate
-    sleep 1
+AUTH_MODELS=""
+# Give permission to the action system to write on all the models.
+for component in ${MODELS[@]}; do
+    AUTH_MODELS+="$component,$HOME_ADDRESS "
 done
+
+sozo auth grant writer $AUTH_MODELS
 
 echo "Default authorizations have been successfully set."
 
 # run intialize function
+sleep 1
 sozo execute $HOME_ADDRESS "initialize"
 echo "Initialize successfully"

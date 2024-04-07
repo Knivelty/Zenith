@@ -2,31 +2,28 @@ use autochessia::models::{CreatureProfile, StageProfile, Piece, Player};
 use autochessia::customType::{PieceChange, RoundResult};
 
 
-// define the interface
-#[starknet::interface]
-trait IHome<TContractState> {
-    fn initialize(self: @TContractState);
-
+#[dojo::interface]
+trait IHome {
+    fn initialize();
 
     // set args
-    fn setCreatureProfile(self: @TContractState, p: CreatureProfile);
-    fn setStageProfile(self: @TContractState, p: StageProfile);
+    fn setCreatureProfile(p: CreatureProfile);
+    fn setStageProfile(p: StageProfile);
+
+    fn spawn();
+    fn refreshAltar();
+    fn buyHero(altarSlot: u8, invSlot: u8);
+    fn buyExp();
+    fn sellHero(gid: u32);
+    fn commitPreparation(changes: Array<PieceChange>, result: RoundResult);
+    fn nextRound();
 
 
-    fn spawn(self: @TContractState);
-    fn refreshAltar(self: @TContractState);
-    fn buyHero(self: @TContractState, altarSlot: u8, invSlot: u8);
-    fn buyExp(self: @TContractState);
-    fn sellHero(self: @TContractState, gid: u32);
-    fn commitPreparation(self: @TContractState, changes: Array<PieceChange>, result: RoundResult);
-    fn nextRound(self: @TContractState);
-
-
-    fn startBattle(self: @TContractState);
+    fn startBattle();
 
     // debug func
-    fn getCoin(self: @TContractState);
-    fn exit(self: @TContractState);
+    fn getCoin();
+    fn exit();
 }
 
 use starknet::{
@@ -61,8 +58,7 @@ mod home {
         PieceActions: PieceActions,
     }
 
-    fn _refreshAltar(self: @ContractState, playerAddr: ContractAddress) {
-        let world = self.world_dispatcher.read();
+    fn _refreshAltar(world: IWorldDispatcher, playerAddr: ContractAddress) {
 
         let mut player = get!(world, playerAddr, Player);
 
@@ -107,8 +103,7 @@ mod home {
     }
 
 
-    fn _validPieceChange(self: @ContractState, c: @PieceChange) {
-        let world = self.world_dispatcher.read();
+    fn _validPieceChange(world: IWorldDispatcher, c: @PieceChange) {
 
         let change = *c;
         let playerAddr = get_caller_address();
@@ -181,8 +176,7 @@ mod home {
     }
 
 
-    fn _spawnEnemyPiece(self: @ContractState, round: u8, enemyAddr: ContractAddress) {
-        let world = self.world_dispatcher.read();
+    fn _spawnEnemyPiece(world: IWorldDispatcher, round: u8, enemyAddr: ContractAddress) {
         let playerAddr = get_caller_address();
 
         let mut globalState = get!(world, 1, GlobalState);
@@ -255,8 +249,7 @@ mod home {
         set!(world, (globalState, enemy));
     }
 
-    fn _giveRoundCoinReward(self: @ContractState) {
-        let world = self.world_dispatcher.read();
+    fn _giveRoundCoinReward(world: IWorldDispatcher) {
         let playerAddr = get_caller_address();
 
         let mut player = get!(world, playerAddr, Player);
@@ -288,9 +281,7 @@ mod home {
         // intialize all args
         // TODO: set as real args
 
-        fn initialize(self: @ContractState) {
-            let world = self.world_dispatcher.read();
-
+        fn initialize(world: IWorldDispatcher) {
             // initialize creature
 
             // Minotaur
@@ -576,12 +567,11 @@ mod home {
             set!(world, (LevelConfig { current: 9, expForNext: 144 }));
         }
 
-        fn setCreatureProfile(self: @ContractState, p: CreatureProfile) {}
-        fn setStageProfile(self: @ContractState, p: StageProfile) {}
+        fn setCreatureProfile(world: IWorldDispatcher, p: CreatureProfile) {}
+        fn setStageProfile(world: IWorldDispatcher, p: StageProfile) {}
 
         // ContractState is defined by system decorator expansion
-        fn spawn(self: @ContractState) {
-            let world = self.world_dispatcher.read();
+        fn spawn(world: IWorldDispatcher) {
             let playerAddr = get_caller_address();
             // get player's enemy address
             let enemyAddr = generate_pseudo_random_address(playerAddr.into());
@@ -621,7 +611,7 @@ mod home {
             );
 
             // refresh hero altar
-            _refreshAltar(self, playerAddr);
+            _refreshAltar(world, playerAddr);
 
             // get the first stage profile
             let stageProfile = get!(world, 1, StageProfile);
@@ -646,7 +636,7 @@ mod home {
             );
 
             // spawn enemy piece
-            _spawnEnemyPiece(self, 1, enemyAddr);
+            _spawnEnemyPiece(world, 1, enemyAddr);
 
             // create battle
             set!(
@@ -670,10 +660,8 @@ mod home {
         // include: refresh, move
         // the contract side need to valid the validity
         fn commitPreparation(
-            self: @ContractState, changes: Array<PieceChange>, result: RoundResult
+            world: IWorldDispatcher, changes: Array<PieceChange>, result: RoundResult
         ) {
-            let world = self.world_dispatcher.read();
-
             let playerAddr = get_caller_address();
 
             let mut idx = 0;
@@ -686,7 +674,7 @@ mod home {
                 }
 
                 let change = changes.at(idx);
-                _validPieceChange(self, change);
+                _validPieceChange(world, change);
 
                 idx = idx + 1;
             };
@@ -731,8 +719,7 @@ mod home {
             set!(world, (inningBattle, player));
         }
 
-        fn refreshAltar(self: @ContractState) {
-            let world = self.world_dispatcher.read();
+        fn refreshAltar(world: IWorldDispatcher) {
             let playerAddr = get_caller_address();
 
             let mut player = get!(world, playerAddr, Player);
@@ -742,11 +729,10 @@ mod home {
 
             set!(world, (player));
 
-            _refreshAltar(self, playerAddr);
+            _refreshAltar(world, playerAddr);
         }
 
-        fn buyExp(self: @ContractState) {
-            let world = self.world_dispatcher.read();
+        fn buyExp(world: IWorldDispatcher) {
             let playerAddr = get_caller_address();
             let mut player = get!(world, playerAddr, Player);
 
@@ -768,8 +754,7 @@ mod home {
             set!(world, (player));
         }
 
-        fn buyHero(self: @ContractState, altarSlot: u8, invSlot: u8) {
-            let world = self.world_dispatcher.read();
+        fn buyHero(world: IWorldDispatcher, altarSlot: u8, invSlot: u8) {
             let playerAddr = get_caller_address();
 
             let mut player = get!(world, playerAddr, Player);
@@ -850,8 +835,7 @@ mod home {
         // 
         }
 
-        fn sellHero(self: @ContractState, gid: u32) {
-            let world = self.world_dispatcher.read();
+        fn sellHero(world: IWorldDispatcher, gid: u32) {
             let playerAddr = get_caller_address();
 
             let mut piece = get!(world, gid, Piece);
@@ -877,8 +861,7 @@ mod home {
             set!(world, (player));
         }
 
-        fn nextRound(self: @ContractState) {
-            let world = self.world_dispatcher.read();
+        fn nextRound(world: IWorldDispatcher) {
             let playerAddr = get_caller_address();
             let mut player = get!(world, playerAddr, Player);
             let mut currentMatchState = get!(world, player.inMatch, MatchState);
@@ -893,7 +876,7 @@ mod home {
 
             // get new piece
             let enemyAddr = lastInningBattle.awayPlayer;
-            _spawnEnemyPiece(self, currentRound + 1, enemyAddr);
+            _spawnEnemyPiece(world, currentRound + 1, enemyAddr);
 
             set!(
                 world,
@@ -923,14 +906,13 @@ mod home {
             set!(world, (player));
 
             // add more coin
-            _giveRoundCoinReward(self);
+            _giveRoundCoinReward(world);
         }
 
 
-        fn startBattle(self: @ContractState) {}
+        fn startBattle(world: IWorldDispatcher) {}
 
-        fn getCoin(self: @ContractState) {
-            let world = self.world_dispatcher.read();
+        fn getCoin(world: IWorldDispatcher) {
             let playerAddr = get_caller_address();
 
             let mut player = get!(world, playerAddr, Player);
@@ -940,8 +922,7 @@ mod home {
         }
 
         // exit current game
-        fn exit(self: @ContractState) {
-            let world = self.world_dispatcher.read();
+        fn exit(world: IWorldDispatcher) {
             let playerAddr = get_caller_address();
 
             let player = get!(world, playerAddr, Player);
