@@ -276,6 +276,14 @@ mod home {
         set!(world, (player));
     }
 
+    fn _registerPlayer(world: IWorldDispatcher, playerAddr: ContractAddress) {
+        let playerProfile = get!(world, playerAddr, PlayerProfile);
+
+        if (playerProfile.pieceCounter == 0) {
+            set!(world, PlayerProfile { player: playerAddr, pieceCounter: 0, })
+        }
+    }
+
 
     // impl: implement functions specified in trait
     #[abi(embed_v0)]
@@ -608,6 +616,7 @@ mod home {
                     refreshed: false,
                 }
             );
+            _registerPlayer(world, playerAddr);
 
             // refresh hero altar
             _refreshAltar(world, playerAddr);
@@ -633,6 +642,7 @@ mod home {
                     refreshed: true
                 }
             );
+            _registerPlayer(world, playerAddr);
 
             // spawn enemy piece
             _spawnEnemyPiece(world, 1, enemyAddr);
@@ -840,6 +850,10 @@ mod home {
             let mut piece = get!(world, gid, Piece);
             let mut invPiece = get!(world, (playerAddr, piece.slot), PlayerInvPiece);
             let mut player = get!(world, playerAddr, Player);
+
+            if (invPiece.gid == 0) {
+                panic!("empty slot, cannot sell");
+            }
 
             // refund coin
             // TODO: judge by level

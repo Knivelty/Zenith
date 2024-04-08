@@ -10,8 +10,8 @@ import { PhaserLayer } from "../..";
 import { TILE_WIDTH } from "../../config/constants";
 import { chainToWorldCoord, worldToChainCoord } from "./coorConvert";
 import { zeroEntity } from "../../../utils";
-import { debug } from "../../../ui/lib/utils";
 import { isEqual } from "lodash";
+import { logDebug } from "../../../ui/lib/utils";
 
 export const utils = (layer: PhaserLayer) => {
     const {
@@ -41,7 +41,7 @@ export const utils = (layer: PhaserLayer) => {
         if (isEqual(hero.position, { x: 0, y: 0 })) {
             return;
         }
-        debug(`removed piece, entity: ${entity} gid: ${gid}`);
+        logDebug(`removed piece, entity: ${entity} gid: ${gid}`);
 
         hero.despawn();
         // hero.setComponent({
@@ -66,23 +66,25 @@ export const utils = (layer: PhaserLayer) => {
         );
 
         if (!playerPiece) {
-            debug("no piece for ", playerAddr, index);
+            logDebug("no piece for ", playerAddr, index);
             return;
         }
 
         const entity = getEntityIdFromKeys([BigInt(playerPiece.gid)]);
 
-        debug(`try get piece ${playerAddr} ${index} ${playerPiece.gid}`);
+        logDebug(`try get piece ${playerAddr} ${index} ${playerPiece.gid}`);
         const piece = getComponentValue(LocalPiece, entity);
         if (!piece) {
-            throw Error(`try get piece ${playerAddr} ${index} ${playerPiece.gid}`);
+            throw Error(
+                `try get piece ${playerAddr} ${index} ${playerPiece.gid}`
+            );
         }
 
         const isEnemy = BigInt(account.address) !== piece.owner;
 
         const { worldX, worldY } = chainToWorldCoord(piece.x, piece.y, isEnemy);
 
-        debug(
+        logDebug(
             `spawn ${playerAddr} ${index} ${piece.gid} at ${worldX}, ${worldY} `
         );
 
@@ -130,7 +132,7 @@ export const utils = (layer: PhaserLayer) => {
 
                     sprite.off("dragend");
                     sprite.on("dragend", (p: Phaser.Input.Pointer) => {
-                        debug("drag end");
+                        logDebug("drag end");
                         sprite.clearTint(); // clear tint color
 
                         // set dragging to false

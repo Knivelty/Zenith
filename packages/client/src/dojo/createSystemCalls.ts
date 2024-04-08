@@ -1,6 +1,6 @@
 import { ClientComponents } from "./createClientComponents";
 import { IWorld } from "./generated/typescript/contracts.gen";
-import { Account } from "starknet";
+import { Account, RpcProvider } from "starknet";
 import {
     getComponentValue,
     getComponentValueStrict,
@@ -8,16 +8,19 @@ import {
 } from "@dojoengine/recs";
 import { zeroEntity } from "../utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { isBoolean, isEqual, isNull, isUndefined } from "lodash";
+import { isEqual } from "lodash";
 import { PieceChange } from "./types";
 import { processBattle } from "../phaser/systems/utils/processBattleLogs";
+import { opBuyHero } from "./opRender/opBuyHero";
+import { opSellHero } from "./opRender/opSellHero";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
     { client }: { client: IWorld },
     clientComponents: ClientComponents,
-    { GameStatus, LocalPiecesChangeTrack, Piece, LocalPiece }: ClientComponents
+    { GameStatus, LocalPiecesChangeTrack, Piece, LocalPiece }: ClientComponents,
+    rpcProvider: RpcProvider
 ) {
     const spawn = async (account: Account) => {
         try {
@@ -126,16 +129,14 @@ export function createSystemCalls(
         altarSlot: number,
         invSlot: number
     ) => {
-        try {
-            return await client.home.buyHero({
-                account,
-                altarSlot,
-                invSlot,
-            });
-        } catch (e) {
-            console.error(e);
-            throw e;
-        }
+        await opBuyHero(
+            { client },
+            clientComponents,
+            rpcProvider,
+            account,
+            altarSlot,
+            invSlot
+        );
     };
 
     const buyExp = async (account: Account) => {
@@ -151,7 +152,13 @@ export function createSystemCalls(
 
     const sellHero = async (account: Account, gid: number) => {
         try {
-            return await client.home.sellHero({ account, gid });
+            await opSellHero(
+                { client },
+                clientComponents,
+                rpcProvider,
+                account,
+                gid
+            );
         } catch (e) {
             console.error(e);
             throw e;

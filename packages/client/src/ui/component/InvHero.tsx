@@ -13,7 +13,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { worldToChainCoord } from "../../phaser/systems/utils/coorConvert";
 import { useComponentValue } from "@dojoengine/react";
 import { zeroEntity } from "../../utils";
-import { logPlayerAction } from "../lib/utils";
+import { logDebug, logPlayerAction } from "../lib/utils";
 
 export const InvHero = ({
     id,
@@ -158,7 +158,9 @@ export const InvHero = ({
                 getEntityIdFromKeys([BigInt(address), BigInt(id)])
             );
 
-            if (!invPiece || invPiece.gid !== 0) {
+            // logDebug(` ${invPiece}`);
+
+            if (invPiece && invPiece.gid !== 0) {
                 console.warn("slot occupied");
                 return;
             }
@@ -365,7 +367,7 @@ export const InvHero = ({
                 </button>
                 <div
                     ref={dropRef}
-                    className="flex justify-center w-[95px] h-[130px] rounded-lg opacity-100 bg-contain bg-no-repeat bg-center border-gray-300	border-2 mx-2"
+                    className="flex justify-center w-[95px] h-[130px] rounded-lg opacity-100 bg-contain bg-no-repeat bg-center bg-black border-[#05FF00]	border-2 mx-2"
                 >
                     <img
                         ref={dragRef}

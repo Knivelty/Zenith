@@ -95,6 +95,9 @@ importers:
       lucide-react:
         specifier: ^0.292.0
         version: 0.292.0(react@18.2.0)
+      micro-starknet:
+        specifier: ^0.2.3
+        version: 0.2.3
       mobx:
         specifier: ^6.9.0
         version: 6.12.0

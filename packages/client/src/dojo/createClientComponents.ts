@@ -19,6 +19,7 @@ export function createClientComponents({
         ...contractComponents,
         // create overridable component for optimistic rendering
         Player: overridableComponent(contractComponents.Player),
+        PlayerProfile: overridableComponent(contractComponents.PlayerProfile),
         Piece: overridableComponent(contractComponents.Piece),
         PlayerInvPiece: overridableComponent(contractComponents.PlayerInvPiece),
         Altar: overridableComponent(contractComponents.Altar),

@@ -16,6 +16,7 @@ import {
 import { createClient } from "graphql-ws";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
+import { RpcProvider } from "starknet";
 export type SetupResult = Awaited<ReturnType<typeof setup>>;
 
 export async function setup({
@@ -27,6 +28,10 @@ export async function setup({
         toriiUrl: config.toriiUrl,
         relayUrl: config.relayUrl,
         worldAddress: config.worldAddress,
+    });
+
+    const rpcProvider = new RpcProvider({
+        nodeUrl: config.rpcUrl,
     });
 
     // ws link
@@ -99,7 +104,8 @@ export async function setup({
         systemCalls: createSystemCalls(
             { client },
             clientComponents,
-            clientComponents
+            clientComponents,
+            rpcProvider
         ),
         config,
         graphqlClient,
