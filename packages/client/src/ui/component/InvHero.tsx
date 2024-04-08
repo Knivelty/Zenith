@@ -145,7 +145,7 @@ export const InvHero = ({
 
     useDrop(dropRef, {
         onDragEnter: (e) => {
-            console.log("onDragEnter: ", e);
+            // console.log("onDragEnter: ", e);
         },
         onDrop(e) {
             const gid = Number(e?.dataTransfer.getData("text/plain"));
@@ -191,7 +191,7 @@ export const InvHero = ({
             logPlayerAction(`move piece ${gid} from ${preSlot} to ${id}`);
         },
         onDragLeave(e) {
-            console.log("onDragLeave: ", e);
+            // console.log("onDragLeave: ", e);
         },
     });
 

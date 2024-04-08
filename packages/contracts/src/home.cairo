@@ -809,12 +809,14 @@ mod home {
                 panic!("this slot occupied")
             }
 
+            let gid = gen_piece_gid(playerAddr, playerProfile.pieceCounter);
+
             // spwan piece
             set!(
                 world,
                 (
                     Piece {
-                        gid: playerProfile.pieceCounter,
+                        gid: gid,
                         owner: playerAddr,
                         idx: 0,
                         slot: invSlot,
@@ -823,9 +825,7 @@ mod home {
                         x: 0,
                         y: 0
                     },
-                    PlayerInvPiece {
-                        owner: playerAddr, slot: invSlot, gid: playerProfile.pieceCounter
-                    },
+                    PlayerInvPiece { owner: playerAddr, slot: invSlot, gid: gid },
                     playerProfile,
                     altar,
                     player
