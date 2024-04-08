@@ -4,7 +4,7 @@ import {
     defineComponent,
     overridableComponent,
 } from "@dojoengine/recs";
-import { ContractComponents } from "./generated/contractComponents";
+import { ContractComponents } from "./generated/typescript/models.gen";
 
 export type ClientComponents = ReturnType<typeof createClientComponents>;
 
@@ -17,6 +17,12 @@ export function createClientComponents({
 }) {
     return {
         ...contractComponents,
+        // create overridable component for optimistic rendering
+        Player: overridableComponent(contractComponents.Player),
+        Piece: overridableComponent(contractComponents.Piece),
+        PlayerInvPiece: overridableComponent(contractComponents.PlayerInvPiece),
+        Altar: overridableComponent(contractComponents.Altar),
+        GlobalState: overridableComponent(contractComponents.GlobalState),
         // create the corresponding local component
         LocalPiece: defineComponent(world, {
             ...contractComponents.Piece.schema,

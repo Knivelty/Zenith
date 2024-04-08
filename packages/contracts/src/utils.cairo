@@ -37,6 +37,15 @@ fn get_felt_mod(divided: felt252, divid: felt252) -> u8 {
     return (y % x).try_into().unwrap();
 }
 
+
+fn gen_piece_gid(player: ContractAddress, counter: u32) -> u32 {
+    let hash = PoseidonTrait::new().update(player.into()).update(counter.into()).finalize();
+
+    let MASK_32: u256 = 0xffffffff;
+
+    return (hash.into() & MASK_32).try_into().unwrap();
+}
+
 fn two_to(mut power: usize) -> felt252 {
     assert(power < 252, 'Power too large');
     let mut result = 1;

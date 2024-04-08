@@ -1,13 +1,10 @@
 import { getSyncEntities } from "@dojoengine/state";
 import * as torii from "@dojoengine/torii-client";
-import {
-    ClientComponents,
-    createClientComponents,
-} from "../createClientComponents";
+import { createClientComponents } from "../createClientComponents";
 import { createSystemCalls } from "../createSystemCalls";
-import { defineContractComponents } from "./contractComponents";
+import { defineContractComponents } from "./typescript/models.gen";
 import { world } from "./world";
-import { setupWorld } from "./generated";
+import { setupWorld } from "./typescript/contracts.gen";
 import { DojoConfig, DojoProvider } from "@dojoengine/core";
 import {
     ApolloClient,

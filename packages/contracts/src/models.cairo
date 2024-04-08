@@ -16,8 +16,15 @@ struct Player {
     heroesCount: u8,
     // hero count in inventory 
     inventoryCount: u8,
-        // a free refresh opportunity for each round
+    // a free refresh opportunity for each round
     refreshed: bool,
+}
+
+#[derive(Model, Copy, Drop, Serde)]
+struct PlayerProfile {
+    #[key]
+    player: ContractAddress,
+    pieceCounter: u32
 }
 
 
@@ -113,7 +120,6 @@ struct GlobalState {
     index: u32,
     totalMatch: u32,
     totalCreature: u8,
-    totalPieceCounter: u32,
 }
 
 #[derive(Model, Copy, Drop, Serde)]

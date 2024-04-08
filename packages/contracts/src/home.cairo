@@ -38,10 +38,12 @@ mod home {
     };
     use autochessia::models::{
         CreatureProfile, Position, Piece, Player, InningBattle, GlobalState, MatchState, Altar,
-        PlayerPiece, PlayerInvPiece, StageProfile, StageProfilePiece, LevelConfig
+        PlayerPiece, PlayerInvPiece, StageProfile, StageProfilePiece, LevelConfig, PlayerProfile
     };
 
-    use autochessia::utils::{next_position, generate_pseudo_random_address, get_felt_mod};
+    use autochessia::utils::{
+        next_position, generate_pseudo_random_address, get_felt_mod, gen_piece_gid
+    };
     use autochessia::customType::{PieceChange, RoundResult};
 
     use autochessia::customEvent::{PieceActions, PieceAction};
@@ -59,7 +61,6 @@ mod home {
     }
 
     fn _refreshAltar(world: IWorldDispatcher, playerAddr: ContractAddress) {
-
         let mut player = get!(world, playerAddr, Player);
 
         // generate pseudo random number on block hash
@@ -104,7 +105,6 @@ mod home {
 
 
     fn _validPieceChange(world: IWorldDispatcher, c: @PieceChange) {
-
         let change = *c;
         let playerAddr = get_caller_address();
         let mut player = get!(world, playerAddr, Player);
@@ -179,7 +179,7 @@ mod home {
     fn _spawnEnemyPiece(world: IWorldDispatcher, round: u8, enemyAddr: ContractAddress) {
         let playerAddr = get_caller_address();
 
-        let mut globalState = get!(world, 1, GlobalState);
+        let mut enemyProfile = get!(world, enemyAddr, PlayerProfile);
 
         // get the current stage profile
         let stageProfile = get!(world, round, StageProfile);
@@ -218,13 +218,15 @@ mod home {
 
         loop {
             let sp = get!(world, (round, idx), StageProfilePiece);
-            globalState.totalPieceCounter += 1;
+            enemyProfile.pieceCounter += 1;
+            let gid = gen_piece_gid(enemyAddr, enemyProfile.pieceCounter);
+
             set!(
                 world,
                 (
-                    PlayerPiece { owner: enemyAddr, idx: idx, gid: globalState.totalPieceCounter },
+                    PlayerPiece { owner: enemyAddr, idx: idx, gid: gid },
                     Piece {
-                        gid: globalState.totalPieceCounter,
+                        gid: gid,
                         owner: enemyAddr,
                         idx: idx,
                         slot: 0,
@@ -246,7 +248,7 @@ mod home {
         let mut enemy = get!(world, enemyAddr, Player);
         enemy.heroesCount = stageProfile.pieceCount;
 
-        set!(world, (globalState, enemy));
+        set!(world, (enemy, enemyProfile));
     }
 
     fn _giveRoundCoinReward(world: IWorldDispatcher) {
@@ -444,10 +446,7 @@ mod home {
                 }
             );
 
-            set!(
-                world,
-                GlobalState { index: 1, totalMatch: 0, totalCreature: 10, totalPieceCounter: 0 }
-            );
+            set!(world, GlobalState { index: 1, totalMatch: 0, totalCreature: 10 });
 
             // intialize stage profile
 
@@ -759,8 +758,8 @@ mod home {
 
             let mut player = get!(world, playerAddr, Player);
             let mut altar = get!(world, playerAddr, Altar);
-            let mut globalState = get!(world, 1, GlobalState);
-            globalState.totalPieceCounter += 1;
+            let mut playerProfile = get!(world, playerAddr, PlayerProfile);
+            playerProfile.pieceCounter += 1;
 
             // get creature Id
             let creatureId = match altarSlot.into() {
@@ -815,7 +814,7 @@ mod home {
                 world,
                 (
                     Piece {
-                        gid: globalState.totalPieceCounter,
+                        gid: playerProfile.pieceCounter,
                         owner: playerAddr,
                         idx: 0,
                         slot: invSlot,
@@ -825,10 +824,10 @@ mod home {
                         y: 0
                     },
                     PlayerInvPiece {
-                        owner: playerAddr, slot: invSlot, gid: globalState.totalPieceCounter
+                        owner: playerAddr, slot: invSlot, gid: playerProfile.pieceCounter
                     },
+                    playerProfile,
                     altar,
-                    globalState,
                     player
                 )
             )
