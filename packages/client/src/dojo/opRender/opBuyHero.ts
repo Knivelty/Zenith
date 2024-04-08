@@ -68,10 +68,13 @@ export const opBuyHero = async (
     altarArray[altarSlot][1] = 0;
     Altar.addOverride(altarOverride, {
         entity: playerEntity,
-        value: altarArray.reduce((accumulator, [key, value]) => {
-            accumulator[key] = value;
-            return accumulator;
-        }, {}),
+        value: altarArray.reduce(
+            (accumulator, [key, value]) => {
+                accumulator[key] = value;
+                return accumulator;
+            },
+            {} as { [key: string]: any }
+        ),
     });
 
     // player inv piece override

@@ -12,7 +12,7 @@ export const supportedNetworks: Record<
         rpcUrl: "https://api.cartridge.gg/x/autochessia/katana",
         toriiUrl: "https://api.cartridge.gg/x/autochessia/torii",
         worldAddress:
-            "0x57cc45d1cbf3d842745b042b512514f5ea7da85785623e161d5838ae74de210",
+            "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0",
     },
 };
 
