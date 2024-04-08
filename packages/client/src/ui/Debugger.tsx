@@ -46,7 +46,7 @@ export function Debugger() {
             <Button>Debug Buttons</Button>
             <Button
                 onClick={async () => {
-                    const { receipt } = await commitPreparation(account);
+                    await commitPreparation(account);
                 }}
             >
                 start battle
@@ -60,7 +60,7 @@ export function Debugger() {
             </Button>
             <Button
                 onClick={async () => {
-                    const { receipt } = await nextRound(account);
+                    await nextRound(account);
                 }}
             >
                 next round

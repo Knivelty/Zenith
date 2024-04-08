@@ -1,16 +1,16 @@
-import { AccountInterface } from "starknet";
-import { IWorld } from "../generated/generated";
+import { Account, AccountInterface } from "starknet";
+import { IWorld } from "../generated/typescript/contracts.gen";
 import { ClientComponents } from "../createClientComponents";
 
 export const opBuyHero = async (
     { client }: { client: IWorld },
     { Player, Altar, PlayerInvPiece }: ClientComponents,
-    account: AccountInterface,
+    account: Account,
     altarSlot: number,
     invSlot: number
 ) => {
     try {
-        return await client.actions.buyHero({
+        return await client.home.buyHero({
             account,
             altarSlot,
             invSlot,

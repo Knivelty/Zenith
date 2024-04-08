@@ -1,7 +1,7 @@
 procs:
   contracts:
     cwd: packages/contracts
-    shell: sozo build --typescript --bindings-output "../client/src/dojo/generated" && pnpm wait-port 5050 && sozo migrate plan && sozo migrate apply && bash scripts/default_auth.sh
+    shell: sozo build && pnpm wait-port 5050 && sozo migrate plan && sozo migrate apply && bash scripts/default_auth.sh
   client:
     cwd: packages/client
     shell: pnpm run dev

@@ -1,7 +1,6 @@
 import { ClientComponents } from "./createClientComponents";
-import { IWorld } from "./generated/generated";
-import { AccountInterface } from "starknet";
-import { ContractComponents } from "./generated/contractComponents";
+import { IWorld } from "./generated/typescript/contracts.gen";
+import { Account } from "starknet";
 import {
     getComponentValue,
     getComponentValueStrict,
@@ -20,9 +19,9 @@ export function createSystemCalls(
     clientComponents: ClientComponents,
     { GameStatus, LocalPiecesChangeTrack, Piece, LocalPiece }: ClientComponents
 ) {
-    const spawn = async (account: AccountInterface) => {
+    const spawn = async (account: Account) => {
         try {
-            const { transaction_hash: txHash } = await client.actions.spawn({
+            const { transaction_hash: txHash } = await client.home.spawn({
                 account,
             });
 
@@ -33,16 +32,16 @@ export function createSystemCalls(
         }
     };
 
-    const startBattle = async (account: AccountInterface) => {
+    const startBattle = async (account: Account) => {
         try {
-            return await client.actions.startBattle({ account });
+            return await client.home.startBattle({ account });
         } catch (e) {
             console.error(e);
             throw e;
         }
     };
 
-    const commitPreparation = async (account: AccountInterface) => {
+    const commitPreparation = async (account: Account) => {
         try {
             // calculate the diff
 
@@ -81,7 +80,7 @@ export function createSystemCalls(
 
             console.log("commit changes: ", changes);
 
-            return await client.actions.commitPreparation({
+            return await client.home.commitPreparation({
                 account,
                 changes,
                 result: {
@@ -95,27 +94,27 @@ export function createSystemCalls(
         }
     };
 
-    const nextRound = async (account: AccountInterface) => {
+    const nextRound = async (account: Account) => {
         try {
-            return await client.actions.nextRound({ account });
+            return await client.home.nextRound({ account });
         } catch (e) {
             console.error(e);
             throw e;
         }
     };
 
-    const refreshAltar = async (account: AccountInterface) => {
+    const refreshAltar = async (account: Account) => {
         try {
-            return await client.actions.refreshAltar({ account });
+            return await client.home.refreshAltar({ account });
         } catch (e) {
             console.error(e);
             throw e;
         }
     };
 
-    const getCoin = async (account: AccountInterface) => {
+    const getCoin = async (account: Account) => {
         try {
-            return await client.actions.getCoin({ account });
+            return await client.home.getCoin({ account });
         } catch (e) {
             console.error(e);
             throw e;
@@ -123,12 +122,12 @@ export function createSystemCalls(
     };
 
     const buyHero = async (
-        account: AccountInterface,
+        account: Account,
         altarSlot: number,
         invSlot: number
     ) => {
         try {
-            return await client.actions.buyHero({
+            return await client.home.buyHero({
                 account,
                 altarSlot,
                 invSlot,
@@ -139,9 +138,9 @@ export function createSystemCalls(
         }
     };
 
-    const buyExp = async (account: AccountInterface) => {
+    const buyExp = async (account: Account) => {
         try {
-            return await client.actions.buyExp({
+            return await client.home.buyExp({
                 account,
             });
         } catch (e) {
@@ -150,9 +149,9 @@ export function createSystemCalls(
         }
     };
 
-    const sellHero = async (account: AccountInterface, gid: number) => {
+    const sellHero = async (account: Account, gid: number) => {
         try {
-            return await client.actions.sellHero({ account, gid });
+            return await client.home.sellHero({ account, gid });
         } catch (e) {
             console.error(e);
             throw e;

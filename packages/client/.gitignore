@@ -23,5 +23,3 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
-
-src/dojo/generated/typescript
