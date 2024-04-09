@@ -8,8 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --fix",
     "preview": "vite preview",
-    "codegen": "graphql-codegen",
-    "components": "pnpm --package=@dojoengine/core dlx create-components ../contracts/manifest/dev/manifest.json src/dojo/generated/contractComponents.ts http://localhost:5050 0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0"
+    "codegen": "graphql-codegen"
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",
