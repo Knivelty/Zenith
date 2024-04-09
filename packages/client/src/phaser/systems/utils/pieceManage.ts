@@ -13,7 +13,7 @@ import { zeroEntity } from "../../../utils";
 import { isEqual } from "lodash";
 import { logDebug } from "../../../ui/lib/utils";
 
-export const utils = (layer: PhaserLayer) => {
+export const pieceManage = (layer: PhaserLayer) => {
     const {
         game,
         scenes: {
@@ -59,6 +59,13 @@ export const utils = (layer: PhaserLayer) => {
         });
     }
 
+    /**
+     *
+     * @param playerAddr
+     * @param index
+     * @param override whether to override previous one
+     * @returns
+     */
     function spawnPiece(playerAddr: bigint, index: bigint, override = false) {
         const playerPiece = getComponentValue(
             LocalPlayerPiece,

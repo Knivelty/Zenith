@@ -11,7 +11,7 @@ import { PhaserLayer } from "..";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { defineSystemST, zeroEntity } from "../../utils";
 import { GameStatusEnum } from "../../dojo/types";
-import { utils } from "./utils";
+import { pieceManage } from "./utils/pieceManage";
 import { getComponentValueUtilNotNull } from "../../ui/lib/utils";
 
 export const prepare = (layer: PhaserLayer) => {
@@ -36,7 +36,7 @@ export const prepare = (layer: PhaserLayer) => {
         },
     } = layer;
 
-    const { spawnPiece } = utils(layer);
+    const { spawnPiece } = pieceManage(layer);
 
     // initialize and sync match status
     defineSystemST<typeof Player.schema>(

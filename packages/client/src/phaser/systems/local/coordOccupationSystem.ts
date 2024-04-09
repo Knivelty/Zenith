@@ -3,8 +3,8 @@ import { PhaserLayer } from "../..";
 import { defineSystemST } from "../../../utils";
 import { world } from "../../../dojo/generated/world";
 import { Has, setComponent, updateComponent } from "@dojoengine/recs";
-import { utils } from "../utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { logDebug } from "../../../ui/lib/utils";
 
 export function coordOccupationSystem(layer: PhaserLayer) {
     const {
@@ -28,6 +28,7 @@ export function coordOccupationSystem(layer: PhaserLayer) {
                     BigInt(preV.x),
                     BigInt(preV.y),
                 ]);
+                logDebug(`unset occupi ${preV.x}, ${preV.y}`);
                 updateComponent(LocalPieceOccupation, occupiedEntity, {
                     x: preV.x,
                     y: preV.y,
@@ -42,6 +43,7 @@ export function coordOccupationSystem(layer: PhaserLayer) {
                     BigInt(v.y),
                 ]);
 
+                logDebug(`set occupi ${v.x}, ${v.y}`);
                 setComponent(LocalPieceOccupation, occupiedEntity, {
                     x: v.x,
                     y: v.y,

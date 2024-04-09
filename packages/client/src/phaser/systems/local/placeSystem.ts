@@ -3,8 +3,9 @@ import { PhaserLayer } from "../..";
 import { defineSystemST, zeroEntity } from "../../../utils";
 import { world } from "../../../dojo/generated/world";
 import { Has, getComponentValueStrict } from "@dojoengine/recs";
-import { utils } from "../utils";
+import { pieceManage } from "../utils/pieceManage";
 import { logDebug } from "../../../ui/lib/utils";
+import { GameStatusEnum } from "../../../dojo/types";
 
 export function placeSystem(layer: PhaserLayer) {
     const {
@@ -17,26 +18,30 @@ export function placeSystem(layer: PhaserLayer) {
         },
     } = layer;
 
-    const { spawnPiece, removePieceOnBoard } = utils(layer);
+    const { spawnPiece, removePieceOnBoard } = pieceManage(layer);
 
     // follow local piece location
     defineSystemST<typeof LocalPiece.schema>(
         world,
         [Has(LocalPiece)],
         ({ entity, type, value: [v, preV] }) => {
-            logDebug("v:", v);
-            const status = getComponentValueStrict(GameStatus, zeroEntity);
+            logDebug("incoming LocalPiece change: ", v);
             if (v) {
                 // only dynamic sync player's piece
+                const status = getComponentValueStrict(GameStatus, zeroEntity);
                 if (v.owner === BigInt(address) && v.idx !== 0) {
-                    console.log("place: ", v, v.owner, v.idx);
-                    spawnPiece(v.owner, BigInt(v.idx));
+                    // only allow override on prepare
+                    if (status.status == GameStatusEnum.Prepare) {
+                        spawnPiece(v.owner, BigInt(v.idx), true);
+                    } else {
+                        spawnPiece(v.owner, BigInt(v.idx), false);
+                    }
                 }
                 if (v.owner === 0n) {
                     removePieceOnBoard(v.gid);
                 }
                 if (v.idx === 0) {
-                    // wait for op render override remove
+                    // wait 0.5s for op render override remove
                     setTimeout(() => {
                         if (v.idx === 0) {
                             removePieceOnBoard(v.gid);
