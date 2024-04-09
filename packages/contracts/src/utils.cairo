@@ -19,8 +19,8 @@ fn next_position(mut position: Position, direction: Direction) -> Position {
 }
 
 
-fn generate_pseudo_random_address(seed: felt252) -> ContractAddress {
-    let hash = PoseidonTrait::new().update(seed).finalize();
+fn generate_pseudo_random_address(seed: felt252, seed2: felt252) -> ContractAddress {
+    let hash = PoseidonTrait::new().update(seed).update(seed2).finalize();
 
     return hash.try_into().unwrap();
 }

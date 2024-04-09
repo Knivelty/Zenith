@@ -81,6 +81,15 @@ export function createSystemCalls(
         }
     };
 
+    const exit = async (account: Account) => {
+        try {
+            return await client.home.exit({ account });
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    };
+
     const buyHero = async (
         account: Account,
         altarSlot: number,
@@ -142,5 +151,6 @@ export function createSystemCalls(
         buyExp,
         sellHero,
         commitPreparation,
+        exit,
     };
 }

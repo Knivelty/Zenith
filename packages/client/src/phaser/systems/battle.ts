@@ -12,6 +12,7 @@ import { GameStatusEnum } from "../../dojo/types";
 import { battleAnimation } from "./utils/playBattle";
 import { BattleResult } from "../../utils/jps";
 import { processBattle } from "./utils/processBattleLogs";
+import { logDebug } from "../../ui/lib/utils";
 
 export const battle = (layer: PhaserLayer) => {
     const {
@@ -49,12 +50,15 @@ export const battle = (layer: PhaserLayer) => {
             const status = getComponentValueStrict(GameStatus, zeroEntity);
 
             // ignore stale update
-            if (v.round < status?.currentRound) {
+            if (
+                v.round < status?.currentRound &&
+                v.currentMatch == status.currentMatch
+            ) {
                 console.warn("stale inning battle update");
                 return;
             }
 
-            console.log("InningBattle update: ", entity, type, [v, preV]);
+            logDebug("InningBattle update: ", entity, type, [v, preV]);
 
             updateComponent(GameStatus, zeroEntity, {
                 currentRound: v.round,

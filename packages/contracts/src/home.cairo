@@ -19,8 +19,6 @@ trait IHome {
     fn nextRound();
 
 
-    fn startBattle();
-
     // debug func
     fn getCoin();
     fn exit();
@@ -581,7 +579,9 @@ mod home {
         fn spawn(world: IWorldDispatcher) {
             let playerAddr = get_caller_address();
             // get player's enemy address
-            let enemyAddr = generate_pseudo_random_address(playerAddr.into());
+
+            let hash = get_tx_info().unbox().nonce;
+            let enemyAddr = generate_pseudo_random_address(playerAddr.into(), hash);
 
             // create match
             let mut globalState = get!(world, 1, GlobalState);
@@ -928,8 +928,6 @@ mod home {
         }
 
 
-        fn startBattle(world: IWorldDispatcher) {}
-
         fn getCoin(world: IWorldDispatcher) {
             let playerAddr = get_caller_address();
 
@@ -943,13 +941,57 @@ mod home {
         fn exit(world: IWorldDispatcher) {
             let playerAddr = get_caller_address();
 
-            let player = get!(world, playerAddr, Player);
-        // delete player inv piece
+            let mut player = get!(world, playerAddr, Player);
+            let mut idx = 1;
 
-        // delete player piece
+            // delete player inv piece
+            loop {
+                if (player.inventoryCount < idx) {
+                    break;
+                }
+                let mut playerInvPiece = get!(world, (playerAddr, idx), PlayerInvPiece);
+                let mut piece = get!(world, playerInvPiece.gid, Piece);
 
-        // reset player attr
+                playerInvPiece.gid = 0;
+                piece.owner = Zeroable::zero();
+                set!(world, (playerInvPiece, piece));
 
+                idx += 1;
+            };
+            // delete player piece
+
+            idx = 1;
+            loop {
+                if (player.heroesCount < idx) {
+                    break;
+                }
+                let mut playerPiece = get!(world, (playerAddr, idx), PlayerPiece);
+                let mut piece = get!(world, playerPiece.gid, Piece);
+
+                playerPiece.gid = 0;
+                piece.owner = Zeroable::zero();
+                set!(world, (playerPiece, piece));
+
+                idx += 1;
+            };
+            // reset player attr
+            set!(
+                world,
+                Player {
+                    player: playerAddr,
+                    health: 0,
+                    heroesCount: 0,
+                    inventoryCount: 0,
+                    level: 0,
+                    coin: 0,
+                    exp: 0,
+                    winStreak: 0,
+                    loseStreak: 0,
+                    locked: 0,
+                    inMatch: 0,
+                    refreshed: false,
+                }
+            );
         }
     }
 }

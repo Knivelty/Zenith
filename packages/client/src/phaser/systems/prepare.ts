@@ -1,5 +1,4 @@
 import {
-    Entity,
     Has,
     getComponentValueStrict,
     getComponentValue,
@@ -12,7 +11,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { defineSystemST, zeroEntity } from "../../utils";
 import { GameStatusEnum } from "../../dojo/types";
 import { pieceManage } from "./utils/pieceManage";
-import { getComponentValueUtilNotNull } from "../../ui/lib/utils";
+import { getComponentValueUtilNotNull, logDebug } from "../../ui/lib/utils";
 
 export const prepare = (layer: PhaserLayer) => {
     const {
@@ -61,6 +60,15 @@ export const prepare = (layer: PhaserLayer) => {
                         currentMatch: v.inMatch,
                     });
                 }
+
+                if (v.inMatch == 0) {
+                    logDebug("user exit or not in game");
+                    updateComponent(GameStatus, zeroEntity, {
+                        currentMatch: 0,
+                        status: GameStatusEnum.Invalid,
+                        currentRound: 0,
+                    });
+                }
             }
         }
     );
@@ -107,6 +115,15 @@ export const prepare = (layer: PhaserLayer) => {
                 for (let i = 1; i <= enemy.heroesCount; i++) {
                     spawnPiece(enemy.player, BigInt(i), true);
                 }
+            }
+
+            // it means user exit game, need refresh to clear local component
+            if (
+                preV &&
+                preV?.status !== GameStatusEnum.Invalid &&
+                v?.status === GameStatusEnum.Invalid
+            ) {
+                location.reload();
             }
         }
     );

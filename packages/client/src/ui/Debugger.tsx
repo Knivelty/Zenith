@@ -4,20 +4,17 @@ import { useDojo } from "./hooks/useDojo";
 import { useEffect } from "react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useUIStore } from "../store";
-import { numToStatus } from "../dojo/types";
 import { zeroEntity } from "../utils";
-import { getComponentValueStrict } from "@dojoengine/recs";
 
 export function Debugger() {
     const {
         account: { account, playerEntity },
         systemCalls: {
             nextRound,
-            startBattle,
             commitPreparation,
             playAnimation,
             getCoin,
-            refreshAltar,
+            exit,
         },
         clientComponents: { MatchState, Player, GameStatus, LocalPlayer },
     } = useDojo();
@@ -85,13 +82,10 @@ export function Debugger() {
             </Button>
             <Button
                 onClick={async () => {
-                    const player = getComponentValueStrict(
-                        LocalPlayer,
-                        playerEntity
-                    );
+                    await exit(account);
                 }}
             >
-                log values
+                Exit Game
             </Button>
         </div>
     );
