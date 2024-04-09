@@ -24,6 +24,7 @@ export function createClientComponents({
         PlayerInvPiece: overridableComponent(contractComponents.PlayerInvPiece),
         Altar: overridableComponent(contractComponents.Altar),
         GlobalState: overridableComponent(contractComponents.GlobalState),
+        InningBattle: overridableComponent(contractComponents.InningBattle),
         // create the corresponding local component
         LocalPiece: defineComponent(world, {
             ...contractComponents.Piece.schema,

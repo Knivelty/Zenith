@@ -13,6 +13,7 @@ import { PieceChange } from "./types";
 import { processBattle } from "../phaser/systems/utils/processBattleLogs";
 import { opBuyHero } from "./opRender/opBuyHero";
 import { opSellHero } from "./opRender/opSellHero";
+import { opCommitPrepare } from "./opRender/opCommitPrepare";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -46,51 +47,12 @@ export function createSystemCalls(
 
     const commitPreparation = async (account: Account) => {
         try {
-            // calculate the diff
-
-            const playerEntity = getEntityIdFromKeys([BigInt(account.address)]);
-
-            const piecesTrack = getComponentValue(
-                LocalPiecesChangeTrack,
-                playerEntity
+            await opCommitPrepare(
+                { client },
+                clientComponents,
+                rpcProvider,
+                account
             );
-
-            console.log("piecesTrack: ", piecesTrack);
-
-            const changes: PieceChange[] = piecesTrack?.gids
-                .map((gid) => {
-                    const entity = getEntityIdFromKeys([BigInt(gid)]);
-                    const local = getComponentValueStrict(LocalPiece, entity);
-                    const remote = getComponentValueStrict(Piece, entity);
-
-                    if (isEqual(local, remote)) {
-                        return undefined;
-                    } else {
-                        return {
-                            gid: gid,
-                            idx: local.idx,
-                            slot: local.slot,
-                            x: local.x,
-                            y: local.y,
-                        };
-                    }
-                })
-                .filter(Boolean) as PieceChange[];
-
-            const { processBattleLogs } = processBattle(clientComponents);
-
-            const { result } = processBattleLogs();
-
-            console.log("commit changes: ", changes);
-
-            return await client.home.commitPreparation({
-                account,
-                changes,
-                result: {
-                    win: result.win,
-                    healthDecrease: result.healthDecrease,
-                },
-            });
         } catch (e) {
             console.error(e);
             throw e;

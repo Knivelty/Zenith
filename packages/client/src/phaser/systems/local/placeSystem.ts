@@ -4,6 +4,7 @@ import { defineSystemST } from "../../../utils";
 import { world } from "../../../dojo/generated/world";
 import { Has, UpdateType } from "@dojoengine/recs";
 import { utils } from "../utils";
+import { logDebug } from "../../../ui/lib/utils";
 
 export function placeSystem(layer: PhaserLayer) {
     const {
@@ -23,10 +24,11 @@ export function placeSystem(layer: PhaserLayer) {
         world,
         [Has(LocalPiece)],
         ({ entity, type, value: [v, preV] }) => {
+            logDebug("v:", v);
             if (v) {
                 // only dynamic sync player's piece
                 if (v.owner == BigInt(address) && v.idx !== 0) {
-                    console.log("place: ",v, v.owner, v.idx);
+                    console.log("place: ", v, v.owner, v.idx);
                     spawnPiece(v.owner, BigInt(v.idx));
                 }
                 if (v.owner === 0n) {
