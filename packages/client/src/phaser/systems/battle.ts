@@ -5,7 +5,6 @@ import {
     updateComponent,
 } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
-
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { defineSystemST, zeroEntity } from "../../utils";
 // import { BattleLog, BattleLogsType } from "../../dojo/generated/setup";
@@ -17,9 +16,6 @@ import { processBattle } from "./utils/processBattleLogs";
 export const battle = (layer: PhaserLayer) => {
     const {
         world,
-        scenes: {
-            Main: { config, objectPool },
-        },
         networkLayer: {
             clientComponents: {
                 GameStatus,

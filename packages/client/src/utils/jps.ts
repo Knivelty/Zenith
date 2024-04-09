@@ -94,6 +94,8 @@ export type BattleResult = {
  * @returns
  */
 export function calculateBattleLogs(pieces: PieceInBattle[]): BattleResult {
+    logJps(`initial piece status: `, pieces);
+
     const pieceActions = new Array<PieceAction>();
     let baseTurnOrder = 1;
     for (let i = 0; i < 500; i++) {
@@ -327,7 +329,7 @@ export function battleForAStep(
             if (pp.entity === p.entity) {
                 return;
             }
-            logJps(`try set ${pp.x} ${pp.y} as workable`)
+            logJps(`try set ${pp.x} ${pp.y} as workable`);
             grid.setWalkableAt(pp.x, pp.y, false);
         });
 
@@ -342,6 +344,10 @@ export function battleForAStep(
             targetPiece.x,
             targetPiece.y,
             p.range
+        );
+
+        logJps(
+            `getTargetPoint: piece in ${p.x} ${p.y} aiming ${targetPiece.x} ${targetPiece.y} target to ${targetPoint.x} ${targetPoint.y}`
         );
 
         let doablePath: { x: number; y: number }[] = [];
@@ -364,7 +370,7 @@ export function battleForAStep(
             p.x = doablePath[doablePath.length - 1].x;
             p.y = doablePath[doablePath.length - 1].y;
 
-            console.log(
+            logJps(
                 `piece ${p.entity} move from ${doablePath[0].x},${doablePath[0].y} to ${p.x},${p.y}`
             );
         }

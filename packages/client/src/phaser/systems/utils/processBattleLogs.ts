@@ -64,8 +64,8 @@ export const processBattle = (component: ClientComponents) => {
             allPieceInBattle.push({
                 player: getEntityIdFromKeys([v.homePlayer]),
                 entity: pieceEntity,
-                x: piece.x,
-                y: piece.y,
+                x: piece.x - 1,
+                y: 8 - piece.y,
                 health: creature.health,
                 attack: creature.attack,
                 armor: creature.armor,
@@ -105,8 +105,8 @@ export const processBattle = (component: ClientComponents) => {
             allPieceInBattle.push({
                 player: getEntityIdFromKeys([v.awayPlayer]),
                 entity: pieceEntity,
-                x: 7 - piece.x,
-                y: 7 - piece.y,
+                x: piece.x - 1,
+                y: piece.y - 1,
                 health: creature.health,
                 attack: creature.attack,
                 armor: creature.armor,
