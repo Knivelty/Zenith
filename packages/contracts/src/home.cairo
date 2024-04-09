@@ -91,16 +91,8 @@ mod home {
 
         let slot5 = get_felt_mod(r, creatureCount) + 1;
 
-        // use the free refresh chance or pay
-        if (!player.refreshed) {
-            player.refreshed = true;
-        } else {
-            // player coin minus 1
-            player.coin -= 2;
-        }
-
         // set altar
-        set!(world, (Altar { player: playerAddr, slot1, slot2, slot3, slot4, slot5 }, player));
+        set!(world, (Altar { player: playerAddr, slot1, slot2, slot3, slot4, slot5 }));
     }
 
 
@@ -131,6 +123,10 @@ mod home {
                 panic!("invalid change");
             }
 
+            if (oldPiece.idx != 0) {
+                panic!("piece already on board");
+            }
+
             oldPlayerInvPiece.gid = 0;
             newPlayerPiece.gid = change.gid;
 
@@ -143,6 +139,10 @@ mod home {
 
             if (change.idx != 0) {
                 panic!("invalid change");
+            }
+
+            if (oldPiece.slot != 0) {
+                panic!("piece already in inv");
             }
 
             oldPlayerPiece.gid = 0;
@@ -733,8 +733,13 @@ mod home {
 
             let mut player = get!(world, playerAddr, Player);
 
-            // player coin reduce by 2
-            player.coin -= 2;
+            // use the free refresh chance or pay
+            if (!player.refreshed) {
+                player.refreshed = true;
+            } else {
+                // player coin minus 1
+                player.coin -= 2;
+            }
 
             set!(world, (player));
 
