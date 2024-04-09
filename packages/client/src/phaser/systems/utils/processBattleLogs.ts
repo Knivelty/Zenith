@@ -10,6 +10,7 @@ import { zeroEntity } from "../../../utils";
 import { PieceInBattle, calculateBattleLogs } from "../../../utils/jps";
 
 import { ClientComponents } from "../../../dojo/createClientComponents";
+import { logDebug } from "../../../ui/lib/utils";
 
 export const processBattle = (component: ClientComponents) => {
     const {
@@ -23,6 +24,8 @@ export const processBattle = (component: ClientComponents) => {
     } = component;
 
     function processBattleLogs() {
+        logDebug("start process battle logs");
+
         const status = getComponentValueStrict(GameStatus, zeroEntity);
         const v = getComponentValueStrict(
             InningBattle,

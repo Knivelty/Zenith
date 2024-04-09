@@ -46,17 +46,12 @@ export function createSystemCalls(
     };
 
     const commitPreparation = async (account: Account) => {
-        try {
-            await opCommitPrepare(
-                { client },
-                clientComponents,
-                rpcProvider,
-                account
-            );
-        } catch (e) {
-            console.error(e);
-            throw e;
-        }
+        await opCommitPrepare(
+            { client },
+            clientComponents,
+            rpcProvider,
+            account
+        );
     };
 
     const nextRound = async (account: Account) => {

@@ -76,7 +76,10 @@ export const battle = (layer: PhaserLayer) => {
                         GameStatus,
                         zeroEntity
                     );
-                    if (status.status === GameStatusEnum.InBattle) {
+                    if (
+                        status.status === GameStatusEnum.InBattle &&
+                        status.shouldPlay === false
+                    ) {
                         processBattle(clientComponents).processBattleLogs();
                     }
                 }, 1000);

@@ -59,7 +59,7 @@ export const utils = (layer: PhaserLayer) => {
         });
     }
 
-    function spawnPiece(playerAddr: bigint, index: bigint) {
+    function spawnPiece(playerAddr: bigint, index: bigint, override = false) {
         const playerPiece = getComponentValue(
             LocalPlayerPiece,
             getEntityIdFromKeys([playerAddr, index])
@@ -89,6 +89,12 @@ export const utils = (layer: PhaserLayer) => {
         );
 
         const hero = objectPool.get(entity, "Sprite");
+
+        if (!override && !isEqual(hero.position, { x: 0, y: 0 })) {
+            logDebug(`piece ${playerPiece.gid} already spawned`);
+            return;
+        }
+
         hero.setComponent({
             id: entity,
             once: (sprite: Phaser.GameObjects.Sprite) => {
@@ -156,13 +162,14 @@ export const utils = (layer: PhaserLayer) => {
                             BigInt(posX),
                             BigInt(posY),
                         ]);
+
                         const pieceOccu = getComponentValue(
                             LocalPieceOccupation,
                             occupiedEntity
                         );
 
                         if (pieceOccu?.occupied) {
-                            console.warn("pos occupied");
+                            logDebug(`pos ${posX}, ${posY} occupied`);
                             return;
                         }
 

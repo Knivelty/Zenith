@@ -84,7 +84,7 @@ export const prepare = (layer: PhaserLayer) => {
                 // spawn players piece
                 for (let i = 1; i <= player.heroesCount; i++) {
                     console.log("trrr");
-                    spawnPiece(player.player, BigInt(i));
+                    spawnPiece(player.player, BigInt(i), true);
                 }
 
                 // spawn enemy's piece
@@ -105,7 +105,7 @@ export const prepare = (layer: PhaserLayer) => {
 
                 // spawn enemy's piece
                 for (let i = 1; i <= enemy.heroesCount; i++) {
-                    spawnPiece(enemy.player, BigInt(i));
+                    spawnPiece(enemy.player, BigInt(i), true);
                 }
             }
         }
