@@ -71,7 +71,7 @@ export function Debugger() {
             </Button>
             <Button
                 onClick={async () => {
-                    const keyJson = localStorage.getItem("burners");
+                    const keyJson = localStorage.getItem("burners_KATANA");
                     if (keyJson) {
                         navigator.clipboard.writeText(keyJson);
                         alert("private key copied");
