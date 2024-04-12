@@ -10,6 +10,7 @@ import {
     updateComponent,
 } from "@dojoengine/recs";
 import { localPlayerInv } from "../utils/localPlayerInv";
+import { logDebug } from "../../../ui/lib/utils";
 
 export function syncSystem(layer: PhaserLayer) {
     const {
@@ -173,16 +174,16 @@ export function syncSystem(layer: PhaserLayer) {
                 playerEntity
             );
 
-            if (v.owner == BigInt(address)) {
+            if (v.owner === BigInt(address)) {
                 if (piecesTrack) {
                     const gids = piecesTrack.gids;
-                    console.log("gids: ", piecesTrack, gids);
+                    logDebug("gids: ", piecesTrack, gids);
                     gids.push(v.gid);
                     updateComponent(LocalPiecesChangeTrack, playerEntity, {
                         gids: [...new Set(gids)],
                     });
                 } else {
-                    console.log("init: ", [v.gid]);
+                    logDebug("init piece track, add", [v.gid]);
                     setComponent(LocalPiecesChangeTrack, playerEntity, {
                         gids: [v.gid],
                     });

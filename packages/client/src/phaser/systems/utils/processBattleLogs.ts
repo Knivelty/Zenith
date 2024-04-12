@@ -1,4 +1,5 @@
 import {
+    getComponentValue,
     getComponentValueStrict,
     setComponent,
     updateComponent,
@@ -45,8 +46,6 @@ export const processBattle = (component: ClientComponents) => {
         );
 
         for (let i = 1; i <= player.heroesCount; i++) {
-            console.log(v.homePlayer, BigInt(i));
-
             const playerPiece = getComponentValueStrict(
                 LocalPlayerPiece,
                 getEntityIdFromKeys([v.homePlayer, BigInt(i)])
@@ -54,7 +53,13 @@ export const processBattle = (component: ClientComponents) => {
 
             const pieceEntity = getEntityIdFromKeys([BigInt(playerPiece.gid)]);
 
-            const piece = getComponentValueStrict(LocalPiece, pieceEntity);
+            const piece = getComponentValue(LocalPiece, pieceEntity);
+
+            if (!piece) {
+                throw Error(
+                    `try get piece error:  ${v.homePlayer}, ${BigInt(i)}`
+                );
+            }
 
             const creature = getComponentValueStrict(
                 CreatureProfile,

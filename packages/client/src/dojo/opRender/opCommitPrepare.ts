@@ -28,7 +28,7 @@ export const opCommitPrepare = async (
 
     const piecesTrack = getComponentValue(LocalPiecesChangeTrack, playerEntity);
 
-    console.log("piecesTrack: ", piecesTrack);
+    logDebug("piecesTrack: ", piecesTrack);
 
     const changes: PieceChange[] = piecesTrack?.gids
         .map((gid) => {
@@ -49,6 +49,22 @@ export const opCommitPrepare = async (
             }
         })
         .filter(Boolean) as PieceChange[];
+
+    // validate piece change, it guarantees that the hero idx was not break
+    const initIndex = new Set(
+        changes.map((c) => {
+            const entity = getEntityIdFromKeys([BigInt(c.gid)]);
+            const remote = getComponentValueStrict(Piece, entity);
+            return remote.idx;
+        })
+    );
+
+    const changedIndex = new Set(changes.map((c) => c.idx));
+
+    if (!isEqual(initIndex, changedIndex)) {
+        logDebug("invalid change, block commit");
+        return;
+    }
 
     const { processBattleLogs } = processBattle(clientComponents);
 
