@@ -20,6 +20,7 @@ export const opCommitPrepare = async (
         Piece,
         LocalPiecesChangeTrack,
         LocalPiece,
+        Player,
         InningBattle,
         GameStatus,
     } = clientComponents;
@@ -51,20 +52,29 @@ export const opCommitPrepare = async (
         .filter(Boolean) as PieceChange[];
 
     // validate piece change, it guarantees that the hero idx was not break
-    const initIndex = new Set(
-        changes.map((c) => {
-            const entity = getEntityIdFromKeys([BigInt(c.gid)]);
-            const remote = getComponentValueStrict(Piece, entity);
-            return remote.idx;
-        })
+    const playerValue = getComponentValueStrict(Player, playerEntity);
+
+    const initIdxArr = Array.from(
+        new Array(playerValue.level),
+        (v: number, idx: number) => idx + 1
     );
 
-    const changedIndex = new Set(changes.map((c) => c.idx));
+    changes.forEach((c) => {
+        const entity = getEntityIdFromKeys([BigInt(c.gid)]);
+        const remote = getComponentValueStrict(Piece, entity);
 
-    if (!isEqual(initIndex, changedIndex)) {
-        logDebug("invalid change, block commit");
-        return;
-    }
+        if (remote.idx === 0) {
+            initIdxArr[c.idx - 1] = c.idx;
+        } else {
+            initIdxArr[remote.idx - 1] = c.idx;
+        }
+    });
+
+    const sortedChangedIndexArr = initIdxArr
+        .filter(Boolean)
+        .sort((a, b) => a - b);
+
+    logDebug("sortedChangedIndexArr: ", sortedChangedIndexArr);
 
     const { processBattleLogs } = processBattle(clientComponents);
 

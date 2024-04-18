@@ -194,8 +194,6 @@ export function syncSystem(layer: PhaserLayer) {
             if (preV?.owner !== 0n && v.owner === 0n) {
                 // TODO: remove gids when user sell this piece
 
-                console.log("remove: ", v.gid);
-
                 if (piecesTrack) {
                     const gids = piecesTrack.gids;
                     updateComponent(LocalPiecesChangeTrack, playerEntity, {

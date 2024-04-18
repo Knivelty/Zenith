@@ -14,8 +14,6 @@ export function mapSystem(layer: PhaserLayer) {
         },
     } = layer;
 
-    console.log("tiles: ", size());
-
     // for (let x = 0; x < 8; x++) {
     //     for (let y = 0; y < 8; y++) {
     //         // const coord = { x, y };

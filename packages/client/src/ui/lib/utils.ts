@@ -36,7 +36,7 @@ export async function getComponentValueUtilNotNull<
     let value = getComponentValue<S, T>(component, entity);
     while (!value) {
         await sleep(1000);
-        logDebug(`fetch`, component, "with entity", entity, "again");
+        logDebug(`fetch`, component.schema, "with entity", entity, "again");
         value = getComponentValue<S, T>(component, entity);
     }
 

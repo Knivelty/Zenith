@@ -52,7 +52,7 @@ export const battle = (layer: PhaserLayer) => {
             // ignore stale update
             if (
                 v.round < status?.currentRound &&
-                v.currentMatch == status.currentMatch
+                v.currentMatch === status.currentMatch
             ) {
                 console.warn("stale inning battle update");
                 return;
@@ -68,7 +68,7 @@ export const battle = (layer: PhaserLayer) => {
                 updateComponent(GameStatus, zeroEntity, {
                     status: GameStatusEnum.Prepare,
                 });
-            } else if (Boolean(v.end) === true) {
+            } else if (Boolean(v.end) === true && v.winner === 0n) {
                 updateComponent(GameStatus, zeroEntity, {
                     status: GameStatusEnum.InBattle,
                 });

@@ -91,7 +91,6 @@ export const prepare = (layer: PhaserLayer) => {
 
                 // spawn players piece
                 for (let i = 1; i <= player.heroesCount; i++) {
-                    console.log("trrr");
                     spawnPiece(player.player, BigInt(i), true);
                 }
 
@@ -127,19 +126,4 @@ export const prepare = (layer: PhaserLayer) => {
             }
         }
     );
-
-    // defineSystem(world, [Has(Piece)], ({ entity, type }) => {
-    //     const gameStatus = getComponentValue(GameStatus, zeroEntity);
-
-    //     if (!gameStatus) {
-    //         return;
-    //     }
-
-    //     if (
-    //         type === UpdateType.Enter &&
-    //         gameStatus.status === GameStatusEnum.Prepare
-    //     ) {
-    //         spawnPreparedPiece(entity as Entity);
-    //     }
-    // });
 };
