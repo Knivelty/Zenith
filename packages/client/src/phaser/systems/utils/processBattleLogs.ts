@@ -51,6 +51,8 @@ export const processBattle = (component: ClientComponents) => {
                 getEntityIdFromKeys([v.homePlayer, BigInt(i)])
             );
 
+            logDebug("playerPiece", playerPiece.gid);
+
             const pieceEntity = getEntityIdFromKeys([BigInt(playerPiece.gid)]);
 
             const piece = getComponentValue(LocalPiece, pieceEntity);

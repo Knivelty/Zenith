@@ -1,16 +1,8 @@
 import { ClientComponents } from "./createClientComponents";
 import { IWorld } from "./generated/typescript/contracts.gen";
 import { Account, RpcProvider } from "starknet";
-import {
-    getComponentValue,
-    getComponentValueStrict,
-    updateComponent,
-} from "@dojoengine/recs";
+import { updateComponent } from "@dojoengine/recs";
 import { zeroEntity } from "../utils";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { isEqual } from "lodash";
-import { PieceChange } from "./types";
-import { processBattle } from "../phaser/systems/utils/processBattleLogs";
 import { opBuyHero } from "./opRender/opBuyHero";
 import { opSellHero } from "./opRender/opSellHero";
 import { opCommitPrepare } from "./opRender/opCommitPrepare";

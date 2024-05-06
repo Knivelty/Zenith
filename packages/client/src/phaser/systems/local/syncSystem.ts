@@ -94,7 +94,7 @@ export function syncSystem(layer: PhaserLayer) {
         }
     );
 
-    // sync local player piece on init
+    // only sync non-player local player piece
     defineSystemST<typeof PlayerPiece.schema>(
         world,
         [Has(PlayerPiece)],
@@ -102,6 +102,11 @@ export function syncSystem(layer: PhaserLayer) {
             if (!v) {
                 return;
             }
+
+            if (v.owner === BigInt(address)) {
+                return;
+            }
+
             // TODO: allow inv drag and find accurate slot
             setComponent(LocalPlayerPiece, entity, v);
         }
@@ -145,28 +150,13 @@ export function syncSystem(layer: PhaserLayer) {
                 return;
             }
 
-            // const player = getComponentValue(Player, playerEntity);
-
-            // if (!player) {
-            //     console.warn("no play");
-            //     return;
-            // }
-
-            // const mathState = await getComponentValueUtilNotNull(
-            //     MatchState,
-            //     getEntityIdFromKeys([BigInt(player.inMatch)])
-            // );
-
-            // // only sync relevant piece
-            // if (
-            //     v.owner == BigInt(address) ||
-            //     v.owner == mathState.player1 ||
-            //     v.owner == mathState.player2 ||
-            //     // zero means piece removed
-            //     v.owner === 0n
-            // ) {
-            setComponent(LocalPiece, entity, v);
-            // }
+            // sync all kinds of values
+            const oldValue = getComponentValue(LocalPiece, entity);
+            if (!oldValue) {
+                setComponent(LocalPiece, entity, v);
+            } else {
+                updateComponent(LocalPiece, entity, v);
+            }
 
             // add the gid to local pieces track
             const piecesTrack = getComponentValue(

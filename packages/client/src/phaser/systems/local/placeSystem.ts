@@ -2,7 +2,7 @@ import { PhaserLayer } from "../..";
 
 import { defineSystemST, zeroEntity } from "../../../utils";
 import { world } from "../../../dojo/generated/world";
-import { Has, getComponentValueStrict } from "@dojoengine/recs";
+import { Has, getComponentValue } from "@dojoengine/recs";
 import { pieceManage } from "../utils/pieceManage";
 import { logDebug } from "../../../ui/lib/utils";
 import { GameStatusEnum } from "../../../dojo/types";
@@ -28,13 +28,18 @@ export function placeSystem(layer: PhaserLayer) {
             logDebug("incoming LocalPiece change: ", v);
             if (v) {
                 // only dynamic sync player's piece
-                const status = getComponentValueStrict(GameStatus, zeroEntity);
+                const status = getComponentValue(GameStatus, zeroEntity);
+                if (!status) {
+                    logDebug("no game status, skip local piece place");
+                    return;
+                }
+
                 if (v.owner === BigInt(address) && v.idx !== 0) {
                     // only allow override on prepare
                     if (status.status == GameStatusEnum.Prepare) {
-                        spawnPiece(v.owner, BigInt(v.idx), true);
+                        spawnPiece(v.owner, BigInt(v.idx), true, v.gid);
                     } else {
-                        spawnPiece(v.owner, BigInt(v.idx), false);
+                        spawnPiece(v.owner, BigInt(v.idx), false, v.gid);
                     }
                 }
                 if (v.owner === 0n) {

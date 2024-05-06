@@ -7,7 +7,7 @@ import { uuid } from "@latticexyz/utils";
 
 export const opSellHero = async (
     { client }: { client: IWorld },
-    { Player, Piece, PlayerInvPiece }: ClientComponents,
+    { Player, Piece }: ClientComponents,
     rpcProvider: RpcProvider,
     account: Account,
     gid: number
@@ -16,14 +16,6 @@ export const opSellHero = async (
     const player = getComponentValueStrict(Player, playerEntity);
     const pieceEntity = getEntityIdFromKeys([BigInt(gid)]);
     const piece = getComponentValueStrict(Piece, pieceEntity);
-    const playerInvEntity = getEntityIdFromKeys([
-        BigInt(account.address),
-        BigInt(piece.slot),
-    ]);
-    const playerInvPiece = getComponentValueStrict(
-        PlayerInvPiece,
-        playerInvEntity
-    );
 
     // check
     player.coin += 1;
@@ -39,23 +31,6 @@ export const opSellHero = async (
         },
     });
 
-    // player inv piece override
-    const playerInvOverride = uuid();
-    PlayerInvPiece.addOverride(playerInvOverride, {
-        entity: playerInvEntity,
-        value: {
-            ...playerInvPiece,
-            gid: 0,
-        },
-    });
-
-    // player override
-    const playerOverride = uuid();
-    Player.addOverride(playerOverride, {
-        entity: playerEntity,
-        value: player,
-    });
-
     try {
         const tx = await client.home.sellHero({
             account,
@@ -69,7 +44,5 @@ export const opSellHero = async (
         throw e;
     } finally {
         Piece.removeOverride(pieceOverUuid);
-        PlayerInvPiece.removeOverride(playerInvOverride);
-        Player.removeOverride(playerOverride);
     }
 };

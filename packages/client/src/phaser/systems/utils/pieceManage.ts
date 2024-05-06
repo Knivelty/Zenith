@@ -66,25 +66,30 @@ export const pieceManage = (layer: PhaserLayer) => {
      * @param override whether to override previous one
      * @returns
      */
-    function spawnPiece(playerAddr: bigint, index: bigint, override = false) {
+    function spawnPiece(
+        playerAddr: bigint,
+        index: bigint,
+        override = false,
+        pieceGid = 0
+    ) {
         const playerPiece = getComponentValue(
             LocalPlayerPiece,
             getEntityIdFromKeys([playerAddr, index])
         );
 
-        if (!playerPiece) {
+        pieceGid = playerPiece?.gid || pieceGid;
+
+        if (!playerPiece && pieceGid === 0) {
             logDebug("no piece for ", playerAddr, index);
             return;
         }
 
-        const entity = getEntityIdFromKeys([BigInt(playerPiece.gid)]);
+        const entity = getEntityIdFromKeys([BigInt(pieceGid)]);
 
-        logDebug(`try get piece ${playerAddr} ${index} ${playerPiece.gid}`);
+        logDebug(`try get piece ${playerAddr} ${index} ${pieceGid}`);
         const piece = getComponentValue(LocalPiece, entity);
         if (!piece) {
-            throw Error(
-                `try get piece ${playerAddr} ${index} ${playerPiece.gid}`
-            );
+            throw Error(`try get piece ${playerAddr} ${index} ${pieceGid}`);
         }
 
         const isEnemy = BigInt(account.address) !== piece.owner;
@@ -98,7 +103,7 @@ export const pieceManage = (layer: PhaserLayer) => {
         const hero = objectPool.get(entity, "Sprite");
 
         if (!override && !isEqual(hero.position, { x: 0, y: 0 })) {
-            logDebug(`piece ${playerPiece.gid} already spawned`);
+            logDebug(`piece ${pieceGid} already spawned`);
             return;
         }
 

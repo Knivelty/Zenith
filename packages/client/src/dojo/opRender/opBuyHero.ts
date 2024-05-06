@@ -9,7 +9,7 @@ import { uuid } from "@latticexyz/utils";
 
 export const opBuyHero = async (
     { client }: { client: IWorld },
-    { Player, Altar, Piece, PlayerInvPiece, PlayerProfile }: ClientComponents,
+    { Player, Altar, Piece, PlayerProfile }: ClientComponents,
     rpcProvider: RpcProvider,
     account: Account,
     altarSlot: number,
@@ -19,10 +19,6 @@ export const opBuyHero = async (
     const playerProfile = getComponentValueStrict(PlayerProfile, playerEntity);
     const player = getComponentValueStrict(Player, playerEntity);
     const altar = getComponentValueStrict(Altar, playerEntity);
-    const playerInvEntity = getEntityIdFromKeys([
-        BigInt(account.address),
-        BigInt(invSlot),
-    ]);
 
     // check
     if (player.coin <= 0 || player.inventoryCount >= 6) {
@@ -77,17 +73,6 @@ export const opBuyHero = async (
         ),
     });
 
-    // player inv piece override
-    const playerInvOverride = uuid();
-    PlayerInvPiece.addOverride(playerInvOverride, {
-        entity: playerInvEntity,
-        value: {
-            owner: BigInt(account.address),
-            slot: invSlot,
-            gid: pieceGid,
-        },
-    });
-
     // player override
     const playerOverride = uuid();
     Player.addOverride(playerOverride, {
@@ -109,7 +94,7 @@ export const opBuyHero = async (
             invSlot,
         });
         await rpcProvider.waitForTransaction(tx.transaction_hash, {
-            retryInterval: 1000,
+            retryInterval: 100,
         });
     } catch (e) {
         console.error(e);
@@ -117,7 +102,6 @@ export const opBuyHero = async (
     } finally {
         Piece.removeOverride(pieceOverUuid);
         Altar.removeOverride(altarOverride);
-        PlayerInvPiece.removeOverride(playerInvOverride);
         Player.removeOverride(playerOverride);
         PlayerProfile.removeOverride(playerProfileOverride);
     }

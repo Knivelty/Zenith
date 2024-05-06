@@ -50,15 +50,10 @@ export const InvHero = ({
 
     useDrag(pieceAttr, dragRef, {
         onDragStart: (e) => {
-            // if (dragImageRef.current) {
-            //     // 设置自定义的拖动图像
-            //     e.dataTransfer.setDragImage(dragImageRef.current, 0, 0);
-            // }
             e.dataTransfer.setData(
                 "text/plain",
                 pieceAttr?.gid.toString() || ""
             );
-            // console.log("onDragStart: ", e);
         },
 
         onDragEnd: (e) => {
@@ -88,6 +83,7 @@ export const InvHero = ({
             const pieceEntity = getEntityIdFromKeys([BigInt(pieceAttr.gid)]);
             const piece = getComponentValueStrict(LocalPiece, pieceEntity);
 
+            // here only check limit, do not modify
             ++player.heroesCount;
             --player.inventoryCount;
 
@@ -96,35 +92,6 @@ export const InvHero = ({
                 console.warn("piece exceed limit");
                 return;
             }
-
-            console.log("player.heroesCount: ", player.heroesCount);
-
-            // delete the local inv piece
-            updateComponent(
-                LocalPlayerInvPiece,
-                getEntityIdFromKeys([player.player, BigInt(piece.slot)]),
-                { gid: 0 }
-            );
-
-            // add to local player inv
-            setComponent(
-                LocalPlayerPiece,
-                getEntityIdFromKeys([
-                    player.player,
-                    BigInt(player.heroesCount),
-                ]),
-                {
-                    owner: player.player,
-                    idx: player.heroesCount,
-                    gid: piece.gid,
-                }
-            );
-
-            // update local player's hero count and inv count
-            updateComponent(LocalPlayer, playerEntity, {
-                heroesCount: player.heroesCount,
-                inventoryCount: player.inventoryCount,
-            });
 
             // update local piece
             updateComponent(LocalPiece, pieceEntity, {
@@ -172,21 +139,7 @@ export const InvHero = ({
 
             const preSlot = prePiece.slot;
 
-            // set new  inv piece
-            setComponent(
-                LocalPlayerInvPiece,
-                getEntityIdFromKeys([BigInt(address), BigInt(id)]),
-                { owner: BigInt(address), slot: id, gid: gid }
-            );
-
-            // update pre inv piece
-            updateComponent(
-                LocalPlayerInvPiece,
-                getEntityIdFromKeys([BigInt(address), BigInt(preSlot)]),
-                { gid: 0 }
-            );
-
-            // update  piece
+            // update piece
             updateComponent(LocalPiece, getEntityIdFromKeys([BigInt(gid)]), {
                 slot: id,
             });
@@ -242,23 +195,7 @@ export const InvHero = ({
                 const pieceGid = userOp.gid;
                 const pieceEntity = getEntityIdFromKeys([BigInt(pieceGid)]);
 
-                // set to player local piece
-                if (playerInvPiece) {
-                    updateComponent(
-                        LocalPlayerInvPiece,
-                        localPlayerInvPieceEntity,
-                        { gid: pieceGid }
-                    );
-                } else {
-                    // if not exist before, set
-                    setComponent(
-                        LocalPlayerInvPiece,
-                        localPlayerInvPieceEntity,
-                        { owner: BigInt(address), slot: id, gid: pieceGid }
-                    );
-                }
-
-                // remove from player piece
+                // get the current piece value
                 const pieceV = getComponentValueStrict(LocalPiece, pieceEntity);
 
                 const playerV = getComponentValueStrict(
@@ -266,16 +203,16 @@ export const InvHero = ({
                     playerEntity
                 );
 
+                // update piece entity
+                updateComponent(LocalPiece, pieceEntity, {
+                    x: 0,
+                    y: 0,
+                    idx: 0,
+                    slot: id,
+                });
+
                 if (pieceV.idx === playerV.heroesCount) {
                     // it means the piece is the last one of player
-                    updateComponent(
-                        LocalPlayerPiece,
-                        getEntityIdFromKeys([
-                            BigInt(address),
-                            BigInt(playerV.heroesCount),
-                        ]),
-                        { gid: 0 }
-                    );
                 } else {
                     // if not, should switch the last piece
                     const lastPiece = getComponentValueStrict(
@@ -286,18 +223,6 @@ export const InvHero = ({
                         ])
                     );
 
-                    // update player piece
-                    updateComponent(
-                        LocalPlayerPiece,
-                        getEntityIdFromKeys([
-                            BigInt(address),
-                            BigInt(pieceV.idx),
-                        ]),
-                        { gid: lastPiece.gid }
-                    );
-
-                    console.log("update last piece", lastPiece);
-
                     // update piece
                     updateComponent(
                         LocalPiece,
@@ -305,32 +230,10 @@ export const InvHero = ({
                         { idx: pieceV.idx }
                     );
 
-                    console.log("playerV:", playerV);
-
-                    // set last to zero
-                    updateComponent(
-                        LocalPlayerPiece,
-                        getEntityIdFromKeys([
-                            BigInt(address),
-                            BigInt(playerV.heroesCount),
-                        ]),
-                        { gid: 0 }
+                    logDebug(
+                        `update last piece ${lastPiece} to idx ${pieceV.idx}`
                     );
                 }
-
-                // update count for the player
-                updateComponent(LocalPlayer, playerEntity, {
-                    heroesCount: playerV.heroesCount - 1,
-                    inventoryCount: playerV.inventoryCount + 1,
-                });
-
-                // update piece entity
-                updateComponent(LocalPiece, pieceEntity, {
-                    x: 0,
-                    y: 0,
-                    idx: 0,
-                    slot: id,
-                });
             }
         },
         [

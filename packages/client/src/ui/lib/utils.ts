@@ -31,13 +31,21 @@ export async function getComponentValueUtilNotNull<
     T = unknown,
 >(
     component: Component<S, Metadata, T>,
-    entity: Entity
+    entity: Entity,
+    maxTry = 5
 ): Promise<ComponentValue<S, T>> {
     let value = getComponentValue<S, T>(component, entity);
-    while (!value) {
+    let triedTime = 1;
+
+    if (triedTime <= maxTry) {
+        triedTime += 1;
         await sleep(1000);
         logDebug(`fetch`, component.schema, "with entity", entity, "again");
         value = getComponentValue<S, T>(component, entity);
+    }
+
+    if (!value) {
+        throw Error("fetch fail");
     }
 
     return value;
@@ -80,5 +88,6 @@ export function generateAvatar(address: string): string {
 }
 
 export const logDebug = d("debug");
+export const logPieceIdx = d("debug:pieceIdx")
 export const logPlayerAction = d("player:actions");
 export const logJps = d("jps");

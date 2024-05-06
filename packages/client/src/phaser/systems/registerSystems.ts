@@ -9,6 +9,7 @@ import { attack } from "./attack";
 import { placeSystem } from "./local/placeSystem";
 import { syncSystem } from "./local/syncSystem";
 import { coordOccupationSystem } from "./local/coordOccupationSystem";
+import { followIndexSystem } from "./local/followIndexSystem";
 
 export const registerSystems = (layer: PhaserLayer) => {
     prepare(layer);
@@ -23,5 +24,6 @@ export const registerSystems = (layer: PhaserLayer) => {
     // local component
     placeSystem(layer);
     syncSystem(layer);
+    followIndexSystem(layer);
     coordOccupationSystem(layer);
 };
