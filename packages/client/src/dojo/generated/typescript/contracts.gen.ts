@@ -218,6 +218,27 @@ export async function setupWorld(provider: DojoProvider) {
             }
         };
 
+        // Call the `mergeHero` system with the specified Account and calldata
+        const mergeHero = async (props: {
+            account: Account;
+            gid1: number;
+            gid2: number;
+            gid3: number;
+            invSlot: number;
+        }) => {
+            try {
+                return await provider.execute(
+                    props.account,
+                    contract_name,
+                    "mergeHero",
+                    [props.gid1, props.gid2, props.gid3, props.invSlot]
+                );
+            } catch (error) {
+                console.error("Error executing mergeHero:", error);
+                throw error;
+            }
+        };
+
         // Call the `getCoin` system with the specified Account and calldata
         const getCoin = async (props: { account: Account }) => {
             try {
@@ -263,6 +284,7 @@ export async function setupWorld(provider: DojoProvider) {
             startBattle,
             getCoin,
             exit,
+            mergeHero,
         };
     }
 
