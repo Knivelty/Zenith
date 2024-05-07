@@ -123,6 +123,21 @@ export function createSystemCalls(
         }
     };
 
+    const mergeHero = async (
+        account: Account,
+        gid1: number,
+        gid2: number,
+        gid3: number,
+        invSlot: number
+    ) => {
+        try {
+            await client.home.mergeHero({ account, gid1, gid2, gid3, invSlot });
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    };
+
     const playAnimation = async () => {
         updateComponent(GameStatus, zeroEntity, {
             shouldPlay: false,
@@ -142,6 +157,7 @@ export function createSystemCalls(
         buyHero,
         buyExp,
         sellHero,
+        mergeHero,
         commitPreparation,
         exit,
     };

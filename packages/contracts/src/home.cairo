@@ -13,6 +13,7 @@ trait IHome {
     fn spawn();
     fn refreshAltar();
     fn buyHero(altarSlot: u8, invSlot: u8);
+    fn mergeHero(gid1: u32, gid2: u32, gid3: u32, invSlot: u8);
     fn buyExp();
     fn sellHero(gid: u32);
     fn commitPreparation(changes: Array<PieceChange>, result: RoundResult);
@@ -282,6 +283,51 @@ mod home {
         }
     }
 
+    fn _removePiece(world: IWorldDispatcher, gid: u32) {
+        let playerAddr = get_caller_address();
+        let mut player = get!(world, playerAddr, Player);
+        let mut piece = get!(world, gid, Piece);
+
+        if (piece.slot != 0) {
+            // remove this piece from inventory
+            set!(world, PlayerInvPiece { owner: playerAddr, slot: piece.slot, gid: 0, });
+            player.inventoryCount -= 1;
+            set!(world, (player));
+        } else if (piece.idx != 0) {
+            if (piece.idx == 0) {
+                // remove piece from player piece idx
+                if (piece.idx == player.heroesCount) {
+                    // if the piece is the last piece, just remove it
+                    set!(world, PlayerPiece { owner: playerAddr, idx: piece.idx, gid: 0, });
+                } else {
+                    // should switch the last piece
+                    let lastPiece = get!(world, (playerAddr, player.heroesCount), PlayerPiece);
+
+                    set!(
+                        world,
+                        PlayerPiece { owner: playerAddr, idx: piece.idx, gid: lastPiece.gid, }
+                    );
+
+                    set!(
+                        world,
+                        PlayerPiece {
+                            owner: playerAddr, idx: player.heroesCount, gid: lastPiece.gid,
+                        }
+                    );
+                }
+
+                player.heroesCount -= 1;
+                set!(world, (player));
+            }
+        } else {
+            panic!("logic error");
+        }
+
+        // update piece owner
+        piece.owner = Zeroable::zero();
+        set!(world, (piece));
+    }
+
 
     // impl: implement functions specified in trait
     #[abi(embed_v0)]
@@ -435,6 +481,67 @@ mod home {
             );
         }
 
+
+        fn mergeHero(world: IWorldDispatcher, gid1: u32, gid2: u32, gid3: u32, invSlot: u8) {
+            // validate piece
+            let playerAddr = get_caller_address();
+
+            let mut playerProfile = get!(world, playerAddr, PlayerProfile);
+            playerProfile.pieceCounter += 1;
+
+            set!(world, (playerProfile));
+
+            let piece1 = get!(world, gid1, Piece);
+            let piece2 = get!(world, gid2, Piece);
+            let piece3 = get!(world, gid3, Piece);
+
+            // check piece owner
+            if (piece1.owner != playerAddr
+                || piece2.owner != playerAddr
+                || piece3.owner != playerAddr) {
+                panic!("invliad piece gid");
+            }
+
+            // check piece creature idx
+            if (!(piece1.creature_index == piece2.creature_index
+                && piece2.creature_index == piece3.creature_index)) {
+                panic!("piece creature idx not consistent");
+            }
+
+            // check piece level
+            if (!(piece1.level == piece2.level && piece2.level == piece3.level)) {
+                panic!("piece level not consistent");
+            }
+
+            if (piece1.level > 2) {
+                panic!("piece level capped")
+            }
+
+            // gen new piece 
+            let gid = gen_piece_gid(playerAddr, playerProfile.pieceCounter);
+
+            // spawn Piece
+            set!(
+                world,
+                (
+                    Piece {
+                        gid: gid,
+                        owner: playerAddr,
+                        idx: 0,
+                        slot: invSlot,
+                        level: piece1.level + 1,
+                        creature_index: piece1.creature_index,
+                        x: 0,
+                        y: 0
+                    },
+                    playerProfile
+                )
+            );
+            // remove the three merged pieces
+            _removePiece(world, gid1);
+            _removePiece(world, gid2);
+            _removePiece(world, gid3);
+        }
 
         // commit preparation in one function
         // include: refresh, move

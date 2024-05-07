@@ -15,6 +15,7 @@ export function Debugger() {
             playAnimation,
             getCoin,
             exit,
+            mergeHero,
         },
         clientComponents: { MatchState, Player, GameStatus, LocalPlayer },
     } = useDojo();
@@ -79,6 +80,19 @@ export function Debugger() {
                 }}
             >
                 copy private key
+            </Button>
+            <Button
+                onClick={async () => {
+                    await mergeHero(
+                        account,
+                        394028214,
+                        1053576027,
+                        4175455502,
+                        1
+                    );
+                }}
+            >
+                Merge Hero
             </Button>
             <Button
                 onClick={async () => {
