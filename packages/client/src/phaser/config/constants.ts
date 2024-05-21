@@ -34,6 +34,8 @@ export enum Animations {
     EttinIdle = "EttinIdle",
     SatoriIdle = "SatoriIdle",
     MantisIdle = "MantisIdle",
+    OrcIdle = "OrcIdle",
+    BasiliskIdle = "BasiliskIdle",
 }
 
 // image addresses
@@ -41,7 +43,7 @@ export enum Animations {
 export enum Sprites {
     Invalid,
     PlayerHealthBar,
-    EnemyHealthBar
+    EnemyHealthBar,
 }
 
 export enum Monster {
@@ -72,6 +74,8 @@ export enum Monster {
     Ettin,
     Satori,
     Mantis,
+    Orc,
+    Basilisk,
 }
 
 export enum Assets {

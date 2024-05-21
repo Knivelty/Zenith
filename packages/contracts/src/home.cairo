@@ -1,4 +1,4 @@
-use autochessia::models::{CreatureProfile, StageProfile, Piece, Player};
+use autochessia::models::{CreatureProfile, StageProfile, StageProfilePiece, Piece, Player};
 use autochessia::customType::{PieceChange, RoundResult};
 
 
@@ -7,8 +7,8 @@ trait IHome {
     fn initialize();
 
     // set args
-    fn setCreatureProfile(p: CreatureProfile);
-    fn setStageProfile(p: StageProfile);
+    fn setCreatureProfile(profiles: Array<CreatureProfile>);
+    fn setStageProfile(profiles: Array<StageProfile>, pieces: Array<StageProfilePiece>);
 
     fn spawn();
     fn refreshAltar();
@@ -290,275 +290,7 @@ mod home {
         // TODO: set as real args
 
         fn initialize(world: IWorldDispatcher) {
-            // initialize creature
-
-            // Minotaur
-            set!(
-                world,
-                CreatureProfile {
-                    level: 1,
-                    rarity: 1,
-                    creature_index: 1,
-                    health: 600,
-                    attack: 48,
-                    armor: 40,
-                    range: 2,
-                    speed: 2,
-                    initiative: 90
-                }
-            );
-
-            // Colossus
-            set!(
-                world,
-                CreatureProfile {
-                    level: 1,
-                    rarity: 1,
-                    creature_index: 2,
-                    health: 700,
-                    attack: 35,
-                    armor: 65,
-                    range: 2,
-                    speed: 1,
-                    initiative: 60
-                }
-            );
-
-            // Behemoth
-            set!(
-                world,
-                CreatureProfile {
-                    level: 1,
-                    rarity: 1,
-                    creature_index: 3,
-                    health: 550,
-                    attack: 45,
-                    armor: 60,
-                    range: 2,
-                    speed: 2,
-                    initiative: 85
-                }
-            );
-
-            // Wyvern
-            set!(
-                world,
-                CreatureProfile {
-                    level: 1,
-                    rarity: 1,
-                    creature_index: 4,
-                    health: 450,
-                    attack: 100,
-                    armor: 30,
-                    range: 3,
-                    speed: 4,
-                    initiative: 135
-                }
-            );
-
-            // Berserker
-            set!(
-                world,
-                CreatureProfile {
-                    level: 1,
-                    rarity: 1,
-                    creature_index: 5,
-                    health: 500,
-                    attack: 65,
-                    armor: 85,
-                    range: 2,
-                    speed: 3,
-                    initiative: 95
-                }
-            );
-
-            // Golem
-            set!(
-                world,
-                CreatureProfile {
-                    level: 1,
-                    rarity: 1,
-                    creature_index: 6,
-                    health: 600,
-                    attack: 65,
-                    armor: 50,
-                    range: 2,
-                    speed: 2,
-                    initiative: 110
-                }
-            );
-
-            // Bear
-            set!(
-                world,
-                CreatureProfile {
-                    level: 1,
-                    rarity: 1,
-                    creature_index: 7,
-                    health: 960,
-                    attack: 90,
-                    armor: 40,
-                    range: 2,
-                    speed: 2,
-                    initiative: 80
-                }
-            );
-
-            // Kitsune
-            set!(
-                world,
-                CreatureProfile {
-                    level: 1,
-                    rarity: 1,
-                    creature_index: 8,
-                    health: 420,
-                    attack: 70,
-                    armor: 35,
-                    range: 2,
-                    speed: 3,
-                    initiative: 115
-                }
-            );
-
-            // Nue
-            set!(
-                world,
-                CreatureProfile {
-                    level: 1,
-                    rarity: 1,
-                    creature_index: 9,
-                    health: 400,
-                    attack: 80,
-                    armor: 25,
-                    range: 2,
-                    speed: 4,
-                    initiative: 175
-                }
-            );
-
-            // Cyclops
-            set!(
-                world,
-                CreatureProfile {
-                    level: 1,
-                    rarity: 1,
-                    creature_index: 10,
-                    health: 300,
-                    attack: 125,
-                    armor: 40,
-                    range: 2,
-                    speed: 0,
-                    initiative: 150
-                }
-            );
-
-            set!(world, GlobalState { index: 1, totalMatch: 0, totalCreature: 10 });
-
-            // intialize stage profile
-
-            // stage 1
-            set!(
-                world,
-                (
-                    StageProfile { stage: 1, pieceCount: 2, },
-                    StageProfilePiece {
-                        stage: 1, index: 1, y: 2, x: 3, creature_index: 1, level: 1,
-                    },
-                    StageProfilePiece {
-                        stage: 1, index: 2, y: 2, x: 6, creature_index: 1, level: 1,
-                    }
-                )
-            );
-
-            // stage 2
-            set!(
-                world,
-                (
-                    StageProfile { stage: 2, pieceCount: 2, },
-                    StageProfilePiece {
-                        stage: 2, index: 1, y: 1, x: 3, creature_index: 2, level: 1,
-                    },
-                    StageProfilePiece {
-                        stage: 2, index: 2, y: 3, x: 5, creature_index: 3, level: 1,
-                    }
-                )
-            );
-
-            // stage 3
-            set!(
-                world,
-                (
-                    StageProfile { stage: 3, pieceCount: 2, },
-                    StageProfilePiece {
-                        stage: 3, index: 1, y: 2, x: 2, creature_index: 4, level: 1,
-                    },
-                    StageProfilePiece {
-                        stage: 3, index: 2, y: 2, x: 7, creature_index: 5, level: 1,
-                    }
-                )
-            );
-
-            // stage 4
-            set!(
-                world,
-                (
-                    StageProfile { stage: 4, pieceCount: 3, },
-                    StageProfilePiece {
-                        stage: 4, index: 1, y: 1, x: 2, creature_index: 5, level: 1,
-                    },
-                    StageProfilePiece {
-                        stage: 4, index: 2, y: 2, x: 5, creature_index: 6, level: 1,
-                    },
-                    StageProfilePiece {
-                        stage: 4, index: 3, y: 3, x: 3, creature_index: 1, level: 1,
-                    }
-                )
-            );
-
-            // stage 5
-            set!(
-                world,
-                (
-                    StageProfile { stage: 5, pieceCount: 3, },
-                    StageProfilePiece {
-                        stage: 5, index: 1, y: 1, x: 5, creature_index: 2, level: 1,
-                    },
-                    StageProfilePiece {
-                        stage: 5, index: 2, y: 2, x: 3, creature_index: 3, level: 1,
-                    },
-                    StageProfilePiece {
-                        stage: 5, index: 3, y: 2, x: 7, creature_index: 3, level: 1,
-                    }
-                )
-            );
-
-            // stage 6
-            set!(
-                world,
-                (
-                    StageProfile { stage: 6, pieceCount: 1, },
-                    StageProfilePiece {
-                        stage: 6, index: 1, y: 2, x: 4, creature_index: 8, level: 1,
-                    },
-                )
-            );
-
-            // stage 7
-            set!(
-                world,
-                (
-                    StageProfile { stage: 7, pieceCount: 3, },
-                    StageProfilePiece {
-                        stage: 7, index: 1, y: 1, x: 5, creature_index: 2, level: 1,
-                    },
-                    StageProfilePiece {
-                        stage: 7, index: 2, y: 2, x: 1, creature_index: 8, level: 1,
-                    },
-                    StageProfilePiece {
-                        stage: 7, index: 3, y: 3, x: 4, creature_index: 9, level: 1,
-                    }
-                )
-            );
+            set!(world, GlobalState { index: 1, totalMatch: 0, totalCreature: 26 });
 
             // set level up config
             set!(world, (LevelConfig { current: 1, expForNext: 2 }));
@@ -572,8 +304,47 @@ mod home {
             set!(world, (LevelConfig { current: 9, expForNext: 144 }));
         }
 
-        fn setCreatureProfile(world: IWorldDispatcher, p: CreatureProfile) {}
-        fn setStageProfile(world: IWorldDispatcher, p: StageProfile) {}
+        fn setCreatureProfile(world: IWorldDispatcher, profiles: Array<CreatureProfile>) {
+            let mut idx = 0;
+            let length = profiles.len();
+
+            loop {
+                if (idx >= length) {
+                    break;
+                }
+                let p = profiles.at(idx);
+                set!(world, (*p));
+                idx += 1;
+            };
+        }
+        fn setStageProfile(
+            world: IWorldDispatcher, profiles: Array<StageProfile>, pieces: Array<StageProfilePiece>
+        ) {
+            let mut idx = 0;
+            let length = profiles.len();
+
+            loop {
+                if (idx >= length) {
+                    break;
+                }
+                let p = profiles.at(idx);
+                set!(world, (*p));
+                idx += 1;
+            };
+
+            idx = 0;
+            let length = pieces.len();
+
+            loop {
+                if (idx >= length) {
+                    break;
+                }
+                let p = pieces.at(idx);
+                set!(world, (*p));
+                idx += 1;
+            };
+        }
+
 
         // ContractState is defined by system decorator expansion
         fn spawn(world: IWorldDispatcher) {

@@ -1,0 +1,21 @@
+{
+  "name": "contracts",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "applyValue": "ts-node scripts/applyValue.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "execa": "^8.0.1",
+    "lodash": "^4.17.21",
+    "starknet": "6.1.5",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.202"
+  }
+}

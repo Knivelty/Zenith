@@ -131,7 +131,7 @@ struct MatchState {
     player2: ContractAddress,
 }
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Model, Copy, Clone, Drop, Serde)]
 struct CreatureProfile {
     #[key]
     creature_index: u8,
@@ -139,8 +139,8 @@ struct CreatureProfile {
     level: u8,
     rarity: u8,
     health: u16,
-    attack: u8,
-    armor: u8,
+    attack: u16,
+    armor: u16,
     range: u8,
     speed: u8,
     initiative: u8,

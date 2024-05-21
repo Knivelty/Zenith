@@ -283,6 +283,26 @@ const baseAnimations: AnimationsConfig = [
         prefix: "mantis/",
         suffix: ".png",
     },
+    {
+        key: Animations.OrcIdle,
+        assetKey: Assets.MainAtlas,
+        startFrame: 0,
+        endFrame: 0,
+        frameRate: 1,
+        repeat: -1,
+        prefix: "orc/",
+        suffix: ".png",
+    },
+    {
+        key: Animations.BasiliskIdle,
+        assetKey: Assets.MainAtlas,
+        startFrame: 0,
+        endFrame: 0,
+        frameRate: 1,
+        repeat: -1,
+        prefix: "basilisk/",
+        suffix: ".png",
+    },
 ];
 
 export function getAnimations() {

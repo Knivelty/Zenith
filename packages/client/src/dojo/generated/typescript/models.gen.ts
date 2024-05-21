@@ -546,7 +546,7 @@ export function defineContractComponents(world: World) {
                 {
                     metadata: {
                         name: "CreatureProfile",
-                        types: ["u8", "u8", "u8", "u16", "u8", "u8", "u8", "u8", "u8"],
+                        types: ["u8", "u8", "u8", "u16", "u16", "u16", "u8", "u8", "u8"],
                         customTypes: [],
                     },
                 }

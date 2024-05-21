@@ -4,7 +4,7 @@
 			"image": "atlas.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 3403,
+				"w": 3691,
 				"h": 1908
 			},
 			"scale": 1,
@@ -52,28 +52,7 @@
 					}
 				},
 				{
-					"filename": "bear/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 782,
-						"y": 1,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "behemoth/0.png",
+					"filename": "basilisk/0.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -94,7 +73,7 @@
 					}
 				},
 				{
-					"filename": "berserker/0.png",
+					"filename": "bear/0.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -108,218 +87,8 @@
 						"h": 513
 					},
 					"frame": {
-						"x": 1297,
-						"y": 1,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "chupacabra/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 1812,
-						"y": 1,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "colossus/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 2327,
-						"y": 1,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "cyclops/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 2842,
-						"y": 1,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "dragon/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 782,
-						"y": 516,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "ettin/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 1297,
-						"y": 516,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "fairy/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 1812,
-						"y": 516,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "fenrir/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 2327,
-						"y": 516,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "jiangshi/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 2842,
-						"y": 516,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "kitsune/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 549,
-						"y": 1031,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "leprechaun/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 1064,
-						"y": 1031,
+						"x": 516,
+						"y": 1394,
 						"w": 513,
 						"h": 513
 					}
@@ -339,260 +108,8 @@
 						"h": 359
 					},
 					"frame": {
-						"x": 1579,
-						"y": 1031,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "minotaur/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 1940,
-						"y": 1031,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "nue/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 2301,
-						"y": 1031,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "ogre/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 2662,
-						"y": 1031,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "qilin/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 3023,
-						"y": 1031,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "rakshasa/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 516,
-						"y": 1546,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "satori/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 877,
-						"y": 1546,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "skinwalker/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 1238,
-						"y": 1546,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "vampire/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 1599,
-						"y": 1392,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "warlock/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 1960,
-						"y": 1392,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "wendigo/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 2321,
-						"y": 1392,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "wraith/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 2682,
-						"y": 1392,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "wyvern/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 3043,
-						"y": 1392,
+						"x": 549,
+						"y": 903,
 						"w": 359,
 						"h": 359
 					}
@@ -613,7 +130,7 @@
 					},
 					"frame": {
 						"x": 549,
-						"y": 903,
+						"y": 1264,
 						"w": 25,
 						"h": 2
 					}
@@ -633,10 +150,535 @@
 						"h": 2
 					},
 					"frame": {
-						"x": 3357,
-						"y": 1,
+						"x": 549,
+						"y": 1268,
 						"w": 25,
 						"h": 2
+					}
+				},
+				{
+					"filename": "behemoth/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 782,
+						"y": 1,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "minotaur/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 782,
+						"y": 516,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "berserker/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 910,
+						"y": 877,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "nue/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 1143,
+						"y": 516,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "chupacabra/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 1297,
+						"y": 1,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "colossus/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 1031,
+						"y": 1392,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "cyclops/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 1425,
+						"y": 877,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "ogre/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 1504,
+						"y": 516,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "dragon/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 1812,
+						"y": 1,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "orc/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 1865,
+						"y": 516,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "ettin/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 1546,
+						"y": 1392,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "fairy/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 1940,
+						"y": 877,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "qilin/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 2226,
+						"y": 516,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "fenrir/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 2327,
+						"y": 1,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "jiangshi/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 2061,
+						"y": 1392,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "kitsune/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 2455,
+						"y": 877,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "rakshasa/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 2587,
+						"y": 516,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "leprechaun/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 513,
+						"h": 513
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 513,
+						"h": 513
+					},
+					"frame": {
+						"x": 2842,
+						"y": 1,
+						"w": 513,
+						"h": 513
+					}
+				},
+				{
+					"filename": "satori/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 2948,
+						"y": 516,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "skinwalker/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 3309,
+						"y": 516,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "vampire/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 2576,
+						"y": 1392,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "warlock/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 2937,
+						"y": 1392,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "wendigo/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 2970,
+						"y": 877,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "wraith/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 3298,
+						"y": 1238,
+						"w": 359,
+						"h": 359
+					}
+				},
+				{
+					"filename": "wyvern/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 359,
+						"h": 359
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 359,
+						"h": 359
+					},
+					"frame": {
+						"x": 3331,
+						"y": 877,
+						"w": 359,
+						"h": 359
 					}
 				}
 			]
@@ -645,6 +687,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:6c9aded3ce0d8eb06d4ec2c1a181cf5a:b794b8bad3dd1933e79a9e63ca3e2ec7:cbce6b53f0f49e0bf15173c25c41f876$"
+		"smartupdate": "$TexturePacker:SmartUpdate:d2145095ea490d9e46a307fcecf651d7:077645df6fa9e9ffd8ac9f9209a2e090:cbce6b53f0f49e0bf15173c25c41f876$"
 	}
 }
