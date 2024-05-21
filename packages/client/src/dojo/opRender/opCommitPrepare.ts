@@ -31,25 +31,26 @@ export const opCommitPrepare = async (
 
     logDebug("piecesTrack: ", piecesTrack);
 
-    const changes: PieceChange[] = piecesTrack?.gids
-        .map((gid) => {
-            const entity = getEntityIdFromKeys([BigInt(gid)]);
-            const local = getComponentValueStrict(LocalPiece, entity);
-            const remote = getComponentValueStrict(Piece, entity);
+    const changes: PieceChange[] =
+        (piecesTrack?.gids
+            .map((gid) => {
+                const entity = getEntityIdFromKeys([BigInt(gid)]);
+                const local = getComponentValueStrict(LocalPiece, entity);
+                const remote = getComponentValueStrict(Piece, entity);
 
-            if (isEqual(local, remote)) {
-                return undefined;
-            } else {
-                return {
-                    gid: gid,
-                    idx: local.idx,
-                    slot: local.slot,
-                    x: local.x,
-                    y: local.y,
-                };
-            }
-        })
-        .filter(Boolean) as PieceChange[];
+                if (isEqual(local, remote)) {
+                    return undefined;
+                } else {
+                    return {
+                        gid: gid,
+                        idx: local.idx,
+                        slot: local.slot,
+                        x: local.x,
+                        y: local.y,
+                    };
+                }
+            })
+            ?.filter(Boolean) as PieceChange[]) || [];
 
     // validate piece change, it guarantees that the hero idx was not break
     const playerValue = getComponentValueStrict(Player, playerEntity);
@@ -59,7 +60,7 @@ export const opCommitPrepare = async (
         (v: number, idx: number) => idx + 1
     );
 
-    changes.forEach((c) => {
+    changes?.forEach((c) => {
         const entity = getEntityIdFromKeys([BigInt(c.gid)]);
         const remote = getComponentValueStrict(Piece, entity);
 

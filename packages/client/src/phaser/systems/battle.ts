@@ -121,6 +121,13 @@ export const battle = (layer: PhaserLayer) => {
 
                 if (!battleLogs) {
                     console.warn("no battle log");
+
+                    // // if not battle log, set status back
+                    // updateComponent(GameStatus, entity, {
+                    //     shouldPlay: false,
+                    //     played: true,
+                    //     status: GameStatusEnum.WaitForNextRound,
+                    // });
                     return;
                 }
 
