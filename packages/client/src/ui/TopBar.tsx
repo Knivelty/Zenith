@@ -13,11 +13,11 @@ export function TopBar() {
 
     return (
         <div className="flex justify-center">
-            <div className="flex justify-between rounded px-2 py-1 w-1/4 bg-[#727272] font-bold text-white">
-                <div className="self-start">
+            <div className="flex justify-between items-center align-middle px-2 py-1 w-[40rem] h-12 bg-black border-x-2 border-b-2 border-[#06FF00] font-bold text-[#06FF00]">
+                <div className=" font-dogica">
                     Round {gameStatus?.currentRound}
                 </div>
-                <div className="self-end">
+                <div className="font-dogica">
                     {numToStatus(gameStatus?.status)}
                 </div>
             </div>

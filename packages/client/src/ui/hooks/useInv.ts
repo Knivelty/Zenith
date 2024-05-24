@@ -4,6 +4,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useMemo } from "react";
 import { useComponentValue } from "@dojoengine/react";
 import { HeroBaseAttr, PieceAttr, getHeroAttr } from "./useHeroAttr";
+import { logDebug } from "../lib/utils";
 
 export function useLocalInv() {
     const {
@@ -130,6 +131,8 @@ export function useInv() {
         inv5?.gid,
         inv6?.gid,
     ];
+
+    logDebug("invGids: ", invGids);
 
     const invPieces = useMemo(() => {
         return invGids.map((gid) => {

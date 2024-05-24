@@ -1,4 +1,5 @@
 import { Button } from "./button";
+import { GreenButton } from "./component/GreenButton";
 import { useDojo } from "./hooks/useDojo";
 import { shortenAddress } from "./lib/utils";
 
@@ -12,27 +13,32 @@ export const Home = () => {
     } = useDojo();
 
     return (
-        <div className="flex z-100 absolute h-screen w-screen bg-[#D7D7D7] top-0 left-0 text-white justify-center">
+        <div className="flex z-100 absolute h-screen w-screen bg-[url('/assets/ui/home_bg.png')] top-0 left-0 text-white justify-center">
             <div className="text-black mt-4 ml-4 border-black border-2 h-auto self-start	">
                 {shortenAddress(address)}
             </div>
-            <div className="w-5/6 p-4">
+            <div className="w-1/2 p-4">
                 <div className="flex flex-col justify-center h-full">
-                    <div className="text-black text-6xl font-bold	self-center">
-                        Loot Auto Chess
+                    <div className="text-[#06FF00] font-dogica font-bold text-5xl self-center -mt-32">
+                        Loot AutoChess
                     </div>
-                    <Button
-                        className="self-center w-40 mt-60 bg-white text-black rounded hover:bg-gray-300 transition duration-300"
+
+                    <GreenButton
+                        className="self-center w-44 h-16 mt-40 text-xl font-dogica"
                         onClick={async () => {
                             await spawn(account);
                         }}
                     >
-                        Start
-                    </Button>
+                        START
+                    </GreenButton>
                 </div>
             </div>
-            <div className="w-2/5 p-4">
-                <div className="text-black text-3xl font-bold mt-20">Rank</div>
+            <div className="w-1/2 p-4">
+                <div className="fl ex flex-col justify-start h-full">
+                    <div className="text-[#06FF00] text-3xl font-bold self-center font-dogica mt-32">
+                        Rank
+                    </div>
+                </div>
             </div>
         </div>
         // <div

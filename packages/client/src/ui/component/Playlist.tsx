@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDojo } from "../hooks/useDojo";
-import { generateAvatar, shortenAddress } from "../lib/utils";
+import { shortenAddress } from "../lib/utils";
 import { useComponentValue } from "@dojoengine/react";
 
 interface IPlayerStatus {
     id: string;
     name: string;
     isCurrent: boolean;
-    avatar: string;
     level: number;
     health: number;
     maxHealth: number;
@@ -18,7 +17,6 @@ function PlayerStatus({
     id,
     name,
     isCurrent,
-    avatar,
     level,
     health,
     maxHealth,
@@ -29,31 +27,31 @@ function PlayerStatus({
     return (
         <div
             key={id}
-            className={`flex justify-center items-center  p-2 mt-[10px] ${
-                isCurrent ? "border border-blue-500" : ""
+            className={`flex flex-col justify-center items-start p-2 mt-[10px] ${
+                isCurrent ? "" : ""
             }`}
         >
-            <img className="w-11 h-11" src={avatar} />
-            <div className="flex flex-col w-11 h-11 justify-center">
-                <span className="text-white text-center">Lv. {level}</span>
-                <div className="flex items-center">
-                    <img className="w-5 h-6" src="/assets/ui/gold.png"></img>
-                    <span className="text-white"> {coin}</span>
+            <div className="flex flex-row justify-center items-center">
+                <div className="flex items-center w-40">
+                    <img className="" src="/assets/ui/default_icon.png"></img>
+                    <div className="text-center">Lv. {level}</div>
+                </div>
+                <div className="flex items-center w-20">
+                    <img className="w-8 h-8" src="/assets/ui/gold.png"></img>
+                    <div className="ml-2"> {coin}</div>
                 </div>
             </div>
-            <div className="flex-1 grid w-11 h-11 content-around ml-2 items-center">
-                <div className="text-white">{name}</div>
-                <div className="w-full h-4 relative rounded-lg">
+            <div className="flex-1 grid w-full h-11 content-around ml-2 mt-2 items-center">
+                <div className="text-sm">{name}</div>
+                <div className="w-[90%] h-4 relative rounded-lg mt-3 mr-3">
                     <div
                         className={`absolute h-4 text-center rounded-lg  flex justify-center items-center bg-[#00FF05] `}
                         style={{ width: `${healthPercentage}%` }}
                     ></div>
-                    <span className="h-4 leading-none absolute left-1/2 transform -translate-x-1/2">
-                        <div className="text-white">
-                            {health}/{maxHealth}
-                        </div>
-                    </span>
                 </div>
+            </div>
+            <div className="flex h-4 leading-none mt-3 ml-2 ">
+                {health}/{maxHealth}
             </div>
         </div>
     );
@@ -93,16 +91,15 @@ export const PlayerList: React.FC = () => {
     }
 
     return (
-        <div className="fixed right-4 top-[100px] h-[820px] bg-contain bg-no-repeat ">
-            <div className="ml-4 mt-6 text-white">Players Info</div>
-            <div className="pl-4 pr-2 mt-2 w-72 h-20 ">
+        <div className="fixed right-4 top-[80px] h-[520px] border border-[#06FF00] bg-black bg-contain bg-no-repeat ">
+            <div className="ml-4 mt-6">Players Info</div>
+            <div className="pl-2 pr-2 mt-2 w-72 h-20 ">
                 <PlayerStatus
                     id={address}
                     name={shortenAddress(address)}
                     health={playerValue?.health || 0}
                     maxHealth={100}
                     coin={playerValue?.coin || 0}
-                    avatar={generateAvatar(address)}
                     level={playerValue?.level || 0}
                     isCurrent={true}
                 />
@@ -128,4 +125,3 @@ export const PlayerList: React.FC = () => {
 const redirectToGame = (userId: string) => {
     return;
 };
-

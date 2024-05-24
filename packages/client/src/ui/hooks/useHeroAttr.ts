@@ -15,6 +15,8 @@ export interface HeroBaseAttr {
     speed: number;
     range: number;
     thumb: string;
+    rarity: number;
+    name: string;
 }
 
 export interface PieceAttr extends HeroBaseAttr {
@@ -28,6 +30,10 @@ export type CreatureKeys = {
 
 export function getHeroThumb(creatureIdx: number) {
     return `/assets/sprites/${Monster[creatureIdx].toLowerCase()}/0.png`;
+}
+
+export function getHeroName(creatureIdx: number) {
+    return Monster[creatureIdx];
 }
 
 export function getHeroAttr(
@@ -53,6 +59,8 @@ export function getHeroAttr(
         cost: profile.level,
         level: profile.level,
         thumb: getHeroThumb(profile.creature_index),
+        rarity: profile.rarity,
+        name: getHeroName(profile.creature_index),
     };
 }
 

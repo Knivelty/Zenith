@@ -72,39 +72,44 @@
     }
     body {
         @apply bg-background text-foreground;
+        @apply font-dogica;
+        @apply text-[#06FF00];
     }
 }
-.mainBoard{
-        position: absolute;
-        top: 20%;
-        left: 50%;
-        width: 32rem;
-        transform: translateX(-50%);
-        height: 32rem;
+.mainBoard {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    width: 32rem;
+    transform: translateX(-50%);
+    height: 32rem;
 }
 
 .monster {
     position: absolute;
     /* top: "26%";
     left: "70%"; */
-    width:64px;
-    height:64px;
+    width: 64px;
+    height: 64px;
     pointer-events: none;
     transition: 2s;
     background-size: 128px 64px;
-    background-image: url('assets/id-1.png');
+    background-image: url("assets/id-1.png");
     background-repeat: no-repeat;
     animation: monster-id1-animation 1s steps(1) infinite;
 }
 
-.monster2{
-    background-image: url('assets/id-2.png');
-
+.monster2 {
+    background-image: url("assets/id-2.png");
 }
 
 @keyframes monster-id1-animation {
-    0% { background-position: 0 0; }
-    50% { background-position: -64px 0; }
+    0% {
+        background-position: 0 0;
+    }
+    50% {
+        background-position: -64px 0;
+    }
 }
 
 .health-bar-container {
@@ -127,8 +132,21 @@
     transition: width 0.5s; /* 宽度变化的过渡效果 */
 }
 
-.health-bar2{
+.health-bar2 {
     background-color: yellow; /* 血条颜色 */
-
 }
 
+@font-face {
+    font-family: "Dogica Pixel";
+    src: url("./assets/fonts/DogicaPixel/dogicapixel.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Dogica Pixel";
+    src: url("./assets/fonts/DogicaPixel/dogicapixelbold.ttf")
+        format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}

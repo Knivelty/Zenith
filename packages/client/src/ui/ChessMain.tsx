@@ -10,6 +10,7 @@ import { CommitButton } from "./component/CommitButton";
 import { ExpButton } from "./component/ExpButton";
 import { PieceLimit } from "./component/PieceLimit";
 import { PlayerList } from "./component/Playlist";
+import { SettleButton } from "./component/SettleButton";
 
 export function ChessMain() {
     const {
@@ -34,8 +35,9 @@ export function ChessMain() {
             <Debugger />
             <PlayerList />
             <Shop />
-            <CommitButton />
+            <SettleButton />
             <PieceLimit />
+            <CommitButton />
             <Inventory />
             <ExpButton />
             <ShopButton />

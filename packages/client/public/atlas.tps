@@ -173,6 +173,7 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">assets/sprites/basilisk/0.png</key>
             <key type="filename">assets/sprites/bear/0.png</key>
             <key type="filename">assets/sprites/behemoth/0.png</key>
             <key type="filename">assets/sprites/berserker/0.png</key>
@@ -235,6 +236,7 @@
             <key type="filename">assets/sprites/minotaur/0.png</key>
             <key type="filename">assets/sprites/nue/0.png</key>
             <key type="filename">assets/sprites/ogre/0.png</key>
+            <key type="filename">assets/sprites/orc/0.png</key>
             <key type="filename">assets/sprites/qilin/0.png</key>
             <key type="filename">assets/sprites/rakshasa/0.png</key>
             <key type="filename">assets/sprites/satori/0.png</key>

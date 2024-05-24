@@ -1,5 +1,4 @@
 import { useComponentValue } from "@dojoengine/react";
-import { Button } from "../button";
 import { useDojo } from "../hooks/useDojo";
 import { zeroEntity } from "../../utils";
 import { UIStore, useUIStore } from "../../store";
@@ -29,7 +28,7 @@ export function CommitButton() {
 
     if (status?.status === 1) {
         return (
-            <OperationButton
+            <CommitOperationButton
                 onClick={() => {
                     commitPreparation(account);
                     setShopShow(false);
@@ -37,29 +36,33 @@ export function CommitButton() {
                 text="Commit Preparation"
             />
         );
-    } else if (status?.status === 3) {
-        let winText = "";
-        // get battle result
-
-        if (battleResult?.winner === BigInt(address)) {
-            winText = "You Win.";
-        } else {
-            winText = `You Lose ${battleResult?.healthDecrease} Health. `;
-        }
-        return (
-            <OperationButton
-                onClick={() => {
-                    nextRound(account);
-                }}
-                text={`${winText} Next Round`}
-            />
-        );
     } else {
-        return <OperationButton visible={"invisible"} />;
+        return <div></div>;
     }
+
+    // if (status?.status === 3) {
+    //     let winText = "";
+    //     // get battle result
+
+    //     if (battleResult?.winner === BigInt(address)) {
+    //         winText = "You Win.";
+    //     } else {
+    //         winText = `You Lose  ${battleResult?.healthDecrease} Health. `;
+    //     }
+    //     return (
+    //         <OperationButton
+    //             onClick={() => {
+    //                 nextRound(account);
+    //             }}
+    //             text={`${winText} Next Round`}
+    //         />
+    //     );
+    // } else {
+    //     return <OperationButton visible={"invisible"} />;
+    // }
 }
 
-export function OperationButton({
+export function CommitOperationButton({
     onClick,
     text,
     visible,
@@ -69,13 +72,11 @@ export function OperationButton({
     visible?: string;
 }) {
     return (
-        <div className={`flex justify-center mt-5 ${visible} select-none`}>
-            <Button
-                className="bg-white/75 text-black/50 hover:bg-slate-200/50"
-                onClick={onClick}
-            >
-                {text}
-            </Button>
-        </div>
+        <button
+            className={`absolute  left-1/2 transform -translate-x-1/2 top-[calc(10%+40rem)] bg-[url(/assets/ui/commit_btn.png)] pixelated bg-contain bg-no-repeat flex justify-center mt-0.5 ${visible} select-none w-60 h-10 font-dogica text-xs z-10`}
+            onClick={onClick}
+        >
+            <div className="self-center text-black">{text}</div>
+        </button>
     );
 }

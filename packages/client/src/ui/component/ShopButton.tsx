@@ -22,15 +22,15 @@ export function ShopButton() {
 
     return (
         <div className="absolute right-[10%] bottom-[10%]">
-            <Button
-                className="w-32 h-32 bg-white border-black  text-black  rounded-full
-                hover:bg-gray-300 transition duration-300 text-lg"
+            <button
+                className="w-32 h-32 bg-black border-[#06FF00] border rounded-full
+                 transition duration-300 text-lg"
                 onClick={async () => {
                     setShowShop(!shopShow);
                 }}
             >
                 $ {player?.coin}
-            </Button>
+            </button>
         </div>
     );
 }

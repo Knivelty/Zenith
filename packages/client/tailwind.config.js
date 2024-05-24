@@ -70,7 +70,19 @@ module.exports = {
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out",
             },
+            fontFamily: {
+                dogica: ["Dogica Pixel", "sans-serif"],
+            },
         },
     },
-    plugins: [require("tailwindcss-animate")],
+    plugins: [
+        require("tailwindcss-animate"),
+        function ({ addUtilities }) {
+            addUtilities({
+                ".pixelated": {
+                    "image-rendering": "pixelated",
+                },
+            });
+        },
+    ],
 };
