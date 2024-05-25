@@ -189,13 +189,16 @@ export async function setupWorld(provider: DojoProvider) {
         };
 
         // Call the `nextRound` system with the specified Account and calldata
-        const nextRound = async (props: { account: Account }) => {
+        const nextRound = async (props: {
+            account: Account;
+            choice: number;
+        }) => {
             try {
                 return await provider.execute(
                     props.account,
                     contract_name,
                     "nextRound",
-                    []
+                    [props.choice]
                 );
             } catch (error) {
                 console.error("Error executing spawn:", error);

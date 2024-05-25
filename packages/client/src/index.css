@@ -138,14 +138,14 @@
 
 @font-face {
     font-family: "Dogica Pixel";
-    src: url("./assets/fonts/DogicaPixel/dogicapixel.ttf") format("truetype");
+    src: url("/assets/fonts/DogicaPixel/dogicapixel.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: "Dogica Pixel";
-    src: url("./assets/fonts/DogicaPixel/dogicapixelbold.ttf")
+    src: url("344/assets/fonts/DogicaPixel/dogicapixelbold.ttf")
         format("truetype");
     font-weight: bold;
     font-style: normal;

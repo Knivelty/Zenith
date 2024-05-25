@@ -9,7 +9,7 @@ import { uuid } from "@latticexyz/utils";
 
 export const opBuyHero = async (
     { client }: { client: IWorld },
-    { Player, Altar, Piece, PlayerProfile }: ClientComponents,
+    { Player, Altar, Piece, PlayerProfile, CreatureProfile }: ClientComponents,
     rpcProvider: RpcProvider,
     account: Account,
     altarSlot: number,
@@ -19,12 +19,6 @@ export const opBuyHero = async (
     const playerProfile = getComponentValueStrict(PlayerProfile, playerEntity);
     const player = getComponentValueStrict(Player, playerEntity);
     const altar = getComponentValueStrict(Altar, playerEntity);
-
-    // check
-    if (player.coin <= 0 || player.inventoryCount >= 6) {
-        alert("cannot buy");
-        return;
-    }
 
     playerProfile.pieceCounter += 1;
 
@@ -37,9 +31,24 @@ export const opBuyHero = async (
     const pieceEntity = getEntityIdFromKeys([BigInt(pieceGid)]);
 
     const creatureId = Number(Object.entries(altar)[altarSlot][1]);
+    const creatureProfile = getComponentValueStrict(
+        CreatureProfile,
+        getEntityIdFromKeys([BigInt(creatureId), 1n])
+    );
 
-    player.coin -= 1;
+    player.coin -= creatureProfile.rarity;
     player.inventoryCount += 1;
+
+    // check
+    if (player.coin < 0 || player.inventoryCount > 6) {
+        alert("cannot buy");
+        return;
+    }
+
+    if (player.coin < 0) {
+        alert("no enough coin");
+        return;
+    }
 
     logDebug(`generate gid ${pieceGid}`);
 

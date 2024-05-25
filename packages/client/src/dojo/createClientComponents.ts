@@ -55,6 +55,7 @@ export function createClientComponents({
             played: Type.Boolean,
             currentMatch: Type.Number,
             currentRound: Type.Number,
+            dangerous: Type.Boolean,
         }),
         BattleLogs: defineComponent(world, {
             matchId: Type.Number,

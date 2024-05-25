@@ -25,6 +25,14 @@ fn generate_pseudo_random_address(seed: felt252, seed2: felt252) -> ContractAddr
     return hash.try_into().unwrap();
 }
 
+fn generate_pseudo_random_u8(seed: felt252, seed2: felt252) -> u8 {
+    let hash = PoseidonTrait::new().update(seed).update(seed2).finalize();
+
+    let MASK_8: u256 = 0xff;
+
+    return (hash.into() & MASK_8).try_into().unwrap();
+}
+
 fn get_felt_mod(divided: felt252, divid: felt252) -> u8 {
     // println!("value: {}  {}", divided, divid);
 

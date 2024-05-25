@@ -93,6 +93,8 @@ export const processBattle = (component: ClientComponents) => {
             getEntityIdFromKeys([v.awayPlayer])
         );
 
+        const boost = status.dangerous ? 1.2 : 1;
+
         for (let i = 1; i <= enemy.heroesCount; i++) {
             const playerPiece = getComponentValueStrict(
                 LocalPlayerPiece,
@@ -117,8 +119,9 @@ export const processBattle = (component: ClientComponents) => {
                 entity: pieceEntity,
                 x: piece.x - 1,
                 y: piece.y - 1,
-                health: creature.health,
-                attack: creature.attack,
+                // boost health and attack if dangerous
+                health: creature.health * boost,
+                attack: creature.attack * boost,
                 armor: creature.armor,
                 speed: creature.speed,
                 range: creature.range,

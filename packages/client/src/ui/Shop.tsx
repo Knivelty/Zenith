@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useDojo } from "./hooks/useDojo";
 import { useComponentValue } from "@dojoengine/react";
-import { getHeroAttr, useHeroesAttr } from "./hooks/useHeroAttr";
+import { getHeroAttr } from "./hooks/useHeroAttr";
 import { HeroCard } from "./component/HeroCard";
 import { useInv } from "./hooks/useInv";
 import { UIStore, useUIStore } from "../store";

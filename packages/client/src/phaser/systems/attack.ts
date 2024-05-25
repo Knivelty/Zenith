@@ -5,7 +5,7 @@ import {
     setComponent,
     updateComponent,
 } from "@dojoengine/recs";
-import { defineSystemST } from "../../utils";
+import { defineSystemST, zeroEntity } from "../../utils";
 import { PhaserLayer } from "..";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 
@@ -16,7 +16,14 @@ export const attack = (layer: PhaserLayer) => {
             Main: { config, objectPool },
         },
         networkLayer: {
-            clientComponents: { Attack, Piece, CreatureProfile, Health },
+            clientComponents: {
+                Attack,
+                Piece,
+                CreatureProfile,
+                Health,
+                GameStatus,
+            },
+            account: { address },
         },
     } = layer;
 
@@ -28,10 +35,14 @@ export const attack = (layer: PhaserLayer) => {
                 return;
             }
 
+            const status = getComponentValueStrict(GameStatus, zeroEntity);
+
             const attacker = getComponentValueStrict(
                 Piece,
                 v.attacker as Entity
             );
+
+            const isEnemy = attacker.owner === BigInt(address);
 
             const attackerCreature = getComponentValueStrict(
                 CreatureProfile,
@@ -54,8 +65,12 @@ export const attack = (layer: PhaserLayer) => {
                 ])
             );
 
+            // boost attack here
+            const boost = status.dangerous && isEnemy ? 1.2 : 1;
+
             const damage =
                 attackerCreature.attack *
+                boost *
                 (attackedCreature.armor / (attackedCreature.armor + 1));
 
             const attackedHealth = getComponentValueStrict(

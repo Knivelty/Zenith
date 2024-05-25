@@ -20,6 +20,9 @@ export function Debugger() {
         clientComponents: { MatchState, Player, GameStatus, LocalPlayer },
     } = useDojo();
 
+    const queryParams = new URLSearchParams(window.location.search);
+    const debug = queryParams.get("debug");
+
     const player = useComponentValue(
         Player,
         getEntityIdFromKeys([BigInt(account.address)])
@@ -39,8 +42,12 @@ export function Debugger() {
         getEntityIdFromKeys([BigInt(player?.inMatch || 0)])
     );
 
+    if (debug != "true") {
+        return <div></div>;
+    }
+
     return (
-        <div className="flex absolute gap-4 flex-wrap flex-col justify-between p-2 space-x-3 z-10">
+        <div className="flex absolute gap-4 flex-wrap flex-col justify-between p-2 space-x-3">
             <Button>Debug Buttons</Button>
             <Button
                 onClick={async () => {
@@ -58,7 +65,7 @@ export function Debugger() {
             </Button>
             <Button
                 onClick={async () => {
-                    await nextRound(account);
+                    // await nextRound(account);
                 }}
             >
                 next round

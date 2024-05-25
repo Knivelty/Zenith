@@ -6,6 +6,7 @@ import { zeroEntity } from "../utils";
 import { opBuyHero } from "./opRender/opBuyHero";
 import { opSellHero } from "./opRender/opSellHero";
 import { opCommitPrepare } from "./opRender/opCommitPrepare";
+import { logDebug } from "../ui/lib/utils";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -46,9 +47,10 @@ export function createSystemCalls(
         );
     };
 
-    const nextRound = async (account: Account) => {
+    const nextRound = async (account: Account, choice: number) => {
         try {
-            return await client.home.nextRound({ account });
+            logDebug(`call next round, ${choice}`);
+            return await client.home.nextRound({ account, choice });
         } catch (e) {
             console.error(e);
             throw e;

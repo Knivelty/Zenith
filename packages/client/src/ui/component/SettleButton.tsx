@@ -6,7 +6,7 @@ import { cn } from "../lib/utils";
 
 export function SettleButton() {
     const {
-        systemCalls: { commitPreparation, nextRound },
+        systemCalls: { nextRound },
         account: {
             account,
             account: { address },
@@ -53,7 +53,7 @@ export function SettleButton() {
                 <div
                     className="bg-black text-white p-2 mt-8 cursor-pointer"
                     onClick={() => {
-                        nextRound(account);
+                        // nextRound(account);
                     }}
                 >
                     <div className="text-xs"> Next Round</div>

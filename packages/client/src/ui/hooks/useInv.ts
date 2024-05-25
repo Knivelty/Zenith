@@ -132,7 +132,6 @@ export function useInv() {
         inv6?.gid,
     ];
 
-    logDebug("invGids: ", invGids);
 
     const invPieces = useMemo(() => {
         return invGids.map((gid) => {

@@ -18,6 +18,9 @@ struct Player {
     inventoryCount: u8,
     // a free refresh opportunity for each round
     refreshed: bool,
+    curse: u8,
+    deterioration: u8,
+    choiceType: u8,
 }
 
 #[derive(Model, Copy, Drop, Serde)]
@@ -112,6 +115,7 @@ struct InningBattle {
     end: bool,
     winner: ContractAddress,
     healthDecrease: u8,
+    dangerous: bool
 }
 
 #[derive(Model, Copy, Drop, Serde)]
@@ -144,6 +148,21 @@ struct CreatureProfile {
     range: u8,
     speed: u8,
     initiative: u8,
+}
+
+#[derive(Model, Copy, Clone, Drop, Serde)]
+struct ChoiceProfile {
+    #[key]
+    t: u8,
+    #[key]
+    idx: u8,
+    coinDec: u8,
+    coinInc: u8,
+    curseDec: u8,
+    curseInc: u8,
+    deterDec: u8,
+    deterInc: u8,
+    healthDec: u8,
 }
 
 

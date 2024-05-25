@@ -9,8 +9,8 @@ export const supportedNetworks: Record<
             "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0",
     },
     slot: {
-        rpcUrl: "https://api.cartridge.gg/x/autochessia/katana",
-        toriiUrl: "https://api.cartridge.gg/x/autochessia/torii",
+        rpcUrl: "https://api.cartridge.gg/x/zenith/katana",
+        toriiUrl: "https://api.cartridge.gg/x/zenith/torii",
         worldAddress:
             "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0",
     },

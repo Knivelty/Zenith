@@ -10,7 +10,8 @@ import { CommitButton } from "./component/CommitButton";
 import { ExpButton } from "./component/ExpButton";
 import { PieceLimit } from "./component/PieceLimit";
 import { PlayerList } from "./component/Playlist";
-import { SettleButton } from "./component/SettleButton";
+import { SettleDialog } from "./component/SettleDialog";
+import { DangerBorder } from "./component/DangerBorder";
 
 export function ChessMain() {
     const {
@@ -35,12 +36,13 @@ export function ChessMain() {
             <Debugger />
             <PlayerList />
             <Shop />
-            <SettleButton />
+            <SettleDialog />
             <PieceLimit />
             <CommitButton />
             <Inventory />
             <ExpButton />
             <ShopButton />
+            <DangerBorder />
         </div>
     );
 }

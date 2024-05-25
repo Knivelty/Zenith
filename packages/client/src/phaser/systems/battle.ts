@@ -62,6 +62,7 @@ export const battle = (layer: PhaserLayer) => {
 
             updateComponent(GameStatus, zeroEntity, {
                 currentRound: v.round,
+                dangerous: v.dangerous,
             });
 
             if (Boolean(v.end) === false) {

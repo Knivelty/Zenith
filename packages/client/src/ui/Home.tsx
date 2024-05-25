@@ -13,7 +13,7 @@ export const Home = () => {
     } = useDojo();
 
     return (
-        <div className="flex z-100 absolute h-screen w-screen bg-[url('/assets/ui/home_bg.png')] top-0 left-0 text-white justify-center">
+        <div className="flex z-100 absolute h-screen w-screen bg-[url('/assets/ui/home_bg.png')] top-0 left-0 text-white justify-center overflow-hidden">
             <div className="text-black mt-4 ml-4 border-black border-2 h-auto self-start	">
                 {shortenAddress(address)}
             </div>

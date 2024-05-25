@@ -45,8 +45,6 @@ export const localPlayerInv = (layer: PhaserLayer) => {
             inv6?.gid,
         ];
 
-        console.log("invGids: ", invGids);
-
         const emptySlots = invGids
             .map((item, index) =>
                 item == 0 || item == undefined ? index + 1 : undefined

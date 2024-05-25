@@ -379,12 +379,15 @@ export function defineContractComponents(world: World) {
                     locked: RecsType.Number,
                     heroesCount: RecsType.Number,
                     inventoryCount: RecsType.Number,
-                    refreshed: RecsType.Boolean,
+                    refreshed: RecsType.Boolean,                    
+                    curse: RecsType.Number,
+                    deterioration: RecsType.Number,
+                    choiceType: RecsType.Number,
                 },
                 {
                     metadata: {
                         name: "Player",
-                        types: ["ContractAddress", "u32", "u8", "u8", "u8", "u8", "u8", "u8", "u8", "u8", "u8", "bool"],
+                        types: ["ContractAddress", "u32", "u8", "u8", "u8", "u8", "u8", "u8", "u8", "u8", "u8", "bool", "u8", "u8", "u8"],
                         customTypes: [],
                     },
                 }
@@ -464,6 +467,31 @@ export function defineContractComponents(world: World) {
             );
         })(),
 
+        // Model definition for `autochessia::models::ChoiceProfile` model
+        ChoiceProfile: (() => {
+            return defineComponent(
+                world,
+                {
+                    t: RecsType.Number,
+                    idx: RecsType.Number,
+                    coinDec: RecsType.Number,
+                    coinInc: RecsType.Number,
+                    curseDec: RecsType.Number,
+                    curseInc: RecsType.Number,
+                    deterDec: RecsType.Number,
+                    deterInc: RecsType.Number,
+                    healthDec: RecsType.Number,
+                },
+                {
+                    metadata: {
+                        name: "ChoiceProfile",
+                        types: ["u8", "u8", "u8", "u8", "u8", "u8", "u8", "u8", "u8"],
+                        customTypes: [],
+                    },
+                }
+            );
+        })(),
+
         // Model definition for `autochessia::models::StageProfilePiece` model
         StageProfilePiece: (() => {
             return defineComponent(
@@ -498,11 +526,12 @@ export function defineContractComponents(world: World) {
                     end: RecsType.Boolean,
                     winner: RecsType.BigInt,
                     healthDecrease: RecsType.Number,
+                    dangerous: RecsType.Boolean,
                 },
                 {
                     metadata: {
                         name: "InningBattle",
-                        types: ["u32", "u8", "ContractAddress", "ContractAddress", "bool", "ContractAddress", "u8"],
+                        types: ["u32", "u8", "ContractAddress", "ContractAddress", "bool", "ContractAddress", "u8","bool"],
                         customTypes: [],
                     },
                 }

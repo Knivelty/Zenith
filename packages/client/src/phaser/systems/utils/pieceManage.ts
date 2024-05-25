@@ -28,6 +28,7 @@ export const pieceManage = (layer: PhaserLayer) => {
                 LocalPiece,
                 LocalPieceOccupation,
                 UserOperation,
+                GameStatus,
             },
             account,
         },
@@ -52,7 +53,7 @@ export const pieceManage = (layer: PhaserLayer) => {
         // });
 
         // remove health bar
-        setComponent(Health, `${entity}-health` as Entity, {
+        updateComponent(Health, `${entity}-health` as Entity, {
             pieceEntity: entity,
             max: 0,
             current: 0,
@@ -76,6 +77,8 @@ export const pieceManage = (layer: PhaserLayer) => {
             LocalPlayerPiece,
             getEntityIdFromKeys([playerAddr, index])
         );
+
+        const status = getComponentValueStrict(GameStatus, zeroEntity);
 
         pieceGid = playerPiece?.gid || pieceGid;
 
@@ -210,10 +213,14 @@ export const pieceManage = (layer: PhaserLayer) => {
             ])
         );
 
+        //health boost here
+        const dangerous = status.dangerous;
+        const boost = dangerous && isEnemy ? 1.2 : 1;
+
         // initialize health
         setComponent(Health, `${entity}-health` as Entity, {
-            max: creature.health,
-            current: creature.health,
+            max: creature.health * boost,
+            current: creature.health * boost,
             pieceEntity: entity,
         });
     }

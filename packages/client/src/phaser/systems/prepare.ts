@@ -54,6 +54,7 @@ export const prepare = (layer: PhaserLayer) => {
                         status: GameStatusEnum.Prepare,
                         currentRound: 1,
                         currentMatch: v.inMatch,
+                        dangerous: false,
                     });
                 } else {
                     updateComponent(GameStatus, zeroEntity, {
@@ -78,6 +79,7 @@ export const prepare = (layer: PhaserLayer) => {
         world,
         [Has(GameStatus)],
         async ({ entity, type, value: [v, preV] }) => {
+            logDebug("incoming game status change: ", v, "preV: ", preV);
             // if switch to prepare, recover all piece to initial place
             if (
                 preV?.status !== GameStatusEnum.Prepare &&
@@ -92,6 +94,11 @@ export const prepare = (layer: PhaserLayer) => {
                 // spawn players piece
                 for (let i = 1; i <= player.heroesCount; i++) {
                     spawnPiece(player.player, BigInt(i), true);
+                }
+
+                if (v.currentMatch === 0) {
+                    logDebug(`not in match`);
+                    return;
                 }
 
                 // spawn enemy's piece
