@@ -1,7 +1,7 @@
 import { useChoice } from "../hooks/useChoice";
 import { useDojo } from "../hooks/useDojo";
 
-export interface IChoice {
+export interface IChoice extends React.HTMLAttributes<HTMLDivElement> {
     coinDec?: number;
     coinInc?: number;
     curseDec?: number;
@@ -24,6 +24,7 @@ export function ChoiceList() {
                 return (
                     <Choice
                         {...c}
+                        id={i.toString()}
                         onClick={() => {
                             nextRound(account, i + 1);
                         }}
@@ -43,6 +44,7 @@ export function Choice({
     deterInc,
     healthDec,
     onClick,
+    ...props
 }: IChoice) {
     const coinChangeText = coinDec ? `- $${coinDec}` : `+ $${coinInc}`;
     let statusChangeText = "";
@@ -58,9 +60,12 @@ export function Choice({
         statusChangeText += `Lost ${healthDec} health`;
     }
     return (
-        <div className="bg-[url(/assets/ui/choice_detail.png)] pixelated bg-contain bg-no-repeat w-[18%] h-full mx-8 flex flex-col items-center text-center justify-start">
+        <div
+            className="bg-[url(/assets/ui/choice_detail.png)] pixelated bg-contain bg-no-repeat w-[18%] h-full mx-8 flex flex-col items-center text-center justify-start"
+            {...props}
+        >
             <div className="w-full mt-52 text-[#FF3D00]">
-                {statusChangeText.trim()}
+                {statusChangeText.trim() || "no change"}
             </div>
             <div className="mt-4 cursor-pointer text-black" onClick={onClick}>
                 {coinChangeText}

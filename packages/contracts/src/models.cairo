@@ -47,16 +47,25 @@ struct LevelConfig {
     expForNext: u8
 }
 
+#[derive(Model, Copy, Drop, Serde)]
+struct LevelRarityProb {
+    #[key]
+    level: u8,
+    r1: u8,
+    r2: u8,
+    r3: u8
+}
+
 // hero altar of a player
 #[derive(Model, Copy, Drop, Serde)]
 struct Altar {
     #[key]
     player: ContractAddress,
-    slot1: u8,
-    slot2: u8,
-    slot3: u8,
-    slot4: u8,
-    slot5: u8,
+    slot1: u16,
+    slot2: u16,
+    slot3: u16,
+    slot4: u16,
+    slot5: u16,
 }
 
 
@@ -75,7 +84,7 @@ struct StageProfilePiece {
     index: u8,
     x: u8,
     y: u8,
-    creature_index: u8,
+    creature_index: u16,
     level: u8,
 }
 
@@ -107,7 +116,7 @@ struct Piece {
     idx: u8,
     slot: u8,
     level: u8,
-    creature_index: u8,
+    creature_index: u16,
     x: u8,
     y: u8
 }
@@ -133,6 +142,9 @@ struct GlobalState {
     index: u32,
     totalMatch: u32,
     totalCreature: u8,
+    totalR1Creature: u8,
+    totalR2Creature: u8,
+    totalR3Creature: u8,
 }
 
 #[derive(Model, Copy, Drop, Serde)]
@@ -147,7 +159,7 @@ struct MatchState {
 #[derive(Model, Copy, Clone, Drop, Serde)]
 struct CreatureProfile {
     #[key]
-    creature_index: u8,
+    creature_index: u16,
     #[key]
     level: u8,
     rarity: u8,

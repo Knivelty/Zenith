@@ -4,19 +4,22 @@ import { getComponentValue, getComponentValueStrict } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useMemo } from "react";
 import { logDebug } from "../lib/utils";
+import { useComponentValue } from "@dojoengine/react";
+import { zeroEntity } from "../../utils";
 
 export function useChoice() {
     const {
-        clientComponents: { ChoiceProfile, Player, CurseOption },
+        clientComponents: { ChoiceProfile, Player, CurseOption, GameStatus },
         account: {
             account: { address },
         },
     } = useDojo();
 
+    const status = useComponentValue(GameStatus, zeroEntity);
 
     const choices = useMemo(() => {
         return getChoices(ChoiceProfile, CurseOption, address);
-    }, [address, ChoiceProfile, CurseOption]);
+    }, [address, ChoiceProfile, status?.status, CurseOption]);
 
     return choices;
 }

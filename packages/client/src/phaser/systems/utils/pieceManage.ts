@@ -7,7 +7,7 @@ import {
 } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { PhaserLayer } from "../..";
-import { TILE_WIDTH } from "../../config/constants";
+import { AnimationIndex, TILE_WIDTH } from "../../config/constants";
 import { chainToWorldCoord, worldToChainCoord } from "./coorConvert";
 import { zeroEntity } from "../../../utils";
 import { isEqual } from "lodash";
@@ -115,7 +115,9 @@ export const pieceManage = (layer: PhaserLayer) => {
             once: (sprite: Phaser.GameObjects.Sprite) => {
                 sprite.setVisible(true);
                 sprite.setPosition(worldX, worldY);
-                sprite.play(config.animations[piece.creature_index]);
+                sprite.play(
+                    config.animations[AnimationIndex[piece.creature_index]]
+                );
                 sprite.setInteractive();
 
                 // TODO: use lossless scale method

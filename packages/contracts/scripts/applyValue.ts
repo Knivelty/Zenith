@@ -13,10 +13,10 @@ const address = homeJsonData["contracts"][0]["address"];
 
 function initializeCreatureProfile() {
   let callData: string[] = [];
-  fs.createReadStream("./resources/heroes.csv")
+  fs.createReadStream("../data/heroes.csv")
     .pipe(csv())
     .on("data", (row) => {
-      const creature_index = numberToHexString(Number(row["ID"]), 2);
+      const creature_index = numberToHexString(Number(row["ID"]), 4);
       const level = numberToHexString(Number(row["Level"]), 2);
       const rarity = numberToHexString(Number(row["Rarity"]), 2);
       const health = numberToHexString(Number(row["Health"]), 4);
@@ -59,7 +59,7 @@ function initializeStage() {
   let stageCallData: string[] = [];
   let stagePieceCallData: string[] = [];
 
-  fs.createReadStream("./resources/stages.csv")
+  fs.createReadStream("../data/stages.csv")
     .pipe(csv())
     .on("data", (row) => {
       const stage = row["Stage"];
@@ -146,7 +146,7 @@ function getPieceProfileElement(stage: number, allEnemies: string[]): string[] {
     // here switch x and y
     const x = numberToHexString(Number(decoded[1]), 2);
     const y = numberToHexString(Number(decoded[0]), 2);
-    const creature_index = numberToHexString(Number(decoded[2]), 2);
+    const creature_index = numberToHexString(Number(decoded[2]), 4);
     const level = numberToHexString(Number(decoded[3]), 2);
 
     arr.push([s, index, x, y, creature_index, level].join(","));

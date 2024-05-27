@@ -239,6 +239,8 @@ importers:
         specifier: ^4.14.202
         version: 4.14.202
 
+  packages/data: {}
+
   packages/recs:
     dependencies:
       '@latticexyz/schema-type':

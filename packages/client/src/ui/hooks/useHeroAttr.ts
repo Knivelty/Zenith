@@ -4,6 +4,7 @@ import { getComponentValueStrict } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { Monster } from "../../phaser/config/constants";
 import { ClientComponents } from "../../dojo/createClientComponents";
+import { logDebug } from "../lib/utils";
 
 export interface HeroBaseAttr {
     attack: number;
@@ -43,6 +44,8 @@ export function getHeroAttr(
     if (!creature.id) {
         return undefined;
     }
+
+    logDebug("get creature profile", creature.id, creature.level);
 
     const profile = getComponentValueStrict(
         creatureProfile,

@@ -42,12 +42,12 @@ mod home {
     use autochessia::models::{
         CreatureProfile, Position, Piece, Player, InningBattle, GlobalState, MatchState, Altar,
         PlayerPiece, PlayerInvPiece, StageProfile, StageProfilePiece, LevelConfig, PlayerProfile,
-        ChoiceProfile, CurseOption
+        ChoiceProfile, CurseOption, LevelRarityProb
     };
 
     use autochessia::utils::{
         next_position, generate_pseudo_random_address, generate_pseudo_random_u8,
-        generate_pseudo_random, get_felt_mod, gen_piece_gid
+        generate_pseudo_random, get_felt_mod, gen_piece_gid, roll_rarity, roll_creature
     };
     use autochessia::customType::{PieceChange, RoundResult, CurseOptionType};
 
@@ -71,7 +71,7 @@ mod home {
         // generate pseudo random number on block hash
         // let mut hash = get_block_hash_syscall(get_block_info().unbox().block_number - 10);
         // TODO: change it later
-        let hash = get_tx_info().unbox().nonce;
+        let hash = get_block_timestamp().into();
 
         let mut r: felt252 = hash;
 
@@ -79,25 +79,62 @@ mod home {
         //     Result::Ok(value) => { r = value.into() },
         //     Result::Err(err) => { panic!("gr error") },
         // }
-        // filter the altar
-        let creatureCount: felt252 = get!(world, 1, GlobalState).totalCreature.into();
+        let gState = get!(world, 1, GlobalState);
 
-        let slot1 = get_felt_mod(r, creatureCount) + 1;
-        r = PoseidonTrait::new().update(r.into()).finalize().into();
+        let slot1 = _roll_piece(world, r);
 
-        let slot2 = get_felt_mod(r, creatureCount) + 1;
-        r = PoseidonTrait::new().update(r.into()).finalize().into();
+        let slot2 = _roll_piece(world, slot1.hash);
 
-        let slot3 = get_felt_mod(r, creatureCount) + 1;
-        r = PoseidonTrait::new().update(r.into()).finalize().into();
+        let slot3 = _roll_piece(world, slot2.hash);
 
-        let slot4 = get_felt_mod(r, creatureCount) + 1;
-        r = PoseidonTrait::new().update(r.into()).finalize().into();
+        let slot4 = _roll_piece(world, slot3.hash);
 
-        let slot5 = get_felt_mod(r, creatureCount) + 1;
+        let slot5 = _roll_piece(world, slot4.hash);
 
         // set altar
-        set!(world, (Altar { player: playerAddr, slot1, slot2, slot3, slot4, slot5 }));
+        set!(
+            world,
+            (Altar {
+                player: playerAddr,
+                slot1: slot1.creature_index,
+                slot2: slot2.creature_index,
+                slot3: slot3.creature_index,
+                slot4: slot4.creature_index,
+                slot5: slot5.creature_index
+            })
+        );
+    }
+
+
+    struct RollPieceReturn {
+        creature_index: u16,
+        hash: felt252
+    }
+
+    fn _roll_piece(world: IWorldDispatcher, preHash: felt252) -> RollPieceReturn {
+        let playerAddr = get_caller_address();
+
+        let gState = get!(world, 1, GlobalState);
+        let player = get!(world, playerAddr, Player);
+        let rarityProb = get!(world, player.level, LevelRarityProb);
+
+        let mut hash = PoseidonTrait::new().update(preHash).finalize();
+
+        let rarity = roll_rarity(hash, rarityProb.r1, rarityProb.r2, rarityProb.r3);
+
+        hash = PoseidonTrait::new().update(hash).finalize();
+
+        let creatureCount = match rarity {
+            0 => 0,
+            1 => gState.totalR1Creature,
+            2 => gState.totalR2Creature,
+            3 => gState.totalR3Creature,
+            _ => 0,
+        };
+
+        let creatureId = roll_creature(hash, rarity, creatureCount);
+
+        return RollPieceReturn { creature_index: creatureId, hash: hash };
     }
 
 
@@ -413,7 +450,17 @@ mod home {
         // TODO: set as real args
 
         fn initialize(world: IWorldDispatcher) {
-            set!(world, GlobalState { index: 1, totalMatch: 0, totalCreature: 26 });
+            set!(
+                world,
+                GlobalState {
+                    index: 1,
+                    totalMatch: 0,
+                    totalCreature: 26,
+                    totalR1Creature: 10,
+                    totalR2Creature: 10,
+                    totalR3Creature: 6
+                }
+            );
 
             // set level up config
             set!(world, (LevelConfig { current: 1, expForNext: 2 }));
@@ -442,10 +489,22 @@ mod home {
                         deterInc: 0,
                         healthDec: 0,
                     },
-                    // pay 2 coin to decrease 6 curse
+                    // pay 3 coin to decrease 8 curse
                     ChoiceProfile {
                         t: CurseOptionType::Safe,
                         idx: 2,
+                        coinDec: 3,
+                        coinInc: 0,
+                        curseDec: 8,
+                        curseInc: 0,
+                        deterDec: 0,
+                        deterInc: 0,
+                        healthDec: 0,
+                    },
+                    // pay 2 coin to decrease 6 curse
+                    ChoiceProfile {
+                        t: CurseOptionType::Safe,
+                        idx: 3,
                         coinDec: 2,
                         coinInc: 0,
                         curseDec: 6,
@@ -457,7 +516,7 @@ mod home {
                     // pay 1 coin to decrease 4 curse
                     ChoiceProfile {
                         t: CurseOptionType::Safe,
-                        idx: 3,
+                        idx: 4,
                         coinDec: 1,
                         coinInc: 0,
                         curseDec: 4,
@@ -466,18 +525,6 @@ mod home {
                         deterInc: 0,
                         healthDec: 0,
                     },
-                    // decrease 3 curse
-                    ChoiceProfile {
-                        t: CurseOptionType::Safe,
-                        idx: 4,
-                        coinDec: 0,
-                        coinInc: 0,
-                        curseDec: 3,
-                        curseInc: 0,
-                        deterDec: 0,
-                        deterInc: 0,
-                        healthDec: 0,
-                    },
                     // decrease 2 curse
                     ChoiceProfile {
                         t: CurseOptionType::Safe,
@@ -490,14 +537,14 @@ mod home {
                         deterInc: 0,
                         healthDec: 0,
                     },
-                    // pay 3 to decrease 40 deter
+                    // get 1 coin and 30 deter
                     ChoiceProfile {
                         t: CurseOptionType::Balanced,
                         idx: 1,
-                        coinDec: 3,
-                        coinInc: 0,
-                        curseDec: 40,
-                        curseInc: 0,
+                        coinDec: 0,
+                        coinInc: 1,
+                        curseDec: 0,
+                        curseInc: 30,
                         deterDec: 0,
                         deterInc: 0,
                         healthDec: 0,
@@ -514,43 +561,43 @@ mod home {
                         deterInc: 0,
                         healthDec: 0,
                     },
-                    // increase 30 deter
+                    // get 2 curse
                     ChoiceProfile {
                         t: CurseOptionType::Balanced,
                         idx: 3,
                         coinDec: 0,
                         coinInc: 0,
                         curseDec: 0,
-                        curseInc: 0,
+                        curseInc: 2,
                         deterDec: 0,
-                        deterInc: 30,
+                        deterInc: 0,
                         healthDec: 0,
                     },
-                    // pay 1 to increase 5 curse
+                    // get 1 coin and 3 curse
                     ChoiceProfile {
                         t: CurseOptionType::Balanced,
                         idx: 4,
-                        coinDec: 1,
-                        coinInc: 0,
+                        coinDec: 0,
+                        coinInc: 1,
                         curseDec: 0,
-                        curseInc: 5,
+                        curseInc: 3,
                         deterDec: 0,
                         deterInc: 0,
                         healthDec: 0,
                     },
-                    // pay 2 to get 7 curse
+                    // pay 2 coin
                     ChoiceProfile {
                         t: CurseOptionType::Balanced,
                         idx: 5,
-                        coinDec: 2,
-                        coinInc: 0,
+                        coinDec: 0,
+                        coinInc: 2,
                         curseDec: 0,
-                        curseInc: 7,
+                        curseInc: 0,
                         deterDec: 0,
                         deterInc: 0,
                         healthDec: 0,
                     },
-                    // increase 3 deter
+                    // get 15 deter
                     ChoiceProfile {
                         t: CurseOptionType::Challenge,
                         idx: 1,
@@ -559,17 +606,17 @@ mod home {
                         curseDec: 0,
                         curseInc: 0,
                         deterDec: 0,
-                        deterInc: 3,
+                        deterInc: 15,
                         healthDec: 0,
                     },
-                    // pay 1 to increase 5 curse
+                    // pay 1 to increase 6 curse
                     ChoiceProfile {
                         t: CurseOptionType::Challenge,
                         idx: 2,
                         coinDec: 1,
                         coinInc: 0,
                         curseDec: 0,
-                        curseInc: 5,
+                        curseInc: 6,
                         deterDec: 0,
                         deterInc: 0,
                         healthDec: 0,
@@ -586,11 +633,11 @@ mod home {
                         deterInc: 100,
                         healthDec: 0,
                     },
-                    // pay 6 coin to get 15 curse
+                    // pay 5 coin to get 15 curse
                     ChoiceProfile {
                         t: CurseOptionType::Challenge,
                         idx: 4,
-                        coinDec: 6,
+                        coinDec: 5,
                         coinInc: 0,
                         curseDec: 0,
                         curseInc: 15,
@@ -612,6 +659,23 @@ mod home {
                     }
                 )
             );
+
+            // set refresh LevelRarityProb
+            set!(
+                world,
+                (
+                    LevelRarityProb { level: 1, r1: 100, r2: 0, r3: 0 },
+                    LevelRarityProb { level: 2, r1: 100, r2: 0, r3: 0 },
+                    LevelRarityProb { level: 3, r1: 80, r2: 20, r3: 0 },
+                    LevelRarityProb { level: 4, r1: 65, r2: 35, r3: 0 },
+                    LevelRarityProb { level: 5, r1: 60, r2: 40, r3: 0 },
+                    LevelRarityProb { level: 6, r1: 50, r2: 45, r3: 5 },
+                    LevelRarityProb { level: 7, r1: 45, r2: 45, r3: 10 },
+                    LevelRarityProb { level: 8, r1: 40, r2: 45, r3: 15 },
+                    LevelRarityProb { level: 9, r1: 35, r2: 45, r3: 20 },
+                    LevelRarityProb { level: 10, r1: 35, r2: 35, r3: 30 },
+                )
+            )
         }
 
         fn setCreatureProfile(world: IWorldDispatcher, profiles: Array<CreatureProfile>) {

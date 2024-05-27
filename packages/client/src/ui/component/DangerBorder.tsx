@@ -10,6 +10,8 @@ export function DangerBorder() {
 
     const status = useComponentValue(GameStatus, zeroEntity);
 
+    console.log(":status", status);
+
     const visible = status?.dangerous == true;
 
     return (

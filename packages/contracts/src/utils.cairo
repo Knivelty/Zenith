@@ -41,16 +41,27 @@ fn generate_pseudo_random_u8(seed: felt252, seed2: felt252) -> u8 {
     return (hash.into() & MASK_8).try_into().unwrap();
 }
 
-fn get_felt_mod(divided: felt252, divid: felt252) -> u8 {
-    // println!("value: {}  {}", divided, divid);
-
-    let MASK_32: u256 = 0xffffffff;
-    let y: u32 = (divided.into() & MASK_32).try_into().unwrap();
-    let x: u32 = divid.try_into().unwrap();
-
-    // println!("value: {} {} {}", x, y, y % x);
+fn get_felt_mod(divided: felt252, divid: u8) -> u8 {
+    let y: u256 = divided.into();
+    let x: u256 = divid.into();
 
     return (y % x).try_into().unwrap();
+}
+
+fn roll_rarity(r: felt252, r1: u8, r2: u8, r3: u8) -> u8 {
+    let m = get_felt_mod(r, 100);
+
+    if (m < r1) {
+        return 1;
+    } else if (m < r2) {
+        return 2;
+    } else {
+        return 3;
+    }
+}
+
+fn roll_creature(r: felt252, rarity: u8, count: u8) -> u16 {
+    return rarity.into() * 1000 + get_felt_mod(r, count).into() + 1;
 }
 
 
