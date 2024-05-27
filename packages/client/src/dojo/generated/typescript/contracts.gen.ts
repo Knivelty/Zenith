@@ -191,7 +191,7 @@ export async function setupWorld(provider: DojoProvider) {
         // Call the `nextRound` system with the specified Account and calldata
         const nextRound = async (props: {
             account: Account;
-            choice: number;
+            choice: models.CurseOptionType;
         }) => {
             try {
                 return await provider.execute(

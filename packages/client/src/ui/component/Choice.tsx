@@ -2,13 +2,13 @@ import { useChoice } from "../hooks/useChoice";
 import { useDojo } from "../hooks/useDojo";
 
 export interface IChoice {
-    coinDec: number;
-    coinInc: number;
-    curseDec: number;
-    curseInc: number;
-    deterDec: number;
-    deterInc: number;
-    healthDec: number;
+    coinDec?: number;
+    coinInc?: number;
+    curseDec?: number;
+    curseInc?: number;
+    deterDec?: number;
+    deterInc?: number;
+    healthDec?: number;
     onClick: () => void;
 }
 
@@ -41,6 +41,7 @@ export function Choice({
     curseInc,
     deterDec,
     deterInc,
+    healthDec,
     onClick,
 }: IChoice) {
     const coinChangeText = coinDec ? `- $${coinDec}` : `+ $${coinInc}`;
@@ -53,9 +54,11 @@ export function Choice({
         statusChangeText += `Lose ${deterDec} danger `;
     } else if (deterInc) {
         statusChangeText += `Obtain ${deterInc} danger `;
+    } else if (healthDec) {
+        statusChangeText += `Lost ${healthDec} health`;
     }
     return (
-        <div className="bg-[url(/assets/ui/choice_detail.png)] pixelated bg-contain bg-no-repeat w-[18%] h-full mx-2 flex flex-col items-center text-center justify-start">
+        <div className="bg-[url(/assets/ui/choice_detail.png)] pixelated bg-contain bg-no-repeat w-[18%] h-full mx-8 flex flex-col items-center text-center justify-start">
             <div className="w-full mt-52 text-[#FF3D00]">
                 {statusChangeText.trim()}
             </div>

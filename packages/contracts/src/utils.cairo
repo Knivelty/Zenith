@@ -25,6 +25,14 @@ fn generate_pseudo_random_address(seed: felt252, seed2: felt252) -> ContractAddr
     return hash.try_into().unwrap();
 }
 
+fn generate_pseudo_random(seed: u128) -> u128 {
+    let hash = PoseidonTrait::new().update(seed.into()).finalize();
+
+    let MASK_128: u256 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+
+    return (hash.into() & MASK_128).try_into().unwrap();
+}
+
 fn generate_pseudo_random_u8(seed: felt252, seed2: felt252) -> u8 {
     let hash = PoseidonTrait::new().update(seed).update(seed2).finalize();
 

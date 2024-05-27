@@ -1,4 +1,5 @@
 use starknet::ContractAddress;
+use autochessia::customType::CurseOptionType;
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Player {
@@ -19,8 +20,16 @@ struct Player {
     // a free refresh opportunity for each round
     refreshed: bool,
     curse: u8,
-    deterioration: u8,
-    choiceType: u8,
+    danger: u8,
+}
+
+#[derive(Model, Copy, Drop, Serde)]
+struct CurseOption {
+    #[key]
+    playerAddr: ContractAddress,
+    #[key]
+    t: CurseOptionType,
+    order: u8
 }
 
 #[derive(Model, Copy, Drop, Serde)]
@@ -153,7 +162,7 @@ struct CreatureProfile {
 #[derive(Model, Copy, Clone, Drop, Serde)]
 struct ChoiceProfile {
     #[key]
-    t: u8,
+    t: CurseOptionType,
     #[key]
     idx: u8,
     coinDec: u8,

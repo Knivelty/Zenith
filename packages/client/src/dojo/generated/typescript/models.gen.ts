@@ -2,24 +2,27 @@
 import { defineComponent, Type as RecsType, World } from "@dojoengine/recs";
 
 export type ContractComponents = Awaited<
-            ReturnType<typeof defineContractComponents>
-        >;
+    ReturnType<typeof defineContractComponents>
+>;
 
-
+// Type definition for `autochessia::customType::CurseOptionType` enum
+export enum CurseOptionType {
+    Invalid,
+    Safe,
+    Balanced,
+    Challenge,
+}
 
 // Type definition for `autochessia::models::LevelConfig` struct
 export interface LevelConfig {
     current: number;
     expForNext: number;
-    
 }
 
 export const LevelConfigDefinition = {
     current: RecsType.Number,
     expForNext: RecsType.Number,
-    
 };
-
 
 // Type definition for `autochessia::models::MatchState` struct
 export interface MatchState {
@@ -27,7 +30,6 @@ export interface MatchState {
     round: number;
     player1: bigint;
     player2: bigint;
-    
 }
 
 export const MatchStateDefinition = {
@@ -35,9 +37,7 @@ export const MatchStateDefinition = {
     round: RecsType.Number,
     player1: RecsType.BigInt,
     player2: RecsType.BigInt,
-    
 };
-
 
 // Type definition for `autochessia::models::Piece` struct
 export interface Piece {
@@ -49,7 +49,6 @@ export interface Piece {
     creature_index: number;
     x: number;
     y: number;
-    
 }
 
 export const PieceDefinition = {
@@ -61,9 +60,7 @@ export const PieceDefinition = {
     creature_index: RecsType.Number,
     x: RecsType.Number,
     y: RecsType.Number,
-    
 };
-
 
 // Type definition for `autochessia::models::Player` struct
 export interface Player {
@@ -78,8 +75,7 @@ export interface Player {
     locked: number;
     heroesCount: number;
     inventoryCount: number;
-    refreshed: boolean
-    
+    refreshed: boolean;
 }
 
 export const PlayerDefinition = {
@@ -95,80 +91,64 @@ export const PlayerDefinition = {
     heroesCount: RecsType.Number,
     inventoryCount: RecsType.Number,
     refreshed: RecsType.Boolean,
-    
 };
-
 
 // Type definition for `autochessia::models::PlayerInvPiece` struct
 export interface PlayerInvPiece {
     owner: bigint;
     slot: number;
     gid: number;
-    
 }
 
 export const PlayerInvPieceDefinition = {
     owner: RecsType.BigInt,
     slot: RecsType.Number,
     gid: RecsType.Number,
-    
 };
-
 
 // Type definition for `autochessia::models::Vec2` struct
 export interface Vec2 {
     x: number;
     y: number;
-    
 }
 
 export const Vec2Definition = {
     x: RecsType.Number,
     y: RecsType.Number,
-    
 };
 
 // Type definition for `autochessia::models::Position` struct
 export interface Position {
     player: bigint;
     vec: Vec2;
-    
 }
 
 export const PositionDefinition = {
     player: RecsType.BigInt,
     vec: Vec2Definition,
-    
 };
-
 
 // Type definition for `autochessia::models::PlayerProfile` struct
 export interface PlayerProfile {
     player: bigint;
     pieceCounter: number;
-    
 }
 
 export const PlayerProfileDefinition = {
     player: RecsType.BigInt,
     pieceCounter: RecsType.Number,
-    
 };
-
 
 // Type definition for `autochessia::models::StageProfile` struct
 export interface StageProfile {
     stage: number;
     pieceCount: number;
-    
 }
 
 export const StageProfileDefinition = {
     stage: RecsType.Number,
     pieceCount: RecsType.Number,
-    
 };
-
 
 // Type definition for `autochessia::models::StageProfilePiece` struct
 export interface StageProfilePiece {
@@ -178,7 +158,6 @@ export interface StageProfilePiece {
     y: number;
     creature_index: number;
     level: number;
-    
 }
 
 export const StageProfilePieceDefinition = {
@@ -188,9 +167,7 @@ export const StageProfilePieceDefinition = {
     y: RecsType.Number,
     creature_index: RecsType.Number,
     level: RecsType.Number,
-    
 };
-
 
 // Type definition for `autochessia::models::InningBattle` struct
 export interface InningBattle {
@@ -198,10 +175,9 @@ export interface InningBattle {
     round: number;
     homePlayer: bigint;
     awayPlayer: bigint;
-    end: boolean
+    end: boolean;
     winner: bigint;
     healthDecrease: number;
-    
 }
 
 export const InningBattleDefinition = {
@@ -212,25 +188,20 @@ export const InningBattleDefinition = {
     end: RecsType.Boolean,
     winner: RecsType.BigInt,
     healthDecrease: RecsType.Number,
-    
 };
-
 
 // Type definition for `autochessia::models::PlayerPiece` struct
 export interface PlayerPiece {
     owner: bigint;
     idx: number;
     gid: number;
-    
 }
 
 export const PlayerPieceDefinition = {
     owner: RecsType.BigInt,
     idx: RecsType.Number,
     gid: RecsType.Number,
-    
 };
-
 
 // Type definition for `autochessia::models::CreatureProfile` struct
 export interface CreatureProfile {
@@ -243,7 +214,6 @@ export interface CreatureProfile {
     range: number;
     speed: number;
     initiative: number;
-    
 }
 
 export const CreatureProfileDefinition = {
@@ -256,9 +226,7 @@ export const CreatureProfileDefinition = {
     range: RecsType.Number,
     speed: RecsType.Number,
     initiative: RecsType.Number,
-    
 };
-
 
 // Type definition for `autochessia::models::Altar` struct
 export interface Altar {
@@ -268,7 +236,6 @@ export interface Altar {
     slot3: number;
     slot4: number;
     slot5: number;
-    
 }
 
 export const AltarDefinition = {
@@ -278,29 +245,23 @@ export const AltarDefinition = {
     slot3: RecsType.Number,
     slot4: RecsType.Number,
     slot5: RecsType.Number,
-    
 };
-
 
 // Type definition for `autochessia::models::GlobalState` struct
 export interface GlobalState {
     index: number;
     totalMatch: number;
     totalCreature: number;
-    
 }
 
 export const GlobalStateDefinition = {
     index: RecsType.Number,
     totalMatch: RecsType.Number,
     totalCreature: RecsType.Number,
-    
 };
-
 
 export function defineContractComponents(world: World) {
     return {
-
         // Model definition for `autochessia::models::LevelConfig` model
         LevelConfig: (() => {
             return defineComponent(
@@ -332,7 +293,12 @@ export function defineContractComponents(world: World) {
                 {
                     metadata: {
                         name: "MatchState",
-                        types: ["u32", "u8", "ContractAddress", "ContractAddress"],
+                        types: [
+                            "u32",
+                            "u8",
+                            "ContractAddress",
+                            "ContractAddress",
+                        ],
                         customTypes: [],
                     },
                 }
@@ -356,7 +322,16 @@ export function defineContractComponents(world: World) {
                 {
                     metadata: {
                         name: "Piece",
-                        types: ["u32", "ContractAddress", "u8", "u8", "u8", "u8", "u8", "u8"],
+                        types: [
+                            "u32",
+                            "ContractAddress",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                        ],
                         customTypes: [],
                     },
                 }
@@ -379,16 +354,49 @@ export function defineContractComponents(world: World) {
                     locked: RecsType.Number,
                     heroesCount: RecsType.Number,
                     inventoryCount: RecsType.Number,
-                    refreshed: RecsType.Boolean,                    
+                    refreshed: RecsType.Boolean,
                     curse: RecsType.Number,
-                    deterioration: RecsType.Number,
-                    choiceType: RecsType.Number,
+                    danger: RecsType.Number,
                 },
                 {
                     metadata: {
                         name: "Player",
-                        types: ["ContractAddress", "u32", "u8", "u8", "u8", "u8", "u8", "u8", "u8", "u8", "u8", "bool", "u8", "u8", "u8"],
+                        types: [
+                            "ContractAddress",
+                            "u32",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "bool",
+                            "u8",
+                            "u8",
+                        ],
                         customTypes: [],
+                    },
+                }
+            );
+        })(),
+
+        // Model definition for `autochessia::models::CurseOption` model
+        CurseOption: (() => {
+            return defineComponent(
+                world,
+                {
+                    playerAddr: RecsType.BigInt,
+                    t: RecsType.Number,
+                    order: RecsType.Number,
+                },
+                {
+                    metadata: {
+                        name: "CurseOption",
+                        types: ["ContractAddress", "u8"],
+                        customTypes: ["CurseOptionType"],
                     },
                 }
             );
@@ -485,7 +493,17 @@ export function defineContractComponents(world: World) {
                 {
                     metadata: {
                         name: "ChoiceProfile",
-                        types: ["u8", "u8", "u8", "u8", "u8", "u8", "u8", "u8", "u8"],
+                        types: [
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                        ],
                         customTypes: [],
                     },
                 }
@@ -531,7 +549,16 @@ export function defineContractComponents(world: World) {
                 {
                     metadata: {
                         name: "InningBattle",
-                        types: ["u32", "u8", "ContractAddress", "ContractAddress", "bool", "ContractAddress", "u8","bool"],
+                        types: [
+                            "u32",
+                            "u8",
+                            "ContractAddress",
+                            "ContractAddress",
+                            "bool",
+                            "ContractAddress",
+                            "u8",
+                            "bool",
+                        ],
                         customTypes: [],
                     },
                 }
@@ -575,7 +602,17 @@ export function defineContractComponents(world: World) {
                 {
                     metadata: {
                         name: "CreatureProfile",
-                        types: ["u8", "u8", "u8", "u16", "u16", "u16", "u8", "u8", "u8"],
+                        types: [
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u16",
+                            "u16",
+                            "u16",
+                            "u8",
+                            "u8",
+                            "u8",
+                        ],
                         customTypes: [],
                     },
                 }
@@ -597,7 +634,14 @@ export function defineContractComponents(world: World) {
                 {
                     metadata: {
                         name: "Altar",
-                        types: ["ContractAddress", "u8", "u8", "u8", "u8", "u8"],
+                        types: [
+                            "ContractAddress",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                            "u8",
+                        ],
                         customTypes: [],
                     },
                 }

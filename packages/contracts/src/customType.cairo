@@ -35,3 +35,12 @@ struct RoundResult {
     win: bool,
     healthDecrease: u8
 }
+
+
+#[derive(Copy, Drop, Serde, Introspect)]
+enum CurseOptionType {
+    Invalid,
+    Safe,
+    Balanced,
+    Challenge
+}

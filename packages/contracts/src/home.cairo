@@ -1,5 +1,5 @@
 use autochessia::models::{CreatureProfile, StageProfile, StageProfilePiece, Piece, Player};
-use autochessia::customType::{PieceChange, RoundResult};
+use autochessia::customType::{PieceChange, RoundResult, CurseOptionType};
 
 
 #[dojo::interface]
@@ -17,7 +17,7 @@ trait IHome {
     fn buyExp();
     fn sellHero(gid: u32);
     fn commitPreparation(changes: Array<PieceChange>, result: RoundResult);
-    fn nextRound(choice: u8);
+    fn nextRound(choice: CurseOptionType);
 
 
     // debug func
@@ -32,21 +32,24 @@ use starknet::{
 
 #[dojo::contract]
 mod home {
+    use core::traits::TryInto;
+    use core::option::OptionTrait;
     use core::traits::Into;
     use starknet::{
-        ContractAddress, get_caller_address, get_block_hash_syscall, get_block_info, get_tx_info
+        ContractAddress, get_caller_address, get_block_hash_syscall, get_block_info, get_tx_info,
+        get_block_timestamp
     };
     use autochessia::models::{
         CreatureProfile, Position, Piece, Player, InningBattle, GlobalState, MatchState, Altar,
         PlayerPiece, PlayerInvPiece, StageProfile, StageProfilePiece, LevelConfig, PlayerProfile,
-        ChoiceProfile
+        ChoiceProfile, CurseOption
     };
 
     use autochessia::utils::{
-        next_position, generate_pseudo_random_address, generate_pseudo_random_u8, get_felt_mod,
-        gen_piece_gid
+        next_position, generate_pseudo_random_address, generate_pseudo_random_u8,
+        generate_pseudo_random, get_felt_mod, gen_piece_gid
     };
-    use autochessia::customType::{PieceChange, RoundResult};
+    use autochessia::customType::{PieceChange, RoundResult, CurseOptionType};
 
     use autochessia::customEvent::{PieceActions, PieceAction};
     use dojo::base;
@@ -338,21 +341,40 @@ mod home {
 
     fn _rollChoiceType(world: IWorldDispatcher) {
         let playerAddr = get_caller_address();
-        let mut player = get!(world, playerAddr, Player);
-        let hash = get_tx_info().unbox().nonce;
-        let choiceType = generate_pseudo_random_u8(playerAddr.into(), hash) % 3 + 1;
 
-        player.choiceType = choiceType;
+        let MASK_8: u128 = 0xff;
+        let MASK_128: felt252 = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+        let mut hash: u128 = generate_pseudo_random(get_block_timestamp().into());
 
-        set!(world, (player));
+        let safe: u8 = ((hash % 5 + 1) & MASK_8).try_into().unwrap();
+
+        hash = generate_pseudo_random(hash.into()).try_into().unwrap();
+        let balanced: u8 = ((hash % 5 + 1) & MASK_8).try_into().unwrap();
+
+        hash = generate_pseudo_random(hash.into()).try_into().unwrap();
+        let challenge: u8 = ((hash % 5 + 1) & MASK_8).try_into().unwrap();
+
+        // 
+        set!(
+            world,
+            (
+                CurseOption { playerAddr: playerAddr, t: CurseOptionType::Safe, order: safe },
+                CurseOption {
+                    playerAddr: playerAddr, t: CurseOptionType::Balanced, order: balanced
+                },
+                CurseOption {
+                    playerAddr: playerAddr, t: CurseOptionType::Challenge, order: challenge
+                }
+            )
+        );
     }
 
-    fn _settleChoice(world: IWorldDispatcher, choice: u8) {
+    fn _settleChoice(world: IWorldDispatcher, choice: CurseOptionType) {
         let playerAddr = get_caller_address();
         let mut player = get!(world, playerAddr, Player);
 
-        let choiceP = get!(world, (player.choiceType, choice), ChoiceProfile);
-
+        let co = get!(world, (playerAddr, choice), CurseOption);
+        let choiceP = get!(world, (choice, co.order), ChoiceProfile);
         player.coin -= choiceP.coinDec;
         player.coin += choiceP.coinInc;
 
@@ -362,16 +384,23 @@ mod home {
             player.curse = 0;
         }
         player.curse += choiceP.curseInc;
-        if (player.deterioration > choiceP.deterDec) {
-            player.deterioration -= choiceP.deterDec;
+        if (player.danger > choiceP.deterDec) {
+            player.danger -= choiceP.deterDec;
         } else {
-            player.deterioration = 0;
+            player.danger = 0;
         }
-        player.deterioration += choiceP.deterInc;
+        player.danger += choiceP.deterInc;
         player.health -= choiceP.healthDec;
 
         // reset to zero
-        player.choiceType = 0;
+        set!(
+            world,
+            (
+                CurseOption { playerAddr: playerAddr, t: CurseOptionType::Safe, order: 0 },
+                CurseOption { playerAddr: playerAddr, t: CurseOptionType::Balanced, order: 0 },
+                CurseOption { playerAddr: playerAddr, t: CurseOptionType::Challenge, order: 0 }
+            )
+        );
 
         set!(world, (player));
     }
@@ -403,7 +432,7 @@ mod home {
                 (
                     // pay 3 coin to decrease 40 deter
                     ChoiceProfile {
-                        t: 1,
+                        t: CurseOptionType::Safe,
                         idx: 1,
                         coinDec: 3,
                         coinInc: 0,
@@ -415,7 +444,7 @@ mod home {
                     },
                     // pay 2 coin to decrease 6 curse
                     ChoiceProfile {
-                        t: 1,
+                        t: CurseOptionType::Safe,
                         idx: 2,
                         coinDec: 2,
                         coinInc: 0,
@@ -427,7 +456,7 @@ mod home {
                     },
                     // pay 1 coin to decrease 4 curse
                     ChoiceProfile {
-                        t: 1,
+                        t: CurseOptionType::Safe,
                         idx: 3,
                         coinDec: 1,
                         coinInc: 0,
@@ -439,7 +468,7 @@ mod home {
                     },
                     // decrease 3 curse
                     ChoiceProfile {
-                        t: 1,
+                        t: CurseOptionType::Safe,
                         idx: 4,
                         coinDec: 0,
                         coinInc: 0,
@@ -451,7 +480,7 @@ mod home {
                     },
                     // decrease 2 curse
                     ChoiceProfile {
-                        t: 1,
+                        t: CurseOptionType::Safe,
                         idx: 5,
                         coinDec: 0,
                         coinInc: 0,
@@ -463,7 +492,7 @@ mod home {
                     },
                     // pay 3 to decrease 40 deter
                     ChoiceProfile {
-                        t: 2,
+                        t: CurseOptionType::Balanced,
                         idx: 1,
                         coinDec: 3,
                         coinInc: 0,
@@ -475,7 +504,7 @@ mod home {
                     },
                     // decrease 2 curse
                     ChoiceProfile {
-                        t: 2,
+                        t: CurseOptionType::Balanced,
                         idx: 2,
                         coinDec: 0,
                         coinInc: 0,
@@ -487,7 +516,7 @@ mod home {
                     },
                     // increase 30 deter
                     ChoiceProfile {
-                        t: 2,
+                        t: CurseOptionType::Balanced,
                         idx: 3,
                         coinDec: 0,
                         coinInc: 0,
@@ -499,7 +528,7 @@ mod home {
                     },
                     // pay 1 to increase 5 curse
                     ChoiceProfile {
-                        t: 2,
+                        t: CurseOptionType::Balanced,
                         idx: 4,
                         coinDec: 1,
                         coinInc: 0,
@@ -511,7 +540,7 @@ mod home {
                     },
                     // pay 2 to get 7 curse
                     ChoiceProfile {
-                        t: 2,
+                        t: CurseOptionType::Balanced,
                         idx: 5,
                         coinDec: 2,
                         coinInc: 0,
@@ -523,7 +552,7 @@ mod home {
                     },
                     // increase 3 deter
                     ChoiceProfile {
-                        t: 3,
+                        t: CurseOptionType::Challenge,
                         idx: 1,
                         coinDec: 0,
                         coinInc: 0,
@@ -535,7 +564,7 @@ mod home {
                     },
                     // pay 1 to increase 5 curse
                     ChoiceProfile {
-                        t: 3,
+                        t: CurseOptionType::Challenge,
                         idx: 2,
                         coinDec: 1,
                         coinInc: 0,
@@ -547,7 +576,7 @@ mod home {
                     },
                     // get 3 coin and increase 100 deter
                     ChoiceProfile {
-                        t: 3,
+                        t: CurseOptionType::Challenge,
                         idx: 3,
                         coinDec: 0,
                         coinInc: 3,
@@ -559,7 +588,7 @@ mod home {
                     },
                     // pay 6 coin to get 15 curse
                     ChoiceProfile {
-                        t: 3,
+                        t: CurseOptionType::Challenge,
                         idx: 4,
                         coinDec: 6,
                         coinInc: 0,
@@ -571,7 +600,7 @@ mod home {
                     },
                     // pay 6 health to get 10 curse and 100 deter
                     ChoiceProfile {
-                        t: 3,
+                        t: CurseOptionType::Challenge,
                         idx: 5,
                         coinDec: 0,
                         coinInc: 0,
@@ -667,8 +696,7 @@ mod home {
                     inMatch: currentMatch,
                     refreshed: false,
                     curse: 0,
-                    deterioration: 0,
-                    choiceType: 0,
+                    danger: 0,
                 }
             );
             _registerPlayer(world, playerAddr);
@@ -696,8 +724,7 @@ mod home {
                     inMatch: currentMatch,
                     refreshed: false,
                     curse: 0,
-                    deterioration: 0,
-                    choiceType: 0
+                    danger: 0,
                 }
             );
             _registerPlayer(world, playerAddr);
@@ -1001,7 +1028,7 @@ mod home {
             set!(world, (player));
         }
 
-        fn nextRound(world: IWorldDispatcher, choice: u8) {
+        fn nextRound(world: IWorldDispatcher, choice: CurseOptionType) {
             // settle player's choice
             _settleChoice(world, choice);
 
@@ -1027,13 +1054,13 @@ mod home {
                 player.curse += 10;
             }
 
-            // increase deterioration by curse
-            player.deterioration += player.curse;
+            // increase danger by curse
+            player.danger += player.curse;
 
             let mut dangerous = false;
             // judge whether next round is a dangerous round
-            if (player.deterioration >= 100) {
-                player.deterioration -= 100;
+            if (player.danger >= 100) {
+                player.danger -= 100;
                 dangerous = true;
             }
 
@@ -1137,8 +1164,7 @@ mod home {
                     inMatch: 0,
                     refreshed: false,
                     curse: 0,
-                    deterioration: 0,
-                    choiceType: 0,
+                    danger: 0,
                 }
             );
         }

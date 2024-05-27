@@ -145,7 +145,7 @@
 
 @font-face {
     font-family: "Dogica Pixel";
-    src: url("344/assets/fonts/DogicaPixel/dogicapixelbold.ttf")
+    src: url("/assets/fonts/DogicaPixel/dogicapixelbold.ttf")
         format("truetype");
     font-weight: bold;
     font-style: normal;

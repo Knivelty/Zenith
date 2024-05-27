@@ -26,7 +26,7 @@ export function TopBar() {
                 </div>
                 <div className="flex flex-row justify-start items-center w-full h-full">
                     <div className=" text-[#F2A316] text-xs ml-2">
-                        Danger value: {player?.deterioration}/100
+                        Danger value: {player?.danger }/100
                     </div>
                 </div>
             </div>
