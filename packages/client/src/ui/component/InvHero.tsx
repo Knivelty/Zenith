@@ -14,6 +14,7 @@ import { worldToChainCoord } from "../../phaser/systems/utils/coorConvert";
 import { useComponentValue } from "@dojoengine/react";
 import { zeroEntity } from "../../utils";
 import { logDebug, logPlayerAction } from "../lib/utils";
+import _ from "lodash";
 
 export const InvHero = ({
     id,
@@ -278,6 +279,9 @@ export const InvHero = ({
                         src={pieceAttr?.thumb}
                         alt={pieceAttr?.thumb}
                     />
+                    <div className="absolute text-white">
+                        {_.repeat("*", pieceAttr?.level || 0)}
+                    </div>
                 </div>
             </div>
         </div>

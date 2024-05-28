@@ -5,6 +5,7 @@ import { getHeroAttr } from "./hooks/useHeroAttr";
 import { HeroCard } from "./component/HeroCard";
 import { useInv } from "./hooks/useInv";
 import { UIStore, useUIStore } from "../store";
+import { logDebug } from "./lib/utils";
 
 const SHOW_INFO_LIST = ["health", "attack", "defense", "range"] as const;
 
@@ -43,7 +44,7 @@ const Shop = () => {
     const playerValue = useComponentValue(Player, playerEntity);
     const heroAltar = useComponentValue(Altar, playerEntity);
 
-    // console.log("heroAltar: ", heroAltar);
+    logDebug("heroAltar: ", heroAltar);
     // console.log("playerEntity: ", playerEntity);
 
     const { firstEmptyInv } = useInv();

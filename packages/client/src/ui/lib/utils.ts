@@ -88,6 +88,7 @@ export function generateAvatar(address: string): string {
 }
 
 export const logDebug = d("debug");
-export const logPieceIdx = d("debug:pieceIdx")
+export const logCall = d("debug:call");
+export const logPieceIdx = d("debug:pieceIdx");
 export const logPlayerAction = d("player:actions");
 export const logJps = d("jps");

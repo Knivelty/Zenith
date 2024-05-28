@@ -6,14 +6,14 @@ import { zeroEntity } from "../utils";
 import { opBuyHero } from "./opRender/opBuyHero";
 import { opSellHero } from "./opRender/opSellHero";
 import { opCommitPrepare } from "./opRender/opCommitPrepare";
-import { logDebug } from "../ui/lib/utils";
+import { logCall, logDebug } from "../ui/lib/utils";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
     { client }: { client: IWorld },
     clientComponents: ClientComponents,
-    { GameStatus, LocalPiecesChangeTrack, Piece, LocalPiece }: ClientComponents,
+    { GameStatus }: ClientComponents,
     rpcProvider: RpcProvider
 ) {
     const spawn = async (account: Account) => {
@@ -89,6 +89,7 @@ export function createSystemCalls(
         altarSlot: number,
         invSlot: number
     ) => {
+        logCall(`buy hero: `, altarSlot, invSlot);
         await opBuyHero(
             { client },
             clientComponents,
@@ -133,6 +134,8 @@ export function createSystemCalls(
         invSlot: number
     ) => {
         try {
+            logCall(`merge hero: `, gid1, gid2, gid3, invSlot);
+
             await client.home.mergeHero({ account, gid1, gid2, gid3, invSlot });
         } catch (e) {
             console.error(e);

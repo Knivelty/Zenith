@@ -10,6 +10,7 @@ import { placeSystem } from "./local/placeSystem";
 import { syncSystem } from "./local/syncSystem";
 import { coordOccupationSystem } from "./local/coordOccupationSystem";
 import { followIndexSystem } from "./local/followIndexSystem";
+import { merge } from "./merge";
 
 export const registerSystems = (layer: PhaserLayer) => {
     prepare(layer);
@@ -20,6 +21,8 @@ export const registerSystems = (layer: PhaserLayer) => {
     // battleLog(layer);
     health(layer);
     attack(layer);
+
+    merge(layer);
 
     // local component
     placeSystem(layer);

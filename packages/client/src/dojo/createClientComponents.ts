@@ -26,62 +26,118 @@ export function createClientComponents({
         GlobalState: overridableComponent(contractComponents.GlobalState),
         InningBattle: overridableComponent(contractComponents.InningBattle),
         // create the corresponding local component
-        LocalPiece: defineComponent(world, {
-            ...contractComponents.Piece.schema,
-        }),
-        LocalPlayer: defineComponent(world, {
-            ...contractComponents.Player.schema,
-        }),
-        LocalPlayerPiece: defineComponent(world, {
-            ...contractComponents.PlayerPiece.schema,
-        }),
-        LocalPlayerInvPiece: defineComponent(world, {
-            ...contractComponents.PlayerInvPiece.schema,
-        }),
+        LocalPiece: defineComponent(
+            world,
+            {
+                ...contractComponents.Piece.schema,
+            },
+            { metadata: { name: "LocalPiece" } }
+        ),
+        LocalPlayer: defineComponent(
+            world,
+            {
+                ...contractComponents.Player.schema,
+            },
+            { metadata: { name: "LocalPlayer" } }
+        ),
+        LocalPlayerPiece: defineComponent(
+            world,
+            {
+                ...contractComponents.PlayerPiece.schema,
+            },
+            { metadata: { name: "LocalPlayerPiece" } }
+        ),
+        LocalPlayerInvPiece: defineComponent(
+            world,
+            {
+                ...contractComponents.PlayerInvPiece.schema,
+            },
+            { metadata: { name: "LocalPlayerInvPiece" } }
+        ),
+        // record all player owned piece
+        PlayerOwnPiece: defineComponent(
+            world,
+            {
+                gids: Type.NumberArray,
+            },
+            { metadata: { name: "PlayerOwnPiece" } }
+        ),
         // save all the piece gids, for calculate diff
         // entity equal player entity
-        LocalPiecesChangeTrack: defineComponent(world, {
-            gids: Type.NumberArray,
-        }),
-        LocalPieceOccupation: defineComponent(world, {
-            x: Type.Number,
-            y: Type.Number,
-            occupied: Type.Boolean,
-        }),
+        LocalPiecesChangeTrack: defineComponent(
+            world,
+            {
+                gids: Type.NumberArray,
+            },
+            { metadata: { name: "LocalPiecesChangeTrack" } }
+        ),
+        LocalPieceOccupation: defineComponent(
+            world,
+            {
+                x: Type.Number,
+                y: Type.Number,
+                occupied: Type.Boolean,
+            },
+            { metadata: { name: "LocalPieceOccupation" } }
+        ),
         // Position: overridableComponent(contractComponents.Position),
-        GameStatus: defineComponent(world, {
-            status: Type.Number,
-            shouldPlay: Type.Boolean,
-            played: Type.Boolean,
-            currentMatch: Type.Number,
-            currentRound: Type.Number,
-            dangerous: Type.Boolean,
-        }),
-        BattleLogs: defineComponent(world, {
-            matchId: Type.Number,
-            inningBattleId: Type.Number,
-            winner: Type.BigInt,
-            healthDecrease: Type.Number,
-            logs: Type.String,
-        }),
-        HealthBar: defineComponent(world, {
-            x: Type.Number,
-            y: Type.Number,
-            percentage: Type.Number,
-            isPlayer: Type.Boolean,
-        }),
-        Health: defineComponent(world, {
-            pieceEntity: Type.String,
-            current: Type.Number,
-            max: Type.Number,
-        }),
-        Attack: defineComponent(world, {
-            attacker: Type.String,
-            attacked: Type.String,
-        }),
-        UserOperation: defineComponent(world, {
-            dragging: Type.Boolean,
-            gid: Type.Number,
-        }),
+        GameStatus: defineComponent(
+            world,
+            {
+                status: Type.Number,
+                shouldPlay: Type.Boolean,
+                played: Type.Boolean,
+                currentMatch: Type.Number,
+                currentRound: Type.Number,
+                dangerous: Type.Boolean,
+            },
+            { metadata: { name: "GameStatus" } }
+        ),
+        BattleLogs: defineComponent(
+            world,
+            {
+                matchId: Type.Number,
+                inningBattleId: Type.Number,
+                winner: Type.BigInt,
+                healthDecrease: Type.Number,
+                logs: Type.String,
+            },
+            { metadata: { name: "BattleLogs" } }
+        ),
+        HealthBar: defineComponent(
+            world,
+            {
+                x: Type.Number,
+                y: Type.Number,
+                percentage: Type.Number,
+                isPlayer: Type.Boolean,
+            },
+            { metadata: { name: "HealthBar" } }
+        ),
+        Health: defineComponent(
+            world,
+            {
+                pieceEntity: Type.String,
+                current: Type.Number,
+                max: Type.Number,
+            },
+            { metadata: { name: "Health" } }
+        ),
+        Attack: defineComponent(
+            world,
+            {
+                attacker: Type.String,
+                attacked: Type.String,
+            },
+            { metadata: { name: "Attack" } }
+        ),
+        UserOperation: defineComponent(
+            world,
+            {
+                dragging: Type.Boolean,
+                gid: Type.Number,
+            },
+            { metadata: { name: "UserOperation" } }
+        ),
     };
 }

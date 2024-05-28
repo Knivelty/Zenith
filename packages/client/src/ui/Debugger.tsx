@@ -92,10 +92,10 @@ export function Debugger() {
                 onClick={async () => {
                     await mergeHero(
                         account,
-                        394028214,
-                        1053576027,
-                        4175455502,
-                        1
+                        3619631714,
+                        9547523,
+                        3433969428,
+                        3
                     );
                 }}
             >

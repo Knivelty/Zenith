@@ -81,7 +81,7 @@ export const opCommitPrepare = async (
 
     const { result } = processBattleLogs();
 
-    console.log("commit changes: ", changes);
+    logDebug("commit changes: ", changes);
 
     const gStatus = getComponentValueStrict(GameStatus, zeroEntity);
     const inningBattleEntity = getEntityIdFromKeys([

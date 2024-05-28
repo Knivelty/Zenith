@@ -33,6 +33,7 @@ export function followIndexSystem(layer: PhaserLayer) {
             if (!v) {
                 return;
             }
+            // logDebug("local p aaaa", v);
 
             // don't care piece which doesn't belong to player
             if (v.owner !== BigInt(address)) {
@@ -126,7 +127,7 @@ export function followIndexSystem(layer: PhaserLayer) {
                  * @dev piece move from inventory to board
                  */
                 logPieceIdx(
-                    `piece ${v.gid} move from ${preV.slot} to ${v.idx}`
+                    `piece ${v.gid} move from slot ${preV.slot} to index ${v.idx} pos ${v.x} ${v.y}`
                 );
 
                 // update local player's hero count and inv count
@@ -206,17 +207,17 @@ export function followIndexSystem(layer: PhaserLayer) {
                 v.slot === 0
             ) {
                 /**
-                 * @dev piece sold
+                 * @dev piece in inventory sold or be merged
                  */
+                logDebug(`piece ${v.gid} sold or merged from inventory`);
                 // update prev inventory index
-                updateComponent(LocalPlayerInvPiece, localInvPieceEntity, {
+                updateComponent(LocalPlayerInvPiece, preLocalInvPieceEntity, {
                     gid: 0,
                 });
 
-                // update local player's hero count and inv count
+                // update local player's inv count
                 updateComponent(LocalPlayer, playerEntity, {
-                    heroesCount: player.heroesCount - 1,
-                    inventoryCount: player.inventoryCount + 1,
+                    inventoryCount: player.inventoryCount - 1,
                 });
             } else if (
                 preV.idx !== 0 &&
@@ -227,7 +228,7 @@ export function followIndexSystem(layer: PhaserLayer) {
                 /**
                  * @dev player piece index change
                  */
-                logDebug(
+                logPieceIdx(
                     `player piece ${v.gid} change from ${preV.idx} to ${v.idx}`
                 );
                 // just update player piece
@@ -237,6 +238,26 @@ export function followIndexSystem(layer: PhaserLayer) {
 
                 updateComponent(LocalPlayerPiece, localPlayerPieceEntity, {
                     gid: v.gid,
+                });
+            } else if (
+                preV.idx !== 0 &&
+                v.idx == 0 &&
+                preV.slot === 0 &&
+                v.slot === 0
+            ) {
+                /**
+                 * @dev piece on board merged or sold
+                 */
+                logPieceIdx(`piece ${v.gid} merged or sold from board`);
+
+                // update prev board index
+                updateComponent(LocalPlayerPiece, preLocalPlayerPieceEntity, {
+                    gid: 0,
+                });
+
+                // update local player's hero count and inv count
+                updateComponent(LocalPlayer, playerEntity, {
+                    heroesCount: player.heroesCount - 1,
                 });
             }
         }

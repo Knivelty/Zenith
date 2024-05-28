@@ -342,31 +342,24 @@ mod home {
             player.inventoryCount -= 1;
             set!(world, (player));
         } else if (piece.idx != 0) {
-            if (piece.idx == 0) {
-                // remove piece from player piece idx
-                if (piece.idx == player.heroesCount) {
-                    // if the piece is the last piece, just remove it
-                    set!(world, PlayerPiece { owner: playerAddr, idx: piece.idx, gid: 0, });
-                } else {
-                    // should switch the last piece
-                    let lastPiece = get!(world, (playerAddr, player.heroesCount), PlayerPiece);
+            // remove piece from player piece idx
+            if (piece.idx == player.heroesCount) {
+                // if the piece is the last piece, just remove it
+                set!(world, PlayerPiece { owner: playerAddr, idx: piece.idx, gid: 0, });
+            } else {
+                // should switch the last piece
+                let lastPiece = get!(world, (playerAddr, player.heroesCount), PlayerPiece);
 
-                    set!(
-                        world,
-                        PlayerPiece { owner: playerAddr, idx: piece.idx, gid: lastPiece.gid, }
-                    );
+                set!(world, PlayerPiece { owner: playerAddr, idx: piece.idx, gid: lastPiece.gid, });
 
-                    set!(
-                        world,
-                        PlayerPiece {
-                            owner: playerAddr, idx: player.heroesCount, gid: lastPiece.gid,
-                        }
-                    );
-                }
-
-                player.heroesCount -= 1;
-                set!(world, (player));
+                set!(
+                    world,
+                    PlayerPiece { owner: playerAddr, idx: player.heroesCount, gid: lastPiece.gid, }
+                );
             }
+
+            player.heroesCount -= 1;
+            set!(world, (player));
         } else {
             panic!("logic error");
         }
@@ -829,11 +822,6 @@ mod home {
             // validate piece
             let playerAddr = get_caller_address();
 
-            let mut playerProfile = get!(world, playerAddr, PlayerProfile);
-            playerProfile.pieceCounter += 1;
-
-            set!(world, (playerProfile));
-
             let piece1 = get!(world, gid1, Piece);
             let piece2 = get!(world, gid2, Piece);
             let piece3 = get!(world, gid3, Piece);
@@ -842,7 +830,7 @@ mod home {
             if (piece1.owner != playerAddr
                 || piece2.owner != playerAddr
                 || piece3.owner != playerAddr) {
-                panic!("invliad piece gid");
+                panic!("pieces owner not player");
             }
 
             // check piece creature idx
@@ -860,8 +848,19 @@ mod home {
                 panic!("piece level capped")
             }
 
+            // remove the three merged pieces
+            _removePiece(world, gid1);
+            _removePiece(world, gid2);
+            _removePiece(world, gid3);
+
             // gen new piece 
+            let mut playerProfile = get!(world, playerAddr, PlayerProfile);
+            playerProfile.pieceCounter += 1;
+            set!(world, (playerProfile));
             let gid = gen_piece_gid(playerAddr, playerProfile.pieceCounter);
+
+            let mut playerV = get!(world, playerAddr, Player);
+            playerV.inventoryCount += 1;
 
             // spawn Piece
             set!(
@@ -877,13 +876,10 @@ mod home {
                         x: 0,
                         y: 0
                     },
-                    playerProfile
+                    PlayerInvPiece { owner: playerAddr, slot: invSlot, gid: gid, },
+                    playerV
                 )
             );
-            // remove the three merged pieces
-            _removePiece(world, gid1);
-            _removePiece(world, gid2);
-            _removePiece(world, gid3);
         }
 
         // commit preparation in one function
@@ -1205,8 +1201,8 @@ mod home {
 
                 idx += 1;
             };
-            // delete player piece
 
+            // delete player piece
             idx = 1;
             loop {
                 if (player.heroesCount < idx) {
