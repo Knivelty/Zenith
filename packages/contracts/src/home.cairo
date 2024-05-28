@@ -406,7 +406,7 @@ mod home {
         );
     }
 
-    fn _settleChoice(world: IWorldDispatcher, choice: CurseOptionType) {
+    fn _settleChoice(world: IWorldDispatcher, choice: CurseOptionType, round: u8) {
         let playerAddr = get_caller_address();
         let mut player = get!(world, playerAddr, Player);
 
@@ -421,6 +421,16 @@ mod home {
             player.curse = 0;
         }
         player.curse += choiceP.curseInc;
+        // max curse is 100
+        if (player.curse > 100) {
+            player.curse = 100;
+        }
+
+        // min curse is 10 after round 4
+        if (player.curse < 10 && round >= 4) {
+            player.curse = 10;
+        }
+
         if (player.danger > choiceP.deterDec) {
             player.danger -= choiceP.deterDec;
         } else {
@@ -1093,13 +1103,13 @@ mod home {
         }
 
         fn nextRound(world: IWorldDispatcher, choice: CurseOptionType) {
-            // settle player's choice
-            _settleChoice(world, choice);
-
             let playerAddr = get_caller_address();
 
             let mut player = get!(world, playerAddr, Player);
             let mut currentMatchState = get!(world, player.inMatch, MatchState);
+
+            // settle player's choice
+            _settleChoice(world, choice, currentMatchState.round);
 
             let lastInningBattle = get!(
                 world, (player.inMatch, currentMatchState.round), InningBattle
@@ -1183,7 +1193,7 @@ mod home {
 
             // delete player inv piece
             loop {
-                if (player.inventoryCount < idx) {
+                if (idx > player.level) {
                     break;
                 }
                 let mut playerInvPiece = get!(world, (playerAddr, idx), PlayerInvPiece);

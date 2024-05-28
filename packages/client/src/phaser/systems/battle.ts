@@ -49,6 +49,13 @@ export const battle = (layer: PhaserLayer) => {
 
             const status = getComponentValueStrict(GameStatus, zeroEntity);
 
+            // ignore other match's round
+            if (v.currentMatch !== status.currentMatch) {
+                return;
+            }
+
+            logDebug("incoming InningBattle update: ", entity, type, [v, preV]);
+
             // ignore stale update
             if (
                 v.round < status?.currentRound &&
@@ -57,8 +64,6 @@ export const battle = (layer: PhaserLayer) => {
                 console.warn("stale inning battle update");
                 return;
             }
-
-            logDebug("InningBattle update: ", entity, type, [v, preV]);
 
             updateComponent(GameStatus, zeroEntity, {
                 currentRound: v.round,
@@ -69,7 +74,7 @@ export const battle = (layer: PhaserLayer) => {
                 updateComponent(GameStatus, zeroEntity, {
                     status: GameStatusEnum.Prepare,
                 });
-            } else if (Boolean(v.end) === true && v.winner === 0n) {
+            } else if (Boolean(v.end) === true && v.winner !== 0n) {
                 updateComponent(GameStatus, zeroEntity, {
                     status: GameStatusEnum.InBattle,
                 });

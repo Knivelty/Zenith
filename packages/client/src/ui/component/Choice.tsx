@@ -24,7 +24,7 @@ export function ChoiceList() {
                 return (
                     <Choice
                         {...c}
-                        id={i.toString()}
+                        key={i}
                         onClick={() => {
                             nextRound(account, i + 1);
                         }}

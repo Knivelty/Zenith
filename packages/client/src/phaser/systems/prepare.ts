@@ -32,6 +32,7 @@ export const prepare = (layer: PhaserLayer) => {
                 PlayerPiece,
             },
             account,
+            playerEntity,
         },
     } = layer;
 
@@ -46,8 +47,15 @@ export const prepare = (layer: PhaserLayer) => {
                 return;
             }
 
+            logDebug("incoming player change: ", [v, preV]);
+
             if (v.player === BigInt(account.address)) {
                 if (!getComponentValue(GameStatus, zeroEntity)) {
+                    const playerValue = getComponentValueStrict(
+                        Player,
+                        playerEntity
+                    );
+
                     setComponent(GameStatus, zeroEntity, {
                         played: false,
                         shouldPlay: false,
@@ -57,8 +65,12 @@ export const prepare = (layer: PhaserLayer) => {
                         dangerous: false,
                     });
                 } else {
+                    const playerValue = getComponentValueStrict(
+                        Player,
+                        playerEntity
+                    );
                     updateComponent(GameStatus, zeroEntity, {
-                        currentMatch: v.inMatch,
+                        currentMatch: playerValue?.inMatch,
                     });
                 }
 

@@ -2,6 +2,7 @@ import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "./hooks/useDojo";
 import { zeroEntity } from "../utils";
 import { numToStatus } from "../dojo/types";
+import { logDebug } from "./lib/utils";
 
 export function TopBar() {
     const {
@@ -11,6 +12,8 @@ export function TopBar() {
 
     const gameStatus = useComponentValue(GameStatus, zeroEntity);
     const player = useComponentValue(Player, playerEntity);
+
+    logDebug("player value: ", player);
 
     return (
         <div className="flex flex-col justify-center items-center">
@@ -26,7 +29,7 @@ export function TopBar() {
                 </div>
                 <div className="flex flex-row justify-start items-center w-full h-full">
                     <div className=" text-[#F2A316] text-xs ml-2">
-                        Danger value: {player?.danger }/100
+                        Danger value: {player?.danger}/100
                     </div>
                 </div>
             </div>
