@@ -26,6 +26,15 @@ export function ProgressBar({
                 cx={radius}
                 cy={radius}
             />
+            <circle
+                stroke="#06FF00"
+                fill="transparent"
+                strokeWidth={1}
+                style={{ strokeDashoffset: 0 }}
+                r={normalizedRadius - strokeWidth / 2} // Adjust radius to create the ring effect
+                cx={radius}
+                cy={radius}
+            />
         </svg>
     );
 }
