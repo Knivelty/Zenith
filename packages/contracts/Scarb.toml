@@ -15,8 +15,7 @@ alexandria_math = { git = "https://github.com/keep-starknet-strange/alexandria.g
 [tool.dojo]
 initializer_class_hash = "0xbeef"
 
-[tool.dojo.env]
-
+[profile.dev.tool.dojo.env]
 # development
 # Default account for katana with seed = 0
 rpc_url = "http://localhost:5050/"
@@ -24,11 +23,12 @@ account_address = "0x6162896d1d7ab204c7ccac6dd5f8e9e7c25ecd5ae4fcb4ad32e57786bb4
 private_key = "0x1800000000300000180000000000030000000000003006001800006600"
 world_address = "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0"
 
+[profile.alpha.tool.dojo.env]
 # cartridge slot
-# rpc_url = "https://api.cartridge.gg/x/zenith/katana"
-# account_address = "0x77e8d51d6ef6485b6c913b8c12790daeec244199db7e3468a3b8cb5b482f080"
-# private_key = "0x23c5116641d16d2855dbdf2624963f055e67a921ed91b86989748cdf3bfa2c4"
-# world_address = "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0"
+rpc_url = "https://api.cartridge.gg/x/zenith/katana"
+account_address = "0x77e8d51d6ef6485b6c913b8c12790daeec244199db7e3468a3b8cb5b482f080"
+private_key = "0x23c5116641d16d2855dbdf2624963f055e67a921ed91b86989748cdf3bfa2c4"
+world_address = "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0"
 
 
 [tool.dojo.world]

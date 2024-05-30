@@ -2,7 +2,8 @@
 set -euo pipefail
 pushd $(dirname "$0")/..
 
-export RPC_URL="http://localhost:5050"
+export PROFILE=$1
+
 # export RPC_URL="https://api.cartridge.gg/x/zenith/katana"
 
 export WORLD_ADDRESS=$(cat ./manifests/dev/manifest.json | jq -r '.world.address')
@@ -24,13 +25,11 @@ for component in ${MODELS[@]}; do
     AUTH_MODELS+="$component,$HOME_ADDRESS "
 done
 
-sozo auth grant writer $AUTH_MODELS
+sozo --profile $PROFILE auth grant writer $AUTH_MODELS
 
 echo "Default authorizations have been successfully set."
 
 # run intialize function
 sleep 1
-sozo execute $HOME_ADDRESS "initialize"
+sozo --profile $PROFILE execute $HOME_ADDRESS "initialize"
 echo "Initialize successfully"
-
-pnpm run applyValue

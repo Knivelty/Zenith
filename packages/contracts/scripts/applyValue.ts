@@ -11,6 +11,9 @@ const homeJsonData = JSON.parse(homeJson);
 
 const address = homeJsonData["contracts"][0]["address"];
 
+const args = process.argv.slice(2);
+const profile = args[0];
+
 function initializeCreatureProfile() {
   let callData: string[] = [];
   fs.createReadStream("../data/heroes.csv")
@@ -46,7 +49,7 @@ function initializeCreatureProfile() {
       for (const c of chunks) {
         const count = c.length;
         const subCallData = c.join(",");
-        const cmd = `sozo execute ${address} "setCreatureProfile" --calldata ${numberToHexString(count, 2)},${subCallData}`;
+        const cmd = `sozo --profile ${profile} execute ${address} "setCreatureProfile" --calldata ${numberToHexString(count, 2)},${subCallData}`;
         execSync("sleep 1");
         execSync(cmd);
       }
@@ -104,7 +107,7 @@ function initializeStage() {
       for (const c of chunks) {
         const count = c.length;
         const subCallData = c.join(",");
-        const cmd = `sozo execute ${address} "setStageProfile" --calldata ${numberToHexString(count, 2)},${subCallData},0x00`;
+        const cmd = `sozo --profile ${profile}  execute ${address} "setStageProfile" --calldata ${numberToHexString(count, 2)},${subCallData},0x00`;
         execSync("sleep 1");
         execSync(cmd);
       }
@@ -114,7 +117,7 @@ function initializeStage() {
       for (const c of pieceChunk) {
         const count = c.length;
         const subCallData = c.join(",");
-        const cmd = `sozo execute ${address} "setStageProfile" --calldata 0x00,${numberToHexString(count, 2)},${subCallData}`;
+        const cmd = `sozo --profile ${profile}  execute ${address} "setStageProfile" --calldata 0x00,${numberToHexString(count, 2)},${subCallData}`;
         execSync("sleep 1");
         execSync(cmd);
       }

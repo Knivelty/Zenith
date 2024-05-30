@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "applyValue": "ts-node scripts/applyValue.ts"
+    "init:dev": "bash scripts/default_auth.sh dev && ts-node scripts/applyValue.ts dev",
+    "init:alpha": "bash scripts/default_auth.sh alpha && ts-node scripts/applyValue.ts alpha"
   },
   "keywords": [],
   "author": "",
