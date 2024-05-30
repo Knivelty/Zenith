@@ -1,5 +1,3 @@
-import { Button, Progress } from "antd";
-import { UIStore, useUIStore } from "../../store";
 import { useDojo } from "../hooks/useDojo";
 import { useComponentValue } from "@dojoengine/react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
@@ -44,7 +42,7 @@ export function ExpButton() {
             >
                 <ProgressBar size={152} strokeWidth={8} percentage={percent} />
             </div>
-            <div className="absolute flex justify-center -right-6 -bottom-6 rounded-full h-12 w-12 border border-[#06FF00] ">
+            <div className="absolute flex justify-center -right-2 -bottom-6 rounded-full h-12 w-12 border border-[#06FF00] ">
                 <div className="self-center text-xs">Lv {player?.level}</div>
             </div>
         </div>

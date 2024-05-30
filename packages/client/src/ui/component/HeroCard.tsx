@@ -24,7 +24,7 @@ export const HeroCard = ({
                 className="flex flex-col border-1 items-start m-2"
                 style={{ backgroundColor: bgColor }}
             >
-                <div className="flex justify-center items-center w-[220px] h-[220px]  opacity-100 bg-contain bg-no-repeat bg-center bg-[url('/assets/ui/hero_bg.png')] mx-0.5">
+                <div className="flex justify-center items-center w-[13.75rem] h-[13.75rem]  opacity-100 bg-contain bg-no-repeat bg-center bg-[url('/assets/ui/hero_bg.png')] mx-0.5">
                     <img
                         className="h-[90%] object-contain w-[90%]"
                         src={heroAttr?.thumb}

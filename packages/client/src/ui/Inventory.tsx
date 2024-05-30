@@ -26,7 +26,7 @@ export function Inventory() {
     const { invPieces } = useLocalInv();
 
     return (
-        <div className="fixed bottom-[1%] text-center  w-screen  mx-auto flex justify-center mt-2">
+        <div className="fixed bottom-0 text-center w-screen  mx-auto flex justify-center mt-2">
             {/* <Synergy /> */}
             <div className="p-3 m-3 flex items-center rounded-xl justify-center">
                 {invPieces?.map(

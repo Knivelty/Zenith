@@ -61,15 +61,19 @@ export function Choice({
     }
     return (
         <div
-            className="bg-[url(/assets/ui/choice_detail.png)] pixelated bg-contain bg-no-repeat w-[18%] h-full mx-8 flex flex-col items-center text-center justify-start"
+            className="bg-[url(/assets/ui/choice_detail.png)] pixelated bg-contain bg-no-repeat w-[20%] h-full mx-8 flex flex-col items-center text-center justify-start"
             {...props}
         >
-            <div className="w-full mt-52 text-[#FF3D00]">
+            <div className="w-full mt-[85%] text-[#FF3D00] text-sm whitespace-nowrap">
                 {statusChangeText.trim() || "no change"}
             </div>
-            <div className="mt-4 cursor-pointer text-black" onClick={onClick}>
-                {coinChangeText}
+            <div
+                className="mt-4 cursor-pointer text-black bg-[#FF3D00] w-[50%] h-8 flex flex-col justify-center "
+                onClick={onClick}
+            >
+                <div>{coinChangeText}</div>
             </div>
+
             <div className="mt-20"></div>
         </div>
     );

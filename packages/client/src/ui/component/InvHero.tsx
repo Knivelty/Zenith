@@ -6,7 +6,6 @@ import { useUIStore } from "../../store";
 import {
     getComponentValue,
     getComponentValueStrict,
-    setComponent,
     updateComponent,
 } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
@@ -271,7 +270,7 @@ export const InvHero = ({
                 </button>
                 <div
                     ref={dropRef}
-                    className="flex justify-center w-[95px] h-[130px] rounded-lg opacity-100 bg-contain bg-no-repeat bg-center bg-black border-[#05FF00]	border-2 mx-2"
+                    className="flex justify-center w-[5.9375rem] h-[8.125rem] rounded-lg opacity-100 bg-contain bg-no-repeat bg-center bg-black border-[#05FF00] border-2 mx-2"
                 >
                     <img
                         ref={dragRef}
