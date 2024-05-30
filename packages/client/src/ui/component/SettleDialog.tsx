@@ -36,7 +36,7 @@ export function SettleDialog() {
     return (
         <div
             className={cn(
-                "absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 border bg-black border-[#06FF00] flex flex-col items-center justify-center w-4/5 z-10",
+                "absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 border bg-black border-[#06FF00] flex flex-col items-center justify-center w-4/5 z-20",
                 { invisible: !visible }
             )}
         >

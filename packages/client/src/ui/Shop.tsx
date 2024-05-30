@@ -60,7 +60,7 @@ const Shop = () => {
 
     return (
         <div
-            className={`flex justify-center mt-16 select-none transform duration-700 ${showShow ? "scale-100" : "scale-0"} `}
+            className={`relative flex justify-center mt-16 select-none transform duration-700 z-10 ${showShow ? "scale-100" : "scale-0"} z-20`}
         >
             {/* {contextHolder} */}
             <div className="flex flex-col justify-center items-start">

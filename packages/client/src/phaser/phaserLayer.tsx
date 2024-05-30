@@ -20,6 +20,9 @@ export const PhaserLayer = ({ networkLayer }: Props) => {
     return (
         <div
             ref={ref}
+            onDragOver={(e) => {
+                e.preventDefault();
+            }}
             style={{
                 position: "absolute",
                 top: "10%",
@@ -27,6 +30,7 @@ export const PhaserLayer = ({ networkLayer }: Props) => {
                 width: "40rem",
                 height: "40rem",
                 transform: "translateX(-50%)",
+                zIndex: "5",
             }}
         />
     );
