@@ -2,12 +2,12 @@ import {
     Entity,
     Has,
     getComponentValueStrict,
-    setComponent,
     updateComponent,
 } from "@dojoengine/recs";
 import { defineSystemST, zeroEntity } from "../../utils";
 import { PhaserLayer } from "..";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { tween } from "@latticexyz/phaserx";
 
 export const attack = (layer: PhaserLayer) => {
     const {
@@ -82,6 +82,63 @@ export const attack = (layer: PhaserLayer) => {
 
             updateComponent(Health, `${v.attacked}-health` as Entity, {
                 current: modifiedHealth,
+            });
+
+            // play animation
+
+            // attacker swing
+            const attackerSprite = objectPool.get(v.attacker, "Sprite");
+            attackerSprite.setComponent({
+                id: v.attacker,
+                now: async (sprite: Phaser.GameObjects.Sprite) => {
+                    await tween(
+                        {
+                            targets: sprite,
+                            duration: 300,
+                            props: {
+                                x: "+=50",
+                            },
+                            ease: Phaser.Math.Easing.Linear,
+                            yoyo: true,
+                            onComplete: async () => {
+                                // resolve to allow next tween
+                                // resolve();
+                            },
+                            onUpdate: () => {
+                                //
+                            },
+                        },
+                        { keepExistingTweens: true }
+                    );
+                },
+            });
+
+            // attacked blink
+
+            const attackedSprite = objectPool.get(v.attacked, "Sprite");
+            attackedSprite.setComponent({
+                id: v.attacker,
+                now: async (sprite: Phaser.GameObjects.Sprite) => {
+                    await tween(
+                        {
+                            targets: sprite,
+                            duration: 300,
+                            props: {
+                                alpha: 0,
+                            },
+                            ease: Phaser.Math.Easing.Linear,
+                            yoyo: true,
+                            onComplete: async () => {
+                                // resolve to allow next tween
+                                // resolve();
+                            },
+                            onUpdate: () => {
+                                //
+                            },
+                        },
+                        { keepExistingTweens: true }
+                    );
+                },
             });
         }
     );

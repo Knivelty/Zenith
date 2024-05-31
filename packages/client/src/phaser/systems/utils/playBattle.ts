@@ -2,11 +2,12 @@ import {
     Entity,
     getComponentValueStrict,
     setComponent,
+    updateComponent,
 } from "@dojoengine/recs";
 import { tileCoordToPixelCoord, tween } from "@latticexyz/phaserx";
 import {
     HealthBarOffSetY,
-    MOVE_SPEED,
+    MOVE_TIME_PER_LENGTH,
     TILE_HEIGHT,
     TILE_WIDTH,
 } from "../../config/constants";
@@ -22,7 +23,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
             Main: { objectPool },
         },
         networkLayer: {
-            clientComponents: { GameStatus, InningBattle, Attack },
+            clientComponents: { GameStatus, InningBattle, Attack, HealthBar },
         },
     } = layer;
 
@@ -55,10 +56,6 @@ export const battleAnimation = (layer: PhaserLayer) => {
             console.log("move to :", pixelPosition);
 
             const hero = objectPool.get(pieceEntity, "Sprite");
-            const health = objectPool.get(
-                `${pieceEntity}-health-bar`,
-                "Sprite"
-            );
 
             const [resolve, , promise] = deferred<void>();
 
@@ -68,7 +65,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
                     await tween(
                         {
                             targets: sprite,
-                            duration: moveLength * MOVE_SPEED,
+                            duration: moveLength * MOVE_TIME_PER_LENGTH,
                             props: {
                                 x: pixelPosition.x,
                                 y: pixelPosition.y,
@@ -81,17 +78,15 @@ export const battleAnimation = (layer: PhaserLayer) => {
                             },
                             onUpdate: () => {
                                 // set health bar follow on tween
-                                health.setComponent({
-                                    id: `${pieceEntity}-health-bar`,
-                                    once: (
-                                        health: Phaser.GameObjects.Sprite
-                                    ) => {
-                                        health.setPosition(
-                                            sprite.x,
-                                            sprite.y - HealthBarOffSetY
-                                        );
-                                    },
-                                });
+
+                                updateComponent(
+                                    HealthBar,
+                                    `${pieceEntity}-health-bar` as Entity,
+                                    {
+                                        x: sprite.x,
+                                        y: sprite.y,
+                                    }
+                                );
                             },
                         },
                         { keepExistingTweens: true }
@@ -112,7 +107,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
         // then attack
         if (v.attackPiece) {
             // attack wait 0.2s
-            await sleep(200);
+            await sleep(1000);
 
             // if have attack piece, run attack
             const game = getComponentValueStrict(GameStatus, zeroEntity);

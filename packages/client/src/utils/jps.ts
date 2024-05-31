@@ -231,6 +231,12 @@ function findDoablePath(
     // calculate doable path
     let totalDistance = 0;
     const doablePath: { x: number; y: number }[] = [];
+
+    // it means no paths to go, just return
+    if (!paths?.[0]?.[0]) {
+        return;
+    }
+
     doablePath.push({ x: paths[0][0], y: paths[0][1] });
     // get doable path
     for (let index = 0; index < paths.length - 1; index++) {
@@ -325,11 +331,11 @@ export function battleForAStep(
         // console.log("undeadPiece: ", undeadPiece);
 
         // fill the map
-        undeadPiece.forEach((pp) => {
+        undeadPiece?.forEach((pp) => {
             if (pp.entity === p.entity) {
                 return;
             }
-            logJps(`try set ${pp.x} ${pp.y} as workable`);
+            logJps(`try set ${pp.x} ${pp.y} as walkable`, pp);
             grid.setWalkableAt(pp.x, pp.y, false);
         });
 
@@ -350,7 +356,7 @@ export function battleForAStep(
             `getTargetPoint: piece in ${p.x} ${p.y} aiming ${targetPiece.x} ${targetPiece.y} target to ${targetPoint.x} ${targetPoint.y}`
         );
 
-        let doablePath: { x: number; y: number }[] = [];
+        let doablePath: { x: number; y: number }[] | undefined = [];
 
         if (targetPoint.x) {
             // calculate target point
@@ -364,7 +370,12 @@ export function battleForAStep(
                 targetPoint.y
             );
 
-            // console.log("doablePath:", doablePath);
+            if (!doablePath) {
+                logJps(
+                    `piece ${p.entity} cannot move and stay at ${p.x},${p.y}`
+                );
+                break;
+            }
 
             // move
             p.x = doablePath[doablePath.length - 1].x;

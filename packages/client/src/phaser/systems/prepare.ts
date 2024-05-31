@@ -20,17 +20,7 @@ export const prepare = (layer: PhaserLayer) => {
             Main: { config, objectPool },
         },
         networkLayer: {
-            clientComponents: {
-                Player,
-                Piece,
-                InningBattle,
-                GameStatus,
-                HealthBar,
-                Health,
-                CreatureProfile,
-                MatchState,
-                PlayerPiece,
-            },
+            clientComponents: { Player, InningBattle, GameStatus },
             account,
             playerEntity,
         },

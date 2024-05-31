@@ -127,4 +127,19 @@ export const MAP_AMPLITUDE = 16;
 export const HealthBarOffSetX = 0;
 export const HealthBarOffSetY = 15;
 
-export const MOVE_SPEED = 200;
+export const Health_CHANGE_OFFSET_X = 256;
+export const Health_CHANGE_OFFSET_Y = -15;
+
+export const MOVE_TIME_PER_LENGTH = 300;
+
+export const HEALTH_PER_SEGMENT = 100;
+
+export const HEALTH_BAR_WIDTH = 240;
+export const HEALTH_BAR_HEIGHT = 40;
+export const HEALTH_BAR_BORDER_WIDTH = 8;
+
+export const HEALTH_BAR_PLAYER_COLOR = 0x06ff00;
+export const HEALTH_BAR_ENEMY_COLOR = 0xff3d00;
+
+export const HEALTH_BAR_BORDER_COLOR = 0x000000;
+export const HEALTH_BAR_EMPTY_COLOR = 0x2b432b;

@@ -7,7 +7,11 @@ import {
 } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { PhaserLayer } from "../..";
-import { AnimationIndex, TILE_WIDTH } from "../../config/constants";
+import {
+    AnimationIndex,
+    HEALTH_PER_SEGMENT,
+    TILE_WIDTH,
+} from "../../config/constants";
 import { chainToWorldCoord, worldToChainCoord } from "./coorConvert";
 import { zeroEntity } from "../../../utils";
 import { isEqual } from "lodash";
@@ -95,6 +99,14 @@ export const pieceManage = (layer: PhaserLayer) => {
             throw Error(`try get piece ${playerAddr} ${index} ${pieceGid}`);
         }
 
+        const creatureProfile = getComponentValueStrict(
+            CreatureProfile,
+            getEntityIdFromKeys([
+                BigInt(piece.creature_index),
+                BigInt(piece.level),
+            ])
+        );
+
         const isEnemy = BigInt(account.address) !== piece.owner;
 
         const { worldX, worldY } = chainToWorldCoord(piece.x, piece.y, isEnemy);
@@ -124,11 +136,6 @@ export const pieceManage = (layer: PhaserLayer) => {
                 const scale = TILE_WIDTH / sprite.width;
                 sprite.setScale(scale);
 
-                // set tint for enemy
-                if (isEnemy) {
-                    sprite.setTintFill(0xff4e4e);
-                }
-
                 // set draggable for self piece
                 if (!isEnemy) {
                     game.scene.getScene("Main")?.input.setDraggable(sprite);
@@ -150,7 +157,9 @@ export const pieceManage = (layer: PhaserLayer) => {
                         (
                             p: Phaser.Input.Pointer,
                             gameObj: Phaser.GameObjects.GameObject
-                        ) => {}
+                        ) => {
+                            //
+                        }
                     );
 
                     sprite.off("dragend");
@@ -199,11 +208,15 @@ export const pieceManage = (layer: PhaserLayer) => {
             },
         });
 
+        const segment = Math.ceil(creatureProfile.health / HEALTH_PER_SEGMENT);
+
         // initialize health bar
         setComponent(HealthBar, `${entity}-health-bar` as Entity, {
             x: worldX,
             y: worldY,
-            percentage: 100,
+            currentHealth: creatureProfile.health,
+            segments: segment,
+            filledSegments: segment,
             isPlayer: !isEnemy,
         });
 

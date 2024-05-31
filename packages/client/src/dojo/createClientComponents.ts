@@ -109,10 +109,22 @@ export function createClientComponents({
             {
                 x: Type.Number,
                 y: Type.Number,
-                percentage: Type.Number,
+                currentHealth: Type.Number,
+                segments: Type.Number,
+                filledSegments: Type.Number,
                 isPlayer: Type.Boolean,
             },
             { metadata: { name: "HealthBar" } }
+        ),
+        HealthChange: defineComponent(
+            world,
+            {
+                x: Type.Number,
+                y: Type.Number,
+                change: Type.Number,
+                sign: Type.Boolean,
+            },
+            { metadata: { name: "HealthChange" } }
         ),
         Health: defineComponent(
             world,
