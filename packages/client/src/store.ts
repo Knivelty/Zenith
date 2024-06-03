@@ -15,6 +15,8 @@ export type UIStore = {
     setShopShow: (show: boolean) => void;
     phaserRect: DOMRect;
     setPhaserRect: (rect: DOMRect) => void;
+    shadeShow: boolean;
+    setShadeShow: (show: boolean) => void;
 };
 
 export const store = create<Store>(() => ({
@@ -33,4 +35,8 @@ export const useUIStore = create<UIStore>((set) => ({
     },
     phaserRect: new DOMRect(0, 0, 0, 0),
     setPhaserRect: (rect: DOMRect) => set(() => ({ phaserRect: rect })),
+    shadeShow: false,
+    setShadeShow(show) {
+        set(() => ({ shadeShow: show }));
+    },
 }));

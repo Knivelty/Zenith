@@ -12,6 +12,7 @@ import { PieceLimit } from "./component/PieceLimit";
 import { PlayerList } from "./component/Playlist";
 import { SettleDialog } from "./component/SettleDialog";
 import { DangerBorder } from "./component/DangerBorder";
+import { Shade } from "./component/Shade";
 
 export function ChessMain() {
     const {
@@ -42,6 +43,7 @@ export function ChessMain() {
             <Inventory />
             <ExpButton />
             <ShopButton />
+            <Shade />
             <DangerBorder />
         </div>
     );
