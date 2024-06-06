@@ -14,6 +14,7 @@ export interface HeroBaseAttr {
     armor: number;
     health: number;
     speed: number;
+    initiative: number;
     range: number;
     thumb: string;
     rarity: number;
@@ -26,7 +27,7 @@ export interface PieceAttr extends HeroBaseAttr {
 
 export type CreatureKeys = {
     id?: number;
-    level: number;
+    level?: number;
 };
 
 export function getHeroThumb(creatureIdx: number) {
@@ -41,7 +42,7 @@ export function getHeroAttr(
     creatureProfile: ClientComponents["CreatureProfile"],
     creature: CreatureKeys
 ): HeroBaseAttr | undefined {
-    if (!creature.id) {
+    if (!creature.id || !creature.level) {
         return undefined;
     }
 
@@ -61,6 +62,7 @@ export function getHeroAttr(
         range: profile.range,
         cost: profile.level,
         level: profile.level,
+        initiative: profile.initiative,
         thumb: getHeroThumb(profile.creature_index),
         rarity: profile.rarity,
         name: getHeroName(profile.creature_index),
@@ -78,7 +80,10 @@ export function useHeroesAttr(creatures: CreatureKeys[]): HeroBaseAttr[] {
             creatures.map((c) => {
                 const creatureProfile = getComponentValueStrict(
                     CreatureProfile,
-                    getEntityIdFromKeys([BigInt(c.id || 0), BigInt(c.level)])
+                    getEntityIdFromKeys([
+                        BigInt(c.id || 0),
+                        BigInt(c.level || 0),
+                    ])
                 );
 
                 return {

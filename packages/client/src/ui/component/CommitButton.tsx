@@ -1,7 +1,7 @@
 import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "../hooks/useDojo";
 import { zeroEntity } from "../../utils";
-import { UIStore, useUIStore } from "../../store";
+import { ShowItem, UIStore, useUIStore } from "../../store";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 export function CommitButton() {
@@ -14,7 +14,7 @@ export function CommitButton() {
         clientComponents: { GameStatus, BattleLogs },
     } = useDojo();
 
-    const setShopShow = useUIStore((state: UIStore) => state.setShopShow);
+    const setShopShow = useUIStore((state: UIStore) => state.setShow);
 
     const status = useComponentValue(GameStatus, zeroEntity);
 
@@ -31,7 +31,7 @@ export function CommitButton() {
             <CommitOperationButton
                 onClick={() => {
                     commitPreparation(account);
-                    setShopShow(false);
+                    setShopShow(ShowItem.Shop, false);
                 }}
                 text="Commit Preparation"
             />

@@ -147,7 +147,9 @@ export function createClientComponents({
             world,
             {
                 dragging: Type.Boolean,
-                gid: Type.Number,
+                draggingGid: Type.Number,
+                selected: Type.Boolean,
+                selectGid: Type.Number,
             },
             { metadata: { name: "UserOperation" } }
         ),

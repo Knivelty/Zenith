@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { PieceAttr } from "../hooks/useHeroAttr";
 import { useDrag, useDrop } from "ahooks";
 import { useDojo } from "../hooks/useDojo";
-import { useUIStore } from "../../store";
+import { ShowItem, useUIStore } from "../../store";
 import {
     getComponentValue,
     getComponentValueStrict,
@@ -47,6 +47,9 @@ export const InvHero = ({
     const dragRef = useRef(null);
 
     const phaserRect = useUIStore((s) => s.phaserRect);
+    const userOp = useComponentValue(UserOperation, zeroEntity);
+    const setSelectPieceId = userOp?.selectGid;
+    const setShow = useUIStore((s) => s.setShow);
 
     useDrag(pieceAttr, dragRef, {
         onDragStart: (e) => {
@@ -192,7 +195,7 @@ export const InvHero = ({
                     return;
                 }
 
-                const pieceGid = userOp.gid;
+                const pieceGid = userOp.draggingGid;
                 const pieceEntity = getEntityIdFromKeys([BigInt(pieceGid)]);
 
                 // get the current piece value
@@ -262,15 +265,15 @@ export const InvHero = ({
     return (
         <div>
             <div className="relative flex flex-col border-1 items-start group">
-                <button
-                    onClick={onClick}
-                    className="bg-red-500 hover:bg-red-600 text-white   w-4 h-4  text-xs absolute  right-3 top-1 group-hover:block hidden   rounded"
-                >
-                    x
-                </button>
                 <div
                     ref={dropRef}
                     className="flex justify-center w-[5.9375rem] h-[8.125rem] rounded-lg opacity-100 bg-contain bg-no-repeat bg-center bg-black border-[#05FF00] border-2 mx-2"
+                    onClick={() => {
+                        updateComponent(UserOperation, zeroEntity, {
+                            selected: true,
+                            selectGid: pieceAttr?.gid,
+                        });
+                    }}
                 >
                     <img
                         ref={dragRef}
@@ -278,9 +281,6 @@ export const InvHero = ({
                         src={pieceAttr?.thumb}
                         alt={pieceAttr?.thumb}
                     />
-                    <div className="absolute text-white">
-                        {_.repeat("*", pieceAttr?.level || 0)}
-                    </div>
                 </div>
             </div>
         </div>

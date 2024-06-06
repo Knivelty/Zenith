@@ -5,7 +5,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { cn } from "../lib/utils";
 import { ChoiceList } from "./Choice";
 import { useMemo } from "react";
-import { useUIStore } from "../../store";
+import { ShowItem, useUIStore } from "../../store";
 
 export function SettleDialog() {
     const {
@@ -18,7 +18,7 @@ export function SettleDialog() {
         clientComponents: { GameStatus, BattleLogs, Player },
     } = useDojo();
 
-    const setShadeShow = useUIStore((state) => state.setShadeShow);
+    const setShow = useUIStore((state) => state.setShow);
 
     const status = useComponentValue(GameStatus, zeroEntity);
     const player = useComponentValue(Player, playerEntity);
@@ -34,8 +34,8 @@ export function SettleDialog() {
     const visible = status?.status === 3;
 
     useMemo(() => {
-        setShadeShow(visible);
-    }, [visible, setShadeShow]);
+        setShow(ShowItem.Shade, visible);
+    }, [visible, setShow]);
 
     const win = battleResult?.winner === BigInt(address);
 

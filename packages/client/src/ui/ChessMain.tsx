@@ -13,6 +13,7 @@ import { PlayerList } from "./component/Playlist";
 import { SettleDialog } from "./component/SettleDialog";
 import { DangerBorder } from "./component/DangerBorder";
 import { Shade } from "./component/Shade";
+import { HeroInfoDialog } from "./HeroInfoDialog";
 
 export function ChessMain() {
     const {
@@ -45,6 +46,7 @@ export function ChessMain() {
             <ShopButton />
             <Shade />
             <DangerBorder />
+            <HeroInfoDialog />
         </div>
     );
 }

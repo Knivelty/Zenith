@@ -9,6 +9,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { PhaserLayer } from "../..";
 import {
     AnimationIndex,
+    DRAG_DISTANCE_THRESHOLD,
     HEALTH_PER_SEGMENT,
     TILE_WIDTH,
 } from "../../config/constants";
@@ -136,6 +137,15 @@ export const pieceManage = (layer: PhaserLayer) => {
                 const scale = TILE_WIDTH / sprite.width;
                 sprite.setScale(scale);
 
+                sprite.on("pointerup", (p: Phaser.Input.Pointer) => {
+                    if (p.distance < DRAG_DISTANCE_THRESHOLD) {
+                        updateComponent(UserOperation, zeroEntity, {
+                            selected: true,
+                            selectGid: piece.gid,
+                        });
+                    }
+                });
+
                 // set draggable for self piece
                 if (!isEnemy) {
                     game.scene.getScene("Main")?.input.setDraggable(sprite);
@@ -145,9 +155,9 @@ export const pieceManage = (layer: PhaserLayer) => {
                         sprite.setTint(0x50dfb6);
 
                         // set dragging to true
-                        setComponent(UserOperation, zeroEntity, {
+                        updateComponent(UserOperation, zeroEntity, {
                             dragging: true,
-                            gid: piece.gid,
+                            draggingGid: piece.gid,
                         });
                     });
 
@@ -165,12 +175,19 @@ export const pieceManage = (layer: PhaserLayer) => {
                     sprite.off("dragend");
                     sprite.on("dragend", (p: Phaser.Input.Pointer) => {
                         logDebug("drag end");
+                        if (p.distance < DRAG_DISTANCE_THRESHOLD) {
+                            updateComponent(UserOperation, zeroEntity, {
+                                dragging: false,
+                                draggingGid: 0,
+                            });
+                            return;
+                        }
                         sprite.clearTint(); // clear tint color
 
                         // set dragging to false
-                        setComponent(UserOperation, zeroEntity, {
+                        updateComponent(UserOperation, zeroEntity, {
                             dragging: false,
-                            gid: 0,
+                            draggingGid: 0,
                         });
 
                         const { posX, posY } = worldToChainCoord(

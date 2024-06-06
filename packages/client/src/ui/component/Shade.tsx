@@ -1,8 +1,8 @@
-import { useUIStore } from "../../store";
+import { ShowItem, UIStore, useUIStore } from "../../store";
 import { cn } from "../lib/utils";
 
 export function Shade() {
-    const shadeShow = useUIStore((state) => state.shadeShow);
+    const shadeShow = useUIStore((state: UIStore) => state.getShow(ShowItem.Shade));
 
     return (
         <div

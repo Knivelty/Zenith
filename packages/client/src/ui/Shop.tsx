@@ -4,7 +4,7 @@ import { useComponentValue } from "@dojoengine/react";
 import { getHeroAttr } from "./hooks/useHeroAttr";
 import { HeroCard } from "./component/HeroCard";
 import { useInv } from "./hooks/useInv";
-import { UIStore, useUIStore } from "../store";
+import { ShowItem, UIStore, useUIStore } from "../store";
 import { logDebug } from "./lib/utils";
 
 const SHOW_INFO_LIST = ["health", "attack", "defense", "range"] as const;
@@ -24,7 +24,9 @@ const Shop = () => {
         account: { playerEntity, account },
     } = useDojo();
 
-    const showShow = useUIStore((state: UIStore) => state.shopShow);
+    const shopShow = useUIStore((state: UIStore) =>
+        state.getShow(ShowItem.Shop)
+    );
 
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -58,9 +60,11 @@ const Shop = () => {
         [account, buyHero, firstEmptyInv]
     );
 
+    console.log("getShow(ShowItem.Shop): ", shopShow);
+
     return (
         <div
-            className={`relative flex justify-center mt-16 select-none transform duration-700 z-10 ${showShow ? "scale-100" : "scale-0"} z-20`}
+            className={`relative flex justify-center mt-16 select-none transform duration-700 z-10 ${shopShow ? "scale-100" : "scale-0"} z-20`}
         >
             {/* {contextHolder} */}
             <div className="flex flex-col justify-center items-start">

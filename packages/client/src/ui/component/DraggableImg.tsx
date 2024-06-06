@@ -32,7 +32,7 @@ export function DraggableImg() {
         if (userO?.dragging) {
             const piece = getComponentValueStrict(
                 LocalPiece,
-                getEntityIdFromKeys([BigInt(userO.gid)])
+                getEntityIdFromKeys([BigInt(userO.draggingGid)])
             );
             const pieceAttr = getHeroAttr(CreatureProfile, {
                 id: piece.creature_index,

@@ -91,7 +91,7 @@ export const PlayerList: React.FC = () => {
     }
 
     return (
-        <div className="fixed right-4 top-[80px] h-[520px] border border-[#06FF00] bg-black bg-contain bg-no-repeat ">
+        <div className="fixed right-4 top-[5rem] h-[32.5rem] border border-[#06FF00] bg-black bg-contain bg-no-repeat ">
             <div className="ml-4 mt-6">Players Info</div>
             <div className="pl-2 pr-2 mt-2 w-72 h-20 ">
                 <PlayerStatus

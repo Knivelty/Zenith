@@ -11,8 +11,10 @@ import { syncSystem } from "./local/syncSystem";
 import { coordOccupationSystem } from "./local/coordOccupationSystem";
 import { followIndexSystem } from "./local/followIndexSystem";
 import { merge } from "./merge";
+import { initialize } from "./initialize";
 
 export const registerSystems = (layer: PhaserLayer) => {
+    initialize(layer);
     prepare(layer);
     controls(layer);
     mapSystem(layer);

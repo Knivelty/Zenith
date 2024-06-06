@@ -13,6 +13,7 @@ import { battleAnimation } from "./utils/playBattle";
 import { BattleResult } from "../../utils/jps";
 import { processBattle } from "./utils/processBattleLogs";
 import { logDebug } from "../../ui/lib/utils";
+import { BATTLE_END_WAIT_TIME } from "../config/constants";
 
 export const battle = (layer: PhaserLayer) => {
     const {
@@ -147,11 +148,13 @@ export const battle = (layer: PhaserLayer) => {
                     console.log("play finish");
 
                     // after play, set status back
-                    updateComponent(GameStatus, entity, {
-                        shouldPlay: false,
-                        played: true,
-                        status: GameStatusEnum.WaitForNextRound,
-                    });
+                    setTimeout(() => {
+                        updateComponent(GameStatus, entity, {
+                            shouldPlay: false,
+                            played: true,
+                            status: GameStatusEnum.WaitForNextRound,
+                        });
+                    }, BATTLE_END_WAIT_TIME);
                 });
             }
         }

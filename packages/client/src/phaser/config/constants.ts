@@ -143,3 +143,7 @@ export const HEALTH_BAR_ENEMY_COLOR = 0xff3d00;
 
 export const HEALTH_BAR_BORDER_COLOR = 0x000000;
 export const HEALTH_BAR_EMPTY_COLOR = 0x2b432b;
+
+export const DRAG_DISTANCE_THRESHOLD = 10;
+
+export const BATTLE_END_WAIT_TIME = 1000;
