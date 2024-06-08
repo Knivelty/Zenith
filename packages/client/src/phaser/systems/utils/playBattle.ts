@@ -6,7 +6,6 @@ import {
 } from "@dojoengine/recs";
 import { tileCoordToPixelCoord, tween } from "@latticexyz/phaserx";
 import {
-    HealthBarOffSetY,
     MOVE_TIME_PER_LENGTH,
     TILE_HEIGHT,
     TILE_WIDTH,
@@ -14,8 +13,9 @@ import {
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { zeroEntity } from "../../../utils";
 import { Coord, deferred, sleep } from "@latticexyz/utils";
-import { PieceAction, manhattanDistance } from "../../../utils/jps";
 import { PhaserLayer } from "../..";
+import { TurnLogs } from "@zenith/simulator/src/jps";
+import { manhattanDistance } from "@zenith/simulator";
 
 export const battleAnimation = (layer: PhaserLayer) => {
     const {
@@ -27,7 +27,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
         },
     } = layer;
 
-    async function playBattle(logs: PieceAction[]) {
+    async function playBattle(logs: TurnLogs[]) {
         console.log("logs: ", logs);
         for (const l of logs) {
             await playSingleBattle(l);
@@ -98,11 +98,11 @@ export const battleAnimation = (layer: PhaserLayer) => {
         }
     }
 
-    async function playSingleBattle(v: PieceAction) {
+    async function playSingleBattle(v: TurnLogs) {
         // const [resolve, , promise] = deferred<void>();
 
         // move first
-        await moveByPaths(v.entity, v.paths);
+        await moveByPaths(v.entity, v.paths!);
 
         // then attack
         if (v.attackPiece) {
@@ -121,10 +121,9 @@ export const battleAnimation = (layer: PhaserLayer) => {
 
             const attacked = v.attackPiece as Entity;
 
-            console.log("v.player", v.player, inningBattle.homePlayer);
             console.log("attacked: ", attacked);
 
-            setComponent(Attack, `${inningBattle}-${v.order}` as Entity, {
+            setComponent(Attack, `${inningBattle}-${v}` as Entity, {
                 attacker: v.entity,
                 attacked: attacked,
             });

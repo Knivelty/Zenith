@@ -7,99 +7,54 @@ import {
 import { uniqWith } from "lodash";
 import { logJps } from "./utils/logger";
 import { manhattanDistance } from "./utils";
+import { DB } from "./createDB";
+import {
+  decreaseHealth,
+  getAimedPiece,
+  getAllUndeadPieceIds,
+  getBattlePiece,
+  getBattleResult,
+  getInitPiece,
+  getPieceCreature,
+  isBattleEnd,
+  movePiece,
+} from "./utils/dbHelper";
 
-export type PieceInBattle = {
-  player: string;
+export type TurnLogs = {
   entity: string;
-  x: number;
-  y: number;
-  health: number;
-  attack: number;
-  armor: number;
-  speed: number;
-  range: number;
-  isInHome: boolean;
-  dead: boolean;
-};
-
-export type PieceInBattleOrUndefined = PieceInBattle | undefined;
-
-function getHomePiece(pieces: PieceInBattle[]) {
-  return pieces.filter((v) => v.isInHome === true);
-}
-
-function getAwayPiece(pieces: PieceInBattle[]) {
-  return pieces.filter((v) => v.isInHome === false);
-}
-
-function getAimedPiece(
-  actionP: PieceInBattle,
-  pieces: PieceInBattle[]
-): PieceInBattle | undefined {
-  let opposingP: PieceInBattle[] = [];
-
-  if (actionP.isInHome) {
-    opposingP = getAwayPiece(pieces);
-  } else {
-    opposingP = getHomePiece(pieces);
-  }
-
-  // get latest piece
-  const targetPiece = opposingP
-    .map((opp) => {
-      return {
-        ...opp,
-        distance: manhattanDistance(actionP.x, actionP.y, opp.x, opp.y),
-      };
-    })
-    .sort((a, b) => a.distance - b.distance)[0];
-
-  return targetPiece;
-}
-
-export type PieceAction = {
-  entity: string;
-  player: string;
-  order: number;
-  paths: { x: number; y: number }[];
+  paths: { x: number; y: number }[] | undefined;
   attackPiece: string | undefined;
 };
 
-export type WinResult = {
-  win: boolean;
-  healthDecrease: number;
-};
-
 export type BattleResult = {
-  logs: PieceAction[];
-  result: WinResult;
+  logs: TurnLogs[];
+  result: { win?: boolean; healthDecrease?: number };
 };
 
 /**
- * @dev "pieces" should be arranged in descending order of "initiative".
  * @param pieces
  * @returns
  */
-export function calculateBattleLogs(pieces: PieceInBattle[]): BattleResult {
-  logJps(`initial piece status: `, pieces);
+export async function calculateBattleLogs(db: DB): Promise<BattleResult> {
+  // logJps(`initial piece status: `, pieces);
 
-  const pieceActions = new Array<PieceAction>();
-  let baseTurnOrder = 1;
+  const pieceActions = new Array<TurnLogs>();
   for (let i = 0; i < 500; i++) {
-    const logs = battleForAStep(pieces, baseTurnOrder);
-
-    baseTurnOrder = logs.length ? logs[logs.length - 1].order + 1 : 1;
+    const logs = await battleForATurn(db);
 
     pieceActions.push(...logs);
-    if (isTurnEnd(pieces)) {
-      console.log("turn end");
+    if (await isBattleEnd(db)) {
+      logJps("turn end");
       break;
     } else {
-      console.log("next turn");
+      logJps("next turn");
     }
   }
-  const result = getResult(pieces);
-  return { logs: pieceActions, result };
+  const result = await getBattleResult(db);
+  return {
+    logs: pieceActions,
+    result: { win: result.win, healthDecrease: result.healthDecrease },
+  };
 }
 
 function getFarthestAttackablePoint(x: number, y: number, k: number) {
@@ -131,33 +86,6 @@ function getFarthestAttackablePoint(x: number, y: number, k: number) {
   });
 
   return uniqPoints;
-}
-
-function isTurnEnd(pieces: PieceInBattle[]) {
-  if (
-    getHomePiece(pieces).findIndex((v) => v.dead === false) === -1 ||
-    getAwayPiece(pieces).findIndex((v) => v.dead === false) === -1
-  ) {
-    return true;
-  }
-  return false;
-}
-
-function getResult(pieces: PieceInBattle[]) {
-  console.log("getting result", pieces);
-
-  const remainHomePiece = getHomePiece(pieces).filter(
-    (v) => v.dead === false
-  ).length;
-  const remainAwayPiece = getAwayPiece(pieces).filter(
-    (v) => v.dead === false
-  ).length;
-  // TODO: check exception
-  if (!remainHomePiece) {
-    return { win: false, healthDecrease: remainAwayPiece };
-  } else {
-    return { win: true, healthDecrease: remainAwayPiece };
-  }
 }
 
 export function getTargetPoint(
@@ -256,134 +184,148 @@ function findDoablePath(
   return doablePath;
 }
 
-function tryAttack(
-  pieces: PieceInBattle[],
-  p: PieceInBattle,
-  targetPiece: PieceInBattle
-): string | undefined {
+export async function tryAttack(
+  db: DB,
+  actionPieceId: string,
+  targetPieceId: string
+): Promise<string | undefined> {
+  const actionPiece = await getBattlePiece(db, actionPieceId);
+  const actionPieceCreature = await getPieceCreature(db, actionPieceId);
+  const targetPiece = await getBattlePiece(db, targetPieceId);
+  const targetPieceCreature = await getPieceCreature(db, targetPieceId);
+
   // judge wether can attack
-  if (manhattanDistance(p.x, p.y, targetPiece.x, targetPiece.y) <= p.range) {
-    const attackedPieceIndex = pieces.findIndex(
-      (v) => v.entity == targetPiece.entity
+  if (
+    manhattanDistance(
+      actionPiece.x,
+      actionPiece.y,
+      targetPiece.x,
+      targetPiece.y
+    ) <= actionPieceCreature.range
+  ) {
+    const damage =
+      actionPieceCreature.attack *
+      (1 - targetPieceCreature.armor / (100 + targetPieceCreature.armor));
+
+    await decreaseHealth(db, targetPieceId, damage);
+
+    console.log(
+      `piece ${actionPieceId} attack ${targetPieceId} with damage ${damage}`
     );
-    const attackedPiece = pieces[attackedPieceIndex];
-    if (attackedPiece) {
-      const damage =
-        p.attack * (attackedPiece.armor / (1 + attackedPiece.armor));
-      attackedPiece.health -= damage;
 
-      console.log(
-        `piece ${p.entity} attack ${attackedPiece.entity} with damage ${damage}`
-      );
-
-      // if dead, set as death
-      if (attackedPiece.health <= 0) {
-        // pieces.splice(index);
-        attackedPiece.dead = true;
-        console.log(`piece ${attackedPiece.entity} dead`);
-      }
-      return attackedPiece.entity;
-    } else {
-      console.error("calculate error");
-    }
+    return targetPieceId;
   } else {
-    // console.log("cannot attack");
+    logJps("cannot attack due to range");
   }
 }
 
-export function battleForAStep(
-  pieces: PieceInBattle[],
-  baseTurnOrder: number
-): PieceAction[] {
-  const actions = new Array<PieceAction>();
+export async function battleForATurn(db: DB): Promise<TurnLogs[]> {
+  const undeadPieceIds = await getAllUndeadPieceIds(db);
 
-  // each piece action by initiative
-  for (const p of pieces) {
-    if (p.dead || isTurnEnd(pieces)) {
-      continue;
+  const actions: Array<TurnLogs> = [];
+
+  for (const p of undeadPieceIds) {
+    const l = await battleForOnePieceOneTurn(db, p);
+    if (l) {
+      actions.push(l);
     }
-
-    const undeadPiece = pieces.filter((v) => v.dead !== true);
-
-    // get aimed piece
-    const targetPiece = getAimedPiece(p, undeadPiece);
-
-    if (!targetPiece) {
-      // no target piece means all enemy's piece are dead
-      continue;
-    }
-
-    const grid = new Grid(8, 8);
-
-    // console.log("undeadPiece: ", undeadPiece);
-
-    // fill the map
-    undeadPiece?.forEach((pp) => {
-      if (pp.entity === p.entity) {
-        return;
-      }
-      logJps(`try set ${pp.x} ${pp.y} as walkable`, pp);
-      grid.setWalkableAt(pp.x, pp.y, false);
-    });
-
-    const finder = JumpPointFinder({
-      diagonalMovement: DiagonalMovement.Never,
-    });
-
-    const targetPoint = getTargetPoint(
-      grid,
-      p.x,
-      p.y,
-      targetPiece.x,
-      targetPiece.y,
-      p.range
-    );
-
-    logJps(
-      `getTargetPoint: piece in ${p.x} ${p.y} aiming ${targetPiece.x} ${targetPiece.y} target to ${targetPoint.x} ${targetPoint.y}`
-    );
-
-    let doablePath: { x: number; y: number }[] | undefined = [];
-
-    if (targetPoint.x) {
-      // calculate target point
-      doablePath = findDoablePath(
-        grid,
-        finder,
-        p.speed,
-        p.x,
-        p.y,
-        targetPoint.x,
-        targetPoint.y
-      );
-
-      if (!doablePath) {
-        logJps(`piece ${p.entity} cannot move and stay at ${p.x},${p.y}`);
-        break;
-      }
-
-      // move
-      p.x = doablePath[doablePath.length - 1].x;
-      p.y = doablePath[doablePath.length - 1].y;
-
-      logJps(
-        `piece ${p.entity} move from ${doablePath[0].x},${doablePath[0].y} to ${p.x},${p.y}`
-      );
-    }
-
-    const attackedEntity = tryAttack(pieces, p, targetPiece);
-
-    actions.push({
-      player: p.player,
-      // order increase one by one
-      order: actions.length
-        ? actions[actions.length - 1].order + 1
-        : baseTurnOrder,
-      entity: p.entity,
-      paths: doablePath,
-      attackPiece: attackedEntity,
-    });
   }
 
   return actions;
+}
+
+export async function battleForOnePieceOneTurn(
+  db: DB,
+  pieceId: string
+): Promise<TurnLogs | undefined> {
+  const pieceBattle = await getBattlePiece(db, pieceId);
+  const pieceInit = await getInitPiece(db, pieceId);
+  const pieceCreature = await getPieceCreature(db, pieceId);
+
+  // if this piece dead, skip
+  if (pieceBattle.dead || (await isBattleEnd(db))) {
+    return;
+  }
+
+  // get aimed piece
+  const targetPieceId = await getAimedPiece(db, pieceId);
+
+  if (!targetPieceId) {
+    // no target piece means all enemy's piece are dead
+    return;
+  }
+
+  const targetPieceInBattle = await getBattlePiece(db, targetPieceId);
+
+  const grid = new Grid(8, 8);
+
+  const undeadPiece = await getAllUndeadPieceIds(db);
+
+  // console.log("undeadPiece: ", undeadPiece);
+
+  // fill the map
+  undeadPiece?.forEach(async (pp: string) => {
+    if (pp === pieceId) {
+      return;
+    }
+    const p = await getBattlePiece(db, pp);
+    logJps(`try set ${p.x} ${p.y} as un walkable`, pp);
+    grid.setWalkableAt(p.x, p.y, false);
+  });
+
+  const finder = JumpPointFinder({
+    diagonalMovement: DiagonalMovement.Never,
+  });
+
+  const targetPoint = getTargetPoint(
+    grid,
+    pieceBattle.x,
+    pieceBattle.y,
+    targetPieceInBattle.x,
+    targetPieceInBattle.y,
+    pieceCreature.range
+  );
+
+  logJps(
+    `getTargetPoint: piece in ${pieceBattle.x} ${pieceBattle.y} aiming ${targetPieceInBattle.x} ${targetPieceInBattle.y} target to ${targetPoint.x} ${targetPoint.y}`
+  );
+
+  let doablePath: { x: number; y: number }[] | undefined = [];
+
+  if (targetPoint.x) {
+    // calculate target point
+    doablePath = findDoablePath(
+      grid,
+      finder,
+      pieceCreature.speed,
+      pieceBattle.x,
+      pieceBattle.y,
+      targetPoint.x,
+      targetPoint.y
+    );
+
+    if (!doablePath) {
+      logJps(
+        `piece ${pieceId} cannot move and stay at ${pieceBattle.x},${pieceBattle.y}`
+      );
+    } else {
+      const toX = doablePath[doablePath.length - 1].x;
+      const toY = doablePath[doablePath.length - 1].y;
+
+      await movePiece(db, pieceId, toX, toY);
+
+      logJps(
+        `piece ${pieceId} move from ${doablePath[0].x},${doablePath[0].y} to ${toX},${toY}`
+      );
+    }
+  }
+
+  const attackedEntity = await tryAttack(db, pieceId, targetPieceId);
+
+  return {
+    // order increase one   by one
+    entity: pieceId,
+    paths: doablePath,
+    attackPiece: attackedEntity,
+  };
 }

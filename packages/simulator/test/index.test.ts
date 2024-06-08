@@ -1,4 +1,4 @@
-import { initialize } from "../src";
+import { createSimulator } from "../src/createSimulator";
 import { CreatureType } from "../src/schema/creature";
 import { InitEntityType } from "../src/schema/entity";
 
@@ -35,11 +35,18 @@ export const MOCK_INIT_ENTITY: InitEntityType[] = [
     id: "2",
     initX: 7,
     initY: 7,
-    isEnemy: false,
+    isEnemy: true,
     creatureId: "2",
   },
 ];
 
-test("test progress", () => {
-  initialize(MOCK_CREATURES, MOCK_INIT_ENTITY);
+test("test progress", async () => {
+  const { db, calculateBattleLogs } = await createSimulator(
+    MOCK_CREATURES,
+    MOCK_INIT_ENTITY
+  );
+
+  const { logs, result } = await calculateBattleLogs(db);
+
+  console.log("logs: ",logs,result);
 });

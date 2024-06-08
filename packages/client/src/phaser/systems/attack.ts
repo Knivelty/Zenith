@@ -71,7 +71,7 @@ export const attack = (layer: PhaserLayer) => {
             const damage =
                 attackerCreature.attack *
                 boost *
-                (attackedCreature.armor / (attackedCreature.armor + 1));
+                (1 - attackedCreature.armor / (attackedCreature.armor + 100));
 
             const attackedHealth = getComponentValueStrict(
                 Health,

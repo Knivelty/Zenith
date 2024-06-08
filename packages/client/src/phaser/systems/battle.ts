@@ -10,10 +10,10 @@ import { defineSystemST, zeroEntity } from "../../utils";
 // import { BattleLog, BattleLogsType } from "../../dojo/generated/setup";
 import { GameStatusEnum } from "../../dojo/types";
 import { battleAnimation } from "./utils/playBattle";
-import { BattleResult } from "../../utils/jps";
 import { processBattle } from "./utils/processBattleLogs";
 import { logDebug } from "../../ui/lib/utils";
 import { BATTLE_END_WAIT_TIME } from "../config/constants";
+import { BattleResult } from "@zenith/simulator/src/jps";
 
 export const battle = (layer: PhaserLayer) => {
     const {
@@ -74,6 +74,7 @@ export const battle = (layer: PhaserLayer) => {
             if (Boolean(v.end) === false) {
                 updateComponent(GameStatus, zeroEntity, {
                     status: GameStatusEnum.Prepare,
+                    played: false,
                 });
             } else if (Boolean(v.end) === true && v.winner !== 0n) {
                 updateComponent(GameStatus, zeroEntity, {

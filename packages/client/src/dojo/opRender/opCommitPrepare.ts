@@ -79,7 +79,7 @@ export const opCommitPrepare = async (
 
     const { processBattleLogs } = processBattle(clientComponents);
 
-    const { result } = processBattleLogs();
+    const { result } = await processBattleLogs();
 
     logDebug("commit changes: ", changes);
 
@@ -104,8 +104,8 @@ export const opCommitPrepare = async (
             account,
             changes,
             result: {
-                win: result.win,
-                healthDecrease: result.healthDecrease,
+                win: result.win!,
+                healthDecrease: result.healthDecrease!,
             },
         });
         const res = await rpcProvider.waitForTransaction(tx.transaction_hash, {

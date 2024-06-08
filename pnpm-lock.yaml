@@ -45,14 +45,17 @@ importers:
         specifier: 0.6.12
         version: 0.6.12(starknet@6.1.5)(typescript@5.3.3)
       '@latticexyz/phaserx':
-        specifier: ^2.0.0-next.14
-        version: 2.0.0-transaction-context-af4b168c
+        specifier: workspace:^
+        version: link:../phaserx
       '@latticexyz/utils':
         specifier: ^2.0.0-next.14
         version: 2.0.0-snapshot-test-32d38619
       '@radix-ui/react-slot':
         specifier: ^1.0.2
         version: 1.0.2(@types/react@18.2.45)(react@18.2.0)
+      '@zenith/simulator':
+        specifier: workspace:^
+        version: link:../simulator
       ahooks:
         specifier: ^3.7.10
         version: 3.7.10(react@18.2.0)
@@ -3850,16 +3853,6 @@ packages:
     resolution: {integrity: sha512-gbkePEBupNydxCelHCESvFSFM8XPh1Zs/OAVRW/rKpEqPAl5PbOM90Si8mv9bvnR53uPD2s/FiRxdvSejpRJew==}
     dev: true
 
-  /@latticexyz/phaserx@2.0.0-transaction-context-af4b168c:
-    resolution: {integrity: sha512-36edYJf2UMfFk/wb4QVv0f34PSvXTeXz3kUoMG9R9jsX540PMwDmIo5o5q0558ZCmWSHDvDbDRDw4qgGo962/g==}
-    dependencies:
-      '@latticexyz/utils': 2.0.0-transaction-context-af4b168c
-      '@use-gesture/vanilla': 10.2.9
-      mobx: 6.12.0
-      phaser: 3.60.0-beta.14
-      rxjs: 7.5.5
-    dev: false
-
   /@latticexyz/schema-type@2.0.0-next.12(typescript@5.3.3):
     resolution: {integrity: sha512-GmWdDmXKPc48KP9LRUB3YJ7UTzjMe08MbWfniR9ChTwJrESZcB8ussCeHL4liuM+6Ts5xKc5fO9p02kd+VqNrQ==}
     dependencies:
@@ -3898,14 +3891,6 @@ packages:
 
   /@latticexyz/utils@2.0.0-transaction-context-324984c5:
     resolution: {integrity: sha512-M2QqBEolMmmJstD6j50A0OmdWWL9rE4Oby2nmE1Ebubfuq7NniXiqpgXoLA93evGZIxSRV5czF+V48ziBKu7kQ==}
-    dependencies:
-      mobx: 6.12.0
-      proxy-deep: 3.1.1
-      rxjs: 7.5.5
-    dev: false
-
-  /@latticexyz/utils@2.0.0-transaction-context-af4b168c:
-    resolution: {integrity: sha512-kik2LD4u7/jjJ1kr+y+Vi/mxhOeYAPzJ7xqhzcc5+EVEfbiV0DzSPlzyDyOqb6xITanE1AZWpqvqiBAA+43GSA==}
     dependencies:
       mobx: 6.12.0
       proxy-deep: 3.1.1

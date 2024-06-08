@@ -8,10 +8,12 @@ import {
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { zeroEntity } from "../../../utils";
 // import { BattleLog, BattleLogsType } from "../../dojo/generated/setup";
-import { PieceInBattle, calculateBattleLogs } from "../../../utils/jps";
-
 import { ClientComponents } from "../../../dojo/createClientComponents";
 import { logDebug } from "../../../ui/lib/utils";
+import { createSimulator } from "@zenith/simulator";
+import { CreatureType } from "@zenith/simulator/src/schema/creature";
+import { InitEntityType } from "@zenith/simulator/src/schema/entity";
+import { attack } from "../attack";
 
 export const processBattle = (component: ClientComponents) => {
     const {
@@ -24,7 +26,7 @@ export const processBattle = (component: ClientComponents) => {
         BattleLogs,
     } = component;
 
-    function processBattleLogs() {
+    async function processBattleLogs() {
         logDebug("start process battle logs");
 
         const status = getComponentValueStrict(GameStatus, zeroEntity);
@@ -36,8 +38,9 @@ export const processBattle = (component: ClientComponents) => {
             ])
         );
 
-        // get all piece
-        const allPieceInBattle = new Array<PieceInBattle>();
+        // prepare data for simulator
+        const allCreatures = new Array<CreatureType>();
+        const allPieces = new Array<InitEntityType>();
 
         // get player piece
         const player = getComponentValueStrict(
@@ -63,26 +66,32 @@ export const processBattle = (component: ClientComponents) => {
                 );
             }
 
+            const creatureEntity = getEntityIdFromKeys([
+                BigInt(piece.creature_index),
+                BigInt(piece.level),
+            ]);
+
             const creature = getComponentValueStrict(
                 CreatureProfile,
-                getEntityIdFromKeys([
-                    BigInt(piece.creature_index),
-                    BigInt(piece.level),
-                ])
+                creatureEntity
             );
 
-            allPieceInBattle.push({
-                player: getEntityIdFromKeys([v.homePlayer]),
-                entity: pieceEntity,
-                x: piece.x - 1,
-                y: 8 - piece.y,
+            allCreatures.push({
+                id: creatureEntity,
                 health: creature.health,
                 attack: creature.attack,
                 armor: creature.armor,
-                speed: creature.speed,
                 range: creature.range,
-                isInHome: true,
-                dead: false,
+                speed: creature.speed,
+                initiative: creature.initiative,
+            });
+
+            allPieces.push({
+                id: pieceEntity,
+                initX: piece.x - 1,
+                initY: 8 - piece.y,
+                isEnemy: false,
+                creatureId: creatureEntity,
             });
         }
 
@@ -106,31 +115,43 @@ export const processBattle = (component: ClientComponents) => {
             console.log("piece: ", playerPiece);
             const piece = getComponentValueStrict(LocalPiece, pieceEntity);
 
+            const creatureEntity = getEntityIdFromKeys([
+                BigInt(piece.creature_index),
+                BigInt(piece.level),
+            ]);
+
             const creature = getComponentValueStrict(
                 CreatureProfile,
-                getEntityIdFromKeys([
-                    BigInt(piece.creature_index),
-                    BigInt(piece.level),
-                ])
+                creatureEntity
             );
 
-            allPieceInBattle.push({
-                player: getEntityIdFromKeys([v.awayPlayer]),
-                entity: pieceEntity,
-                x: piece.x - 1,
-                y: piece.y - 1,
-                // boost health and attack if dangerous
-                health: creature.health * boost,
-                attack: creature.attack * boost,
+            allCreatures.push({
+                id: creatureEntity,
+                health: creature.health,
+                attack: creature.attack,
                 armor: creature.armor,
-                speed: creature.speed,
                 range: creature.range,
-                isInHome: false,
-                dead: false,
+                speed: creature.speed,
+                initiative: creature.initiative,
+            });
+
+            allPieces.push({
+                id: pieceEntity,
+                initX: piece.x - 1,
+                initY: piece.y - 1,
+                isEnemy: true,
+                creatureId: creatureEntity,
             });
         }
 
-        const { logs, result } = calculateBattleLogs(allPieceInBattle);
+        const { db, calculateBattleLogs, destroyDB } = await createSimulator(
+            allCreatures,
+            allPieces
+        );
+
+        const { logs, result } = await calculateBattleLogs(db);
+
+        await destroyDB(db);
 
         console.log("set battle logs: ", v.currentMatch, v.round, logs);
 
@@ -142,7 +163,7 @@ export const processBattle = (component: ClientComponents) => {
                 inningBattleId: v.round,
                 logs: JSON.stringify(logs),
                 winner: result.win ? v.homePlayer : v.awayPlayer,
-                healthDecrease: result.healthDecrease,
+                healthDecrease: result.healthDecrease ?? 0,
             }
         );
 
