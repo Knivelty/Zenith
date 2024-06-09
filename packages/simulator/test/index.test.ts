@@ -1,10 +1,10 @@
+import { BaseStateType } from "../src";
 import { createSimulator } from "../src/createSimulator";
 import { CreatureType } from "../src/schema/creature";
-import { InitEntityType } from "../src/schema/entity";
 
 export const MOCK_CREATURES: CreatureType[] = [
   {
-    id: "1",
+    creature_id: "1",
     health: 600,
     attack: 60,
     armor: 20,
@@ -13,7 +13,7 @@ export const MOCK_CREATURES: CreatureType[] = [
     initiative: 90,
   },
   {
-    id: "2",
+    creature_id: "2",
     health: 800,
     attack: 60,
     armor: 20,
@@ -23,7 +23,7 @@ export const MOCK_CREATURES: CreatureType[] = [
   },
 ];
 
-export const MOCK_INIT_ENTITY: InitEntityType[] = [
+export const MOCK_INIT_ENTITY: BaseStateType[] = [
   {
     id: "1",
     initX: 1,
@@ -48,5 +48,5 @@ test("test progress", async () => {
 
   const { logs, result } = await calculateBattleLogs(db);
 
-  console.log("logs: ",logs,result);
+  console.log("logs: ", logs, result);
 });

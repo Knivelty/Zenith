@@ -1,10 +1,10 @@
-import { manhattanDistance } from ".";
 import { DB } from "../createDB";
+import { manhattanDistance } from "../mechanism";
 import { UNKNOWN_CREATURE_ERROR, UNKNOWN_PIECE_ERROR } from "./error";
 import { isDefined } from "./type";
 
-export async function getInitPiece(db: DB, id: string) {
-  const piece = await db.init_entity.findOne().where("id").eq(id).exec();
+export async function getPieceBaseState(db: DB, id: string) {
+  const piece = await db.base_state.findOne().where("id").eq(id).exec();
 
   if (!piece) {
     throw UNKNOWN_PIECE_ERROR;
@@ -24,7 +24,7 @@ export async function getBattlePiece(db: DB, id: string) {
 }
 
 export async function getPieceCreature(db: DB, id: string) {
-  const pieceProfile = await db.init_entity.findOne().where("id").eq(id).exec();
+  const pieceProfile = await db.base_state.findOne().where("id").eq(id).exec();
 
   if (!pieceProfile) {
     throw UNKNOWN_PIECE_ERROR;
@@ -56,7 +56,7 @@ export async function getAllUndeadPieceIds(db: DB) {
 export async function getEnemyUndeadPieceIds(db: DB) {
   const undeadPieceIds = await getAllUndeadPieceIds(db);
 
-  const enemyUndeadPieceIds = await db.init_entity
+  const enemyUndeadPieceIds = await db.base_state
     .find()
     .where("isEnemy")
     .eq(true)
@@ -70,7 +70,7 @@ export async function getEnemyUndeadPieceIds(db: DB) {
 export async function getAlliedUndeadPieceIds(db: DB) {
   const undeadPieceIds = await getAllUndeadPieceIds(db);
 
-  const alliedUndeadPieceIds = await db.init_entity
+  const alliedUndeadPieceIds = await db.base_state
     .find()
     .where("isEnemy")
     .eq(false)
@@ -148,27 +148,27 @@ export async function decreaseHealth(
 }
 
 export async function getAlliedPiece(db: DB) {
-  return await db.init_entity.find({ selector: { isEnemy: false } }).exec();
+  return await db.base_state.find({ selector: { isEnemy: false } }).exec();
 }
 
 export async function getEnemyPiece(db: DB) {
-  return await db.init_entity.find({ selector: { isEnemy: true } }).exec();
+  return await db.base_state.find({ selector: { isEnemy: true } }).exec();
 }
 
 export async function getAimedPiece(
   db: DB,
   actionPieceId: string
 ): Promise<string | undefined> {
-  const actionPieceInit = await getInitPiece(db, actionPieceId);
+  const actionPieceBase = await getPieceBaseState(db, actionPieceId);
   const actionPieceBattle = await getBattlePiece(db, actionPieceId);
 
-  if (!actionPieceBattle || !actionPieceInit) {
+  if (!actionPieceBattle || !actionPieceBase) {
     throw Error("unknown piece gid");
   }
 
   let opposingP: Awaited<ReturnType<typeof getAlliedPiece>>;
 
-  if (actionPieceInit?.isEnemy) {
+  if (actionPieceBase?.isEnemy) {
     opposingP = await getAlliedPiece(db);
   } else {
     opposingP = await getEnemyPiece(db);

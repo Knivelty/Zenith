@@ -6,7 +6,6 @@ import {
 } from "pathfinding";
 import { uniqWith } from "lodash";
 import { logJps } from "./utils/logger";
-import { manhattanDistance } from "./utils";
 import { DB } from "./createDB";
 import {
   decreaseHealth,
@@ -14,11 +13,13 @@ import {
   getAllUndeadPieceIds,
   getBattlePiece,
   getBattleResult,
-  getInitPiece,
+  getPieceBaseState,
   getPieceCreature,
   isBattleEnd,
   movePiece,
 } from "./utils/dbHelper";
+import { manhattanDistance } from "./mechanism";
+import { getAllUndeadPieceIdsByInitiative } from "./mechanism/actLev";
 
 export type TurnLogs = {
   entity: string;
@@ -220,7 +221,7 @@ export async function tryAttack(
 }
 
 export async function battleForATurn(db: DB): Promise<TurnLogs[]> {
-  const undeadPieceIds = await getAllUndeadPieceIds(db);
+  const undeadPieceIds = await getAllUndeadPieceIdsByInitiative(db);
 
   const actions: Array<TurnLogs> = [];
 
@@ -239,7 +240,7 @@ export async function battleForOnePieceOneTurn(
   pieceId: string
 ): Promise<TurnLogs | undefined> {
   const pieceBattle = await getBattlePiece(db, pieceId);
-  const pieceInit = await getInitPiece(db, pieceId);
+  const pieceBase = await getPieceBaseState(db, pieceId);
   const pieceCreature = await getPieceCreature(db, pieceId);
 
   // if this piece dead, skip

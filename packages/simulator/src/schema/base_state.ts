@@ -5,8 +5,8 @@ import {
   toTypedRxJsonSchema,
 } from "rxdb";
 
-export const InitEntitySchemaJson = {
-  title: "battle entity schema",
+export const BaseStateSchemaJson = {
+  title: "entity base status",
   version: 0,
   primaryKey: "id",
   type: "object",
@@ -31,15 +31,14 @@ export const InitEntitySchemaJson = {
   indexes: [],
 } as const;
 
-const schemaTyped = toTypedRxJsonSchema(InitEntitySchemaJson);
+const schemaTyped = toTypedRxJsonSchema(BaseStateSchemaJson);
 
 // aggregate the document type from the schema
-export type InitEntityType = ExtractDocumentTypeFromTypedRxJsonSchema<
+export type BaseStateType = ExtractDocumentTypeFromTypedRxJsonSchema<
   typeof schemaTyped
 >;
 
 // create the typed RxJsonSchema from the literal typed object.
-export const InitEntitySchema: RxJsonSchema<InitEntityType> =
-  InitEntitySchemaJson;
+export const BaseStateSchema: RxJsonSchema<BaseStateType> = BaseStateSchemaJson;
 
-export type InitEntityTypeCollection = RxCollection<InitEntityType>;
+export type BaseStateTypeCollection = RxCollection<BaseStateType>;

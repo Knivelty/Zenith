@@ -10,10 +10,8 @@ import { zeroEntity } from "../../../utils";
 // import { BattleLog, BattleLogsType } from "../../dojo/generated/setup";
 import { ClientComponents } from "../../../dojo/createClientComponents";
 import { logDebug } from "../../../ui/lib/utils";
-import { createSimulator } from "@zenith/simulator";
+import { BaseStateType, createSimulator } from "@zenith/simulator";
 import { CreatureType } from "@zenith/simulator/src/schema/creature";
-import { InitEntityType } from "@zenith/simulator/src/schema/entity";
-import { attack } from "../attack";
 
 export const processBattle = (component: ClientComponents) => {
     const {
@@ -40,7 +38,7 @@ export const processBattle = (component: ClientComponents) => {
 
         // prepare data for simulator
         const allCreatures = new Array<CreatureType>();
-        const allPieces = new Array<InitEntityType>();
+        const allPieces = new Array<BaseStateType>();
 
         // get player piece
         const player = getComponentValueStrict(
@@ -77,7 +75,7 @@ export const processBattle = (component: ClientComponents) => {
             );
 
             allCreatures.push({
-                id: creatureEntity,
+                creature_id: creatureEntity,
                 health: creature.health,
                 attack: creature.attack,
                 armor: creature.armor,
@@ -126,7 +124,7 @@ export const processBattle = (component: ClientComponents) => {
             );
 
             allCreatures.push({
-                id: creatureEntity,
+                creature_id: creatureEntity,
                 health: creature.health,
                 attack: creature.attack,
                 armor: creature.armor,

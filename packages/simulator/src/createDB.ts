@@ -6,8 +6,8 @@ import { disableWarnings } from "rxdb/plugins/dev-mode";
 import { CreatureSchema } from "./schema/creature";
 import { BattleEntitySchema } from "./schema/battle_entity";
 import { MyDatabase } from "./schema/db";
-import { InitEntitySchema } from "./schema/entity";
 import { RxDBUpdatePlugin } from "rxdb/plugins/update";
+import { BaseStateSchema } from "./schema";
 
 export type DB = Awaited<ReturnType<typeof createDB>>;
 
@@ -27,7 +27,7 @@ export async function createDB() {
       schema: CreatureSchema,
     },
     battle_entity: { schema: BattleEntitySchema },
-    init_entity: { schema: InitEntitySchema },
+    base_state: { schema: BaseStateSchema },
   });
   return db;
 }

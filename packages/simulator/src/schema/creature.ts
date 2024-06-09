@@ -8,11 +8,11 @@ import {
 export const CreatureSchemaJson = {
   title: "creature schema",
   version: 0,
-  primaryKey: "id",
+  primaryKey: "creature_id",
   type: "object",
   properties: {
     // id = creature_index_u16 bit add level_u8
-    id: {
+    creature_id: {
       type: "string",
       maxLength: 100,
     },
@@ -35,7 +35,15 @@ export const CreatureSchemaJson = {
       type: "number",
     },
   },
-  required: ["id", "health", "attack", "armor", "range", "speed", "initiative"],
+  required: [
+    "creature_id",
+    "health",
+    "attack",
+    "armor",
+    "range",
+    "speed",
+    "initiative",
+  ],
   indexes: [],
 } as const;
 
