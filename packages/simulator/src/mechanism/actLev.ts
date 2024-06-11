@@ -6,12 +6,14 @@ import {
   getPieceCreature,
 } from "../utils/dbHelper";
 
-export async function getAllUndeadPieceIdsByInitiative(db: DB) {
-  const piecesIds = await getAllUndeadPieceIds(db);
+export async function getAllUndeadPieceIdsByInitiative() {
+  const db = globalThis.Simulator.db;
+
+  const piecesIds = await getAllUndeadPieceIds();
 
   const pieceIdsWithInitiative = await asyncMap(piecesIds, async (id) => {
-    const pieceProfile = await getPieceBaseState(db, id);
-    const pieceCreature = await getPieceCreature(db, pieceProfile?.id);
+    const pieceProfile = await getPieceBaseState(id);
+    const pieceCreature = await getPieceCreature(pieceProfile?.id);
     return { ...pieceCreature, id: id };
   });
 

@@ -1,17 +1,19 @@
-import { DB } from "../createDB";
-import { decreaseHealth, getBattlePiece, getPieceCreature } from "../utils/dbHelper";
+import {
+  decreaseHealth,
+  getBattlePiece,
+  getPieceCreature,
+} from "../utils/dbHelper";
 import { logJps } from "../utils/logger";
 import { manhattanDistance } from "./distance";
 
 export async function tryAttack(
-  db: DB,
   actionPieceId: string,
   targetPieceId: string
 ): Promise<string | undefined> {
-  const actionPiece = await getBattlePiece(db, actionPieceId);
-  const actionPieceCreature = await getPieceCreature(db, actionPieceId);
-  const targetPiece = await getBattlePiece(db, targetPieceId);
-  const targetPieceCreature = await getPieceCreature(db, targetPieceId);
+  const actionPiece = await getBattlePiece(actionPieceId);
+  const actionPieceCreature = await getPieceCreature(actionPieceId);
+  const targetPiece = await getBattlePiece(targetPieceId);
+  const targetPieceCreature = await getPieceCreature(targetPieceId);
 
   // judge wether can attack
   if (
@@ -26,7 +28,7 @@ export async function tryAttack(
       actionPieceCreature.attack *
       (1 - targetPieceCreature.armor / (100 + targetPieceCreature.armor));
 
-    await decreaseHealth(db, targetPieceId, damage);
+    await decreaseHealth(targetPieceId, damage);
 
     console.log(
       `piece ${actionPieceId} attack ${targetPieceId} with damage ${damage}`

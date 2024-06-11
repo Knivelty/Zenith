@@ -41,12 +41,12 @@ export const MOCK_INIT_ENTITY: BaseStateType[] = [
 ];
 
 test("test progress", async () => {
-  const { db, calculateBattleLogs } = await createSimulator(
+  const { calculateBattleLogs } = await createSimulator(
     MOCK_CREATURES,
     MOCK_INIT_ENTITY
   );
 
-  const { logs, result } = await calculateBattleLogs(db);
+  const { logs, result } = await calculateBattleLogs();
 
   console.log("logs: ", logs, result);
 });

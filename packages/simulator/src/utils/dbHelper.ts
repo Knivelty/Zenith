@@ -1,9 +1,8 @@
-import { DB } from "../createDB";
-import { manhattanDistance } from "../mechanism";
 import { UNKNOWN_CREATURE_ERROR, UNKNOWN_PIECE_ERROR } from "./error";
-import { isDefined } from "./type";
 
-export async function getPieceBaseState(db: DB, id: string) {
+export async function getPieceBaseState(id: string) {
+  const db = globalThis.Simulator.db;
+
   const piece = await db.base_state.findOne().where("id").eq(id).exec();
 
   if (!piece) {
@@ -13,7 +12,9 @@ export async function getPieceBaseState(db: DB, id: string) {
   return piece;
 }
 
-export async function getBattlePiece(db: DB, id: string) {
+export async function getBattlePiece(id: string) {
+  const db = globalThis.Simulator.db;
+
   const piece = await db.battle_entity.findOne().where("id").eq(id).exec();
 
   if (!piece) {
@@ -23,7 +24,9 @@ export async function getBattlePiece(db: DB, id: string) {
   return piece;
 }
 
-export async function getPieceCreature(db: DB, id: string) {
+export async function getPieceCreature(id: string) {
+  const db = globalThis.Simulator.db;
+
   const pieceProfile = await db.base_state.findOne().where("id").eq(id).exec();
 
   if (!pieceProfile) {
@@ -43,7 +46,9 @@ export async function getPieceCreature(db: DB, id: string) {
   return pieceCreature;
 }
 
-export async function getAllUndeadPieceIds(db: DB) {
+export async function getAllUndeadPieceIds() {
+  const db = globalThis.Simulator.db;
+
   const pieces = await db.battle_entity
     .find({
       selector: { dead: false },
@@ -53,8 +58,10 @@ export async function getAllUndeadPieceIds(db: DB) {
   return ids;
 }
 
-export async function getEnemyUndeadPieceIds(db: DB) {
-  const undeadPieceIds = await getAllUndeadPieceIds(db);
+export async function getEnemyUndeadPieceIds() {
+  const db = globalThis.Simulator.db;
+
+  const undeadPieceIds = await getAllUndeadPieceIds();
 
   const enemyUndeadPieceIds = await db.base_state
     .find()
@@ -67,8 +74,10 @@ export async function getEnemyUndeadPieceIds(db: DB) {
   return enemyUndeadPieceIds;
 }
 
-export async function getAlliedUndeadPieceIds(db: DB) {
-  const undeadPieceIds = await getAllUndeadPieceIds(db);
+export async function getAlliedUndeadPieceIds() {
+  const db = globalThis.Simulator.db;
+
+  const undeadPieceIds = await getAllUndeadPieceIds();
 
   const alliedUndeadPieceIds = await db.base_state
     .find()
@@ -81,9 +90,9 @@ export async function getAlliedUndeadPieceIds(db: DB) {
   return alliedUndeadPieceIds;
 }
 
-export async function getBattleResult(db: DB) {
-  const enemyUndeadPieceIds = await getEnemyUndeadPieceIds(db);
-  const alliedUndeadPieceIds = await getAlliedUndeadPieceIds(db);
+export async function getBattleResult() {
+  const enemyUndeadPieceIds = await getEnemyUndeadPieceIds();
+  const alliedUndeadPieceIds = await getAlliedUndeadPieceIds();
 
   const end =
     enemyUndeadPieceIds.length === 0 || alliedUndeadPieceIds.length === 0;
@@ -98,22 +107,21 @@ export async function getBattleResult(db: DB) {
   return { end, win, healthDecrease };
 }
 
-export async function isBattleEnd(db: DB) {
-  const enemyUndeadPieceIds = await getEnemyUndeadPieceIds(db);
+export async function isBattleEnd() {
+  const db = globalThis.Simulator.db;
 
-  const alliedPieceIds = await getAlliedUndeadPieceIds(db);
+  const enemyUndeadPieceIds = await getEnemyUndeadPieceIds();
+
+  const alliedPieceIds = await getAlliedUndeadPieceIds();
 
   const end = enemyUndeadPieceIds.length === 0 || alliedPieceIds.length === 0;
 
   return end;
 }
 
-export async function movePiece(
-  db: DB,
-  pieceId: string,
-  toX: number,
-  toY: number
-) {
+export async function movePiece(pieceId: string, toX: number, toY: number) {
+  const db = globalThis.Simulator.db;
+
   await db.battle_entity
     .findOne()
     .where("id")
@@ -126,11 +134,9 @@ export async function movePiece(
     });
 }
 
-export async function decreaseHealth(
-  db: DB,
-  pieceId: string,
-  healthDiff: number
-) {
+export async function decreaseHealth(pieceId: string, healthDiff: number) {
+  const db = globalThis.Simulator.db;
+
   await db.battle_entity
     .findOne()
     .where("id")
@@ -138,7 +144,7 @@ export async function decreaseHealth(
     .update({ $inc: { health: -healthDiff } });
 
   // if health lower than zero, set to dead
-  if ((await getBattlePiece(db, pieceId)).health <= 0) {
+  if ((await getBattlePiece(pieceId)).health <= 0) {
     await db.battle_entity
       .findOne()
       .where("id")
@@ -147,10 +153,14 @@ export async function decreaseHealth(
   }
 }
 
-export async function getAlliedPiece(db: DB) {
+export async function getAlliedPiece() {
+  const db = globalThis.Simulator.db;
+
   return await db.base_state.find({ selector: { isEnemy: false } }).exec();
 }
 
-export async function getEnemyPiece(db: DB) {
+export async function getEnemyPiece() {
+  const db = globalThis.Simulator.db;
+
   return await db.base_state.find({ selector: { isEnemy: true } }).exec();
 }

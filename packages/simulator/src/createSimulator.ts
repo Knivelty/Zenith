@@ -1,4 +1,5 @@
-import { DB, createDB } from "./createDB";
+import { createDB } from "./createDB";
+import { createEventSystem } from "./createEventSystem";
 import { calculateBattleLogs } from "./mechanism/roundBattle";
 import { BaseStateType } from "./schema";
 import { CreatureType } from "./schema/creature";
@@ -9,23 +10,24 @@ export async function createSimulator(
   creatures: CreatureType[],
   initEntities: BaseStateType[]
 ) {
-  const db = await createDB();
+  globalThis.Simulator.db = await createDB();
 
-  await importData({ db, creatures, initEntities });
-  await initializeBattle(db);
+  globalThis.Simulator.eventSystem = createEventSystem();
 
-  return { db, calculateBattleLogs, destroyDB };
+  await importData({ creatures, initEntities });
+  await initializeBattle();
+
+  return { calculateBattleLogs, destroyDB };
 }
 
 async function importData({
-  db,
   creatures,
   initEntities,
 }: {
-  db: DB;
   creatures: CreatureType[];
   initEntities: BaseStateType[];
 }) {
+  const db = globalThis.Simulator.db;
   const p1 = creatures.map(async (c) => {
     await db.creature.upsert(c);
   });
@@ -37,12 +39,14 @@ async function importData({
   await Promise.all([...p1, ...p2]);
 }
 
-async function initializeBattle(db: DB) {
+async function initializeBattle() {
+  const db = globalThis.Simulator.db;
+
   // find all piece and copy to battle entity
   const allPieces = await db.base_state.find().exec();
 
   for (const p of allPieces) {
-    const pieceCreature = await getPieceCreature(db, p.id);
+    const pieceCreature = await getPieceCreature(p.id);
     await db.battle_entity.upsert({
       id: p.id,
       health: pieceCreature.health,

@@ -4,7 +4,6 @@ import {
   JPFNeverMoveDiagonally,
   JumpPointFinder,
 } from "pathfinding";
-import { DB } from "../createDB";
 import {
   getAllUndeadPieceIds,
   getBattlePiece,
@@ -14,26 +13,22 @@ import { logJps } from "../utils/logger";
 import { manhattanDistance } from "./distance";
 import { uniqWith } from "lodash";
 
-export async function findPath(
-  db: DB,
-  actionPieceId: string,
-  targetPieceId: string
-) {
-  const actionPieceInBattle = await getBattlePiece(db, actionPieceId);
-  const actionPieceCreature = await getPieceCreature(db, actionPieceId);
+export async function findPath(actionPieceId: string, targetPieceId: string) {
+  const actionPieceInBattle = await getBattlePiece(actionPieceId);
+  const actionPieceCreature = await getPieceCreature(actionPieceId);
 
-  const targetPieceInBattle = await getBattlePiece(db, targetPieceId);
+  const targetPieceInBattle = await getBattlePiece(targetPieceId);
 
   const grid = new Grid(8, 8);
 
-  const undeadPieceIds = await getAllUndeadPieceIds(db);
+  const undeadPieceIds = await getAllUndeadPieceIds();
 
   // fill the map
   undeadPieceIds?.forEach(async (pid: string) => {
     if (pid === actionPieceId) {
       return;
     }
-    const p = await getBattlePiece(db, pid);
+    const p = await getBattlePiece(pid);
     logJps(`try set ${p.x} ${p.y} as un walkable`, pid);
     grid.setWalkableAt(p.x, p.y, false);
   });

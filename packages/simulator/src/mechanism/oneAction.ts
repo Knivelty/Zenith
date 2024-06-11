@@ -1,4 +1,3 @@
-import { DB } from "../createDB";
 import { getBattlePiece, isBattleEnd } from "../utils/dbHelper";
 import { getAimedPiece } from "./enemySearch";
 import { findPath } from "./pathFind";
@@ -7,29 +6,28 @@ import { tryAttack } from "./attack";
 import { TurnLog } from "./roundBattle";
 
 export async function battleForOnePieceOneTurn(
-  db: DB,
   pieceId: string
 ): Promise<TurnLog | undefined> {
-  const pieceBattle = await getBattlePiece(db, pieceId);
+  const pieceBattle = await getBattlePiece(pieceId);
 
   // if this piece dead or battle end, skip
-  if (pieceBattle.dead || (await isBattleEnd(db))) {
+  if (pieceBattle.dead || (await isBattleEnd())) {
     return;
   }
 
   // get aimed piece
-  const targetPieceId = await getAimedPiece(db, pieceId);
+  const targetPieceId = await getAimedPiece(pieceId);
 
   if (!targetPieceId) {
     // no target piece means all enemy's piece are dead the same as battle end
     return;
   }
 
-  const actPath = await findPath(db, pieceId, targetPieceId);
+  const actPath = await findPath(pieceId, targetPieceId);
 
-  await executeMove(db, pieceId, actPath);
+  await executeMove(pieceId, actPath);
 
-  const attackedEntity = await tryAttack(db, pieceId, targetPieceId);
+  const attackedEntity = await tryAttack(pieceId, targetPieceId);
 
   return {
     // order increase one by one
