@@ -1,5 +1,5 @@
 import { DB, createDB } from "./createDB";
-import { calculateBattleLogs } from "./jps";
+import { calculateBattleLogs } from "./mechanism/roundBattle";
 import { BaseStateType } from "./schema";
 import { CreatureType } from "./schema/creature";
 import { getPieceCreature } from "./utils/dbHelper";
