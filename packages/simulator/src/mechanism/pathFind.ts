@@ -4,18 +4,13 @@ import {
   JPFNeverMoveDiagonally,
   JumpPointFinder,
 } from "pathfinding";
-import {
-  getAllUndeadPieceIds,
-  getBattlePiece,
-  getPieceCreature,
-} from "../utils/dbHelper";
+import { getAllUndeadPieceIds, getBattlePiece } from "../utils/dbHelper";
 import { logJps } from "../utils/logger";
 import { manhattanDistance } from "./distance";
 import { uniqWith } from "lodash";
 
 export async function findPath(actionPieceId: string, targetPieceId: string) {
   const actionPieceInBattle = await getBattlePiece(actionPieceId);
-  const actionPieceCreature = await getPieceCreature(actionPieceId);
 
   const targetPieceInBattle = await getBattlePiece(targetPieceId);
 
@@ -43,7 +38,7 @@ export async function findPath(actionPieceId: string, targetPieceId: string) {
     actionPieceInBattle.y,
     targetPieceInBattle.x,
     targetPieceInBattle.y,
-    actionPieceCreature.range
+    actionPieceInBattle.range
   );
 
   logJps(
@@ -56,7 +51,7 @@ export async function findPath(actionPieceId: string, targetPieceId: string) {
     actPath = findActPath(
       grid,
       finder,
-      actionPieceCreature.speed,
+      actionPieceInBattle.speed,
       actionPieceInBattle.x,
       actionPieceInBattle.y,
       targetPoint.x,

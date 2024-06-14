@@ -1,10 +1,8 @@
-import { DB } from "../createDB";
 import {
-  getAlliedUndeadPieceIds,
+  getHomeUndeadPieceIds,
   getBattlePiece,
-  getEnemyUndeadPieceIds,
+  getAwayUndeadPieceIds,
   getPieceBaseState,
-  getPieceCreature,
 } from "../utils/dbHelper";
 import { manhattanDistance } from "./distance";
 
@@ -19,12 +17,12 @@ export async function getAimedPiece(
   }
 
   // tgtSet = target set
-  let tgtSet: Awaited<ReturnType<typeof getAlliedUndeadPieceIds>>;
+  let tgtSet: Awaited<ReturnType<typeof getHomeUndeadPieceIds>>;
 
-  if (actionPieceBase?.isEnemy) {
-    tgtSet = await getAlliedUndeadPieceIds();
+  if (actionPieceBase?.isHome) {
+    tgtSet = await getAwayUndeadPieceIds();
   } else {
-    tgtSet = await getEnemyUndeadPieceIds();
+    tgtSet = await getHomeUndeadPieceIds();
   }
 
   // get nearest piece

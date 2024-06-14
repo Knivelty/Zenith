@@ -1,4 +1,3 @@
-import { DB } from "../createDB";
 import { getBattlePiece, movePiece } from "../utils/dbHelper";
 import { logJps } from "../utils/logger";
 import { findPath } from "./pathFind";
@@ -8,7 +7,7 @@ export async function executeMove(
   actPath: Awaited<ReturnType<typeof findPath>>
 ) {
   const pieceInBattle = await getBattlePiece(pieceId);
-  if (!actPath) {
+  if (!actPath?.length) {
     logJps(
       `piece ${pieceId} cannot move and stay at ${pieceInBattle.x},${pieceInBattle.y}`
     );

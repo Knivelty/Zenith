@@ -1,3 +1,4 @@
+import { property } from "lodash";
 import {
   ExtractDocumentTypeFromTypedRxJsonSchema,
   RxCollection,
@@ -16,7 +17,34 @@ export const BattleEntitySchemaJson = {
       type: "string",
       maxLength: 100,
     },
+    isHome: {
+      type: "boolean",
+    },
     health: {
+      type: "number",
+    },
+    maxHealth: {
+      type: "number",
+    },
+    mana: {
+      type: "number",
+    },
+    maxMana: {
+      type: "number",
+    },
+    attack: {
+      type: "number",
+    },
+    armor: {
+      type: "number",
+    },
+    range: {
+      type: "number",
+    },
+    speed: {
+      type: "number",
+    },
+    initiative: {
       type: "number",
     },
     x: { type: "number" },
@@ -24,8 +52,34 @@ export const BattleEntitySchemaJson = {
       type: "number",
     },
     dead: { type: "boolean" },
+    order: {
+      type: "string",
+    },
+    origins: {
+      type: "array",
+      items: {
+        type: "string",
+      },
+    },
   },
-  required: ["id", "health", "x", "y", "dead"],
+  required: [
+    "id",
+    "isHome",
+    "health",
+    "maxHealth",
+    "mana",
+    "maxMana",
+    "x",
+    "y",
+    "dead",
+    "attack",
+    "armor",
+    "range",
+    "speed",
+    "initiative",
+    "order",
+    "origins",
+  ],
   indexes: [],
 } as const;
 

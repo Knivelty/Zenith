@@ -23,11 +23,11 @@ export const BaseStateSchemaJson = {
     initY: {
       type: "number",
     },
-    isEnemy: {
+    isHome: {
       type: "boolean",
     },
   },
-  required: ["id", "initX", "initY", "isEnemy", "creatureId"],
+  required: ["id", "initX", "initY", "isHome", "creatureId"],
   indexes: [],
 } as const;
 

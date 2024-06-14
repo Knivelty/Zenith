@@ -1,6 +1,9 @@
 import { createDB } from "./createDB";
-import { createEventSystem } from "./createEventSystem";
+import { createEffectSystem } from "./effect/general";
+import { createEventSystem } from "./event/createEventSystem";
 import { calculateBattleLogs } from "./mechanism/roundBattle";
+import { registerEffect } from "./registry/registerEffect";
+import { registerSynergy } from "./registry/registerSynergy";
 import { BaseStateType } from "./schema";
 import { CreatureType } from "./schema/creature";
 import { getPieceCreature } from "./utils/dbHelper";
@@ -10,12 +13,15 @@ export async function createSimulator(
   creatures: CreatureType[],
   initEntities: BaseStateType[]
 ) {
-  globalThis.Simulator.db = await createDB();
-
-  globalThis.Simulator.eventSystem = createEventSystem();
+  const db = await createDB();
+  const eventSystem = createEventSystem();
+  const effectSystem = createEffectSystem();
+  globalThis.Simulator = { db, eventSystem, effectSystem };
 
   await importData({ creatures, initEntities });
   await initializeBattle();
+  await registerSynergy();
+  await registerEffect();
 
   return { calculateBattleLogs, destroyDB };
 }
@@ -46,13 +52,34 @@ async function initializeBattle() {
   const allPieces = await db.base_state.find().exec();
 
   for (const p of allPieces) {
-    const pieceCreature = await getPieceCreature(p.id);
-    await db.battle_entity.upsert({
+    const c = await getPieceCreature(p.id);
+    await db.battle_entity.insert({
       id: p.id,
-      health: pieceCreature.health,
+      isHome: p.isHome,
+      health: c.health,
+      maxHealth: c.health,
+      mana: 0,
+      maxMana: 100,
+      attack: c.attack,
+      armor: c.armor,
+      range: c.range,
+      speed: c.speed,
+      initiative: c.initiative,
+      order: c.order,
+      origins: c.origins,
       x: p.initX,
       y: p.initY,
       dead: false,
+    });
+
+    // initial piece attack
+    await db.piece_attack.insert({
+      id: p.id,
+      base: c.attack,
+      addition: 0,
+      times: 1,
+      isFixed: false,
+      fixedValue: 0,
     });
   }
 }

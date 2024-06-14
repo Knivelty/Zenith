@@ -34,6 +34,15 @@ export const CreatureSchemaJson = {
     initiative: {
       type: "number",
     },
+    order: {
+      type: "string",
+    },
+    origins: {
+      type: "array",
+      items: {
+        type: "string",
+      },
+    },
   },
   required: [
     "creature_id",
@@ -43,6 +52,8 @@ export const CreatureSchemaJson = {
     "range",
     "speed",
     "initiative",
+    "order",
+    "origins",
   ],
   indexes: [],
 } as const;

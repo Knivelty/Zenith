@@ -1,42 +1,57 @@
 import { BaseStateType } from "../src";
 import { createSimulator } from "../src/createSimulator";
 import { CreatureType } from "../src/schema/creature";
+import { ORDER_BRUTE_NAME } from "../src/synergy/order/brute";
+import { ORDER_HUNTER_NAME } from "../src/synergy/order/hunter";
+import { ORIGIN_DARK_NAME } from "../src/synergy/origin/dark";
+import { ORIGIN_LIGHT_NAME } from "../src/synergy/origin/light";
 
 export const MOCK_CREATURES: CreatureType[] = [
   {
-    creature_id: "1",
+    creature_id: "001",
     health: 600,
     attack: 60,
     armor: 20,
     speed: 3,
     range: 2,
     initiative: 90,
+    order: ORDER_HUNTER_NAME,
+    origins: [ORIGIN_LIGHT_NAME, ORIGIN_DARK_NAME],
   },
   {
-    creature_id: "2",
-    health: 800,
+    creature_id: "002",
+    health: 2000,
     attack: 60,
     armor: 20,
     speed: 3,
     range: 2,
     initiative: 60,
+    order: ORDER_BRUTE_NAME,
+    origins: [],
   },
 ];
 
 export const MOCK_INIT_ENTITY: BaseStateType[] = [
   {
-    id: "1",
+    id: "1001",
     initX: 1,
     initY: 1,
-    isEnemy: false,
-    creatureId: "1",
+    isHome: true,
+    creatureId: "001",
   },
   {
-    id: "2",
+    id: "1002",
+    initX: 1,
+    initY: 1,
+    isHome: true,
+    creatureId: "001",
+  },
+  {
+    id: "2001",
     initX: 7,
     initY: 7,
-    isEnemy: true,
-    creatureId: "2",
+    isHome: false,
+    creatureId: "002",
   },
 ];
 

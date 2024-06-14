@@ -1,7 +1,7 @@
 import { getBattlePiece, isBattleEnd } from "../utils/dbHelper";
 import { getAimedPiece } from "./enemySearch";
 import { findPath } from "./pathFind";
-import { executeMove } from "./exexcuteMove";
+import { executeMove } from "./executeMove";
 import { tryAttack } from "./attack";
 import { TurnLog } from "./roundBattle";
 
@@ -24,7 +24,6 @@ export async function battleForOnePieceOneTurn(
   }
 
   const actPath = await findPath(pieceId, targetPieceId);
-
   await executeMove(pieceId, actPath);
 
   const attackedEntity = await tryAttack(pieceId, targetPieceId);

@@ -3,7 +3,11 @@ import { UNKNOWN_CREATURE_ERROR, UNKNOWN_PIECE_ERROR } from "./error";
 export async function getPieceBaseState(id: string) {
   const db = globalThis.Simulator.db;
 
-  const piece = await db.base_state.findOne().where("id").eq(id).exec();
+  const piece = await db.base_state
+    .findOne({
+      selector: { id: id },
+    })
+    .exec();
 
   if (!piece) {
     throw UNKNOWN_PIECE_ERROR;
@@ -15,7 +19,11 @@ export async function getPieceBaseState(id: string) {
 export async function getBattlePiece(id: string) {
   const db = globalThis.Simulator.db;
 
-  const piece = await db.battle_entity.findOne().where("id").eq(id).exec();
+  const piece = await db.battle_entity
+    .findOne({
+      selector: { id: id },
+    })
+    .exec();
 
   if (!piece) {
     throw UNKNOWN_PIECE_ERROR;
@@ -27,16 +35,22 @@ export async function getBattlePiece(id: string) {
 export async function getPieceCreature(id: string) {
   const db = globalThis.Simulator.db;
 
-  const pieceProfile = await db.base_state.findOne().where("id").eq(id).exec();
+  const pieceProfile = await db.base_state
+    .findOne({
+      selector: { id: id },
+    })
+    .exec();
 
   if (!pieceProfile) {
     throw UNKNOWN_PIECE_ERROR;
   }
 
   const pieceCreature = await db.creature
-    .findOne()
-    .where("id")
-    .eq(pieceProfile.creatureId)
+    .findOne({
+      selector: {
+        creature_id: pieceProfile.creatureId,
+      },
+    })
     .exec();
 
   if (!pieceCreature) {
@@ -58,63 +72,68 @@ export async function getAllUndeadPieceIds() {
   return ids;
 }
 
-export async function getEnemyUndeadPieceIds() {
+export async function getAwayUndeadPieceIds() {
   const db = globalThis.Simulator.db;
 
   const undeadPieceIds = await getAllUndeadPieceIds();
 
-  const enemyUndeadPieceIds = await db.base_state
-    .find()
-    .where("isEnemy")
-    .eq(true)
-    .where("id")
-    .in(undeadPieceIds)
+  const awayUndeadPieceIds = await db.base_state
+    .find({
+      selector: {
+        isHome: false,
+        id: {
+          $in: undeadPieceIds,
+        },
+      },
+    })
+
     .exec();
 
-  return enemyUndeadPieceIds;
+  return awayUndeadPieceIds;
 }
 
-export async function getAlliedUndeadPieceIds() {
+export async function getHomeUndeadPieceIds() {
   const db = globalThis.Simulator.db;
 
   const undeadPieceIds = await getAllUndeadPieceIds();
 
   const alliedUndeadPieceIds = await db.base_state
-    .find()
-    .where("isEnemy")
-    .eq(false)
-    .where("id")
-    .in(undeadPieceIds)
+    .find({
+      selector: {
+        isHome: true,
+        id: {
+          $in: undeadPieceIds,
+        },
+      },
+    })
+
     .exec();
 
   return alliedUndeadPieceIds;
 }
 
 export async function getBattleResult() {
-  const enemyUndeadPieceIds = await getEnemyUndeadPieceIds();
-  const alliedUndeadPieceIds = await getAlliedUndeadPieceIds();
+  const awayUndeadPieceIds = await getAwayUndeadPieceIds();
+  const homeUndeadPieceIds = await getHomeUndeadPieceIds();
 
   const end =
-    enemyUndeadPieceIds.length === 0 || alliedUndeadPieceIds.length === 0;
+    homeUndeadPieceIds.length === 0 || awayUndeadPieceIds.length === 0;
 
   let win: boolean | undefined = undefined;
   let healthDecrease: number | undefined = undefined;
   if (end) {
-    win = alliedUndeadPieceIds.length ? true : false;
-    healthDecrease = enemyUndeadPieceIds.length;
+    win = homeUndeadPieceIds.length ? true : false;
+    healthDecrease = awayUndeadPieceIds.length;
   }
 
   return { end, win, healthDecrease };
 }
 
 export async function isBattleEnd() {
-  const db = globalThis.Simulator.db;
+  const awayUndeadPieceIds = await getAwayUndeadPieceIds();
+  const homePieceIds = await getHomeUndeadPieceIds();
 
-  const enemyUndeadPieceIds = await getEnemyUndeadPieceIds();
-
-  const alliedPieceIds = await getAlliedUndeadPieceIds();
-
-  const end = enemyUndeadPieceIds.length === 0 || alliedPieceIds.length === 0;
+  const end = awayUndeadPieceIds.length === 0 || homePieceIds.length === 0;
 
   return end;
 }
@@ -123,9 +142,11 @@ export async function movePiece(pieceId: string, toX: number, toY: number) {
   const db = globalThis.Simulator.db;
 
   await db.battle_entity
-    .findOne()
-    .where("id")
-    .eq(pieceId)
+    .findOne({
+      selector: {
+        id: pieceId,
+      },
+    })
     .update({
       $set: {
         x: toX,
@@ -138,29 +159,30 @@ export async function decreaseHealth(pieceId: string, healthDiff: number) {
   const db = globalThis.Simulator.db;
 
   await db.battle_entity
-    .findOne()
-    .where("id")
-    .eq(pieceId)
+    .findOne({ selector: { id: pieceId } })
     .update({ $inc: { health: -healthDiff } });
 
   // if health lower than zero, set to dead
   if ((await getBattlePiece(pieceId)).health <= 0) {
     await db.battle_entity
-      .findOne()
-      .where("id")
-      .eq(pieceId)
+      .findOne({ selector: { id: pieceId } })
       .update({ $set: { health: { eq: 0 }, dead: true } });
+
+    // emit death event
+    await globalThis.Simulator.eventSystem.emit("pieceDeath", {
+      pieceId: pieceId,
+    });
   }
 }
 
-export async function getAlliedPiece() {
+export async function getHomePiece() {
   const db = globalThis.Simulator.db;
 
-  return await db.base_state.find({ selector: { isEnemy: false } }).exec();
+  return await db.base_state.find({ selector: { isHome: true } }).exec();
 }
 
-export async function getEnemyPiece() {
+export async function getAwayPiece() {
   const db = globalThis.Simulator.db;
 
-  return await db.base_state.find({ selector: { isEnemy: true } }).exec();
+  return await db.base_state.find({ selector: { isHome: false } }).exec();
 }

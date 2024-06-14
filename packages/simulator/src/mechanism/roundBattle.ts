@@ -19,7 +19,10 @@ export type BattleResult = {
  * @returns
  */
 export async function calculateBattleLogs(): Promise<BattleResult> {
-  // logJps(`initial piece status: `, pieces);
+  const eventSystem = globalThis.Simulator.eventSystem;
+
+  await eventSystem.emit("beforeBattleStart", { isHome: true });
+  await eventSystem.emit("beforeBattleStart", { isHome: false });
 
   const pieceActions = new Array<TurnLog>();
   for (let i = 0; i < 500; i++) {
@@ -41,8 +44,6 @@ export async function calculateBattleLogs(): Promise<BattleResult> {
 }
 
 export async function battleForATurn(): Promise<TurnLog[]> {
-  const db = globalThis.Simulator.db;
-
   const undeadPieceIds = await getAllUndeadPieceIdsByInitiative();
 
   const actions: Array<TurnLog> = [];

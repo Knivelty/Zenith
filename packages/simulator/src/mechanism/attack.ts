@@ -1,8 +1,5 @@
-import {
-  decreaseHealth,
-  getBattlePiece,
-  getPieceCreature,
-} from "../utils/dbHelper";
+import { logAttack } from "../debug";
+import { decreaseHealth, getBattlePiece } from "../utils/dbHelper";
 import { logJps } from "../utils/logger";
 import { manhattanDistance } from "./distance";
 
@@ -11,9 +8,7 @@ export async function tryAttack(
   targetPieceId: string
 ): Promise<string | undefined> {
   const actionPiece = await getBattlePiece(actionPieceId);
-  const actionPieceCreature = await getPieceCreature(actionPieceId);
   const targetPiece = await getBattlePiece(targetPieceId);
-  const targetPieceCreature = await getPieceCreature(targetPieceId);
 
   // judge wether can attack
   if (
@@ -22,17 +17,16 @@ export async function tryAttack(
       actionPiece.y,
       targetPiece.x,
       targetPiece.y
-    ) <= actionPieceCreature.range
+    ) <= actionPiece.range
   ) {
     const damage =
-      actionPieceCreature.attack *
-      (1 - targetPieceCreature.armor / (100 + targetPieceCreature.armor));
+      actionPiece.attack * (1 - targetPiece.armor / (100 + targetPiece.armor));
 
-    await decreaseHealth(targetPieceId, damage);
-
-    console.log(
+    logAttack(
       `piece ${actionPieceId} attack ${targetPieceId} with damage ${damage}`
     );
+
+    await decreaseHealth(targetPieceId, damage);
 
     return targetPieceId;
   } else {
