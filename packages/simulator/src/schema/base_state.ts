@@ -26,8 +26,11 @@ export const BaseStateSchemaJson = {
     isHome: {
       type: "boolean",
     },
+    level: {
+      type: "number",
+    },
   },
-  required: ["id", "initX", "initY", "isHome", "creatureId"],
+  required: ["id", "initX", "initY", "isHome", "creatureId", "level"],
   indexes: [],
 } as const;
 

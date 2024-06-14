@@ -1,4 +1,3 @@
-import { property } from "lodash";
 import {
   ExtractDocumentTypeFromTypedRxJsonSchema,
   RxCollection,
@@ -51,6 +50,15 @@ export const BattleEntitySchemaJson = {
     y: {
       type: "number",
     },
+    level: {
+      type: "number",
+    },
+    spell_amp: {
+      type: "number",
+    },
+    ability: {
+      type: "string",
+    },
     dead: { type: "boolean" },
     order: {
       type: "string",
@@ -79,6 +87,9 @@ export const BattleEntitySchemaJson = {
     "initiative",
     "order",
     "origins",
+    "level",
+    "spell_amp",
+    "ability",
   ],
   indexes: [],
 } as const;

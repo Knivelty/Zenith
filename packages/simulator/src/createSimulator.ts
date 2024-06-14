@@ -1,8 +1,11 @@
+import { createAbilitySystem } from "./ability/createAbilitySystem";
 import { createDB } from "./createDB";
-import { createEffectSystem } from "./effect/general";
+import { createEffectSystem } from "./effect/createEffectSystem";
 import { createEventSystem } from "./event/createEventSystem";
 import { calculateBattleLogs } from "./mechanism/roundBattle";
+import { registerAbility } from "./registry/registerAbility";
 import { registerEffect } from "./registry/registerEffect";
+import { registerEventHandler } from "./registry/registerEventHandler";
 import { registerSynergy } from "./registry/registerSynergy";
 import { BaseStateType } from "./schema";
 import { CreatureType } from "./schema/creature";
@@ -16,12 +19,23 @@ export async function createSimulator(
   const db = await createDB();
   const eventSystem = createEventSystem();
   const effectSystem = createEffectSystem();
-  globalThis.Simulator = { db, eventSystem, effectSystem };
+  const abilitySystem = createAbilitySystem();
+  const handlerMap = new Map<string, (data: any) => Promise<void>>();
+
+  globalThis.Simulator = {
+    db,
+    eventSystem,
+    effectSystem,
+    abilitySystem,
+    handlerMap,
+  };
 
   await importData({ creatures, initEntities });
   await initializeBattle();
-  await registerSynergy();
-  await registerEffect();
+  registerSynergy();
+  registerEffect();
+  registerAbility();
+  registerEventHandler();
 
   return { calculateBattleLogs, destroyDB };
 }
@@ -70,6 +84,9 @@ async function initializeBattle() {
       x: p.initX,
       y: p.initY,
       dead: false,
+      level: p.level,
+      spell_amp: 0,
+      ability: c.ability,
     });
 
     // initial piece attack

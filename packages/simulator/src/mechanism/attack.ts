@@ -28,8 +28,18 @@ export async function tryAttack(
 
     await decreaseHealth(targetPieceId, damage);
 
+    await emitAttack(actionPieceId, targetPieceId);
+
     return targetPieceId;
   } else {
     logJps("cannot attack due to range");
   }
+}
+
+export async function emitAttack(pieceId: string, targetPieceId: string) {
+  const eventSystem = globalThis.Simulator.eventSystem;
+  await eventSystem.emit("afterAttack", {
+    pieceId: pieceId,
+    targetPieceId: targetPieceId,
+  });
 }

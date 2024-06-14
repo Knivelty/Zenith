@@ -4,10 +4,14 @@ import { findPath } from "./pathFind";
 import { executeMove } from "./executeMove";
 import { tryAttack } from "./attack";
 import { TurnLog } from "./roundBattle";
+import { tryCast } from "./cast";
 
 export async function battleForOnePieceOneTurn(
   pieceId: string
 ): Promise<TurnLog | undefined> {
+  // emit battle start
+  await globalThis.Simulator.eventSystem.emit("beforePieceAction", { pieceId });
+
   const pieceBattle = await getBattlePiece(pieceId);
 
   // if this piece dead or battle end, skip
@@ -26,7 +30,12 @@ export async function battleForOnePieceOneTurn(
   const actPath = await findPath(pieceId, targetPieceId);
   await executeMove(pieceId, actPath);
 
-  const attackedEntity = await tryAttack(pieceId, targetPieceId);
+  const cast = await tryCast(pieceId, targetPieceId);
+
+  let attackedEntity;
+  if (!cast) {
+    attackedEntity = await tryAttack(pieceId, targetPieceId);
+  }
 
   return {
     // order increase one by one

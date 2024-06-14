@@ -13,10 +13,11 @@ export const MOCK_CREATURES: CreatureType[] = [
     attack: 60,
     armor: 20,
     speed: 3,
-    range: 2,
+    range: 1,
     initiative: 90,
     order: ORDER_HUNTER_NAME,
     origins: [ORIGIN_LIGHT_NAME, ORIGIN_DARK_NAME],
+    ability: "dragonExhale",
   },
   {
     creature_id: "002",
@@ -24,10 +25,11 @@ export const MOCK_CREATURES: CreatureType[] = [
     attack: 60,
     armor: 20,
     speed: 3,
-    range: 2,
+    range: 1,
     initiative: 60,
     order: ORDER_BRUTE_NAME,
     origins: [],
+    ability: "dragonExhale",
   },
 ];
 
@@ -38,6 +40,7 @@ export const MOCK_INIT_ENTITY: BaseStateType[] = [
     initY: 1,
     isHome: true,
     creatureId: "001",
+    level: 1,
   },
   {
     id: "1002",
@@ -45,13 +48,15 @@ export const MOCK_INIT_ENTITY: BaseStateType[] = [
     initY: 1,
     isHome: true,
     creatureId: "001",
+    level: 1,
   },
   {
     id: "2001",
-    initX: 7,
+    initX: 1,
     initY: 7,
     isHome: false,
     creatureId: "002",
+    level: 1,
   },
 ];
 

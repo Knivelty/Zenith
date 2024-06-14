@@ -112,6 +112,7 @@ export async function addLightMaxManaBenefit(isHome: boolean) {
           maxMana: -decrease,
         },
       });
+    // TODO: fix the cast lower mana logic
     logSynergy(ORIGIN_LIGHT_NAME)(
       `decrease ${decrease} max mana for piece ${p.id}`
     );

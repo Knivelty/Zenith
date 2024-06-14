@@ -2,6 +2,7 @@ import { asyncMap } from "../utils/asyncHelper";
 
 export interface EffectMap {
   Darkness: { pieceId: string; stack: number };
+  Burn: { pieceId: string; stack: number };
 }
 
 export type EffectNameType = keyof EffectMap;

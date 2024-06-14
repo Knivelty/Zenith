@@ -1,5 +1,5 @@
 import { logEffect } from "../debug";
-import { EffectNameType } from "./general";
+import { EffectNameType } from "./createEffectSystem";
 
 /**
  * @note stack overlay, duration overwrite
@@ -29,7 +29,7 @@ export async function addEffectToPiece(
       duration: duration,
     });
 
-    logEffect("Darkness")(
+    logEffect(effectName)(
       `add ${effectName} to ${pieceId} with stack ${stack}, duration ${duration}`
     );
   } else {
@@ -57,7 +57,69 @@ export async function addEffectToPiece(
         $inc: { stack: stack },
       });
 
-    logEffect("Darkness")(
+    logEffect(effectName)(
+      `update ${effectName} to ${pieceId} with stack ${stack}, duration ${duration}`
+    );
+  }
+}
+
+/**
+ * @note stack override, duration override
+ */
+export async function overrideEffectToPiece(
+  pieceId: string,
+  effectName: EffectNameType,
+  stack: number,
+  duration: number
+) {
+  const db = globalThis.Simulator.db;
+
+  const existEffect = await db.effect
+    .findOne({
+      selector: {
+        id: pieceId,
+        name: effectName,
+      },
+    })
+    .exec();
+
+  if (!existEffect) {
+    await db.effect.insert({
+      id: pieceId,
+      name: effectName,
+      stack: stack,
+      duration: duration,
+    });
+
+    logEffect(effectName)(
+      `add ${effectName} to ${pieceId} with stack ${stack}, duration ${duration}`
+    );
+  } else {
+    // update duration
+    await db.effect
+      .findOne({
+        selector: {
+          id: pieceId,
+          name: effectName,
+        },
+      })
+      .update({
+        $set: { duration: duration },
+      });
+
+    // set stack
+    await db.effect
+      .findOne({
+        selector: {
+          id: pieceId,
+          name: effectName,
+        },
+      })
+      .update({
+        $set: { stack: stack },
+      });
+
+    logEffect(effectName)(
       `update ${effectName} to ${pieceId} with stack ${stack}, duration ${duration}`
     );
   }

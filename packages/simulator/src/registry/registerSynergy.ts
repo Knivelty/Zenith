@@ -5,7 +5,7 @@ import { applyDarkSynergy } from "../synergy/origin/dark";
 import { applyLightSynergy } from "../synergy/origin/light";
 import { applyStrengthSynergy } from "../synergy/origin/strength";
 
-export async function registerSynergy() {
+export function registerSynergy() {
   const eventSystem = globalThis.Simulator.eventSystem;
 
   eventSystem.on("beforeBattleStart", async ({ isHome }) => {

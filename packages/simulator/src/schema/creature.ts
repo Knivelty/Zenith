@@ -43,6 +43,9 @@ export const CreatureSchemaJson = {
         type: "string",
       },
     },
+    ability: {
+      type: "string",
+    },
   },
   required: [
     "creature_id",
@@ -54,6 +57,7 @@ export const CreatureSchemaJson = {
     "initiative",
     "order",
     "origins",
+    "ability",
   ],
   indexes: [],
 } as const;
