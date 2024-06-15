@@ -1,5 +1,5 @@
 import debug from "debug";
-import { EffectNameType } from "../effect/createEffectSystem";
+import { EffectNameType } from "../effect";
 import { SynergyName } from "../synergy";
 import { EventName } from "../event/createEventSystem";
 

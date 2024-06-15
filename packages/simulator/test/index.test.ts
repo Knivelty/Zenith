@@ -1,5 +1,6 @@
 import { BaseStateType } from "../src";
 import { createSimulator } from "../src/createSimulator";
+import { AbilityProfileType } from "../src/schema/ability_profile";
 import { CreatureType } from "../src/schema/creature";
 import { ORDER_BRUTE_NAME } from "../src/synergy/order/brute";
 import { ORDER_HUNTER_NAME } from "../src/synergy/order/hunter";
@@ -33,6 +34,13 @@ export const MOCK_CREATURES: CreatureType[] = [
   },
 ];
 
+export const MOCK_ABILITY_PROFILE: AbilityProfileType[] = [
+  {
+    ability_name: "dragonExhale",
+    requiredMana: 100,
+  },
+];
+
 export const MOCK_INIT_ENTITY: BaseStateType[] = [
   {
     id: "1001",
@@ -63,7 +71,8 @@ export const MOCK_INIT_ENTITY: BaseStateType[] = [
 test("test progress", async () => {
   const { calculateBattleLogs } = await createSimulator(
     MOCK_CREATURES,
-    MOCK_INIT_ENTITY
+    MOCK_INIT_ENTITY,
+    MOCK_ABILITY_PROFILE
   );
 
   const { logs, result } = await calculateBattleLogs();

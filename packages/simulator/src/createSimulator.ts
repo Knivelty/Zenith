@@ -1,40 +1,36 @@
-import { createAbilitySystem } from "./ability/createAbilitySystem";
 import { createDB } from "./createDB";
-import { createEffectSystem } from "./effect/createEffectSystem";
 import { createEventSystem } from "./event/createEventSystem";
 import { calculateBattleLogs } from "./mechanism/roundBattle";
-import { registerAbility } from "./registry/registerAbility";
+import { registerAbilities } from "./registry/registerAbility";
 import { registerEffect } from "./registry/registerEffect";
 import { registerEventHandler } from "./registry/registerEventHandler";
 import { registerSynergy } from "./registry/registerSynergy";
 import { BaseStateType } from "./schema";
+import { AbilityProfileType } from "./schema/ability_profile";
 import { CreatureType } from "./schema/creature";
 import { getPieceCreature } from "./utils/dbHelper";
 import { destroyDB } from "./utils/destroy";
 
 export async function createSimulator(
   creatures: CreatureType[],
-  initEntities: BaseStateType[]
+  initEntities: BaseStateType[],
+  ability_profiles: AbilityProfileType[]
 ) {
   const db = await createDB();
   const eventSystem = createEventSystem();
-  const effectSystem = createEffectSystem();
-  const abilitySystem = createAbilitySystem();
   const handlerMap = new Map<string, (data: any) => Promise<void>>();
 
   globalThis.Simulator = {
     db,
     eventSystem,
-    effectSystem,
-    abilitySystem,
     handlerMap,
   };
 
-  await importData({ creatures, initEntities });
+  await importData({ creatures, initEntities, ability_profiles });
   await initializeBattle();
   registerSynergy();
   registerEffect();
-  registerAbility();
+  registerAbilities();
   registerEventHandler();
 
   return { calculateBattleLogs, destroyDB };
@@ -43,9 +39,11 @@ export async function createSimulator(
 async function importData({
   creatures,
   initEntities,
+  ability_profiles,
 }: {
   creatures: CreatureType[];
   initEntities: BaseStateType[];
+  ability_profiles: AbilityProfileType[];
 }) {
   const db = globalThis.Simulator.db;
   const p1 = creatures.map(async (c) => {
@@ -56,7 +54,11 @@ async function importData({
     await db.base_state.upsert(e);
   });
 
-  await Promise.all([...p1, ...p2]);
+  const p3 = ability_profiles.map(async (a) => {
+    await db.ability_profile.upsert(a);
+  });
+
+  await Promise.all([...p1, ...p2, ...p3]);
 }
 
 async function initializeBattle() {

@@ -1,7 +1,19 @@
+import { AbilityFunction, AbilityNameType } from "../ability";
 import { dragonExhale } from "../ability/dragonExhale";
 
-export function registerAbility() {
-  const abilitySystem = globalThis.Simulator.abilitySystem;
+export function registerAbilities() {
+  registerSingleAbility("dragonExhale", dragonExhale);
+}
 
-  abilitySystem.registerAbility("dragonExhale", dragonExhale, 100);
+function registerSingleAbility(
+  name: AbilityNameType,
+  handler: AbilityFunction
+) {
+  const eventSystem = globalThis.Simulator.eventSystem;
+
+  eventSystem.on("abilityCast", async ({ abilityName, data }) => {
+    if (name === abilityName) {
+      await handler(data);
+    }
+  });
 }

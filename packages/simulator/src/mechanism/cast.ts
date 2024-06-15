@@ -1,4 +1,4 @@
-import { AbilityName } from "../ability/createAbilitySystem";
+import { UNKNOWN_ABILITY } from "../utils";
 import { getBattlePiece } from "../utils/dbHelper";
 
 export async function tryCast(
@@ -8,20 +8,16 @@ export async function tryCast(
   const actionPiece = await getBattlePiece(actionPieceId);
   const targetPiece = await getBattlePiece(targetPieceId);
 
-  const abilitySystem = globalThis.Simulator.abilitySystem;
-  const { func, requiredMana } = abilitySystem.getAbility(
-    actionPiece.ability as AbilityName
-  );
+  const abilityProfile = await getPieceAbilityProfile(actionPieceId);
 
-  if (func && actionPiece.mana > requiredMana) {
+  if (actionPiece.mana > abilityProfile.requiredMana) {
     // decrease mana
-    await decreaseMana(actionPieceId, requiredMana);
+    await decreaseMana(actionPieceId, abilityProfile.requiredMana);
 
-    await func({
-      actionPieceId,
-      targetPieceId,
-      data: undefined,
-      level: actionPiece.level,
+    // emit event to trigger cast
+    await globalThis.Simulator.eventSystem.emit("abilityCast", {
+      abilityName: "dragonExhale",
+      data: { actionPieceId: actionPieceId },
     });
 
     return true;
@@ -34,4 +30,23 @@ export async function decreaseMana(pieceId: string, manaDecrease: number) {
   await db.battle_entity
     .findOne({ selector: { id: pieceId } })
     .update({ $inc: { mana: -manaDecrease } });
+}
+
+export async function getPieceAbilityProfile(pieceId: string) {
+  const db = globalThis.Simulator.db;
+  const piece = await db.battle_entity
+    .findOne({ selector: { id: pieceId } })
+    .exec();
+
+  const abilityProfile = await db.ability_profile
+    .findOne({
+      selector: { ability_name: piece?.ability },
+    })
+    .exec();
+
+  if (!abilityProfile) {
+    throw UNKNOWN_ABILITY;
+  }
+
+  return abilityProfile;
 }

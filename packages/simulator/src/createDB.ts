@@ -16,6 +16,7 @@ import {
 } from "./schema/maxHealth/handler";
 import { EffectSchema } from "./schema/effect";
 import { handleEffectChange } from "./schema/effect/handler";
+import { AbilityProfileSchema } from "./schema/ability_profile";
 
 export type DB = Awaited<ReturnType<typeof createDB>>;
 
@@ -33,8 +34,9 @@ export async function createDB() {
     creature: {
       schema: CreatureSchema,
     },
-    battle_entity: { schema: BattleEntitySchema },
     base_state: { schema: BaseStateSchema },
+    ability_profile: { schema: AbilityProfileSchema },
+    battle_entity: { schema: BattleEntitySchema },
     piece_attack: { schema: PieceAttackSchema },
     piece_max_health: { schema: PieceMaxHealthSchema },
     effect: { schema: EffectSchema },

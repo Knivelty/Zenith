@@ -1,5 +1,5 @@
 import { logEffect } from "../debug";
-import { EffectMap } from "./createEffectSystem";
+import { EffectMap } from ".";
 
 export async function onDarknessActive({
   pieceId,

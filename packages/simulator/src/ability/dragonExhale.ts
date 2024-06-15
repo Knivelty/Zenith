@@ -29,18 +29,15 @@ const SIDE_COL_BURN: Record<number, number> = {
   3: 100,
 };
 
-export const dragonExhale: AbilityFunction = async ({
-  actionPieceId,
-  targetPieceId,
-  level,
-}) => {
+export const dragonExhale: AbilityFunction = async ({ actionPieceId }) => {
   const battlePiece = await getBattlePiece(actionPieceId);
   const frontCol = battlePiece.x;
   const sideCols = [battlePiece.x].filter((x) => x >= 1 && x <= 8);
 
-  const frontColAttack = COL_ATTACK[level] + 0.75 * battlePiece.attack;
+  const frontColAttack =
+    COL_ATTACK[battlePiece.level] + 0.75 * battlePiece.attack;
   const frontColBurnStack = Math.floor(
-    COL_BURN[level] + 0.2 * battlePiece.spell_amp
+    COL_BURN[battlePiece.level] + 0.2 * battlePiece.spell_amp
   );
 
   await makeColAttack({
@@ -58,9 +55,10 @@ export const dragonExhale: AbilityFunction = async ({
     isHome: battlePiece.isHome,
   });
 
-  const sideColAttack = SIDE_COL_ATTACK[level] + 0.35 * battlePiece.attack;
+  const sideColAttack =
+    SIDE_COL_ATTACK[battlePiece.level] + 0.35 * battlePiece.attack;
   const sideColBurnStack = Math.floor(
-    SIDE_COL_BURN[level] + 0.1 * battlePiece.spell_amp
+    SIDE_COL_BURN[battlePiece.level] + 0.1 * battlePiece.spell_amp
   );
 
   await asyncMap(sideCols, async (col) => {
@@ -80,7 +78,7 @@ export const dragonExhale: AbilityFunction = async ({
     });
   });
 
-  logCast(`piece ${actionPieceId} cast dragon Exhale`);
+  logCast(`piece ${actionPieceId} finish cast dragon Exhale`);
 };
 
 async function makeColAttack({

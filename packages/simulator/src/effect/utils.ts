@@ -1,5 +1,5 @@
 import { logEffect } from "../debug";
-import { EffectNameType } from "./createEffectSystem";
+import { EffectNameType } from ".";
 
 /**
  * @note stack overlay, duration overwrite
@@ -35,14 +35,14 @@ export async function addEffectToPiece(
   } else {
     // update duration
     await db.effect
-      .findOne({
+      .find({
         selector: {
           id: pieceId,
           name: effectName,
         },
       })
-      .update({
-        $set: { duration: duration },
+      .incrementalPatch({
+        duration: duration,
       });
 
     // update stack

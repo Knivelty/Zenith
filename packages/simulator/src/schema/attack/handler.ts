@@ -20,7 +20,5 @@ export async function calculatePieceAttack({
     .findOne({
       selector: { id: documentData.id },
     })
-    .update({
-      $set: { attack: attack },
-    });
+    .incrementalPatch({ attack: attack });
 }

@@ -1,8 +1,7 @@
 import { logEffect } from "../debug";
 import { EventMap } from "../event/createEventSystem";
-import { spellAttack } from "../mechanism/spell";
 import { decreaseHealth } from "../utils/dbHelper";
-import { EffectMap } from "./createEffectSystem";
+import { EffectMap } from ".";
 import { overrideEffectToPiece } from "./utils";
 
 /**
@@ -38,7 +37,6 @@ export async function onBurnActive({ pieceId, stack }: EffectMap["Burn"]) {
 
   eventSystem.on("beforePieceAction", getHandler(pieceId, stack));
 
-  logEffect("Burn")(`active stack ${stack} burn on piece ${pieceId} `);
 }
 
 export async function onBurnDeActive({ pieceId, stack }: EffectMap["Burn"]) {
@@ -46,5 +44,4 @@ export async function onBurnDeActive({ pieceId, stack }: EffectMap["Burn"]) {
 
   eventSystem.off("beforePieceAction", getHandler(pieceId, stack));
 
-  logEffect("Burn")(`deActive stack ${stack} burn on piece ${pieceId} `);
 }
