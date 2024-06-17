@@ -10,7 +10,6 @@ export type TurnLog = {
 };
 
 export type BattleResult = {
-  logs: TurnLog[];
   result: { win?: boolean; healthDecrease?: number };
 };
 
@@ -24,11 +23,9 @@ export async function calculateBattleLogs(): Promise<BattleResult> {
   await eventSystem.emit("beforeBattleStart", { isHome: true });
   await eventSystem.emit("beforeBattleStart", { isHome: false });
 
-  const pieceActions = new Array<TurnLog>();
   for (let i = 0; i < 500; i++) {
-    const logs = await battleForATurn();
+    await battleForATurn();
 
-    pieceActions.push(...logs);
     if (await isBattleEnd()) {
       logJps("turn end");
       break;
@@ -38,22 +35,14 @@ export async function calculateBattleLogs(): Promise<BattleResult> {
   }
   const result = await getBattleResult();
   return {
-    logs: pieceActions,
     result: { win: result.win, healthDecrease: result.healthDecrease },
   };
 }
 
-export async function battleForATurn(): Promise<TurnLog[]> {
+export async function battleForATurn() {
   const undeadPieceIds = await getAllUndeadPieceIdsByInitiative();
 
-  const actions: Array<TurnLog> = [];
-
   for (const p of undeadPieceIds) {
-    const l = await battleForOnePieceOneTurn(p);
-    if (l) {
-      actions.push(l);
-    }
+    await battleForOnePieceOneTurn(p);
   }
-
-  return actions;
 }

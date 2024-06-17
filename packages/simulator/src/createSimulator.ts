@@ -1,5 +1,6 @@
 import { createDB } from "./createDB";
 import { createEventSystem } from "./event/createEventSystem";
+import { getEmittedEvents } from "./event/getEmittedEvents";
 import { calculateBattleLogs } from "./mechanism/roundBattle";
 import { registerAbilities } from "./registry/registerAbility";
 import { registerEffect } from "./registry/registerEffect";
@@ -33,7 +34,7 @@ export async function createSimulator(
   registerAbilities();
   registerEventHandler();
 
-  return { calculateBattleLogs, destroyDB };
+  return { calculateBattleLogs, destroyDB, getEmittedEvents };
 }
 
 async function importData({

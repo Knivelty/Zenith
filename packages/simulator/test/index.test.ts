@@ -69,13 +69,16 @@ export const MOCK_INIT_ENTITY: BaseStateType[] = [
 ];
 
 test("test progress", async () => {
-  const { calculateBattleLogs } = await createSimulator(
+  const { calculateBattleLogs, getEmittedEvents } = await createSimulator(
     MOCK_CREATURES,
     MOCK_INIT_ENTITY,
     MOCK_ABILITY_PROFILE
   );
 
-  const { logs, result } = await calculateBattleLogs();
+  const { result } = await calculateBattleLogs();
 
-  console.log("logs: ", logs, result);
+  console.log("logs: ", result);
+
+  const allEvents = getEmittedEvents();
+  console.log("allEvents: ", allEvents);
 });

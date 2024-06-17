@@ -45,7 +45,7 @@ export async function findPath(actionPieceId: string, targetPieceId: string) {
     `getTargetPoint: piece in ${actionPieceInBattle.x} ${actionPieceInBattle.y} aiming ${targetPieceInBattle.x} ${targetPieceInBattle.y} target to ${targetPoint.x} ${targetPoint.y}`
   );
 
-  let actPath: { x: number; y: number }[] | undefined = [];
+  let actPath: { x: number; y: number }[] = [];
 
   if (targetPoint.needMove && targetPoint.x) {
     actPath = findActPath(
@@ -57,6 +57,8 @@ export async function findPath(actionPieceId: string, targetPieceId: string) {
       targetPoint.x,
       targetPoint.y
     );
+  } else {
+    actPath = [{ x: actionPieceInBattle.x, y: actionPieceInBattle.y }];
   }
 
   return actPath;
@@ -152,7 +154,7 @@ function findActPath(
 
   // it means no paths to go, just return
   if (!paths?.[0]?.[0]) {
-    return;
+    return [{ x: fromX, y: fromY }];
   }
 
   doablePath.push({ x: paths[0][0], y: paths[0][1] });

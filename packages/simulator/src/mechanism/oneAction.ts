@@ -3,12 +3,9 @@ import { getAimedPiece } from "./enemySearch";
 import { findPath } from "./pathFind";
 import { executeMove } from "./executeMove";
 import { tryAttack } from "./attack";
-import { TurnLog } from "./roundBattle";
 import { tryCast } from "./cast";
 
-export async function battleForOnePieceOneTurn(
-  pieceId: string
-): Promise<TurnLog | undefined> {
+export async function battleForOnePieceOneTurn(pieceId: string) {
   // emit battle start
   await globalThis.Simulator.eventSystem.emit("beforePieceAction", { pieceId });
 
@@ -36,11 +33,4 @@ export async function battleForOnePieceOneTurn(
   if (!cast) {
     attackedEntity = await tryAttack(pieceId, targetPieceId);
   }
-
-  return {
-    // order increase one by one
-    entity: pieceId,
-    paths: actPath,
-    attackPiece: attackedEntity,
-  };
 }

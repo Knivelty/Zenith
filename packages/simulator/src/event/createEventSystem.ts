@@ -7,6 +7,13 @@ import { asyncMap } from "../utils/asyncHelper";
 export interface EventMap {
   beforeBattleStart: { isHome: boolean };
   beforePieceAction: { pieceId: string };
+
+  //
+  pieceMove: {
+    pieceId: string;
+    paths: { x: number; y: number }[];
+  };
+
   pieceDeath: { pieceId: string };
   afterAttack: { pieceId: string; targetPieceId: string };
 
@@ -24,7 +31,7 @@ export interface EventMap {
   abilityCast: { abilityName: AbilityNameType; data: AbilityParamType };
 }
 
-export type EventName = keyof EventMap;
+export type EventNameType = keyof EventMap;
 
 interface EventSystem<T extends EventMap> {
   on<K extends keyof T>(event: K, handler: (data: T[K]) => Promise<void>): void;
@@ -34,12 +41,16 @@ interface EventSystem<T extends EventMap> {
   ): void;
   // TODO: handler match exact data
   emit<K extends keyof T>(event: K, data: T[K]): Promise<void>;
+
+  emitted(): ({ name: EventNameType } & T[keyof T])[];
 }
 
 export const createEventSystem = <T extends EventMap>(): EventSystem<T> => {
   const eventsHandlers: {
     [K in keyof T]?: Array<(data: T[K]) => Promise<void>>;
   } = {};
+
+  const emittedEvents: ({ name: EventNameType } & T[keyof T])[] = [];
 
   const on = <K extends keyof T>(
     event: K,
@@ -68,7 +79,8 @@ export const createEventSystem = <T extends EventMap>(): EventSystem<T> => {
     event: K,
     data: T[K]
   ): Promise<void> => {
-    logEvent(event as EventName)(data);
+    logEvent(event as EventNameType)(data);
+    emittedEvents.push({ name: event as EventNameType, ...data });
     if (!eventsHandlers[event]) return;
     await asyncMap(
       eventsHandlers[event]!,
@@ -76,5 +88,9 @@ export const createEventSystem = <T extends EventMap>(): EventSystem<T> => {
     );
   };
 
-  return { on, off, emit };
+  const emitted = () => {
+    return emittedEvents;
+  };
+
+  return { on, off, emit, emitted };
 };

@@ -21,4 +21,8 @@ export async function executeMove(
       `piece ${pieceId} move from ${actPath[0].x},${actPath[0].y} to ${toX},${toY}`
     );
   }
+  await globalThis.Simulator.eventSystem.emit("pieceMove", {
+    pieceId: pieceId,
+    paths: actPath,
+  });
 }
