@@ -6,8 +6,7 @@ import {
 } from "@dojoengine/recs";
 
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { zeroEntity } from "../../../utils";
-// import { BattleLog, BattleLogsType } from "../../dojo/generated/setup";
+import { getOrder, getOrigins, zeroEntity } from "../../../utils";
 import { ClientComponents } from "../../../dojo/createClientComponents";
 import { logDebug } from "../../../ui/lib/utils";
 import { BaseStateType, createSimulator } from "@zenith/simulator";
@@ -84,8 +83,8 @@ export const processBattle = (component: ClientComponents) => {
                 range: creature.range,
                 speed: creature.speed,
                 initiative: creature.initiative,
-                origins: [""],
-                order: "",
+                origins: getOrigins(creature.origins),
+                order: getOrder(creature.order),
                 ability: "",
             });
 
@@ -137,8 +136,8 @@ export const processBattle = (component: ClientComponents) => {
                 range: creature.range,
                 speed: creature.speed,
                 initiative: creature.initiative,
-                origins: [""],
-                order: "",
+                origins: getOrigins(creature.origins),
+                order: getOrder(creature.order),
                 ability: "",
             });
 

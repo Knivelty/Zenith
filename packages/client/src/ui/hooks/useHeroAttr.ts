@@ -5,6 +5,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { Monster } from "../../phaser/config/constants";
 import { ClientComponents } from "../../dojo/createClientComponents";
 import { logDebug } from "../lib/utils";
+import { getOrder, getOrigins } from "../../utils";
 
 export interface HeroBaseAttr {
     attack: number;
@@ -17,6 +18,9 @@ export interface HeroBaseAttr {
     initiative: number;
     range: number;
     thumb: string;
+    order: string;
+    origins: string[];
+    ability: string;
     rarity: number;
     name: string;
 }
@@ -64,6 +68,9 @@ export function getHeroAttr(
         level: profile.level,
         initiative: profile.initiative,
         thumb: getHeroThumb(profile.creature_index),
+        order: getOrder(profile.order),
+        origins: getOrigins(profile.origins),
+        ability: "",
         rarity: profile.rarity,
         name: getHeroName(profile.creature_index),
     };

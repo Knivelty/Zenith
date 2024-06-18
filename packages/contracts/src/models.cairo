@@ -169,6 +169,9 @@ struct CreatureProfile {
     range: u8,
     speed: u8,
     initiative: u8,
+    order: felt252,
+    origins: felt252,
+    ability: felt252,
 }
 
 #[derive(Model, Copy, Clone, Drop, Serde)]

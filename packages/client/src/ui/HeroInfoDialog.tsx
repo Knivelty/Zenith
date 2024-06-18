@@ -1,5 +1,5 @@
 import { useComponentValue } from "@dojoengine/react";
-import { ShowItem, UIStore, useUIStore } from "../store";
+import { ShowItem, useUIStore } from "../store";
 import { HeroDetail } from "./component/HeroDetail";
 import { useDojo } from "./hooks/useDojo";
 import { cn } from "./lib/utils";

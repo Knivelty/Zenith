@@ -46,8 +46,10 @@ export function HeroDetail(props: HeroDetailProp) {
             </div>
 
             <div className="flex flex-cow pl-8 pt-4 w-full">
-                <SynergyName name="Skill" />
-                <SynergyName name="Power" />
+                <SynergyName name={props.attr?.order || ""} />
+                {props.attr?.origins.map((o) => {
+                    return <SynergyName name={o || ""} />;
+                })}
             </div>
             <div className="grid grid-cols-[10rem,1fr] gap-0 pl-8 pt-8 text-sm w-full">
                 <div className=" text-[#06FF00] pb-6">

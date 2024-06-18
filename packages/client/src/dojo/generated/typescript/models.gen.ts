@@ -84,6 +84,9 @@ export interface CreatureProfile {
     range: number;
     speed: number;
     initiative: number;
+    order: bigint;
+    origins: bigint;
+    ability: bigint;
 }
 
 export const CreatureProfileDefinition = {
@@ -434,6 +437,9 @@ export function defineContractComponents(world: World) {
                     range: RecsType.Number,
                     speed: RecsType.Number,
                     initiative: RecsType.Number,
+                    order: RecsType.BigInt,
+                    origins: RecsType.BigInt,
+                    ability: RecsType.BigInt,
                 },
                 {
                     metadata: {
@@ -448,6 +454,9 @@ export function defineContractComponents(world: World) {
                             "u8",
                             "u8",
                             "u8",
+                            "felt252",
+                            "felt252",
+                            "felt252",
                         ],
                         customTypes: [],
                     },

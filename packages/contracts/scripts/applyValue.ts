@@ -28,6 +28,9 @@ function initializeCreatureProfile() {
       const range = numberToHexString(Number(row["Range"]), 2);
       const speed = numberToHexString(Number(row["Speed"]), 2);
       const initiative = numberToHexString(Number(row["Initiative"]), 2);
+      const order = utf8StringToHexString(row["Order"]);
+      const origins = utf8StringToHexString(row["Origins"]);
+      const ability = utf8StringToHexString("");
 
       const callDataStr = [
         creature_index,
@@ -39,6 +42,9 @@ function initializeCreatureProfile() {
         range,
         speed,
         initiative,
+        order,
+        origins,
+        ability,
       ].join(",");
       callData.push(callDataStr);
     })
@@ -159,6 +165,10 @@ function getPieceProfileElement(stage: number, allEnemies: string[]): string[] {
 
 function numberToHexString(n: number, length: number) {
   return "0x" + n.toString(16).padStart(length, "0");
+}
+
+function utf8StringToHexString(utf8String: string) {
+  return "0x" + Buffer.from(utf8String, "utf8").toString("hex");
 }
 
 function main() {
