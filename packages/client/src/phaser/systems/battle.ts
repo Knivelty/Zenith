@@ -13,7 +13,10 @@ import { battleAnimation } from "./utils/playBattle";
 import { processBattle } from "./utils/processBattleLogs";
 import { logDebug } from "../../ui/lib/utils";
 import { BATTLE_END_WAIT_TIME } from "../config/constants";
-import { BattleResult } from "@zenith/simulator/src/jps";
+import {
+    EventMap,
+    EventWithName,
+} from "@zenith/simulator/src/event/createEventSystem";
 
 export const battle = (layer: PhaserLayer) => {
     const {
@@ -139,13 +142,13 @@ export const battle = (layer: PhaserLayer) => {
                     return;
                 }
 
-                const logs = JSON.parse(
-                    battleLogs.logs
-                ) as BattleResult["logs"];
+                const events = JSON.parse(battleLogs.logs) as EventWithName<
+                    keyof EventMap
+                >[];
 
-                console.log("battleLogs: ", logs);
+                console.log("battleEvents: ", events);
 
-                playBattle(logs).then(() => {
+                playBattle(events).then(() => {
                     console.log("play finish");
 
                     // after play, set status back

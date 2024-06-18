@@ -1,5 +1,4 @@
-import { DB } from "../createDB";
-
-export async function destroyDB(db: DB) {
+export async function destroyDB() {
+  const db = globalThis.Simulator.db;
   await db.destroy();
 }

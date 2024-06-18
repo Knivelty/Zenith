@@ -38,7 +38,12 @@ export async function tryAttack(
 
 export async function emitAttack(pieceId: string, targetPieceId: string) {
   const eventSystem = globalThis.Simulator.eventSystem;
-  await eventSystem.emit("afterAttack", {
+  await eventSystem.emit("pieceAttack", {
+    pieceId: pieceId,
+    targetPieceId: targetPieceId,
+  });
+
+  await eventSystem.emit("afterPieceAttack", {
     pieceId: pieceId,
     targetPieceId: targetPieceId,
   });

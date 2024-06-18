@@ -15,7 +15,9 @@ export interface EventMap {
   };
 
   pieceDeath: { pieceId: string };
-  afterAttack: { pieceId: string; targetPieceId: string };
+
+  pieceAttack: { pieceId: string; targetPieceId: string };
+  afterPieceAttack: { pieceId: string; targetPieceId: string };
 
   // effect relate event
   effectDeActive: {
@@ -32,6 +34,9 @@ export interface EventMap {
 }
 
 export type EventNameType = keyof EventMap;
+export type EventWithName<T extends keyof EventMap> = EventMap[T] & {
+  name: T;
+};
 
 interface EventSystem<T extends EventMap> {
   on<K extends keyof T>(event: K, handler: (data: T[K]) => Promise<void>): void;

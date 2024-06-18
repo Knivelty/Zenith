@@ -10,7 +10,7 @@ export async function tryCast(
 
   const abilityProfile = await getPieceAbilityProfile(actionPieceId);
 
-  if (actionPiece.mana > abilityProfile.requiredMana) {
+  if (abilityProfile && actionPiece.mana > abilityProfile.requiredMana) {
     // decrease mana
     await decreaseMana(actionPieceId, abilityProfile.requiredMana);
 
@@ -45,7 +45,7 @@ export async function getPieceAbilityProfile(pieceId: string) {
     .exec();
 
   if (!abilityProfile) {
-    throw UNKNOWN_ABILITY;
+    return undefined;
   }
 
   return abilityProfile;
