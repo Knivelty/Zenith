@@ -1,6 +1,10 @@
 import { logSynergy } from "../../debug";
 import { asyncMap } from "../../utils/asyncHelper";
-import { getAllPieceWithOrder, getAllPieceWithOrigin } from "../utils";
+import {
+  getAllPieceWithOrder,
+  getAllPieceWithOrigin,
+  getValidTraitCount,
+} from "../utils";
 
 //note: wip
 
@@ -42,7 +46,9 @@ export async function addInitiativeBonus(isHome: boolean) {
 
   const allHunterPieces = await getAllPieceWithOrder(isHome, ORDER_HUNTER_NAME);
 
-  const initiativeBonus = INITIATIVE_BONUS[allHunterPieces.length];
+  const validCount = getValidTraitCount(allHunterPieces);
+
+  const initiativeBonus = INITIATIVE_BONUS[validCount];
 
   // add initiative bonus to all hunter piece
   await asyncMap(allHunterPieces, async (p) => {
@@ -60,7 +66,9 @@ export async function addRangeBonus(isHome: boolean) {
 
   const allHunterPieces = await getAllPieceWithOrder(isHome, ORDER_HUNTER_NAME);
 
-  const rangeBonus = RANGE_BONUS[allHunterPieces.length];
+  const validCount = getValidTraitCount(allHunterPieces);
+
+  const rangeBonus = RANGE_BONUS[validCount];
 
   // add initiative bonus to all hunter piece
   await asyncMap(allHunterPieces, async (p) => {

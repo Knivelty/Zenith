@@ -50,6 +50,9 @@ export const BattleEntitySchemaJson = {
     y: {
       type: "number",
     },
+    creature_idx: {
+      type: "number",
+    },
     level: {
       type: "number",
     },
@@ -87,6 +90,7 @@ export const BattleEntitySchemaJson = {
     "initiative",
     "order",
     "origins",
+    "creature_idx",
     "level",
     "spell_amp",
     "ability",

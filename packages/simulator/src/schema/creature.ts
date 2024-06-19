@@ -8,13 +8,25 @@ import {
 export const CreatureSchemaJson = {
   title: "creature schema",
   version: 0,
-  primaryKey: "creature_id",
+  primaryKey: {
+    // where should the composed string be stored
+    key: "placeholder",
+    // fields that will be used to create the composed key
+    fields: ["creature_idx", "level"],
+    // separator which is used to concat the fields values.
+    separator: "|",
+  },
   type: "object",
   properties: {
-    // id = creature_index_u16 bit add level_u8
-    creature_id: {
+    placeholder: {
       type: "string",
       maxLength: 100,
+    },
+    creature_idx: {
+      type: "number",
+    },
+    level: {
+      type: "number",
     },
     health: {
       type: "number",
@@ -48,7 +60,8 @@ export const CreatureSchemaJson = {
     },
   },
   required: [
-    "creature_id",
+    "creature_idx",
+    "level",
     "health",
     "attack",
     "armor",

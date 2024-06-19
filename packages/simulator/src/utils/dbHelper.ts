@@ -48,7 +48,8 @@ export async function getPieceCreature(id: string) {
   const pieceCreature = await db.creature
     .findOne({
       selector: {
-        creature_id: pieceProfile.creatureId,
+        creature_idx: pieceProfile.creature_idx,
+        level: pieceProfile.level,
       },
     })
     .exec();

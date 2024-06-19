@@ -1,5 +1,5 @@
 import { asyncMap } from "../../utils/asyncHelper";
-import { getAllPieceWithOrder, getAllPieceWithOrigin } from "../utils";
+import { getAllPieceWithOrder, getValidTraitCount } from "../utils";
 
 //note: wip
 
@@ -43,8 +43,10 @@ export async function addSpPowerBonus(isHome: boolean) {
     ORDER_MAGICAL_NAME
   );
 
-  const magicalSpBonus = SP_POWER_BONUS_FOR_MAGICAL[allMagicalPieces.length];
-  const allSpPowerBonus = SP_POWER_BONUS_FOR_ALL[allMagicalPieces.length];
+  const validCount = getValidTraitCount(allMagicalPieces);
+
+  const magicalSpBonus = SP_POWER_BONUS_FOR_MAGICAL[validCount];
+  const allSpPowerBonus = SP_POWER_BONUS_FOR_ALL[validCount];
 
   // add sp power bonus to all magical piece
   await asyncMap(allMagicalPieces, async (p) => {});

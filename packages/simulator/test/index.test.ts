@@ -9,7 +9,8 @@ import { ORIGIN_LIGHT_NAME } from "../src/synergy/origin/light";
 
 export const MOCK_CREATURES: CreatureType[] = [
   {
-    creature_id: "001",
+    creature_idx: 1,
+    level: 1,
     health: 600,
     attack: 60,
     armor: 20,
@@ -21,7 +22,8 @@ export const MOCK_CREATURES: CreatureType[] = [
     ability: "dragonExhale",
   },
   {
-    creature_id: "002",
+    creature_idx: 2,
+    level: 1,
     health: 2000,
     attack: 60,
     armor: 20,
@@ -47,7 +49,7 @@ export const MOCK_INIT_ENTITY: BaseStateType[] = [
     initX: 1,
     initY: 1,
     isHome: true,
-    creatureId: "001",
+    creature_idx: 1,
     level: 1,
   },
   {
@@ -55,7 +57,7 @@ export const MOCK_INIT_ENTITY: BaseStateType[] = [
     initX: 1,
     initY: 1,
     isHome: true,
-    creatureId: "001",
+    creature_idx: 1,
     level: 1,
   },
   {
@@ -63,7 +65,7 @@ export const MOCK_INIT_ENTITY: BaseStateType[] = [
     initX: 1,
     initY: 7,
     isHome: false,
-    creatureId: "002",
+    creature_idx: 2,
     level: 1,
   },
 ];

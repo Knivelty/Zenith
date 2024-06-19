@@ -16,8 +16,8 @@ export const BaseStateSchemaJson = {
       type: "string",
       maxLength: 100,
     },
-    creatureId: {
-      type: "string",
+    creature_idx: {
+      type: "number",
     },
     initX: { type: "number" },
     initY: {
@@ -30,7 +30,7 @@ export const BaseStateSchemaJson = {
       type: "number",
     },
   },
-  required: ["id", "initX", "initY", "isHome", "creatureId", "level"],
+  required: ["id", "initX", "initY", "isHome", "creature_idx", "level"],
   indexes: [],
 } as const;
 

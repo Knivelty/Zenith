@@ -1,5 +1,5 @@
 import { asyncMap } from "../../utils/asyncHelper";
-import { getAllPieceWithOrigin } from "../utils";
+import { getAllPieceWithOrigin, getValidTraitCount } from "../utils";
 
 export const STRENGTH_NAME = "Strength";
 
@@ -25,9 +25,10 @@ export async function addStrengthBonus(isHome: boolean) {
 
   const allStrengthPieces = await getAllPieceWithOrigin(isHome, STRENGTH_NAME);
 
-  const bonus = STRENGTH_BONUS[allStrengthPieces.length] / 100;
-  const extraBonus =
-    allStrengthPieces.length > 7 ? allStrengthPieces.length * 0.05 : 0;
+  const validCount = getValidTraitCount(allStrengthPieces);
+
+  const bonus = STRENGTH_BONUS[validCount] / 100;
+  const extraBonus = validCount > 7 ? validCount * 0.05 : 0;
 
   const totalBonus = bonus + extraBonus;
 

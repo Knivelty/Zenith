@@ -87,6 +87,7 @@ async function initializeBattle() {
       x: p.initX,
       y: p.initY,
       dead: false,
+      creature_idx: p.creature_idx,
       level: p.level,
       spell_amp: 0,
       ability: c.ability,

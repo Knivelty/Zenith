@@ -1,6 +1,6 @@
 import { logSynergy } from "../../debug";
 import { asyncMap } from "../../utils/asyncHelper";
-import { getAllPieceWithOrigin } from "../utils";
+import { getAllPieceWithOrigin, getValidTraitCount } from "../utils";
 
 export const ORIGIN_LIGHT_NAME = "LIGHT";
 
@@ -52,12 +52,14 @@ export async function applyLightSynergy(isHome: boolean) {
 export async function addLightInitiativeBonus(isHome: boolean) {
   const db = globalThis.Simulator.db;
 
-  const allPieces = await getAllPieceWithOrigin(isHome, ORIGIN_LIGHT_NAME);
+  const allLightPieces = await getAllPieceWithOrigin(isHome, ORIGIN_LIGHT_NAME);
 
-  const bonus = LIGHT_INITIATIVE_BONUS[allPieces.length];
+  const validCount = getValidTraitCount(allLightPieces);
+
+  const bonus = LIGHT_INITIATIVE_BONUS[validCount];
 
   // add initiative to bonus
-  await asyncMap(allPieces, async (p) => {
+  await asyncMap(allLightPieces, async (p) => {
     await db.battle_entity
       .find({
         selector: {
@@ -72,12 +74,13 @@ export async function addLightInitiativeBonus(isHome: boolean) {
 export async function addLightRangeBonus(isHome: boolean) {
   const db = globalThis.Simulator.db;
 
-  const allPieces = await getAllPieceWithOrigin(isHome, ORIGIN_LIGHT_NAME);
+  const allLightPieces = await getAllPieceWithOrigin(isHome, ORIGIN_LIGHT_NAME);
+  const validCount = getValidTraitCount(allLightPieces);
 
-  const bonus = LIGHT_RANGE_BONUS[allPieces.length];
+  const bonus = LIGHT_RANGE_BONUS[validCount];
 
   // add range to bonus
-  await asyncMap(allPieces, async (p) => {
+  await asyncMap(allLightPieces, async (p) => {
     await db.battle_entity
       .find({
         selector: {
@@ -96,11 +99,13 @@ export async function addLightRangeBonus(isHome: boolean) {
 export async function addLightMaxManaBenefit(isHome: boolean) {
   const db = globalThis.Simulator.db;
 
-  const allPieces = await getAllPieceWithOrigin(isHome, ORIGIN_LIGHT_NAME);
-  const decrease = LIGHT_MAX_MANA_DECREASE[allPieces.length];
+  const allLightPieces = await getAllPieceWithOrigin(isHome, ORIGIN_LIGHT_NAME);
+  const validCount = getValidTraitCount(allLightPieces);
+
+  const decrease = LIGHT_MAX_MANA_DECREASE[validCount];
 
   // add range to bonus
-  await asyncMap(allPieces, async (p) => {
+  await asyncMap(allLightPieces, async (p) => {
     await db.battle_entity
       .find({
         selector: {
