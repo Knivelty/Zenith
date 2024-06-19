@@ -175,6 +175,16 @@ struct CreatureProfile {
 }
 
 #[derive(Model, Copy, Clone, Drop, Serde)]
+struct SynergyProfile {
+    #[key]
+    trait_name: felt252,
+    #[key]
+    requiredPieces: u8,
+    // Note: can be used in future
+    metadata: felt252
+}
+
+#[derive(Model, Copy, Clone, Drop, Serde)]
 struct ChoiceProfile {
     #[key]
     t: CurseOptionType,

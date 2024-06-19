@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useDojo } from "../hooks/useDojo";
-import { shortenAddress } from "../lib/utils";
+import { useDojo } from "./hooks/useDojo";
+import { shortenAddress } from "./lib/utils";
 import { useComponentValue } from "@dojoengine/react";
 
 interface IPlayerStatus {

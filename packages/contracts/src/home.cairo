@@ -1,4 +1,6 @@
-use autochessia::models::{CreatureProfile, StageProfile, StageProfilePiece, Piece, Player};
+use autochessia::models::{
+    CreatureProfile, StageProfile, StageProfilePiece, Piece, Player, SynergyProfile
+};
 use autochessia::customType::{PieceChange, RoundResult, CurseOptionType};
 
 
@@ -9,6 +11,7 @@ trait IHome {
     // set args
     fn setCreatureProfile(profiles: Array<CreatureProfile>);
     fn setStageProfile(profiles: Array<StageProfile>, pieces: Array<StageProfilePiece>);
+    fn setSynergyProfile(profiles: Array<SynergyProfile>);
 
     fn spawn();
     fn refreshAltar();
@@ -42,7 +45,7 @@ mod home {
     use autochessia::models::{
         CreatureProfile, Position, Piece, Player, InningBattle, GlobalState, MatchState, Altar,
         PlayerPiece, PlayerInvPiece, StageProfile, StageProfilePiece, LevelConfig, PlayerProfile,
-        ChoiceProfile, CurseOption, LevelRarityProb
+        ChoiceProfile, CurseOption, LevelRarityProb, SynergyProfile
     };
 
     use autochessia::utils::{
@@ -694,6 +697,23 @@ mod home {
                 idx += 1;
             };
         }
+
+
+        fn setSynergyProfile(world: IWorldDispatcher, profiles: Array<SynergyProfile>) {
+            let mut idx = 0;
+            let length = profiles.len();
+
+            loop {
+                if (idx >= length) {
+                    break;
+                }
+                let p = profiles.at(idx);
+                set!(world, (*p));
+                idx += 1;
+            };
+        }
+
+
         fn setStageProfile(
             world: IWorldDispatcher, profiles: Array<StageProfile>, pieces: Array<StageProfilePiece>
         ) {

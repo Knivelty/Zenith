@@ -40,23 +40,15 @@ export const HeroCard = ({
                         </div>
                     </div>
                     <div className="ml-4"></div>
+                    <div className="flex flex-row ">
+                        <div className="text-[#06FF00]  ">
+                            {[
+                                heroAttr?.order,
+                                ...(heroAttr?.origins ?? []),
+                            ].join(" ")}
+                        </div>
+                    </div>
                 </div>
-
-                {/* show class and race */}
-                {/* <div className="flex flex-row -mt-8 ml-7">
-                    <img
-                        className="w-[20px] h-[20px] mx-1"
-                        // src={getRaceImage(
-                        //     hero.race as number
-                        // )}
-                    ></img>
-                    <img
-                        className="w-[20px] h-[20px] mx-1"
-                        // src={getClassImage(
-                        //     hero.class as number
-                        // )}
-                    ></img>
-                </div> */}
             </div>
         </div>
     );

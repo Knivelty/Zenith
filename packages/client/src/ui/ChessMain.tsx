@@ -9,11 +9,12 @@ import { TopBar } from "./TopBar";
 import { CommitButton } from "./component/CommitButton";
 import { ExpButton } from "./component/ExpButton";
 import { PieceLimit } from "./component/PieceLimit";
-import { PlayerList } from "./component/Playlist";
+import { PlayerList } from "./Playlist";
 import { SettleDialog } from "./component/SettleDialog";
 import { DangerBorder } from "./component/DangerBorder";
 import { Shade } from "./component/Shade";
 import { HeroInfoDialog } from "./HeroInfoDialog";
+import { SynergyBar } from "./SynegyBar";
 
 export function ChessMain() {
     const {
@@ -37,6 +38,7 @@ export function ChessMain() {
             <TopBar />
             <Debugger />
             <PlayerList />
+            <SynergyBar />
             <Shop />
             <SettleDialog />
             <PieceLimit />

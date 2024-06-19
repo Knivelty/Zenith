@@ -64,6 +64,37 @@ function initializeCreatureProfile() {
     });
 }
 
+function initializeSynergyProfile() {
+  let callData: string[] = [];
+  fs.createReadStream("../data/synergy.csv")
+    .pipe(csv())
+    .on("data", (row) => {
+      const name = utf8StringToHexString(row["Name"]);
+      const requiredPieces = numberToHexString(
+        Number(row["RequiredPieces"]),
+        2
+      );
+      const metadata = numberToHexString(Number(row["Metadata"]), 2);
+
+      const callDataStr = [name, requiredPieces, metadata].join(",");
+      callData.push(callDataStr);
+    })
+    .on("end", () => {
+      // execute in batch to avoid gas limit
+      const chunks = _.chunk(callData, 60);
+
+      for (const c of chunks) {
+        const count = c.length;
+        const subCallData = c.join(",");
+        const cmd = `sozo --profile ${profile} execute ${address} "setSynergyProfile" --calldata ${numberToHexString(count, 2)},${subCallData}`;
+        execSync("sleep 1");
+        execSync(cmd);
+      }
+
+      console.log("Initialize synergy profile successfully");
+    });
+}
+
 function initializeStage() {
   let stageCallData: string[] = [];
   let stagePieceCallData: string[] = [];
@@ -174,6 +205,7 @@ function utf8StringToHexString(utf8String: string) {
 function main() {
   initializeCreatureProfile();
   initializeStage();
+  initializeSynergyProfile();
 }
 
 main();

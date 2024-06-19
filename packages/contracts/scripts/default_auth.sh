@@ -32,4 +32,4 @@ echo "Default authorizations have been successfully set."
 # run intialize function
 sleep 1
 sozo --profile $PROFILE execute $HOME_ADDRESS "initialize"
-echo "Initialize successfully"
+echo "Initialize permission successfully"

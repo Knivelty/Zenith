@@ -5,10 +5,6 @@ import { zeroEntity } from "../../utils";
 // initialize some obj
 export const initialize = (layer: PhaserLayer) => {
     const {
-        world,
-        scenes: {
-            Main: { config, objectPool },
-        },
         networkLayer: {
             clientComponents: { UserOperation },
         },
