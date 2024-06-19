@@ -1,7 +1,7 @@
 import { logEffect } from "../debug";
 import { EventMap } from "../event/createEventSystem";
 import { decreaseHealth } from "../utils/dbHelper";
-import { EffectMap } from ".";
+import { EffectHandler, EffectMap } from ".";
 import { overrideEffectToPiece } from "./utils";
 
 /**
@@ -32,16 +32,22 @@ function getHandler(actionPieceId: string, stack: number) {
   return handlerMap.get(key)!;
 }
 
-export async function onBurnActive({ pieceId, stack }: EffectMap["Burn"]) {
+export const onEffectBurnChange: EffectHandler = async ({
+  preValue,
+  value,
+}) => {
+  await onBurnDeActive(preValue);
+  await onBurnActive(preValue);
+};
+
+async function onBurnActive({ pieceId, stack }: EffectMap["Burn"]) {
   const eventSystem = globalThis.Simulator.eventSystem;
 
   eventSystem.on("beforePieceAction", getHandler(pieceId, stack));
-
 }
 
-export async function onBurnDeActive({ pieceId, stack }: EffectMap["Burn"]) {
+async function onBurnDeActive({ pieceId, stack }: EffectMap["Burn"]) {
   const eventSystem = globalThis.Simulator.eventSystem;
 
   eventSystem.off("beforePieceAction", getHandler(pieceId, stack));
-
 }

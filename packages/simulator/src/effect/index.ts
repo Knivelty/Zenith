@@ -5,4 +5,10 @@ export interface EffectMap {
 
 export type EffectNameType = keyof EffectMap;
 export type EffectParamType = EffectMap[keyof EffectMap];
-export type EffectHandler = (data: EffectParamType) => Promise<void>;
+export type EffectHandler = ({
+  preValue,
+  value,
+}: {
+  preValue: EffectParamType;
+  value: EffectParamType;
+}) => Promise<void>;

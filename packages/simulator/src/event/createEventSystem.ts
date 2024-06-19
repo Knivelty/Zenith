@@ -20,13 +20,10 @@ export interface EventMap {
   afterPieceAttack: { pieceId: string; targetPieceId: string };
 
   // effect relate event
-  effectDeActive: {
+  effectChange: {
     effectName: EffectNameType;
-    data: EffectParamType;
-  };
-  effectActive: {
-    effectName: EffectNameType;
-    data: EffectParamType;
+    preValue: EffectParamType;
+    value: EffectParamType;
   };
 
   // ability relate event

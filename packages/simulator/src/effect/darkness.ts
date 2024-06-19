@@ -1,10 +1,15 @@
 import { logEffect } from "../debug";
-import { EffectMap } from ".";
+import { EffectHandler, EffectMap } from ".";
 
-export async function onDarknessActive({
-  pieceId,
-  stack,
-}: EffectMap["Darkness"]) {
+export const onEffectDarknessChange: EffectHandler = async ({
+  preValue,
+  value,
+}) => {
+  await onDarknessDeActive(preValue);
+  await onDarknessActive(value);
+};
+
+async function onDarknessActive({ pieceId, stack }: EffectMap["Darkness"]) {
   const db = globalThis.Simulator.db;
 
   await db.piece_attack.findOne({ selector: { id: pieceId } }).update({
@@ -24,10 +29,7 @@ export async function onDarknessActive({
   );
 }
 
-export async function onDarknessDeActive({
-  pieceId,
-  stack,
-}: EffectMap["Darkness"]) {
+async function onDarknessDeActive({ pieceId, stack }: EffectMap["Darkness"]) {
   const db = globalThis.Simulator.db;
 
   await db.piece_attack.findOne({ selector: { id: pieceId } }).update({
