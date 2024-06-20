@@ -1,6 +1,7 @@
 import { AbilityNameType, AbilityParamType } from "../ability/interface";
-import { logDebug, logEvent } from "../debug";
+import { logEvent } from "../debug";
 import { EffectParamType, EffectNameType } from "../effect/interface";
+import { NON_EXIST_EVENT_HANDLER } from "../utils";
 import { asyncMap } from "../utils/asyncHelper";
 
 // define event map
@@ -85,7 +86,7 @@ export const createEventSystem = <T extends EventMap>(): EventSystem<T> => {
     if (index > -1) {
       eventsHandlers[event]!.splice(index, 1);
     } else {
-      logDebug("cannot find func");
+      throw NON_EXIST_EVENT_HANDLER;
     }
   };
 
