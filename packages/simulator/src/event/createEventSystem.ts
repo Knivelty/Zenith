@@ -8,6 +8,8 @@ export interface EventMap {
   beforeBattleStart: { isHome: boolean };
   beforePieceAction: { pieceId: string };
 
+  turnEnd: {};
+
   //
   pieceMove: {
     pieceId: string;

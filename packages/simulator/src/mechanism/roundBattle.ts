@@ -27,7 +27,7 @@ export async function calculateBattleLogs(): Promise<BattleResult> {
     await battleForATurn();
 
     if (await isBattleEnd()) {
-      logJps("turn end");
+      logJps("battle end");
       break;
     } else {
       logJps("next turn");
@@ -45,4 +45,6 @@ export async function battleForATurn() {
   for (const p of undeadPieceIds) {
     await battleForOnePieceOneTurn(p);
   }
+
+  await globalThis.Simulator.eventSystem.emit("turnEnd", {});
 }

@@ -1,4 +1,4 @@
-import { decreaseMana } from "../utils/dbHelper";
+import { decreaseMana } from "../../../utils/dbHelper";
 
 export function increaseManaOnEvent() {
   const eventSystem = globalThis.Simulator.eventSystem;

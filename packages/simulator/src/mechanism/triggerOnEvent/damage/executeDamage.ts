@@ -1,4 +1,4 @@
-import { decreaseHealth } from "../utils/dbHelper";
+import { decreaseHealth } from "../../../utils/dbHelper";
 
 export function executeDamageOnEvent() {
   const eventSystem = globalThis.Simulator.eventSystem;

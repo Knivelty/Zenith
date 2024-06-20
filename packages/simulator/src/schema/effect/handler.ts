@@ -13,10 +13,12 @@ export async function handleEffectChange({
     preValue: {
       pieceId: documentData.id,
       stack: previousDocumentData?.stack || 0,
+      duration: previousDocumentData?.duration || 0,
     },
     value: {
       pieceId: documentData.id,
       stack: documentData.stack,
+      duration: documentData.duration,
     },
   });
 }

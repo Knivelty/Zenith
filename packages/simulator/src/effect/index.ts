@@ -1,7 +1,7 @@
 export interface EffectMap {
-  Darkness: { pieceId: string; stack: number };
-  Burn: { pieceId: string; stack: number };
-  Rage: { pieceId: string; stack: number };
+  Darkness: { pieceId: string; stack: number; duration: number };
+  Burn: { pieceId: string; stack: number; duration: number };
+  Rage: { pieceId: string; stack: number; duration: number };
 }
 
 export type EffectNameType = keyof EffectMap;
