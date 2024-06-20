@@ -1,21 +1,24 @@
 import { logEffect } from "../debug";
 import { EventMap } from "../event/createEventSystem";
+import { getPieceEffectProfile } from "../utils/dbHelper";
 import { EffectHandler, EffectMap } from "./interface";
 import { overrideEffectToPiece } from "./utils";
 
 /**
  * @note use a global map to confirm to get the same handler
  */
-function getHandler(actionPieceId: string, stack: number) {
+function getHandler(actionPieceId: string) {
   const handlerMap = globalThis.Simulator.handlerMap;
   // TODO: perf key design
-  const key = `burnHandler-${actionPieceId}-${stack}`;
+  const key = `burnHandler-${actionPieceId}`;
   if (!handlerMap.has(key)) {
     const handler = async ({ pieceId }: EventMap["beforePieceAction"]) => {
       if (actionPieceId === pieceId) {
+        const pieceBurnEffect = await getPieceEffectProfile(pieceId, "Burn");
         logEffect("Burn")(
-          `piece ${pieceId} get ${stack} damage from effect burn`
+          `piece ${pieceId} get ${pieceBurnEffect?.stack} damage from effect burn`
         );
+        const stack = pieceBurnEffect?.stack ?? 0;
         await globalThis.Simulator.eventSystem.emit("damage", {
           // TODO: add damage source
           pieceId: "0",
@@ -48,11 +51,11 @@ export const onEffectBurnChange: EffectHandler<"Burn"> = async ({
 async function onBurnActive({ pieceId, stack }: EffectMap["Burn"]) {
   const eventSystem = globalThis.Simulator.eventSystem;
 
-  eventSystem.on("beforePieceAction", getHandler(pieceId, stack));
+  eventSystem.on("beforePieceAction", getHandler(pieceId));
 }
 
 async function onBurnDeActive({ pieceId, stack }: EffectMap["Burn"]) {
   const eventSystem = globalThis.Simulator.eventSystem;
 
-  eventSystem.off("beforePieceAction", getHandler(pieceId, stack));
+  eventSystem.off("beforePieceAction", getHandler(pieceId));
 }
