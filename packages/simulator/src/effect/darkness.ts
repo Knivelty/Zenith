@@ -1,7 +1,7 @@
 import { logEffect } from "../debug";
 import { EffectHandler, EffectMap } from ".";
 
-export const onEffectDarknessChange: EffectHandler = async ({
+export const onEffectDarknessChange: EffectHandler<"Darkness"> = async ({
   preValue,
   value,
 }) => {

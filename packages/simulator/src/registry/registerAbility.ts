@@ -1,8 +1,11 @@
 import { AbilityFunction, AbilityNameType } from "../ability";
-import { dragonExhale } from "../ability/dragonExhale";
+import { barbariansRage } from "../ability/barbariansRage";
+import { burningBurst } from "../ability/burningBurst";
+import { logCast } from "../debug";
 
 export function registerAbilities() {
-  registerSingleAbility("dragonExhale", dragonExhale);
+  registerSingleAbility("burningBurst", burningBurst);
+  registerSingleAbility("barbariansRage", barbariansRage);
 }
 
 function registerSingleAbility(
@@ -14,6 +17,7 @@ function registerSingleAbility(
   eventSystem.on("abilityCast", async ({ abilityName, data }) => {
     if (name === abilityName) {
       await handler(data);
+      logCast(`piece ${data.actionPieceId} finish cast ${abilityName}`);
     }
   });
 }

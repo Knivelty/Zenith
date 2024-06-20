@@ -10,7 +10,7 @@ export const EffectSchemaJson = {
   version: 0,
   primaryKey: {
     // where should the composed string be stored
-    key: "idx",
+    key: "place_holder",
     // fields that will be used to create the composed key
     fields: ["id", "name"],
     // separator which is used to concat the fields values.
@@ -18,7 +18,7 @@ export const EffectSchemaJson = {
   },
   type: "object",
   properties: {
-    idx: {
+    place_holder: {
       type: "string",
       maxLength: 100, // <- the primary key must have set maxLength
     },

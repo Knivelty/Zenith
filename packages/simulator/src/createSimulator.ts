@@ -76,7 +76,7 @@ async function initializeBattle() {
       health: c.health,
       maxHealth: c.health,
       mana: 0,
-      maxMana: 100,
+      maxMana: c.maxMana,
       attack: c.attack,
       armor: c.armor,
       range: c.range,

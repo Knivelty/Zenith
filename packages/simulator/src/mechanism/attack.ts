@@ -1,5 +1,5 @@
 import { logAttack } from "../debug";
-import { decreaseHealth, getBattlePiece } from "../utils/dbHelper";
+import { getBattlePiece } from "../utils/dbHelper";
 import { logJps } from "../utils/logger";
 import { manhattanDistance } from "./distance";
 
@@ -7,6 +7,8 @@ export async function tryAttack(
   actionPieceId: string,
   targetPieceId: string
 ): Promise<string | undefined> {
+  const eventSystem = globalThis.Simulator.eventSystem;
+
   const actionPiece = await getBattlePiece(actionPieceId);
   const targetPiece = await getBattlePiece(targetPieceId);
 
@@ -26,7 +28,12 @@ export async function tryAttack(
       `piece ${actionPieceId} attack ${targetPieceId} with damage ${damage}`
     );
 
-    await decreaseHealth(targetPieceId, damage);
+    await eventSystem.emit("damage", {
+      pieceId: actionPieceId,
+      targetPieceId: targetPieceId,
+      value: damage,
+      type: "Physical",
+    });
 
     await emitAttack(actionPieceId, targetPieceId);
 

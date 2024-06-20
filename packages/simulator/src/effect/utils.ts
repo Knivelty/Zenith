@@ -103,9 +103,7 @@ export async function overrideEffectToPiece(
           name: effectName,
         },
       })
-      .update({
-        $set: { duration: duration },
-      });
+      .incrementalPatch({ duration: duration });
 
     // set stack
     await db.effect
@@ -115,8 +113,8 @@ export async function overrideEffectToPiece(
           name: effectName,
         },
       })
-      .update({
-        $set: { stack: stack },
+      .incrementalPatch({
+        stack: stack,
       });
 
     logEffect(effectName)(

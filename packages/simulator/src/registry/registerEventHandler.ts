@@ -1,5 +1,7 @@
-import { increaseManaAfterAttack } from "../mechanism/mana";
+import { executeDamageOnEvent } from "../mechanism/damage";
+import { increaseManaOnEvent } from "../mechanism/mana";
 
 export function registerEventHandler() {
-  increaseManaAfterAttack();
+  increaseManaOnEvent();
+  executeDamageOnEvent();
 }

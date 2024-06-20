@@ -1,5 +1,6 @@
 export interface AbilityMap {
-  dragonExhale: { actionPieceId: string };
+  burningBurst: { actionPieceId: string };
+  barbariansRage: { actionPieceId: string };
 }
 export type AbilityNameType = keyof AbilityMap;
 export type AbilityParamType = AbilityMap[keyof AbilityMap];

@@ -1,7 +1,5 @@
 import { AbilityFunction } from ".";
-import { logCast } from "../debug";
 import { addEffectToPiece } from "../effect/utils";
-import { spellAttack } from "../mechanism/spell";
 import { asyncMap } from "../utils/asyncHelper";
 import { getBattlePiece } from "../utils/dbHelper";
 
@@ -29,7 +27,7 @@ const SIDE_COL_BURN: Record<number, number> = {
   3: 100,
 };
 
-export const dragonExhale: AbilityFunction = async ({ actionPieceId }) => {
+export const burningBurst: AbilityFunction = async ({ actionPieceId }) => {
   const battlePiece = await getBattlePiece(actionPieceId);
   const frontCol = battlePiece.x;
   const sideCols = [battlePiece.x].filter((x) => x >= 1 && x <= 8);
@@ -77,8 +75,6 @@ export const dragonExhale: AbilityFunction = async ({ actionPieceId }) => {
       isHome: battlePiece.isHome,
     });
   });
-
-  logCast(`piece ${actionPieceId} finish cast dragon Exhale`);
 };
 
 async function makeColAttack({
@@ -108,7 +104,12 @@ async function makeColAttack({
     .exec();
 
   await asyncMap(affectedPiece, async (p) => {
-    await spellAttack(actionPieceId, p.id, damage);
+    await globalThis.Simulator.eventSystem.emit("damage", {
+      pieceId: actionPieceId,
+      targetPieceId: p.id,
+      value: damage,
+      type: "Magical",
+    });
   });
 }
 

@@ -1,6 +1,5 @@
 import { logEffect } from "../debug";
 import { EventMap } from "../event/createEventSystem";
-import { decreaseHealth } from "../utils/dbHelper";
 import { EffectHandler, EffectMap } from ".";
 import { overrideEffectToPiece } from "./utils";
 
@@ -17,7 +16,13 @@ function getHandler(actionPieceId: string, stack: number) {
         logEffect("Burn")(
           `piece ${pieceId} get ${stack} damage from effect burn`
         );
-        await decreaseHealth(actionPieceId, stack);
+        await globalThis.Simulator.eventSystem.emit("damage", {
+          // TODO: add damage source
+          pieceId: "0",
+          targetPieceId: pieceId,
+          value: stack,
+          type: "Magical",
+        });
         await overrideEffectToPiece(
           actionPieceId,
           "Burn",
@@ -32,7 +37,7 @@ function getHandler(actionPieceId: string, stack: number) {
   return handlerMap.get(key)!;
 }
 
-export const onEffectBurnChange: EffectHandler = async ({
+export const onEffectBurnChange: EffectHandler<"Burn"> = async ({
   preValue,
   value,
 }) => {

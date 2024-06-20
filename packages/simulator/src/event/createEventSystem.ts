@@ -17,13 +17,23 @@ export interface EventMap {
   pieceDeath: { pieceId: string };
 
   pieceAttack: { pieceId: string; targetPieceId: string };
+  damage: {
+    pieceId: string;
+    targetPieceId: string;
+    type: "Physical" | "Magical" | "Pure" | "Life Drain";
+    value: number;
+  };
   afterPieceAttack: { pieceId: string; targetPieceId: string };
+
+  // mana
+  pieceGainMana: { pieceId: string; manaAmount: number };
+  pieceUseMana: { pieceId: string; manaAmount: number };
 
   // effect relate event
   effectChange: {
     effectName: EffectNameType;
-    preValue: EffectParamType;
-    value: EffectParamType;
+    preValue: EffectParamType<EffectNameType>;
+    value: EffectParamType<EffectNameType>;
   };
 
   // ability relate event

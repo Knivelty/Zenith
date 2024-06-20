@@ -1,14 +1,15 @@
 import { EffectHandler, EffectNameType } from "../effect";
+import { onEffectBurnChange } from "../effect/burn";
 import { onEffectDarknessChange } from "../effect/darkness";
 
 export function registerEffect() {
-  registerOnEffectChange("Darkness", onEffectDarknessChange);
-  registerOnEffectChange("Burn", onEffectDarknessChange);
+  registerOnEffectChange<"Darkness">("Darkness", onEffectDarknessChange);
+  registerOnEffectChange<"Burn">("Burn", onEffectBurnChange);
 }
 
-export function registerOnEffectChange(
+export function registerOnEffectChange<T extends EffectNameType>(
   name: EffectNameType,
-  handler: EffectHandler
+  handler: EffectHandler<T>
 ) {
   const eventSystem = globalThis.Simulator.eventSystem;
 

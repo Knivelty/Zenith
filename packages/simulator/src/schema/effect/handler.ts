@@ -1,6 +1,6 @@
 import { RxChangeEvent } from "rxdb";
 import { EffectType } from ".";
-import { EffectMap, EffectNameType } from "../../effect";
+import { EffectNameType } from "../../effect";
 
 export async function handleEffectChange({
   documentData,
@@ -8,19 +8,13 @@ export async function handleEffectChange({
 }: RxChangeEvent<EffectType>) {
   const eventSystem = globalThis.Simulator.eventSystem;
 
-  if (previousDocumentData && previousDocumentData != documentData) {
-    await eventSystem.emit("effectDeActive", {
-      effectName: previousDocumentData.name as EffectNameType,
-      data: {
-        pieceId: documentData.id,
-        stack: previousDocumentData?.stack,
-      },
-    });
-  }
-
-  await eventSystem.emit("effectActive", {
+  await eventSystem.emit("effectChange", {
     effectName: documentData.name as EffectNameType,
-    data: {
+    preValue: {
+      pieceId: documentData.id,
+      stack: previousDocumentData?.stack || 0,
+    },
+    value: {
       pieceId: documentData.id,
       stack: documentData.stack,
     },

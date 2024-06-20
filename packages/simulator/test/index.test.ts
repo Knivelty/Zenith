@@ -12,6 +12,7 @@ export const MOCK_CREATURES: CreatureType[] = [
     creature_idx: 1,
     level: 1,
     health: 600,
+    maxMana: 80,
     attack: 60,
     armor: 20,
     speed: 3,
@@ -19,12 +20,13 @@ export const MOCK_CREATURES: CreatureType[] = [
     initiative: 90,
     order: ORDER_HUNTER_NAME,
     origins: [ORIGIN_LIGHT_NAME, ORIGIN_DARK_NAME],
-    ability: "dragonExhale",
+    ability: "burningBurst",
   },
   {
     creature_idx: 2,
     level: 1,
     health: 2000,
+    maxMana: 80,
     attack: 60,
     armor: 20,
     speed: 3,
@@ -32,14 +34,18 @@ export const MOCK_CREATURES: CreatureType[] = [
     initiative: 60,
     order: ORDER_BRUTE_NAME,
     origins: [],
-    ability: "dragonExhale",
+    ability: "barbariansRage",
   },
 ];
 
 export const MOCK_ABILITY_PROFILE: AbilityProfileType[] = [
   {
-    ability_name: "dragonExhale",
-    requiredMana: 100,
+    ability_name: "burningBurst",
+    requiredMana: 90,
+  },
+  {
+    ability_name: "barbariansRage",
+    requiredMana: 90,
   },
 ];
 

@@ -31,6 +31,9 @@ export const CreatureSchemaJson = {
     health: {
       type: "number",
     },
+    maxMana: {
+      type: "number",
+    },
     attack: {
       type: "number",
     },
@@ -63,6 +66,7 @@ export const CreatureSchemaJson = {
     "creature_idx",
     "level",
     "health",
+    "maxMana",
     "attack",
     "armor",
     "range",

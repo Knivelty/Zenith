@@ -161,7 +161,10 @@ export async function decreaseHealth(pieceId: string, healthDiff: number) {
 
   await db.battle_entity
     .findOne({ selector: { id: pieceId } })
-    .update({ $inc: { health: -healthDiff } });
+    .incrementalModify((doc) => {
+      doc.health -= healthDiff;
+      return doc;
+    });
 
   // if health lower than zero, set to dead
   if ((await getBattlePiece(pieceId)).health <= 0) {
@@ -186,4 +189,30 @@ export async function getAwayPiece() {
   const db = globalThis.Simulator.db;
 
   return await db.base_state.find({ selector: { isHome: false } }).exec();
+}
+
+export async function decreaseMana(pieceId: string, manaDecrease: number) {
+  const db = globalThis.Simulator.db;
+  await db.battle_entity
+    .findOne({ selector: { id: pieceId } })
+    .update({ $inc: { mana: -manaDecrease } });
+}
+
+export async function getPieceAbilityProfile(pieceId: string) {
+  const db = globalThis.Simulator.db;
+  const piece = await db.battle_entity
+    .findOne({ selector: { id: pieceId } })
+    .exec();
+
+  const abilityProfile = await db.ability_profile
+    .findOne({
+      selector: { ability_name: piece?.ability },
+    })
+    .exec();
+
+  if (!abilityProfile) {
+    return undefined;
+  }
+
+  return abilityProfile;
 }
