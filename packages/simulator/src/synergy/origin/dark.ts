@@ -19,7 +19,12 @@ export async function applyDarkSynergy(isHome: boolean) {
     await asyncMap(allDarkPiece, async (piece) => {
       // ignore death
       if (piece.dead) return;
-      await addEffectToPiece(piece.id, "Darkness", 1, 3);
+      await addEffectToPiece({
+        pieceId: piece.id,
+        effectName: "Darkness",
+        stack: 1,
+        duration: 3,
+      });
     });
   });
 }

@@ -1,6 +1,6 @@
-import { AbilityNameType, AbilityParamType } from "../ability";
+import { AbilityNameType, AbilityParamType } from "../ability/interface";
 import { logDebug, logEvent } from "../debug";
-import { EffectParamType, EffectNameType } from "../effect";
+import { EffectParamType, EffectNameType } from "../effect/interface";
 import { asyncMap } from "../utils/asyncHelper";
 
 // define event map

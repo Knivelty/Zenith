@@ -1,4 +1,4 @@
-import { AbilityNameType } from "../ability";
+import { AbilityNameType } from "../ability/interface";
 import { logDebug } from "../debug";
 import { getBattlePiece, getPieceAbilityProfile } from "../utils/dbHelper";
 
@@ -16,7 +16,7 @@ export async function tryCast(
     return false;
   }
 
-  if (actionPiece.mana === actionPiece.maxMana) {
+  if (actionPiece.mana >= actionPiece.maxMana) {
     // emit use mana event
     await globalThis.Simulator.eventSystem.emit("pieceUseMana", {
       pieceId: actionPieceId,

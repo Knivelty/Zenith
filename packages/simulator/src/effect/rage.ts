@@ -1,4 +1,4 @@
-import { EffectHandler } from ".";
+import { EffectHandler } from "./interface";
 import { getBattlePiece } from "../utils/dbHelper";
 
 const ATTACK_BONUS_PER_STACK: Record<number, number> = {

@@ -1,6 +1,6 @@
-import { AbilityFunction } from ".";
+import { AbilityFunction } from "./interface";
 
-import { getEffectName } from "../effect";
+import { getEffectName } from "../effect/interface";
 import { getBattlePiece } from "../utils/dbHelper";
 
 export const barbariansRage: AbilityFunction = async ({ actionPieceId }) => {

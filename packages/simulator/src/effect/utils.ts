@@ -1,15 +1,20 @@
 import { logEffect } from "../debug";
-import { EffectNameType } from ".";
+import { EffectNameType } from "./interface";
 
 /**
  * @note stack overlay, duration overwrite
  */
-export async function addEffectToPiece(
-  pieceId: string,
-  effectName: EffectNameType,
-  stack: number,
-  duration: number
-) {
+export async function addEffectToPiece({
+  pieceId,
+  effectName,
+  stack,
+  duration,
+}: {
+  pieceId: string;
+  effectName: EffectNameType;
+  stack: number;
+  duration: number;
+}) {
   const db = globalThis.Simulator.db;
 
   const existEffect = await db.effect
@@ -53,8 +58,9 @@ export async function addEffectToPiece(
           name: effectName,
         },
       })
-      .update({
-        $inc: { stack: stack },
+      .incrementalModify((doc) => {
+        doc.stack += stack;
+        return doc;
       });
 
     logEffect(effectName)(
@@ -66,12 +72,17 @@ export async function addEffectToPiece(
 /**
  * @note stack override, duration override
  */
-export async function overrideEffectToPiece(
-  pieceId: string,
-  effectName: EffectNameType,
-  stack: number,
-  duration: number
-) {
+export async function overrideEffectToPiece({
+  pieceId,
+  effectName,
+  stack,
+  duration,
+}: {
+  pieceId: string;
+  effectName: EffectNameType;
+  stack: number;
+  duration: number;
+}) {
   const db = globalThis.Simulator.db;
 
   const existEffect = await db.effect

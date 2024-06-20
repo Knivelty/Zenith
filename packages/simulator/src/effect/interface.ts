@@ -2,10 +2,12 @@ export interface EffectMap {
   Darkness: { pieceId: string; stack: number; duration: number };
   Burn: { pieceId: string; stack: number; duration: number };
   Rage: { pieceId: string; stack: number; duration: number };
+  Shield: { pieceId: string; stack: number; duration: number };
+  ShieldRevenge: { pieceId: string; stack: number; duration: number };
 }
 
 export type EffectNameType = keyof EffectMap;
-export function getEffectName<EffectMap, K extends EffectNameType>(key: K): K {
+export function getEffectName<K extends EffectNameType>(key: K): K {
   return key;
 }
 export type EffectParamType<T extends EffectNameType> = EffectMap[T];

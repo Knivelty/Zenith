@@ -1,6 +1,6 @@
 import { logEffect } from "../debug";
 import { EventMap } from "../event/createEventSystem";
-import { EffectHandler, EffectMap } from ".";
+import { EffectHandler, EffectMap } from "./interface";
 import { overrideEffectToPiece } from "./utils";
 
 /**
@@ -9,7 +9,7 @@ import { overrideEffectToPiece } from "./utils";
 function getHandler(actionPieceId: string, stack: number) {
   const handlerMap = globalThis.Simulator.handlerMap;
   // TODO: perf key design
-  const key = `${actionPieceId}-${stack}`;
+  const key = `burnHandler-${actionPieceId}-${stack}`;
   if (!handlerMap.has(key)) {
     const handler = async ({ pieceId }: EventMap["beforePieceAction"]) => {
       if (actionPieceId === pieceId) {
@@ -23,12 +23,12 @@ function getHandler(actionPieceId: string, stack: number) {
           value: stack,
           type: "Magical",
         });
-        await overrideEffectToPiece(
-          actionPieceId,
-          "Burn",
-          Math.floor(stack / 2),
-          999
-        );
+        await overrideEffectToPiece({
+          pieceId: actionPieceId,
+          effectName: "Burn",
+          stack: Math.floor(stack / 2),
+          duration: 999,
+        });
       }
     };
     handlerMap.set(key, handler);

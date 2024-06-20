@@ -1,4 +1,4 @@
-import { AbilityFunction } from ".";
+import { AbilityFunction } from "./interface";
 import { addEffectToPiece } from "../effect/utils";
 import { asyncMap } from "../utils/asyncHelper";
 import { getBattlePiece } from "../utils/dbHelper";
@@ -138,6 +138,11 @@ async function makeColBurn({
     .exec();
 
   await asyncMap(affectedPiece, async (p) => {
-    await addEffectToPiece(p.id, "Burn", stack, 999);
+    await addEffectToPiece({
+      pieceId: p.id,
+      effectName: "Burn",
+      stack,
+      duration: 999,
+    });
   });
 }

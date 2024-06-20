@@ -1,6 +1,6 @@
 import { RxChangeEvent } from "rxdb";
 import { EffectType } from ".";
-import { EffectNameType } from "../../effect";
+import { EffectNameType } from "../../effect/interface";
 
 export async function handleEffectChange({
   documentData,

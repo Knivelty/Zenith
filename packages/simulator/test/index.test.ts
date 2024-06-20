@@ -11,8 +11,8 @@ export const MOCK_CREATURES: CreatureType[] = [
   {
     creature_idx: 1,
     level: 1,
-    health: 600,
-    maxMana: 80,
+    health: 2000,
+    maxMana: 90,
     attack: 60,
     armor: 20,
     speed: 3,
@@ -24,6 +24,20 @@ export const MOCK_CREATURES: CreatureType[] = [
   },
   {
     creature_idx: 2,
+    level: 1,
+    health: 2000,
+    maxMana: 100,
+    attack: 60,
+    armor: 20,
+    speed: 3,
+    range: 1,
+    initiative: 90,
+    order: ORDER_HUNTER_NAME,
+    origins: [ORIGIN_LIGHT_NAME, ORIGIN_DARK_NAME],
+    ability: "mountainCollapse",
+  },
+  {
+    creature_idx: 3,
     level: 1,
     health: 2000,
     maxMana: 80,
@@ -47,6 +61,10 @@ export const MOCK_ABILITY_PROFILE: AbilityProfileType[] = [
     ability_name: "barbariansRage",
     requiredMana: 90,
   },
+  {
+    ability_name: "mountainCollapse",
+    requiredMana: 100,
+  },
 ];
 
 export const MOCK_INIT_ENTITY: BaseStateType[] = [
@@ -61,9 +79,9 @@ export const MOCK_INIT_ENTITY: BaseStateType[] = [
   {
     id: "1002",
     initX: 1,
-    initY: 1,
+    initY: 3,
     isHome: true,
-    creature_idx: 1,
+    creature_idx: 2,
     level: 1,
   },
   {
@@ -71,7 +89,7 @@ export const MOCK_INIT_ENTITY: BaseStateType[] = [
     initX: 1,
     initY: 7,
     isHome: false,
-    creature_idx: 2,
+    creature_idx: 3,
     level: 1,
   },
 ];

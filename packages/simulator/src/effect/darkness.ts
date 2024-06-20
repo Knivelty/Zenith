@@ -1,5 +1,5 @@
 import { logEffect } from "../debug";
-import { EffectHandler, EffectMap } from ".";
+import { EffectHandler, EffectMap } from "./interface";
 
 export const onEffectDarknessChange: EffectHandler<"Darkness"> = async ({
   preValue,

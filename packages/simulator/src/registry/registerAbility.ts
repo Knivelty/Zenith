@@ -1,11 +1,13 @@
-import { AbilityFunction, AbilityNameType } from "../ability";
+import { AbilityFunction, AbilityNameType } from "../ability/interface";
 import { barbariansRage } from "../ability/barbariansRage";
 import { burningBurst } from "../ability/burningBurst";
 import { logCast } from "../debug";
+import { mountainCollapse } from "../ability/mountainCollapse";
 
 export function registerAbilities() {
   registerSingleAbility("burningBurst", burningBurst);
   registerSingleAbility("barbariansRage", barbariansRage);
+  registerSingleAbility("mountainCollapse", mountainCollapse);
 }
 
 function registerSingleAbility(

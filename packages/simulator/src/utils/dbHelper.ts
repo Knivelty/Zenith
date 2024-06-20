@@ -1,3 +1,4 @@
+import { EffectNameType } from "../effect/interface";
 import { UNKNOWN_CREATURE_ERROR, UNKNOWN_PIECE_ERROR } from "./error";
 
 export async function getPieceBaseState(id: string) {
@@ -148,11 +149,9 @@ export async function movePiece(pieceId: string, toX: number, toY: number) {
         id: pieceId,
       },
     })
-    .update({
-      $set: {
-        x: toX,
-        y: toY,
-      },
+    .incrementalPatch({
+      x: toX,
+      y: toY,
     });
 }
 
@@ -170,7 +169,7 @@ export async function decreaseHealth(pieceId: string, healthDiff: number) {
   if ((await getBattlePiece(pieceId)).health <= 0) {
     await db.battle_entity
       .findOne({ selector: { id: pieceId } })
-      .update({ $set: { health: { eq: 0 }, dead: true } });
+      .incrementalPatch({ health: 0, dead: true });
 
     // emit death event
     await globalThis.Simulator.eventSystem.emit("pieceDeath", {
@@ -215,4 +214,16 @@ export async function getPieceAbilityProfile(pieceId: string) {
   }
 
   return abilityProfile;
+}
+
+export async function getPieceEffectProfile(
+  pieceId: string,
+  effectName: EffectNameType
+) {
+  const db = globalThis.Simulator.db;
+  const effect = await db.effect
+    .findOne({ selector: { id: pieceId, name: effectName } })
+    .exec();
+
+  return effect;
 }
