@@ -164,6 +164,7 @@ struct CreatureProfile {
     level: u8,
     rarity: u8,
     health: u16,
+    maxMana: u16,
     attack: u16,
     armor: u16,
     range: u8,

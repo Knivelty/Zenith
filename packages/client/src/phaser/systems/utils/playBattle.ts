@@ -23,7 +23,7 @@ import {
 export const battleAnimation = (layer: PhaserLayer) => {
     const {
         scenes: {
-            Main: { objectPool },
+            Main: { config, objectPool },
         },
         networkLayer: {
             clientComponents: { GameStatus, InningBattle, Attack, HealthBar },
@@ -108,6 +108,8 @@ export const battleAnimation = (layer: PhaserLayer) => {
             case "pieceAttack":
                 await handleAttack(v as EventWithName<"pieceAttack">);
                 break;
+            case "abilityCast":
+                await handleAbilityCast(v as EventWithName<"abilityCast">);
         }
     }
 
@@ -150,6 +152,37 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 attacked: attacked,
             }
         );
+    }
+
+    async function handleAbilityCast({
+        abilityName,
+        data: { actionPieceId },
+    }: EventWithName<"abilityCast">) {
+        // attack wait 0.2s
+        await sleep(1000);
+
+        const piece = objectPool.get(actionPieceId, "Sprite");
+
+        const [resolve, , promise] = deferred<void>();
+
+        piece.setComponent({
+            id: actionPieceId,
+            now: async (sprite: Phaser.GameObjects.Sprite) => {
+                // TODO:
+                const animation =
+                    config.animations[config.animations.length - 1];
+
+                console.log("play cast", animation);
+                sprite.play(animation);
+                sprite.stopAfterRepeat(0);
+                const scale = TILE_HEIGHT / sprite.height;
+                sprite.setScale(scale);
+
+                // sprite.
+            },
+        });
+
+        await promise;
     }
 
     return { playBattle };

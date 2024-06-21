@@ -13,6 +13,6 @@ export const logEvent = (eventName: EventNameType) =>
 
 export const logAttack = debug("attack");
 export const logSpellAttack = debug("spellAttack");
-export const logCast = debug("cast");
+export const logCast = debug("abilityCast");
 
 export const logDebug = debug("debug");

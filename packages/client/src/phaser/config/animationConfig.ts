@@ -1,8 +1,8 @@
-import { Animations, Assets } from "./constants";
+import { AbilityAnimations, Animations, Assets } from "./constants";
 
 type AnimationsConfig = {
     key: string;
-    assetKey: Assets.MainAtlas;
+    assetKey: Assets;
     startFrame: number;
     endFrame: number;
     frameRate: number;
@@ -241,7 +241,6 @@ const baseAnimations: AnimationsConfig = [
         repeat: -1,
         prefix: "tarrasque/",
         suffix: ".png",
-
     },
     {
         key: Animations.ChupacabraIdle,
@@ -301,6 +300,16 @@ const baseAnimations: AnimationsConfig = [
         frameRate: 1,
         repeat: -1,
         prefix: "basilisk/",
+        suffix: ".png",
+    },
+    {
+        key: AbilityAnimations.burningBurst,
+        assetKey: Assets.AbilityAtlas,
+        startFrame: 1,
+        endFrame: 12,
+        frameRate: 8,
+        repeat: -1,
+        prefix: "burningBurst/",
         suffix: ".png",
     },
 ];

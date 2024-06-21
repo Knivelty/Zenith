@@ -23,6 +23,7 @@ function initializeCreatureProfile() {
       const level = numberToHexString(Number(row["Level"]), 2);
       const rarity = numberToHexString(Number(row["Rarity"]), 2);
       const health = numberToHexString(Number(row["Health"]), 4);
+      const maxMana = numberToHexString(Number(row["Mana"]), 4);
       const attack = numberToHexString(Number(row["ATK"]), 4);
       const armor = numberToHexString(Number(row["Armor"]), 4);
       const range = numberToHexString(Number(row["Range"]), 2);
@@ -30,13 +31,14 @@ function initializeCreatureProfile() {
       const initiative = numberToHexString(Number(row["Initiative"]), 2);
       const order = utf8StringToHexString(row["Order"]);
       const origins = utf8StringToHexString(row["Origins"]);
-      const ability = utf8StringToHexString("");
+      const ability = utf8StringToHexString(row["Ability"]);
 
       const callDataStr = [
         creature_index,
         level,
         rarity,
         health,
+        maxMana,
         attack,
         armor,
         range,
@@ -50,7 +52,7 @@ function initializeCreatureProfile() {
     })
     .on("end", () => {
       // execute in batch to avoid gas limit
-      const chunks = _.chunk(callData, 60);
+      const chunks = _.chunk(callData, 40);
 
       for (const c of chunks) {
         const count = c.length;

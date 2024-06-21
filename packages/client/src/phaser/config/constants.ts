@@ -38,6 +38,11 @@ export enum Animations {
     BasiliskIdle = "BasiliskIdle",
 }
 
+export enum AbilityAnimations {
+    Invalid = "Invalid",
+    burningBurst = "burningBurst",
+}
+
 // image addresses
 
 export enum Sprites {
@@ -110,6 +115,7 @@ export const Monster: Record<number, string> = {
 
 export enum Assets {
     MainAtlas = "MainAtlas",
+    AbilityAtlas = "AbilityAtlas",
     Tileset = "Tileset",
 }
 

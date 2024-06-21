@@ -6,7 +6,7 @@ import {
 } from "@dojoengine/recs";
 
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { getOrder, getOrigins, zeroEntity } from "../../../utils";
+import { getAbility, getOrder, getOrigins, zeroEntity } from "../../../utils";
 import { ClientComponents } from "../../../dojo/createClientComponents";
 import { logDebug } from "../../../ui/lib/utils";
 import { BaseStateType, createSimulator } from "@zenith/simulator";
@@ -40,6 +40,24 @@ export const processBattle = (component: ClientComponents) => {
         const allCreatures = new Array<CreatureType>();
         const allPieces = new Array<BaseStateType>();
         const allAbilitiesProfiles = new Array<AbilityProfileType>();
+
+        // TODO: read it from csv
+        allAbilitiesProfiles.push(
+            ...[
+                {
+                    ability_name: "burningBurst",
+                    requiredMana: 90,
+                },
+                {
+                    ability_name: "barbariansRage",
+                    requiredMana: 90,
+                },
+                {
+                    ability_name: "mountainCollapse",
+                    requiredMana: 100,
+                },
+            ]
+        );
 
         // get player piece
         const player = getComponentValueStrict(
@@ -76,8 +94,10 @@ export const processBattle = (component: ClientComponents) => {
             );
 
             allCreatures.push({
-                creature_id: creatureEntity,
+                creature_idx: creature.creature_index,
+                level: creature.level,
                 health: creature.health,
+                maxMana: creature.maxMana,
                 attack: creature.attack,
                 armor: creature.armor,
                 range: creature.range,
@@ -85,7 +105,7 @@ export const processBattle = (component: ClientComponents) => {
                 initiative: creature.initiative,
                 origins: getOrigins(creature.origins),
                 order: getOrder(creature.order),
-                ability: "",
+                ability: getAbility(creature.ability),
             });
 
             allPieces.push({
@@ -93,7 +113,7 @@ export const processBattle = (component: ClientComponents) => {
                 initX: piece.x - 1,
                 initY: 8 - piece.y,
                 isHome: true,
-                creatureId: creatureEntity,
+                creature_idx: creature.creature_index,
                 level: piece.level,
             });
         }
@@ -129,8 +149,10 @@ export const processBattle = (component: ClientComponents) => {
             );
 
             allCreatures.push({
-                creature_id: creatureEntity,
+                creature_idx: creature.creature_index,
+                level: creature.level,
                 health: creature.health,
+                maxMana: creature.maxMana,
                 attack: creature.attack,
                 armor: creature.armor,
                 range: creature.range,
@@ -138,7 +160,7 @@ export const processBattle = (component: ClientComponents) => {
                 initiative: creature.initiative,
                 origins: getOrigins(creature.origins),
                 order: getOrder(creature.order),
-                ability: "",
+                ability: getAbility(creature.ability),
             });
 
             allPieces.push({
@@ -146,7 +168,7 @@ export const processBattle = (component: ClientComponents) => {
                 initX: piece.x - 1,
                 initY: piece.y - 1,
                 isHome: false,
-                creatureId: creatureEntity,
+                creature_idx: creature.creature_index,
                 level: piece.level,
             });
         }

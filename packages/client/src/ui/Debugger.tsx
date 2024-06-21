@@ -61,7 +61,7 @@ export function Debugger() {
     }
 
     return (
-        <div className="flex absolute gap-4 flex-wrap flex-col justify-between p-2 space-x-3">
+        <div className="flex absolute gap-4 flex-wrap flex-col justify-between p-2 space-x-3 z-30">
             <Button
                 onClick={() => {
                     increaseFontSize();

@@ -51,3 +51,7 @@ export function getOrder(hexStringBigInt: bigint): string {
 export function getOrigins(hexStringBigInt: bigint): string[] {
     return hexStringToUtf8(hexStringBigInt).split("+");
 }
+
+export function getAbility(hexStringBigInt: bigint): string {
+    return hexStringToUtf8(hexStringBigInt);
+}

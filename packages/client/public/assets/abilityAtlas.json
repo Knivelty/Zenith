@@ -1,0 +1,272 @@
+{
+	"textures": [
+		{
+			"image": "abilityAtlas.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 1068,
+				"h": 1068
+			},
+			"scale": 0.25,
+			"frames": [
+				{
+					"filename": "burningBurst/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 354,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 354,
+						"h": 258
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 354,
+						"h": 258
+					}
+				},
+				{
+					"filename": "burningBurst/1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 354,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 354,
+						"h": 258
+					},
+					"frame": {
+						"x": 357,
+						"y": 1,
+						"w": 354,
+						"h": 258
+					}
+				},
+				{
+					"filename": "burningBurst/2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 354,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 354,
+						"h": 258
+					},
+					"frame": {
+						"x": 713,
+						"y": 1,
+						"w": 354,
+						"h": 258
+					}
+				},
+				{
+					"filename": "burningBurst/3.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 354,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 354,
+						"h": 258
+					},
+					"frame": {
+						"x": 1,
+						"y": 261,
+						"w": 354,
+						"h": 258
+					}
+				},
+				{
+					"filename": "burningBurst/4.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 354,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 354,
+						"h": 258
+					},
+					"frame": {
+						"x": 1,
+						"y": 521,
+						"w": 354,
+						"h": 258
+					}
+				},
+				{
+					"filename": "burningBurst/5.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 354,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 354,
+						"h": 258
+					},
+					"frame": {
+						"x": 1,
+						"y": 781,
+						"w": 354,
+						"h": 258
+					}
+				},
+				{
+					"filename": "burningBurst/6.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 354,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 354,
+						"h": 258
+					},
+					"frame": {
+						"x": 357,
+						"y": 261,
+						"w": 354,
+						"h": 258
+					}
+				},
+				{
+					"filename": "burningBurst/7.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 354,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 354,
+						"h": 258
+					},
+					"frame": {
+						"x": 713,
+						"y": 261,
+						"w": 354,
+						"h": 258
+					}
+				},
+				{
+					"filename": "burningBurst/8.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 354,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 354,
+						"h": 258
+					},
+					"frame": {
+						"x": 357,
+						"y": 521,
+						"w": 354,
+						"h": 258
+					}
+				},
+				{
+					"filename": "burningBurst/9.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 354,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 354,
+						"h": 258
+					},
+					"frame": {
+						"x": 713,
+						"y": 521,
+						"w": 354,
+						"h": 258
+					}
+				},
+				{
+					"filename": "burningBurst/10.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 354,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 354,
+						"h": 258
+					},
+					"frame": {
+						"x": 357,
+						"y": 781,
+						"w": 354,
+						"h": 258
+					}
+				},
+				{
+					"filename": "burningBurst/11.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 354,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 354,
+						"h": 258
+					},
+					"frame": {
+						"x": 713,
+						"y": 781,
+						"w": 354,
+						"h": 258
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:5ac3b3b3442748e05c410109f2e969e7:2bf98ed2efc53644df55833ab4c0b413:ceec77ccbe7a6c347fe8fec448addb3a$"
+	}
+}
