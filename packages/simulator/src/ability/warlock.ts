@@ -33,7 +33,7 @@ export const warlock_interlockedInferno: AbilityFunction = async ({ actionPieceI
     await globalThis.Simulator.eventSystem.emit("damage", {
       pieceId: actionPieceId,
       targetPieceId: target.id,
-      value: ConstPrimaryDmg[pieceInBattle.level] + Math.floor(pieceInBattle.attack * 0.4),
+      value: ConstPrimaryDmg[pieceInBattle.level] + Math.floor(pieceInBattle.spell_amp * 0.4),
       type: "Magical",
     });
 
@@ -50,7 +50,7 @@ export const warlock_interlockedInferno: AbilityFunction = async ({ actionPieceI
       await globalThis.Simulator.eventSystem.emit("damage", {
         pieceId: actionPieceId,
         targetPieceId: p.id,
-        value: ConstSecondaryDmg[pieceInBattle.level] + Math.floor(pieceInBattle.attack * 0.15),
+        value: ConstSecondaryDmg[pieceInBattle.level] + Math.floor(pieceInBattle.spell_amp * 0.15),
         type: "Magical",
       });
     }));
