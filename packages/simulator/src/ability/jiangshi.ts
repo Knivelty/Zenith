@@ -15,12 +15,6 @@ const AtkFactor: Record<number, number> = {
   3: 1.8,
 };
 
-const MaxManaIncrease: Record<number, number> = {
-  1: 100,
-  2: 80,
-  3: 50,
-};
-
 // TODO passive ability
 
 export const jiangshi_penetrationInfection: AbilityFunction = async ({ actionPieceId }) => {
@@ -39,6 +33,13 @@ export const jiangshi_penetrationInfection: AbilityFunction = async ({ actionPie
 
   if(target) {
     // deal ConstDmg+AtkFactor*ATK+80%AP physical dmg to the target
+    // if the target is killed, summon a zombie with 100% of the target's stats and penetrationInfection ability
+    await db.effect.insert({
+      id: target.id,
+      name: getEffectName("Revive"),
+      stack: 1,
+      duration: 1,
+    });
     // TODO 75% armor penetration
     await globalThis.Simulator.eventSystem.emit("damage", {
       pieceId: actionPieceId,
@@ -46,14 +47,6 @@ export const jiangshi_penetrationInfection: AbilityFunction = async ({ actionPie
       value: Math.floor(ConstDmg[pieceInBattle.level] + pieceInBattle.attack * AtkFactor[pieceInBattle.level] + pieceInBattle.spell_amp * 0.8),
       type: "Physical",
     });
-
-    // if the target is killed, summon a zombie with 100% of the target's stats and penetrationInfection ability
-    if(target.health <= 0) {
-      target.health = target.maxHealth;
-      target.maxMana = 100 + MaxManaIncrease[pieceInBattle.level];
-      target.isHome = pieceInBattle.isHome;
-      target.ability = pieceInBattle.ability;
-    }
   } else {
     return;
   }

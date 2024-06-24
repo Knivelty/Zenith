@@ -155,7 +155,7 @@ export async function movePiece(pieceId: string, toX: number, toY: number) {
     });
 }
 
-export async function decreaseHealth(pieceId: string, healthDiff: number) {
+export async function decreaseHealth(source: string, pieceId: string, type: string, healthDiff: number) {
   const db = globalThis.Simulator.db;
 
   await db.battle_entity
@@ -174,6 +174,8 @@ export async function decreaseHealth(pieceId: string, healthDiff: number) {
     // emit death event
     await globalThis.Simulator.eventSystem.emit("pieceDeath", {
       pieceId: pieceId,
+      killerPieceId: source,
+      dmgSource: type,
     });
   }
 }

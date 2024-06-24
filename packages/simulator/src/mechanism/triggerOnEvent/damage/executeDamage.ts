@@ -8,6 +8,6 @@ export function executeDamageOnEvent() {
 
     // TODO: deal with different attack type
 
-    decreaseHealth(targetPieceId, value);
+    decreaseHealth(pieceId, targetPieceId, type, value);
   });
 }

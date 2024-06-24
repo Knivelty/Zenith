@@ -9,7 +9,7 @@ export const ORIGIN_DARK_NAME = "DARK";
 
 export async function applyDarkSynergy(isHome: boolean) {
   const eventSystem = globalThis.Simulator.eventSystem;
-  eventSystem.on("pieceDeath", async ({ pieceId }) => {
+  eventSystem.on("pieceDeath", async ({ pieceId, killerPieceId, dmgSource}) => {
     const piece = await getBattlePiece(pieceId);
     // filter enemy's piece death
     if (piece.isHome !== isHome) {

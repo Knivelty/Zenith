@@ -4,6 +4,7 @@ export interface EffectMap {
   Rage: { pieceId: string; stack: number; duration: number };
   Shield: { pieceId: string; stack: number; duration: number };
   ShieldRevenge: { pieceId: string; stack: number; duration: number };
+  Revive: { pieceId: string; stack: number; duration: number };
 }
 
 export type EffectNameType = keyof EffectMap;

@@ -17,7 +17,7 @@ export interface EventMap {
     paths: { x: number; y: number }[];
   };
 
-  pieceDeath: { pieceId: string };
+  pieceDeath: { pieceId: string; killerPieceId: string; dmgSource: string };
 
   pieceAttack: { pieceId: string; targetPieceId: string };
   damage: {
