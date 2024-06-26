@@ -6,6 +6,8 @@ import {
 } from "@dojoengine/recs";
 import { tileCoordToPixelCoord, tween } from "@latticexyz/phaserx";
 import {
+    AbilityAnimations,
+    AnimationIndex,
     MOVE_TIME_PER_LENGTH,
     TILE_HEIGHT,
     TILE_WIDTH,
@@ -19,6 +21,7 @@ import {
     EventMap,
     EventWithName,
 } from "@zenith/simulator/src/event/createEventSystem";
+import { getCastAnimationIndex } from "./animationHelper";
 
 export const battleAnimation = (layer: PhaserLayer) => {
     const {
@@ -26,7 +29,13 @@ export const battleAnimation = (layer: PhaserLayer) => {
             Main: { config, objectPool },
         },
         networkLayer: {
-            clientComponents: { GameStatus, InningBattle, Attack, HealthBar },
+            clientComponents: {
+                GameStatus,
+                InningBattle,
+                Attack,
+                HealthBar,
+                LocalPiece,
+            },
         },
     } = layer;
 
@@ -161,20 +170,37 @@ export const battleAnimation = (layer: PhaserLayer) => {
         // attack wait 0.2s
         await sleep(1000);
 
-        const piece = objectPool.get(actionPieceId, "Sprite");
+        const pieceSprite = objectPool.get(actionPieceId, "Sprite");
+        const piece = getComponentValueStrict(
+            LocalPiece,
+            actionPieceId as Entity
+        );
 
         const [resolve, , promise] = deferred<void>();
 
-        piece.setComponent({
+        pieceSprite.setComponent({
             id: actionPieceId,
             now: async (sprite: Phaser.GameObjects.Sprite) => {
                 // TODO:
-                const animation =
-                    config.animations[config.animations.length - 1];
+                const castAnimationKey = getCastAnimationIndex(
+                    abilityName as AbilityAnimations
+                );
+                const animation = config.animations[castAnimationKey];
 
-                console.log("play cast", animation);
                 sprite.play(animation);
                 sprite.stopAfterRepeat(0);
+
+                const onAnimationStop = () => {
+                    const idleAnimation =
+                        config.animations[AnimationIndex[piece.creature_index]];
+                    sprite.play(idleAnimation);
+                    const scale = TILE_HEIGHT / sprite.height;
+                    sprite.setScale(scale);
+                    resolve();
+                };
+
+                sprite.once("animationstop", onAnimationStop);
+
                 const scale = TILE_HEIGHT / sprite.height;
                 sprite.setScale(scale);
 

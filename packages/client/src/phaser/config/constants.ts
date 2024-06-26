@@ -39,7 +39,7 @@ export enum Animations {
 }
 
 export enum AbilityAnimations {
-    Invalid = "Invalid",
+    Invalid = "invalid",
     burningBurst = "burningBurst",
 }
 
