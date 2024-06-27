@@ -8,6 +8,14 @@ export function executeDamageOnEvent() {
 
     // TODO: deal with different attack type
 
+    value = Math.floor(value);
+
+    await eventSystem.emit("healthDecrease", {
+      pieceId: targetPieceId,
+      type,
+      value,
+    });
+
     decreaseHealth(targetPieceId, value);
   });
 }

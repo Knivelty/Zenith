@@ -27,6 +27,13 @@ export interface EventMap {
     type: "Physical" | "Magical" | "Pure" | "Life Drain";
     value: number;
   };
+  // for front end play animation
+  healthDecrease: {
+    pieceId: string;
+    type: "Physical" | "Magical" | "Pure" | "Life Drain";
+    value: number;
+  };
+
   afterPieceAttack: { pieceId: string; targetPieceId: string };
 
   // mana
@@ -43,9 +50,9 @@ export interface EventMap {
   // ability relate event
 
   // this event is used to trigger cast
-  abilityCast: { abilityName: AbilityNameType; data: AbilityParamType };
+  beforeAbilityCast: { abilityName: AbilityNameType; data: AbilityParamType };
   // this event emit more detail to let client render animation
-  afterAbilityCast: {
+  abilityCast: {
     abilityName: AbilityNameType;
     data: AbilityParamType;
     affectedGrounds: AffectedGround[];

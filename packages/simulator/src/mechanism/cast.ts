@@ -24,7 +24,7 @@ export async function tryCast(
     });
 
     // emit event to trigger cast
-    await globalThis.Simulator.eventSystem.emit("abilityCast", {
+    await globalThis.Simulator.eventSystem.emit("beforeAbilityCast", {
       // warn: assert type here
       abilityName: actionPiece.ability as AbilityNameType,
       data: { actionPieceId: actionPieceId },

@@ -13,8 +13,6 @@ import {
     TILE_HEIGHT,
     TILE_WIDTH,
 } from "../../config/constants";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { zeroEntity } from "../../../utils";
 import { Coord, deferred, sleep } from "@latticexyz/utils";
 import { PhaserLayer } from "../..";
 import { manhattanDistance } from "@zenith/simulator";
@@ -23,7 +21,6 @@ import {
     EventWithName,
 } from "@zenith/simulator/src/event/createEventSystem";
 import { getAnimationIndex } from "./animationHelper";
-import { chainToWorldCoord } from "./coorConvert";
 
 export const battleAnimation = (layer: PhaserLayer) => {
     const {
@@ -31,13 +28,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
             Main: { config, objectPool },
         },
         networkLayer: {
-            clientComponents: {
-                GameStatus,
-                InningBattle,
-                Attack,
-                HealthBar,
-                LocalPiece,
-            },
+            clientComponents: { HealthBar, LocalPiece, Health },
         },
     } = layer;
 
@@ -45,7 +36,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
         console.log("logs: ", events);
         for (const e of events) {
             await playSingleEvent(e);
-            // await new Promise((resolve) => setTimeout(resolve, 500));
+            await new Promise((resolve) => setTimeout(resolve, 200));
         }
     }
 
@@ -65,8 +56,6 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 TILE_WIDTH,
                 TILE_HEIGHT
             );
-
-            console.log("move to :", pixelPosition);
 
             const hero = objectPool.get(pieceEntity, "Sprite");
 
@@ -119,8 +108,14 @@ export const battleAnimation = (layer: PhaserLayer) => {
             case "pieceAttack":
                 await handleAttack(v as EventWithName<"pieceAttack">);
                 break;
-            case "afterAbilityCast":
-                await handleAbilityCast(v as EventWithName<"afterAbilityCast">);
+            case "abilityCast":
+                await handleAbilityCast(v as EventWithName<"abilityCast">);
+                break;
+            case "healthDecrease":
+                await handleHealthDecrease(
+                    v as EventWithName<"healthDecrease">
+                );
+                break;
         }
     }
 
@@ -136,40 +131,85 @@ export const battleAnimation = (layer: PhaserLayer) => {
         pieceId,
         targetPieceId,
     }: EventWithName<"pieceAttack">) {
-        // attack wait 0.2s
-        await sleep(1000);
+        const [resolve, , promise] = deferred<void>();
 
-        // if have attack piece, run attack
-        const game = getComponentValueStrict(GameStatus, zeroEntity);
-        const inningBattle = getComponentValueStrict(
-            InningBattle,
-            getEntityIdFromKeys([
-                BigInt(game.currentMatch),
-                BigInt(game.currentRound),
-            ])
+        const attackerSprite = objectPool.get(pieceId, "Sprite");
+        attackerSprite.setComponent({
+            id: pieceId,
+            now: async (sprite: Phaser.GameObjects.Sprite) => {
+                await tween(
+                    {
+                        targets: sprite,
+                        duration: 300,
+                        props: {
+                            x: "+=50",
+                        },
+                        ease: Phaser.Math.Easing.Linear,
+                        yoyo: true,
+                        onComplete: async () => {
+                            // resolve to allow next tween
+                            resolve();
+                        },
+                        onUpdate: () => {
+                            //
+                        },
+                    },
+                    { keepExistingTweens: true }
+                );
+            },
+        });
+
+        return await sleep(200);
+    }
+
+    async function handleHealthDecrease({
+        pieceId,
+        value,
+    }: EventWithName<"healthDecrease">) {
+        const attackedHealth = getComponentValueStrict(
+            Health,
+            `${pieceId}-health` as Entity
         );
 
-        const attacked = targetPieceId as Entity;
+        const modifiedHealth = attackedHealth.current - value;
 
-        console.log("attacked: ", attacked);
+        updateComponent(Health, `${pieceId}-health` as Entity, {
+            current: modifiedHealth,
+        });
 
-        // OLD value
-        // ${inningBattle}-${v}
-        setComponent(
-            Attack,
-            `${inningBattle}-${pieceId}-${attacked}` as Entity,
-            {
-                attacker: pieceId,
-                attacked: attacked,
-            }
-        );
+        // attacked blink
+        const attackedSprite = objectPool.get(pieceId, "Sprite");
+        attackedSprite.setComponent({
+            id: pieceId,
+            now: async (sprite: Phaser.GameObjects.Sprite) => {
+                await tween(
+                    {
+                        targets: sprite,
+                        duration: 200,
+                        props: {
+                            alpha: 0,
+                        },
+                        ease: Phaser.Math.Easing.Linear,
+                        yoyo: true,
+                        onComplete: async () => {
+                            // resolve to allow next tween
+                            // resolve();
+                        },
+                        onUpdate: () => {
+                            //
+                        },
+                    },
+                    { keepExistingTweens: true }
+                );
+            },
+        });
     }
 
     async function handleAbilityCast({
         abilityName,
         data: { actionPieceId },
         affectedGrounds,
-    }: EventWithName<"afterAbilityCast">) {
+    }: EventWithName<"abilityCast">) {
         // attack wait 0.2s
         await sleep(1000);
 

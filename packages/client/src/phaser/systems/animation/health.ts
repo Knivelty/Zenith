@@ -1,6 +1,6 @@
 import { Entity, Has, setComponent, updateComponent } from "@dojoengine/recs";
-import { defineSystemST } from "../../utils";
-import { PhaserLayer } from "..";
+import { defineSystemST } from "../../../utils";
+import { PhaserLayer } from "../..";
 import {
     HEALTH_BAR_BORDER_COLOR,
     HEALTH_BAR_BORDER_WIDTH,
@@ -13,9 +13,9 @@ import {
     HealthBarOffSetY,
     Health_CHANGE_OFFSET_X,
     Health_CHANGE_OFFSET_Y,
-} from "../config/constants";
+} from "../../config/constants";
 import { tween } from "@latticexyz/phaserx";
-import { logDebug } from "../../ui/lib/utils";
+import { logDebug } from "../../../ui/lib/utils";
 import { deferred } from "@latticexyz/utils";
 
 export const health = (layer: PhaserLayer) => {

@@ -62,6 +62,17 @@ export const burningBurst: AbilityFunction = async ({ actionPieceId }) => {
     SIDE_COL_BURN[battlePiece.level] + 0.1 * battlePiece.spell_amp
   );
 
+  await globalThis.Simulator.eventSystem.emit("abilityCast", {
+    abilityName: "burningBurst",
+    data: { actionPieceId },
+    affectedGrounds: getAffectedGrounds({
+      isHome: battlePiece.isHome,
+      y: battlePiece.y,
+      sideCols,
+      frontCol,
+    }),
+  });
+
   await asyncMap(sideCols, async (col) => {
     await makeColAttack({
       actionPieceId,
@@ -77,17 +88,6 @@ export const burningBurst: AbilityFunction = async ({ actionPieceId }) => {
       startRow: battlePiece.y,
       isHome: battlePiece.isHome,
     });
-  });
-
-  await globalThis.Simulator.eventSystem.emit("afterAbilityCast", {
-    abilityName: "burningBurst",
-    data: { actionPieceId },
-    affectedGrounds: getAffectedGrounds({
-      isHome: battlePiece.isHome,
-      y: battlePiece.y,
-      sideCols,
-      frontCol,
-    }),
   });
 };
 
@@ -111,8 +111,9 @@ async function makeColAttack({
     .find({
       selector: {
         x: col,
-        y: isHome ? { $gt: startRow } : { $lt: startRow },
+        y: isHome ? { $lt: startRow } : { $gt: startRow },
         isHome: !isHome,
+        dead: false,
       },
     })
     .exec();
@@ -145,8 +146,9 @@ async function makeColBurn({
     .find({
       selector: {
         x: col,
-        y: isHome ? { $gt: startRow } : { $lt: startRow },
+        y: isHome ? { $lt: startRow } : { $gt: startRow },
         isHome: !isHome,
+        dead: false,
       },
     })
     .exec();

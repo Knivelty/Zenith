@@ -135,14 +135,6 @@ export function createClientComponents({
             },
             { metadata: { name: "Health" } }
         ),
-        Attack: defineComponent(
-            world,
-            {
-                attacker: Type.String,
-                attacked: Type.String,
-            },
-            { metadata: { name: "Attack" } }
-        ),
         UserOperation: defineComponent(
             world,
             {
