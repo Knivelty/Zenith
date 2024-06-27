@@ -62,6 +62,14 @@ export const phaserConfig = {
                         imagePath: "assets/",
                     },
                 },
+                [Assets.GroundAtlas]: {
+                    type: AssetType.MultiAtlas,
+                    key: Assets.GroundAtlas,
+                    path: `assets/groundAtlas.json`,
+                    options: {
+                        imagePath: "assets/",
+                    },
+                },
             },
             maps: {
                 [Maps.Main]: mainMap,

@@ -1,4 +1,9 @@
-import { AbilityAnimations, Animations, Assets } from "./constants";
+import {
+    AbilityAnimations,
+    Animations,
+    Assets,
+    GroundAnimations,
+} from "./constants";
 
 type AnimationsConfig = {
     key: string;
@@ -310,6 +315,26 @@ const baseAnimations: AnimationsConfig = [
         frameRate: 8,
         repeat: -1,
         prefix: "burningBurst/",
+        suffix: ".png",
+    },
+    {
+        key: GroundAnimations.fire,
+        assetKey: Assets.GroundAtlas,
+        startFrame: 1,
+        endFrame: 12,
+        frameRate: 8,
+        repeat: -1,
+        prefix: "fire/",
+        suffix: ".png",
+    },
+    {
+        key: GroundAnimations.slightFire,
+        assetKey: Assets.GroundAtlas,
+        startFrame: 1,
+        endFrame: 12,
+        frameRate: 8,
+        repeat: -1,
+        prefix: "fire/",
         suffix: ".png",
     },
 ];

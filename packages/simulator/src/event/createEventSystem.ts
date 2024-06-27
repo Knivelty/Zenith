@@ -1,5 +1,6 @@
 import { AbilityNameType, AbilityParamType } from "../ability/interface";
 import { logEvent } from "../debug";
+import { AffectedGround, GroundEffect } from "../misc/groundEffect";
 import { EffectParamType, EffectNameType } from "../effect/interface";
 import { NON_EXIST_EVENT_HANDLER } from "../utils";
 import { asyncMap } from "../utils/asyncHelper";
@@ -40,7 +41,15 @@ export interface EventMap {
   };
 
   // ability relate event
+
+  // this event is used to trigger cast
   abilityCast: { abilityName: AbilityNameType; data: AbilityParamType };
+  // this event emit more detail to let client render animation
+  afterAbilityCast: {
+    abilityName: AbilityNameType;
+    data: AbilityParamType;
+    affectedGrounds: AffectedGround[];
+  };
 }
 
 export type EventNameType = keyof EventMap;

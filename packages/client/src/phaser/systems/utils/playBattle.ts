@@ -8,6 +8,7 @@ import { tileCoordToPixelCoord, tween } from "@latticexyz/phaserx";
 import {
     AbilityAnimations,
     AnimationIndex,
+    GroundAnimations,
     MOVE_TIME_PER_LENGTH,
     TILE_HEIGHT,
     TILE_WIDTH,
@@ -21,7 +22,8 @@ import {
     EventMap,
     EventWithName,
 } from "@zenith/simulator/src/event/createEventSystem";
-import { getCastAnimationIndex } from "./animationHelper";
+import { getAnimationIndex } from "./animationHelper";
+import { chainToWorldCoord } from "./coorConvert";
 
 export const battleAnimation = (layer: PhaserLayer) => {
     const {
@@ -117,8 +119,8 @@ export const battleAnimation = (layer: PhaserLayer) => {
             case "pieceAttack":
                 await handleAttack(v as EventWithName<"pieceAttack">);
                 break;
-            case "abilityCast":
-                await handleAbilityCast(v as EventWithName<"abilityCast">);
+            case "afterAbilityCast":
+                await handleAbilityCast(v as EventWithName<"afterAbilityCast">);
         }
     }
 
@@ -166,7 +168,8 @@ export const battleAnimation = (layer: PhaserLayer) => {
     async function handleAbilityCast({
         abilityName,
         data: { actionPieceId },
-    }: EventWithName<"abilityCast">) {
+        affectedGrounds,
+    }: EventWithName<"afterAbilityCast">) {
         // attack wait 0.2s
         await sleep(1000);
 
@@ -182,7 +185,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
             id: actionPieceId,
             now: async (sprite: Phaser.GameObjects.Sprite) => {
                 // TODO:
-                const castAnimationKey = getCastAnimationIndex(
+                const castAnimationKey = getAnimationIndex(
                     abilityName as AbilityAnimations
                 );
                 const animation = config.animations[castAnimationKey];
@@ -206,6 +209,33 @@ export const battleAnimation = (layer: PhaserLayer) => {
 
                 // sprite.
             },
+        });
+
+        // play ground effect amination
+        affectedGrounds.forEach((ag) => {
+            console.log("affectedGrounds: ", affectedGrounds);
+
+            const effectAnimationIndex = getAnimationIndex(
+                ag.groundEffect as GroundAnimations
+            );
+            const groundSpriteEntity = `ground-${ag.x}-${ag.y}`;
+            const groundSprite = objectPool.get(groundSpriteEntity, "Sprite");
+
+            groundSprite.setComponent({
+                id: groundSpriteEntity,
+                once: async (sprite: Phaser.GameObjects.Sprite) => {
+                    sprite.setPosition(ag.x * TILE_HEIGHT, ag.y * TILE_HEIGHT);
+                    sprite.play(config.animations[effectAnimationIndex]);
+
+                    const scale = TILE_HEIGHT / sprite.height;
+                    sprite.setScale(scale);
+
+                    promise.then(() => {
+                        sprite.setVisible(false);
+                        sprite.stop();
+                    });
+                },
+            });
         });
 
         await promise;

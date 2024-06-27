@@ -1,8 +1,10 @@
 import { INVALID_ANIMATION_KEY_ERROR } from "../../../error";
 import { getAnimations } from "../../config/animationConfig";
-import { AbilityAnimations } from "../../config/constants";
+import { AbilityAnimations, GroundAnimations } from "../../config/constants";
 
-export function getCastAnimationIndex(animationKey: AbilityAnimations) {
+export function getAnimationIndex(
+    animationKey: AbilityAnimations | GroundAnimations
+) {
     const allAnimation = getAnimations();
 
     const index = allAnimation.findIndex((v) => v.key === animationKey);
