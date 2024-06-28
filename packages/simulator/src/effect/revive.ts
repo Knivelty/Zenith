@@ -28,7 +28,7 @@ function getHandler(actionPieceId: string) {
           id: killerPieceId,
         },
       }).exec();
-      if (killerPiece && killerPiece.creature_idx === 3005 /*jiangshi*/) {
+      if (killerPiece && killerPiece.ability === "penetrationInfection") {
         logEffect("Revive")(`piece ${pieceId} revive`);
 
         await db.battle_entity.findOne({
