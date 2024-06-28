@@ -2,6 +2,9 @@ import { AbilityFunction } from "./interface";
 
 import { getEffectName } from "../effect/interface";
 import { getBattlePiece } from "../utils/dbHelper";
+import { asyncMap } from "../utils/asyncHelper";
+import { getAimedPiece } from "../mechanism/enemySearch";
+import { logDebug } from "../debug";
 
 const ConstDmg: Record<number, number> = {
   1: 150,
@@ -16,19 +19,42 @@ const AtkFactor: Record<number, number> = {
 };
 
 // TODO passive ability
+export const jiangshi_penetrationInfection_passive = async () => {
+  const db = globalThis.Simulator.db;
+
+  const jiangshiPieces = await db.battle_entity.find({
+    selector: {
+      creature_idx: 3005,
+    },
+  }).exec();
+
+  // add initiative bonus to all hunter piece
+  await asyncMap(jiangshiPieces, async (p) => {
+    await p.update({
+      $inc: {
+        maxHealth: p.armor * 5,
+        attack: p.armor,
+      },
+    });
+    logDebug(`add ${p.armor} * 5 HP and ${p.armor} attack to piece ${p.id}`);
+  });
+};
 
 export const jiangshi_penetrationInfection: AbilityFunction = async ({ actionPieceId }) => {
   const db = globalThis.Simulator.db;
 
   const pieceInBattle = await getBattlePiece(actionPieceId);
 
-  // TODO detail the target selection, currently using the same as warlock
-  // find the enemy piece with the highest health
+  // find the enemy piece
+  const targetPieceId = await getAimedPiece(actionPieceId);
+  if (!targetPieceId) {
+    // no target piece means all enemy's piece are dead the same as battle end
+    return;
+  }
   const target = await db.battle_entity.findOne({
     selector: {
-      isHome: !pieceInBattle.isHome,
+      id: targetPieceId,
     },
-    sort: [{ health: "desc" }],
   }).exec();
 
   if(target) {
