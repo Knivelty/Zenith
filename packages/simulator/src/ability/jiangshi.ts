@@ -18,7 +18,6 @@ const AtkFactor: Record<number, number> = {
   3: 1.8,
 };
 
-// TODO passive ability
 export const jiangshi_penetrationInfection_passive = async () => {
   const db = globalThis.Simulator.db;
 
