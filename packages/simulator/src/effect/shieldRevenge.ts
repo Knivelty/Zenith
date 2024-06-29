@@ -6,24 +6,23 @@ import { EffectHandler } from "./interface";
 /**
  * @note use a global map to confirm to get the same handler
  */
-function getHandler(actionPieceId: string) {
+function getHandler(affectedPieceId: string) {
   const handlerMap = globalThis.Simulator.handlerMap;
   // TODO: perf key design
-  const key = `shieldRevenge-${actionPieceId}`;
+  const key = `shieldRevenge-${affectedPieceId}`;
   if (!handlerMap.has(key)) {
-    const handler = async ({
-      pieceId,
-      targetPieceId,
-    }: EventMap["afterPieceAttack"]) => {
-      if (targetPieceId === pieceId) {
-        logEffect("ShieldRevenge")(`piece ${pieceId} revenge`);
+    const handler = async ({ pieceId, targetPieceId }: EventMap["damage"]) => {
+      if (targetPieceId === affectedPieceId) {
+        logEffect("ShieldRevenge")(`piece ${affectedPieceId} revenge`);
 
         const shieldEffect = await getPieceEffectProfile(
           targetPieceId,
           "Shield"
         );
 
-        const damage = Math.floor(shieldEffect?.stack ?? 0 ** 0.15);
+        const damage = Math.floor(
+          shieldEffect?.stack ? shieldEffect?.stack * 0.15 : 0
+        );
 
         await globalThis.Simulator.eventSystem.emit("damage", {
           pieceId: targetPieceId,
@@ -49,16 +48,10 @@ export const onEffectShieldRevengeChange: EffectHandler<
   }
 
   if (value.stack !== 0 && preValue.stack === 0) {
-    globalThis.Simulator.eventSystem.on(
-      "afterPieceAttack",
-      getHandler(value.pieceId)
-    );
+    globalThis.Simulator.eventSystem.on("damage", getHandler(value.pieceId));
   }
 
   if (value.stack === 0 && preValue.stack !== 0) {
-    globalThis.Simulator.eventSystem.off(
-      "afterPieceAttack",
-      getHandler(value.pieceId)
-    );
+    globalThis.Simulator.eventSystem.off("damage", getHandler(value.pieceId));
   }
 };

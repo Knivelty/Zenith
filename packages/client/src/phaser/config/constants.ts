@@ -41,6 +41,8 @@ export enum Animations {
 export enum AbilityAnimations {
     Invalid = "invalid",
     burningBurst = "burningBurst",
+    barbariansRage = "barbariansRage",
+    mountainCollapse = "mountainCollapse",
 }
 
 export enum GroundAnimations {

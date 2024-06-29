@@ -21,6 +21,7 @@ import {
     EventWithName,
 } from "@zenith/simulator/src/event/createEventSystem";
 import { getAnimationIndex } from "./animationHelper";
+import { logDebug } from "../../../ui/lib/utils";
 
 export const battleAnimation = (layer: PhaserLayer) => {
     const {
@@ -229,6 +230,8 @@ export const battleAnimation = (layer: PhaserLayer) => {
                     abilityName as AbilityAnimations
                 );
                 const animation = config.animations[castAnimationKey];
+
+                logDebug("cast animation: ", animation);
 
                 sprite.play(animation);
                 sprite.stopAfterRepeat(0);

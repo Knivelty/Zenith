@@ -124,7 +124,7 @@
             <key>json</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename></filename>
+                <filename>assets/groundAtlas.json</filename>
             </struct>
         </map>
         <key>multiPackMode</key>

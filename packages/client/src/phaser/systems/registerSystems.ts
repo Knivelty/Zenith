@@ -5,7 +5,6 @@ import { mapSystem } from "./mapSystem";
 import { camera } from "./camera";
 import { battle } from "./battle";
 import { health } from "./animation/health";
-import { attack } from "./animation/attack";
 import { placeSystem } from "./local/placeSystem";
 import { syncSystem } from "./local/syncSystem";
 import { coordOccupationSystem } from "./local/coordOccupationSystem";
@@ -22,7 +21,6 @@ export const registerSystems = (layer: PhaserLayer) => {
     battle(layer);
     // battleLog(layer);
     health(layer);
-    attack(layer);
 
     merge(layer);
 

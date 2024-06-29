@@ -8,14 +8,6 @@ export const barbariansRage: AbilityFunction = async ({ actionPieceId }) => {
 
   const pieceInBattle = await getBattlePiece(actionPieceId);
 
-  // decrease current 25% HP
-  await globalThis.Simulator.eventSystem.emit("damage", {
-    pieceId: actionPieceId,
-    targetPieceId: actionPieceId,
-    value: Math.floor(pieceInBattle.health * 0.25),
-    type: "Life Drain",
-  });
-
   const existEffect = await db.effect
     .findOne({
       selector: {
@@ -38,4 +30,18 @@ export const barbariansRage: AbilityFunction = async ({ actionPieceId }) => {
       duration: 999,
     });
   }
+
+  await globalThis.Simulator.eventSystem.emit("abilityCast", {
+    abilityName: "barbariansRage",
+    data: { actionPieceId },
+    affectedGrounds: [],
+  });
+
+  // decrease current 25% HP
+  await globalThis.Simulator.eventSystem.emit("damage", {
+    pieceId: actionPieceId,
+    targetPieceId: actionPieceId,
+    value: Math.floor(pieceInBattle.health * 0.25),
+    type: "Life Drain",
+  });
 };

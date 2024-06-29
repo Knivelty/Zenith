@@ -41,8 +41,8 @@ export async function addStrengthBonus(isHome: boolean) {
         },
       })
       .update({
-        times: {
-          $add: totalBonus,
+        $inc: {
+          times: totalBonus,
         },
       });
   });
