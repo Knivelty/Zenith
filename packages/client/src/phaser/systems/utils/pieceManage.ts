@@ -11,7 +11,7 @@ import {
     AnimationIndex,
     DRAG_DISTANCE_THRESHOLD,
     HEALTH_PER_SEGMENT,
-    TILE_WIDTH,
+    TILE_HEIGHT,
 } from "../../config/constants";
 import { chainToWorldCoord, worldToChainCoord } from "./coorConvert";
 import { zeroEntity } from "../../../utils";
@@ -134,7 +134,7 @@ export const pieceManage = (layer: PhaserLayer) => {
                 sprite.setInteractive();
 
                 // TODO: use lossless scale method
-                const scale = TILE_WIDTH / sprite.width;
+                const scale = TILE_HEIGHT / sprite.height;
                 sprite.setScale(scale);
 
                 sprite.on("pointerup", (p: Phaser.Input.Pointer) => {

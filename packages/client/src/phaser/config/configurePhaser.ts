@@ -87,7 +87,7 @@ export const phaserConfig = {
     },
     scale: defineScaleConfig({
         parent: "phaser-game",
-        mode: Phaser.Scale.NONE,
+        mode: Phaser.Scale.RESIZE,
         zoom: 1,
         height: "40rem",
         width: "40rem",
