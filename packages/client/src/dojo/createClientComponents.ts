@@ -80,6 +80,15 @@ export function createClientComponents({
             },
             { metadata: { name: "LocalPieceOccupation" } }
         ),
+        LocalSynergyStatus: defineComponent(
+            world,
+            {
+                name: Type.String,
+                count: Type.Number,
+                unlockLevels: Type.NumberArray,
+            },
+            { metadata: { name: "LocalPieceOccupation" } }
+        ),
         // Position: overridableComponent(contractComponents.Position),
         GameStatus: defineComponent(
             world,

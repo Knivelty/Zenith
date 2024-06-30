@@ -22,6 +22,7 @@ import {
 } from "@zenith/simulator/src/event/createEventSystem";
 import { getAnimationIndex } from "./animationHelper";
 import { logDebug } from "../../../ui/lib/utils";
+import { encodeGroundEntity } from "./entityEncoder";
 
 export const battleAnimation = (layer: PhaserLayer) => {
     const {
@@ -261,7 +262,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
             const effectAnimationIndex = getAnimationIndex(
                 ag.groundEffect as GroundAnimations
             );
-            const groundSpriteEntity = `ground-${ag.x}-${ag.y}`;
+            const groundSpriteEntity = encodeGroundEntity(ag.x, ag.y);
             const groundSprite = objectPool.get(groundSpriteEntity, "Sprite");
 
             groundSprite.setComponent({

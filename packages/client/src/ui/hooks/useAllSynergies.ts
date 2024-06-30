@@ -2,6 +2,7 @@ import { useDojo } from "./useDojo";
 import { getComponentValueStrict } from "@dojoengine/recs";
 import { toUtf8String } from "ethers/lib/utils";
 import { groupBy, prop, sortBy } from "ramda";
+import { ClientComponents } from "../../dojo/createClientComponents";
 
 export interface ISynergyStatus {
     synergyEntity: string;
@@ -12,6 +13,12 @@ export function useAllSynergies() {
         clientComponents: { SynergyProfile },
     } = useDojo();
 
+    return getAllSynergies(SynergyProfile);
+}
+
+export function getAllSynergies(
+    SynergyProfile: ClientComponents["SynergyProfile"]
+) {
     const allEntities = SynergyProfile.entities();
 
     const allSynergies: {

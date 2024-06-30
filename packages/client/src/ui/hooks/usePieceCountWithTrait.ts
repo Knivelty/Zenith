@@ -1,66 +1,94 @@
-import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "./useDojo";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { getComponentValueStrict } from "@dojoengine/recs";
+import {
+    HasValue,
+    NotValue,
+    getComponentValueStrict,
+    runQuery,
+} from "@dojoengine/recs";
 import { getOrder, getOrigins } from "../../utils";
 import * as R from "ramda";
+import { ClientComponents } from "../../dojo/createClientComponents";
 
-export function useAllPiecesWithTraits() {
-    const {
-        clientComponents: {
-            LocalPiece,
-            LocalPlayer,
-            LocalPlayerPiece,
+export function getAllPiecesWithAllTraits({
+    clientComponents: { LocalPiece, CreatureProfile },
+    playerAddress,
+}: {
+    clientComponents: ClientComponents;
+    playerAddress: string;
+}) {
+    const onBoardPieceEntity = runQuery([
+        HasValue(LocalPiece, { owner: BigInt(playerAddress) }),
+        NotValue(LocalPiece, { idx: 0 }),
+    ]);
+
+    const piecesWithTraits = Array.from(onBoardPieceEntity).map((entity) => {
+        const piece = getComponentValueStrict(LocalPiece, entity);
+
+        const pieceCreature = getComponentValueStrict(
             CreatureProfile,
-        },
+            getEntityIdFromKeys([
+                BigInt(piece.creature_index),
+                BigInt(piece.level),
+            ])
+        );
+
+        const traits = [
+            getOrder(pieceCreature.order),
+            ...getOrigins(pieceCreature.origins),
+        ];
+
+        return {
+            pieceId: piece.gid,
+            traits,
+            creature_index: pieceCreature.creature_index,
+        };
+    });
+
+    return piecesWithTraits;
+}
+
+export function useAllPiecesWithAllTraits() {
+    const {
+        clientComponents: { LocalPiece, CreatureProfile },
         account: {
-            playerEntity,
             account: { address },
         },
     } = useDojo();
 
-    const playerV = useComponentValue(LocalPlayer, playerEntity);
+    const onBoardPieceEntity = runQuery([
+        HasValue(LocalPiece, { owner: BigInt(address) }),
+        NotValue(LocalPiece, { idx: 0 }),
+    ]);
 
-    const piecesWithTraits = new Array(playerV?.heroesCount)
-        .fill(1)
-        .map((_, i) => {
-            console.log("i", i);
-            const playerPiece = getComponentValueStrict(
-                LocalPlayerPiece,
-                getEntityIdFromKeys([BigInt(address), BigInt(i + 1)])
-            );
-            const piece = getComponentValueStrict(
-                LocalPiece,
-                getEntityIdFromKeys([BigInt(playerPiece.gid)])
-            );
+    const piecesWithTraits = Array.from(onBoardPieceEntity).map((entity) => {
+        const piece = getComponentValueStrict(LocalPiece, entity);
 
-            const pieceCreature = getComponentValueStrict(
-                CreatureProfile,
-                getEntityIdFromKeys([
-                    BigInt(piece.creature_index),
-                    BigInt(piece.level),
-                ])
-            );
+        const pieceCreature = getComponentValueStrict(
+            CreatureProfile,
+            getEntityIdFromKeys([
+                BigInt(piece.creature_index),
+                BigInt(piece.level),
+            ])
+        );
 
-            const traits = [
-                getOrder(pieceCreature.order),
-                ...getOrigins(pieceCreature.origins),
-            ];
+        const traits = [
+            getOrder(pieceCreature.order),
+            ...getOrigins(pieceCreature.origins),
+        ];
 
-            console.log("ttt: ", traits);
-
-            return {
-                pieceId: piece.gid,
-                traits,
-                creature_index: pieceCreature.creature_index,
-            };
-        });
+        return {
+            pieceId: piece.gid,
+            traits,
+            creature_index: pieceCreature.creature_index,
+        };
+    });
 
     return piecesWithTraits;
 }
 
 export function usePieceCountWithTrait(trait: string | undefined) {
-    const piecesWithTraits = useAllPiecesWithTraits();
+    const piecesWithTraits = useAllPiecesWithAllTraits();
 
     console.log("piecesWithTraits: ", piecesWithTraits);
 

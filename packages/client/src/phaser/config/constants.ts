@@ -39,10 +39,22 @@ export enum Animations {
 }
 
 export enum AbilityAnimations {
-    Invalid = "invalid",
+    invalid = "invalid",
     burningBurst = "burningBurst",
     barbariansRage = "barbariansRage",
     mountainCollapse = "mountainCollapse",
+}
+
+export enum SynergyAnimations {
+    invalid = "invalid",
+    hunter = "hunter",
+    imaginary = "imaginary",
+    dark = "dark",
+    magical = "magical",
+    strength = "strength",
+    light = "light",
+    brute = "brute",
+    cunning = "cunning"
 }
 
 export enum GroundAnimations {
@@ -125,6 +137,7 @@ export enum Assets {
     MainAtlas = "MainAtlas",
     AbilityAtlas = "AbilityAtlas",
     GroundAtlas = "GroundAtlas",
+    SynergyAtlas = "SynergyAtlas",
     Tileset = "Tileset",
 }
 

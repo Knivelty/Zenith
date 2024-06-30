@@ -13,10 +13,12 @@ export function SynergyBar() {
     console.log("all:", all);
 
     return (
-        <div className="fixed left-4 top-[5rem] h-[35rem] border border-[#06FF00] bg-black bg-contain bg-no-repeat w-60 ">
-            {Object.values(all).map((t) => {
-                return <SynergyActiveStatus traits={t} />;
-            })}
+        <div className="fixed left-4 top-[5rem] h-[38rem] border border-[#06FF00] bg-black bg-contain bg-no-repeat w-60 ">
+            <div className="mt-2">
+                {Object.values(all).map((t) => {
+                    return <SynergyActiveStatus traits={t} />;
+                })}
+            </div>
         </div>
     );
 }
@@ -27,7 +29,9 @@ interface ISynergyActiveStatus {
         requiredPieces: number;
     }[];
 }
+
 function SynergyActiveStatus({ traits }: ISynergyActiveStatus) {
+    const traitName = traits?.[0].trait_name;
     const count = usePieceCountWithTrait(traits?.[0].trait_name);
 
     const unlockLevel =
@@ -39,14 +43,14 @@ function SynergyActiveStatus({ traits }: ISynergyActiveStatus) {
         }, 0) || 0;
 
     return (
-        <div className="flex flex-row">
+        <div className="flex flex-row ml-4 my-1 h-[4.25rem]">
             <img
-                className="w-16 h-16"
-                src="/assets/ui/synergy_placeholder.png"
+                className="w-16 h-16 pixelated"
+                src={`/assets/ui/synergy/${traitName?.toLocaleLowerCase()}.png`}
             ></img>
-            <div className="flex flex-col">
-                <div>{traits?.[0].trait_name}</div>
-                <div className="flex flex-row text-gray-400">
+            <div className="flex flex-col ml-2 text-sm ">
+                <div className="pt-3">{traits?.[0].trait_name}</div>
+                <div className="flex flex-row text-gray-400 mt-0.5">
                     {traits?.map((t, index) => {
                         const unlocked = index < unlockLevel;
 
@@ -69,7 +73,9 @@ function SynergyActiveStatus({ traits }: ISynergyActiveStatus) {
                         );
                     })}
                 </div>
-                <div className="text-sm">{count}</div>
+                <div className="text-sm -mt-2 -ml-6  w-auto text-[#D6A541]">
+                    {count}
+                </div>
             </div>
         </div>
     );

@@ -11,6 +11,7 @@ import { coordOccupationSystem } from "./local/coordOccupationSystem";
 import { followIndexSystem } from "./local/followIndexSystem";
 import { merge } from "./merge";
 import { initialize } from "./initialize";
+import { synergy } from "./animation/synergy";
 
 export const registerSystems = (layer: PhaserLayer) => {
     initialize(layer);
@@ -21,6 +22,7 @@ export const registerSystems = (layer: PhaserLayer) => {
     battle(layer);
     // battleLog(layer);
     health(layer);
+    synergy(layer);
 
     merge(layer);
 

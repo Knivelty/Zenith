@@ -70,6 +70,14 @@ export const phaserConfig = {
                         imagePath: "assets/",
                     },
                 },
+                [Assets.SynergyAtlas]: {
+                    type: AssetType.MultiAtlas,
+                    key: Assets.SynergyAtlas,
+                    path: `assets/synergyAtlas.json`,
+                    options: {
+                        imagePath: "assets/",
+                    },
+                },
             },
             maps: {
                 [Maps.Main]: mainMap,

@@ -1,6 +1,8 @@
+import { useDojo } from "../hooks/useDojo";
 import { HeroBaseAttr } from "../hooks/useHeroAttr";
 
 interface HeroDetailProp {
+    gid?: number;
     attr?: HeroBaseAttr;
 }
 
@@ -13,6 +15,11 @@ export function SynergyName({ name }: { name: string }) {
 }
 
 export function HeroDetail(props: HeroDetailProp) {
+    const {
+        systemCalls: { sellHero },
+        account: { account },
+    } = useDojo();
+
     return (
         <div className="flex flex-col items-center justify-start w-96 h-[40rem] bg-black border border-[#06FF00] box-border">
             <div className="flex flex-row pl-8 pt-8 w-full">
@@ -71,6 +78,20 @@ export function HeroDetail(props: HeroDetailProp) {
                     Initiative: {props.attr?.initiative}
                 </div>
             </div>
+            <button
+                className="bg-[#06FF00] w-40 h-10 flex flex-row items-center justify-center"
+                onClick={() => {
+                    if (!props?.gid) {
+                        return;
+                    }
+                    sellHero(account, props.gid);
+                }}
+            >
+                <div>
+                    <img src="assets/ui/recycle_bin.png"></img>
+                </div>
+                <div className="text-black ml-6">{`$ ${props.attr?.level}`}</div>
+            </button>
         </div>
     );
 }

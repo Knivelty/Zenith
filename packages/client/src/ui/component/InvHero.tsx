@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { PieceAttr } from "../hooks/useHeroAttr";
 import { useDrag, useDrop } from "ahooks";
 import { useDojo } from "../hooks/useDojo";
-import { ShowItem, useUIStore } from "../../store";
+import { useUIStore } from "../../store";
 import {
     getComponentValue,
     getComponentValueStrict,
@@ -18,7 +18,6 @@ import _ from "lodash";
 export const InvHero = ({
     id,
     pieceAttr,
-    onClick,
 }: {
     id: number;
     pieceAttr: PieceAttr | undefined;
@@ -269,6 +268,10 @@ export const InvHero = ({
                     ref={dropRef}
                     className="flex justify-center w-[5.9375rem] h-[8.125rem] rounded-lg opacity-100 bg-contain bg-no-repeat bg-center bg-black border-[#05FF00] border-2 mx-2"
                     onClick={() => {
+                        // ignore invalid gid
+                        if (!pieceAttr?.gid) {
+                            return;
+                        }
                         updateComponent(UserOperation, zeroEntity, {
                             selected: true,
                             selectGid: pieceAttr?.gid,
