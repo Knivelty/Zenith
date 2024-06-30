@@ -39,4 +39,10 @@ export const mountainCollapse: AbilityFunction = async ({ actionPieceId }) => {
     stack: 1,
     duration: 999,
   });
+
+  await globalThis.Simulator.eventSystem.emit("abilityCast", {
+    abilityName: "mountainCollapse",
+    data: { actionPieceId },
+    affectedGrounds: [],
+  });
 };

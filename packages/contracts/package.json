@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "init:dev": "bash scripts/default_auth.sh dev && ts-node scripts/applyValue.ts dev",
-    "init:alpha": "bash scripts/default_auth.sh alpha && ts-node scripts/applyValue.ts alpha"
+    "init:alpha": "bash scripts/default_auth.sh alpha && ts-node scripts/applyValue.ts alpha",
+    "init:sepolia": "bash scripts/default_auth.sh sepolia && ts-node scripts/applyValue.ts sepolia"
   },
   "keywords": [],
   "author": "",

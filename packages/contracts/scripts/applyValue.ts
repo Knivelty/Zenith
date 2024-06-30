@@ -3,16 +3,16 @@ import csv from "csv-parser";
 const { execSync } = require("child_process");
 import _ from "lodash";
 
+const args = process.argv.slice(2);
+const profile = args[0];
+
 const homeJson = fs.readFileSync(
-  "./manifests/dev/manifest.json"
+  `./manifests/${profile}/manifest.json`
 ) as unknown as string;
 
 const homeJsonData = JSON.parse(homeJson);
 
 const address = homeJsonData["contracts"][0]["address"];
-
-const args = process.argv.slice(2);
-const profile = args[0];
 
 function initializeCreatureProfile() {
   let callData: string[] = [];

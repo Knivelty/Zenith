@@ -4,11 +4,9 @@ pushd $(dirname "$0")/..
 
 export PROFILE=$1
 
-# export RPC_URL="https://api.cartridge.gg/x/zenith/katana"
+export WORLD_ADDRESS=$(cat ./manifests/$PROFILE/manifest.json | jq -r '.world.address')
 
-export WORLD_ADDRESS=$(cat ./manifests/dev/manifest.json | jq -r '.world.address')
-
-export HOME_ADDRESS=$(cat ./manifests/dev/manifest.json | jq -r '.contracts[] | select(.kind == "DojoContract" ).address')
+export HOME_ADDRESS=$(cat ./manifests/$PROFILE/manifest.json | jq -r '.contracts[] | select(.kind == "DojoContract" ).address')
 
 echo "---------------------------------------------------------------------------"
 echo world : $WORLD_ADDRESS

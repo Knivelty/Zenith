@@ -6,12 +6,13 @@ import {
 } from "@dojoengine/recs";
 import { tileCoordToPixelCoord, tween } from "@latticexyz/phaserx";
 import {
+    AbilityAnimations,
+    AnimationIndex,
+    GroundAnimations,
     MOVE_TIME_PER_LENGTH,
     TILE_HEIGHT,
     TILE_WIDTH,
 } from "../../config/constants";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { zeroEntity } from "../../../utils";
 import { Coord, deferred, sleep } from "@latticexyz/utils";
 import { PhaserLayer } from "../..";
 import { manhattanDistance } from "@zenith/simulator";
@@ -19,6 +20,9 @@ import {
     EventMap,
     EventWithName,
 } from "@zenith/simulator/src/event/createEventSystem";
+import { getAnimationIndex } from "./animationHelper";
+import { logDebug } from "../../../ui/lib/utils";
+import { encodeGroundEntity } from "./entityEncoder";
 
 export const battleAnimation = (layer: PhaserLayer) => {
     const {
@@ -26,7 +30,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
             Main: { config, objectPool },
         },
         networkLayer: {
-            clientComponents: { GameStatus, InningBattle, Attack, HealthBar },
+            clientComponents: { HealthBar, LocalPiece, Health },
         },
     } = layer;
 
@@ -34,7 +38,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
         console.log("logs: ", events);
         for (const e of events) {
             await playSingleEvent(e);
-            // await new Promise((resolve) => setTimeout(resolve, 500));
+            await new Promise((resolve) => setTimeout(resolve, 200));
         }
     }
 
@@ -54,8 +58,6 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 TILE_WIDTH,
                 TILE_HEIGHT
             );
-
-            console.log("move to :", pixelPosition);
 
             const hero = objectPool.get(pieceEntity, "Sprite");
 
@@ -110,6 +112,12 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 break;
             case "abilityCast":
                 await handleAbilityCast(v as EventWithName<"abilityCast">);
+                break;
+            case "healthDecrease":
+                await handleHealthDecrease(
+                    v as EventWithName<"healthDecrease">
+                );
+                break;
         }
     }
 
@@ -125,61 +133,153 @@ export const battleAnimation = (layer: PhaserLayer) => {
         pieceId,
         targetPieceId,
     }: EventWithName<"pieceAttack">) {
-        // attack wait 0.2s
-        await sleep(1000);
+        const [resolve, , promise] = deferred<void>();
 
-        // if have attack piece, run attack
-        const game = getComponentValueStrict(GameStatus, zeroEntity);
-        const inningBattle = getComponentValueStrict(
-            InningBattle,
-            getEntityIdFromKeys([
-                BigInt(game.currentMatch),
-                BigInt(game.currentRound),
-            ])
+        const attackerSprite = objectPool.get(pieceId, "Sprite");
+        attackerSprite.setComponent({
+            id: pieceId,
+            now: async (sprite: Phaser.GameObjects.Sprite) => {
+                await tween(
+                    {
+                        targets: sprite,
+                        duration: 300,
+                        props: {
+                            x: "+=50",
+                        },
+                        ease: Phaser.Math.Easing.Linear,
+                        yoyo: true,
+                        onComplete: async () => {
+                            // resolve to allow next tween
+                            resolve();
+                        },
+                        onUpdate: () => {
+                            //
+                        },
+                    },
+                    { keepExistingTweens: true }
+                );
+            },
+        });
+
+        return await sleep(200);
+    }
+
+    async function handleHealthDecrease({
+        pieceId,
+        value,
+    }: EventWithName<"healthDecrease">) {
+        const attackedHealth = getComponentValueStrict(
+            Health,
+            `${pieceId}-health` as Entity
         );
 
-        const attacked = targetPieceId as Entity;
+        const modifiedHealth = attackedHealth.current - value;
 
-        console.log("attacked: ", attacked);
+        updateComponent(Health, `${pieceId}-health` as Entity, {
+            current: modifiedHealth,
+        });
 
-        // OLD value
-        // ${inningBattle}-${v}
-        setComponent(
-            Attack,
-            `${inningBattle}-${pieceId}-${attacked}` as Entity,
-            {
-                attacker: pieceId,
-                attacked: attacked,
-            }
-        );
+        // attacked blink
+        const attackedSprite = objectPool.get(pieceId, "Sprite");
+        attackedSprite.setComponent({
+            id: pieceId,
+            now: async (sprite: Phaser.GameObjects.Sprite) => {
+                await tween(
+                    {
+                        targets: sprite,
+                        duration: 200,
+                        props: {
+                            alpha: 0,
+                        },
+                        ease: Phaser.Math.Easing.Linear,
+                        yoyo: true,
+                        onComplete: async () => {
+                            // resolve to allow next tween
+                            // resolve();
+                        },
+                        onUpdate: () => {
+                            //
+                        },
+                    },
+                    { keepExistingTweens: true }
+                );
+            },
+        });
     }
 
     async function handleAbilityCast({
         abilityName,
         data: { actionPieceId },
+        affectedGrounds,
     }: EventWithName<"abilityCast">) {
         // attack wait 0.2s
         await sleep(1000);
 
-        const piece = objectPool.get(actionPieceId, "Sprite");
+        const pieceSprite = objectPool.get(actionPieceId, "Sprite");
+        const piece = getComponentValueStrict(
+            LocalPiece,
+            actionPieceId as Entity
+        );
 
         const [resolve, , promise] = deferred<void>();
 
-        piece.setComponent({
+        pieceSprite.setComponent({
             id: actionPieceId,
             now: async (sprite: Phaser.GameObjects.Sprite) => {
                 // TODO:
-                const animation =
-                    config.animations[config.animations.length - 1];
+                const castAnimationKey = getAnimationIndex(
+                    abilityName as AbilityAnimations
+                );
+                const animation = config.animations[castAnimationKey];
 
-                console.log("play cast", animation);
+                logDebug("cast animation: ", animation);
+
                 sprite.play(animation);
                 sprite.stopAfterRepeat(0);
+
+                const onAnimationStop = () => {
+                    const idleAnimation =
+                        config.animations[AnimationIndex[piece.creature_index]];
+                    sprite.play(idleAnimation);
+                    const scale = TILE_HEIGHT / sprite.height;
+                    sprite.setScale(scale);
+                    resolve();
+                };
+
+                sprite.once("animationstop", onAnimationStop);
+
                 const scale = TILE_HEIGHT / sprite.height;
                 sprite.setScale(scale);
 
                 // sprite.
             },
+        });
+
+        // play ground effect amination
+        affectedGrounds.forEach((ag) => {
+            console.log("affectedGrounds: ", affectedGrounds);
+
+            const effectAnimationIndex = getAnimationIndex(
+                ag.groundEffect as GroundAnimations
+            );
+            const groundSpriteEntity = encodeGroundEntity(ag.x, ag.y);
+            const groundSprite = objectPool.get(groundSpriteEntity, "Sprite");
+
+            groundSprite.setComponent({
+                id: groundSpriteEntity,
+                once: async (sprite: Phaser.GameObjects.Sprite) => {
+                    sprite.setPosition(ag.x * TILE_HEIGHT, ag.y * TILE_HEIGHT);
+                    sprite.play(config.animations[effectAnimationIndex]);
+
+                    const scale = TILE_HEIGHT / sprite.height;
+                    sprite.setScale(scale);
+
+                    promise.then(() => {
+                        sprite.setVisible(false);
+                        sprite.stop();
+                    });
+                },
+            });
         });
 
         await promise;

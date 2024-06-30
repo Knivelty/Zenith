@@ -62,6 +62,22 @@ export const phaserConfig = {
                         imagePath: "assets/",
                     },
                 },
+                [Assets.GroundAtlas]: {
+                    type: AssetType.MultiAtlas,
+                    key: Assets.GroundAtlas,
+                    path: `assets/groundAtlas.json`,
+                    options: {
+                        imagePath: "assets/",
+                    },
+                },
+                [Assets.SynergyAtlas]: {
+                    type: AssetType.MultiAtlas,
+                    key: Assets.SynergyAtlas,
+                    path: `assets/synergyAtlas.json`,
+                    options: {
+                        imagePath: "assets/",
+                    },
+                },
             },
             maps: {
                 [Maps.Main]: mainMap,
@@ -79,7 +95,7 @@ export const phaserConfig = {
     },
     scale: defineScaleConfig({
         parent: "phaser-game",
-        mode: Phaser.Scale.NONE,
+        mode: Phaser.Scale.RESIZE,
         zoom: 1,
         height: "40rem",
         width: "40rem",

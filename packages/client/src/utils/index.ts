@@ -44,6 +44,16 @@ export function hexStringToUtf8(hexStringBigInt: bigint) {
     return decoder.decode(bytes);
 }
 
+export function utf8StringToBigInt(utf8String: string) {
+    const encoder = new TextEncoder();
+    const bytes = encoder.encode(utf8String);
+    const hex = Array.from(bytes)
+        .map((byte) => byte.toString(16).padStart(2, "0"))
+        .join("");
+
+    return BigInt("0x" + hex);
+}
+
 export function getOrder(hexStringBigInt: bigint): string {
     return hexStringToUtf8(hexStringBigInt);
 }

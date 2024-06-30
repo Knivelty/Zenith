@@ -1,5 +1,6 @@
 import { AbilityNameType, AbilityParamType } from "../ability/interface";
 import { logEvent } from "../debug";
+import { AffectedGround, GroundEffect } from "../misc/groundEffect";
 import { EffectParamType, EffectNameType } from "../effect/interface";
 import { NON_EXIST_EVENT_HANDLER } from "../utils";
 import { asyncMap } from "../utils/asyncHelper";
@@ -26,6 +27,13 @@ export interface EventMap {
     type: "Physical" | "Magical" | "Pure" | "Life Drain";
     value: number;
   };
+  // for front end play animation
+  healthDecrease: {
+    pieceId: string;
+    type: "Physical" | "Magical" | "Pure" | "Life Drain";
+    value: number;
+  };
+
   afterPieceAttack: { pieceId: string; targetPieceId: string };
 
   // mana
@@ -40,7 +48,15 @@ export interface EventMap {
   };
 
   // ability relate event
-  abilityCast: { abilityName: AbilityNameType; data: AbilityParamType };
+
+  // this event is used to trigger cast
+  beforeAbilityCast: { abilityName: AbilityNameType; data: AbilityParamType };
+  // this event emit more detail to let client render animation
+  abilityCast: {
+    abilityName: AbilityNameType;
+    data: AbilityParamType;
+    affectedGrounds: AffectedGround[];
+  };
 }
 
 export type EventNameType = keyof EventMap;

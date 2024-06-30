@@ -173,6 +173,39 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">assets/ability/barbariansRage/0.png</key>
+            <key type="filename">assets/ability/barbariansRage/1.png</key>
+            <key type="filename">assets/ability/barbariansRage/10.png</key>
+            <key type="filename">assets/ability/barbariansRage/11.png</key>
+            <key type="filename">assets/ability/barbariansRage/12.png</key>
+            <key type="filename">assets/ability/barbariansRage/13.png</key>
+            <key type="filename">assets/ability/barbariansRage/14.png</key>
+            <key type="filename">assets/ability/barbariansRage/15.png</key>
+            <key type="filename">assets/ability/barbariansRage/16.png</key>
+            <key type="filename">assets/ability/barbariansRage/2.png</key>
+            <key type="filename">assets/ability/barbariansRage/3.png</key>
+            <key type="filename">assets/ability/barbariansRage/4.png</key>
+            <key type="filename">assets/ability/barbariansRage/5.png</key>
+            <key type="filename">assets/ability/barbariansRage/6.png</key>
+            <key type="filename">assets/ability/barbariansRage/7.png</key>
+            <key type="filename">assets/ability/barbariansRage/8.png</key>
+            <key type="filename">assets/ability/barbariansRage/9.png</key>
+            <key type="filename">assets/ability/mountainCollapse/3.png</key>
+            <key type="filename">assets/ability/mountainCollapse/6.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>258,258,515,515</rect>
+                <key>scale9Paddings</key>
+                <rect>258,258,515,515</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">assets/ability/burningBurst/0.png</key>
             <key type="filename">assets/ability/burningBurst/1.png</key>
             <key type="filename">assets/ability/burningBurst/10.png</key>
@@ -196,6 +229,28 @@
                 <rect>354,258,707,515</rect>
                 <key>scale9Paddings</key>
                 <rect>354,258,707,515</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/ability/mountainCollapse/0.png</key>
+            <key type="filename">assets/ability/mountainCollapse/1.png</key>
+            <key type="filename">assets/ability/mountainCollapse/2.png</key>
+            <key type="filename">assets/ability/mountainCollapse/4.png</key>
+            <key type="filename">assets/ability/mountainCollapse/5.png</key>
+            <key type="filename">assets/ability/mountainCollapse/7.png</key>
+            <key type="filename">assets/ability/mountainCollapse/8.png</key>
+            <key type="filename">assets/ability/mountainCollapse/9.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>0,0,0,0</rect>
+                <key>scale9Paddings</key>
+                <rect>0,0,0,0</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

@@ -4,14 +4,14 @@ import { controls } from "./controls";
 import { mapSystem } from "./mapSystem";
 import { camera } from "./camera";
 import { battle } from "./battle";
-import { health } from "./health";
-import { attack } from "./attack";
+import { health } from "./animation/health";
 import { placeSystem } from "./local/placeSystem";
 import { syncSystem } from "./local/syncSystem";
 import { coordOccupationSystem } from "./local/coordOccupationSystem";
 import { followIndexSystem } from "./local/followIndexSystem";
 import { merge } from "./merge";
 import { initialize } from "./initialize";
+import { synergy } from "./animation/synergy";
 
 export const registerSystems = (layer: PhaserLayer) => {
     initialize(layer);
@@ -22,7 +22,7 @@ export const registerSystems = (layer: PhaserLayer) => {
     battle(layer);
     // battleLog(layer);
     health(layer);
-    attack(layer);
+    synergy(layer);
 
     merge(layer);
 

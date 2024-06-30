@@ -2,6 +2,7 @@ import { AbilityFunction } from "./interface";
 import { addEffectToPiece } from "../effect/utils";
 import { asyncMap } from "../utils/asyncHelper";
 import { getBattlePiece } from "../utils/dbHelper";
+import { AffectedGround } from "../misc/groundEffect";
 
 const COL_ATTACK: Record<number, number> = {
   1: 160,
@@ -30,7 +31,9 @@ const SIDE_COL_BURN: Record<number, number> = {
 export const burningBurst: AbilityFunction = async ({ actionPieceId }) => {
   const battlePiece = await getBattlePiece(actionPieceId);
   const frontCol = battlePiece.x;
-  const sideCols = [battlePiece.x].filter((x) => x >= 1 && x <= 8);
+  const sideCols = [battlePiece.x - 1, battlePiece.x + 1].filter(
+    (x) => x >= 0 && x <= 7
+  );
 
   const frontColAttack =
     COL_ATTACK[battlePiece.level] + 0.75 * battlePiece.attack;
@@ -58,6 +61,17 @@ export const burningBurst: AbilityFunction = async ({ actionPieceId }) => {
   const sideColBurnStack = Math.floor(
     SIDE_COL_BURN[battlePiece.level] + 0.1 * battlePiece.spell_amp
   );
+
+  await globalThis.Simulator.eventSystem.emit("abilityCast", {
+    abilityName: "burningBurst",
+    data: { actionPieceId },
+    affectedGrounds: getAffectedGrounds({
+      isHome: battlePiece.isHome,
+      y: battlePiece.y,
+      sideCols,
+      frontCol,
+    }),
+  });
 
   await asyncMap(sideCols, async (col) => {
     await makeColAttack({
@@ -97,8 +111,9 @@ async function makeColAttack({
     .find({
       selector: {
         x: col,
-        y: isHome ? { $gt: startRow } : { $lt: startRow },
+        y: isHome ? { $lt: startRow } : { $gt: startRow },
         isHome: !isHome,
+        dead: false,
       },
     })
     .exec();
@@ -131,8 +146,9 @@ async function makeColBurn({
     .find({
       selector: {
         x: col,
-        y: isHome ? { $gt: startRow } : { $lt: startRow },
+        y: isHome ? { $lt: startRow } : { $gt: startRow },
         isHome: !isHome,
+        dead: false,
       },
     })
     .exec();
@@ -145,4 +161,36 @@ async function makeColBurn({
       duration: 999,
     });
   });
+}
+
+function getAffectedGrounds({
+  isHome,
+  y,
+  frontCol,
+  sideCols,
+}: {
+  isHome: boolean;
+  y: number;
+  frontCol: number;
+  sideCols: number[];
+}) {
+  let affectedGround: AffectedGround[] = [];
+  if (isHome) {
+    for (let i = 0; i < y; i++) {
+      affectedGround.push({ x: frontCol, y: i, groundEffect: "fire" });
+
+      sideCols.map((col) => {
+        affectedGround.push({ x: col, y: i, groundEffect: "slightFire" });
+      });
+    }
+  } else {
+    for (let i = 7; i > y; i--) {
+      affectedGround.push({ x: frontCol, y: i, groundEffect: "fire" });
+      sideCols.map((col) => {
+        affectedGround.push({ x: col, y: i, groundEffect: "slightFire" });
+      });
+    }
+  }
+
+  return affectedGround;
 }

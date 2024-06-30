@@ -28,14 +28,14 @@ export async function tryAttack(
       `piece ${actionPieceId} attack ${targetPieceId} with damage ${damage}`
     );
 
+    await emitAttack(actionPieceId, targetPieceId);
+
     await eventSystem.emit("damage", {
       pieceId: actionPieceId,
       targetPieceId: targetPieceId,
       value: damage,
       type: "Physical",
     });
-
-    await emitAttack(actionPieceId, targetPieceId);
 
     return targetPieceId;
   } else {

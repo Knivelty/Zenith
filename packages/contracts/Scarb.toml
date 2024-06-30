@@ -31,6 +31,14 @@ private_key = "0x23c5116641d16d2855dbdf2624963f055e67a921ed91b86989748cdf3bfa2c4
 world_address = "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0"
 
 
+[profile.sepolia.tool.dojo.env]
+# starknet sepolia public rpc
+rpc_url = "https://starknet-sepolia.public.blastapi.io/rpc/v0_6"
+account_address = "0x01f330217295297676bed94934ea92e657b7b2e556d8690c78d29e2b8833ab4a"
+private_key = ""
+world_address = "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0"
+
+
 [tool.dojo.world]
 name = "autochessia"
 description = "auto chess battle game"

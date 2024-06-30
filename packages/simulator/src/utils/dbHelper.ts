@@ -149,7 +149,7 @@ export async function movePiece(pieceId: string, toX: number, toY: number) {
         id: pieceId,
       },
     })
-    .incrementalPatch({
+    .patch({
       x: toX,
       y: toY,
     });

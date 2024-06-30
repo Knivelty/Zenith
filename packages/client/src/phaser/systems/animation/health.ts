@@ -1,6 +1,12 @@
-import { Entity, Has, setComponent, updateComponent } from "@dojoengine/recs";
-import { defineSystemST } from "../../utils";
-import { PhaserLayer } from "..";
+import {
+    Entity,
+    Has,
+    getComponentValueStrict,
+    setComponent,
+    updateComponent,
+} from "@dojoengine/recs";
+import { defineSystemST } from "../../../utils";
+import { PhaserLayer } from "../..";
 import {
     HEALTH_BAR_BORDER_COLOR,
     HEALTH_BAR_BORDER_WIDTH,
@@ -13,10 +19,11 @@ import {
     HealthBarOffSetY,
     Health_CHANGE_OFFSET_X,
     Health_CHANGE_OFFSET_Y,
-} from "../config/constants";
+} from "../../config/constants";
 import { tween } from "@latticexyz/phaserx";
-import { logDebug } from "../../ui/lib/utils";
+import { logDebug } from "../../../ui/lib/utils";
 import { deferred } from "@latticexyz/utils";
+import { isEqual } from "lodash";
 
 export const health = (layer: PhaserLayer) => {
     const {
@@ -25,7 +32,7 @@ export const health = (layer: PhaserLayer) => {
             Main: { config, objectPool },
         },
         networkLayer: {
-            clientComponents: { HealthBar, Health, HealthChange },
+            clientComponents: { HealthBar, Health, HealthChange, LocalPiece },
         },
     } = layer;
 
@@ -83,6 +90,17 @@ export const health = (layer: PhaserLayer) => {
             }
 
             const healthBar = objectPool.get(entity, "Graphics");
+            const pieceEntity = entity.split("-")[0];
+
+            const localPiece = getComponentValueStrict(
+                LocalPiece,
+                pieceEntity as Entity
+            );
+
+            if (localPiece.idx === 0) {
+                // it mean piece is not on board
+                return;
+            }
 
             // spawn health bar
             healthBar.setComponent({
@@ -138,7 +156,7 @@ export const health = (layer: PhaserLayer) => {
             });
 
             // update health change
-            const healthChangeEntity = `${entity.split("-")[0]}-change`;
+            const healthChangeEntity = `${entity.split("-")[0]}-health-change`;
             const change = !preV?.currentHealth
                 ? 0
                 : v.currentHealth - preV.currentHealth;

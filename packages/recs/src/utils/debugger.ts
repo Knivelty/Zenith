@@ -1,3 +1,3 @@
 import d from "debug";
 
-export const logSetCom = d("debug:SetComponent");
+export const logSetCom = d("recs:SetComponent");

@@ -74,7 +74,7 @@ export function HeroInfoDialog() {
             })}
             ref={dialogRef}
         >
-            <HeroDetail attr={baseAttr}></HeroDetail>
+            <HeroDetail gid={piece?.gid} attr={baseAttr}></HeroDetail>
         </div>
     );
 }

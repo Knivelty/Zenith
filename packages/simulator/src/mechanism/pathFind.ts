@@ -8,6 +8,7 @@ import { getAllUndeadPieceIds, getBattlePiece } from "../utils/dbHelper";
 import { logJps } from "../utils/logger";
 import { manhattanDistance } from "./distance";
 import { uniqWith } from "lodash";
+import { asyncMap } from "../utils/asyncHelper";
 
 export async function findPath(actionPieceId: string, targetPieceId: string) {
   const actionPieceInBattle = await getBattlePiece(actionPieceId);
@@ -19,7 +20,7 @@ export async function findPath(actionPieceId: string, targetPieceId: string) {
   const undeadPieceIds = await getAllUndeadPieceIds();
 
   // fill the map
-  undeadPieceIds?.forEach(async (pid: string) => {
+  await asyncMap(undeadPieceIds, async (pid: string) => {
     if (pid === actionPieceId) {
       return;
     }
@@ -97,8 +98,6 @@ export function getTargetPoint(
     .sort((a, b) => {
       return a.dis - b.dis;
     })[0];
-
-  // console.log("nearestPoint: ", nearestPoint);
 
   return { x: nearestPoint.x, y: nearestPoint.y, needMove: true };
 }

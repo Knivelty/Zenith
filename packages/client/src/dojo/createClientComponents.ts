@@ -80,6 +80,15 @@ export function createClientComponents({
             },
             { metadata: { name: "LocalPieceOccupation" } }
         ),
+        LocalSynergyStatus: defineComponent(
+            world,
+            {
+                name: Type.String,
+                count: Type.Number,
+                unlockLevels: Type.NumberArray,
+            },
+            { metadata: { name: "LocalPieceOccupation" } }
+        ),
         // Position: overridableComponent(contractComponents.Position),
         GameStatus: defineComponent(
             world,
@@ -134,14 +143,6 @@ export function createClientComponents({
                 max: Type.Number,
             },
             { metadata: { name: "Health" } }
-        ),
-        Attack: defineComponent(
-            world,
-            {
-                attacker: Type.String,
-                attacked: Type.String,
-            },
-            { metadata: { name: "Attack" } }
         ),
         UserOperation: defineComponent(
             world,

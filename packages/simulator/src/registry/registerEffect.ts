@@ -4,6 +4,7 @@ import { onEffectDarknessChange } from "../effect/darkness";
 import { onEffectShieldChange } from "../effect/shield";
 import { onEffectShieldRevengeChange } from "../effect/shieldRevenge";
 import { onEffectReviveChange } from "../effect/revive";
+import { onEffectRageChange } from "../effect/rage";
 
 export function registerEffect() {
   registerOnEffectChange<"Darkness">("Darkness", onEffectDarknessChange);
@@ -14,6 +15,7 @@ export function registerEffect() {
     onEffectShieldRevengeChange
   );
   registerOnEffectChange<"Revive">("Revive", onEffectReviveChange);
+  registerOnEffectChange<"Rage">("Rage", onEffectRageChange);
 }
 
 export function registerOnEffectChange<T extends EffectNameType>(

@@ -22,7 +22,7 @@ function registerSingleAbility(
 ) {
   const eventSystem = globalThis.Simulator.eventSystem;
 
-  eventSystem.on("abilityCast", async ({ abilityName, data }) => {
+  eventSystem.on("beforeAbilityCast", async ({ abilityName, data }) => {
     if (name === abilityName) {
       await handler(data);
       logCast(`piece ${data.actionPieceId} finish cast ${abilityName}`);
