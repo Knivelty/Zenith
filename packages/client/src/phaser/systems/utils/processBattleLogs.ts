@@ -56,6 +56,10 @@ export const processBattle = (component: ClientComponents) => {
                     ability_name: "mountainCollapse",
                     requiredMana: 100,
                 },
+                {
+                    ability_name: "interlockedInferno",
+                    requiredMana: 100,
+                },
             ]
         );
 

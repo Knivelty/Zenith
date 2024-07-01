@@ -43,6 +43,7 @@ export enum AbilityAnimations {
     burningBurst = "burningBurst",
     barbariansRage = "barbariansRage",
     mountainCollapse = "mountainCollapse",
+    interlockedInferno = "interlockedInferno",
 }
 
 export enum SynergyAnimations {
@@ -54,13 +55,16 @@ export enum SynergyAnimations {
     strength = "strength",
     light = "light",
     brute = "brute",
-    cunning = "cunning"
+    cunning = "cunning",
 }
 
 export enum GroundAnimations {
-    invalid = "invalid",
     fire = "fire",
     slightFire = "slightFire",
+    inferno_center = "inferno_center",
+    inferno_middle = "inferno_middle",
+    inferno_border = "inferno_border",
+    inferno_edge = "inferno_edge",
 }
 
 // image addresses

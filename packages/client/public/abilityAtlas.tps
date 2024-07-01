@@ -80,9 +80,9 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>2048</int>
+            <int>20480</int>
             <key>height</key>
-            <int>2048</int>
+            <int>20480</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>
@@ -190,6 +190,21 @@
             <key type="filename">assets/ability/barbariansRage/7.png</key>
             <key type="filename">assets/ability/barbariansRage/8.png</key>
             <key type="filename">assets/ability/barbariansRage/9.png</key>
+            <key type="filename">assets/ability/interlockedInferno/0.png</key>
+            <key type="filename">assets/ability/interlockedInferno/1.png</key>
+            <key type="filename">assets/ability/interlockedInferno/10.png</key>
+            <key type="filename">assets/ability/interlockedInferno/11.png</key>
+            <key type="filename">assets/ability/interlockedInferno/12.png</key>
+            <key type="filename">assets/ability/interlockedInferno/13.png</key>
+            <key type="filename">assets/ability/interlockedInferno/14.png</key>
+            <key type="filename">assets/ability/interlockedInferno/2.png</key>
+            <key type="filename">assets/ability/interlockedInferno/3.png</key>
+            <key type="filename">assets/ability/interlockedInferno/4.png</key>
+            <key type="filename">assets/ability/interlockedInferno/5.png</key>
+            <key type="filename">assets/ability/interlockedInferno/6.png</key>
+            <key type="filename">assets/ability/interlockedInferno/7.png</key>
+            <key type="filename">assets/ability/interlockedInferno/8.png</key>
+            <key type="filename">assets/ability/interlockedInferno/9.png</key>
             <key type="filename">assets/ability/mountainCollapse/3.png</key>
             <key type="filename">assets/ability/mountainCollapse/6.png</key>
             <struct type="IndividualSpriteSettings">

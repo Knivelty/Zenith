@@ -80,7 +80,7 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>2048</int>
+            <int>20480</int>
             <key>height</key>
             <int>2048</int>
         </QSize>
@@ -192,6 +192,60 @@
                 <rect>163,163,325,325</rect>
                 <key>scale9Paddings</key>
                 <rect>163,163,325,325</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/ground/inferno_border/1.png</key>
+            <key type="filename">assets/ground/inferno_border/10.png</key>
+            <key type="filename">assets/ground/inferno_border/2.png</key>
+            <key type="filename">assets/ground/inferno_border/3.png</key>
+            <key type="filename">assets/ground/inferno_border/4.png</key>
+            <key type="filename">assets/ground/inferno_border/5.png</key>
+            <key type="filename">assets/ground/inferno_border/6.png</key>
+            <key type="filename">assets/ground/inferno_border/7.png</key>
+            <key type="filename">assets/ground/inferno_border/8.png</key>
+            <key type="filename">assets/ground/inferno_border/9.png</key>
+            <key type="filename">assets/ground/inferno_center/1.png</key>
+            <key type="filename">assets/ground/inferno_center/10.png</key>
+            <key type="filename">assets/ground/inferno_center/2.png</key>
+            <key type="filename">assets/ground/inferno_center/3.png</key>
+            <key type="filename">assets/ground/inferno_center/4.png</key>
+            <key type="filename">assets/ground/inferno_center/5.png</key>
+            <key type="filename">assets/ground/inferno_center/6.png</key>
+            <key type="filename">assets/ground/inferno_center/7.png</key>
+            <key type="filename">assets/ground/inferno_center/8.png</key>
+            <key type="filename">assets/ground/inferno_center/9.png</key>
+            <key type="filename">assets/ground/inferno_edge/1.png</key>
+            <key type="filename">assets/ground/inferno_edge/10.png</key>
+            <key type="filename">assets/ground/inferno_edge/2.png</key>
+            <key type="filename">assets/ground/inferno_edge/3.png</key>
+            <key type="filename">assets/ground/inferno_edge/4.png</key>
+            <key type="filename">assets/ground/inferno_edge/5.png</key>
+            <key type="filename">assets/ground/inferno_edge/6.png</key>
+            <key type="filename">assets/ground/inferno_edge/7.png</key>
+            <key type="filename">assets/ground/inferno_edge/8.png</key>
+            <key type="filename">assets/ground/inferno_edge/9.png</key>
+            <key type="filename">assets/ground/inferno_middle/1.png</key>
+            <key type="filename">assets/ground/inferno_middle/10.png</key>
+            <key type="filename">assets/ground/inferno_middle/2.png</key>
+            <key type="filename">assets/ground/inferno_middle/3.png</key>
+            <key type="filename">assets/ground/inferno_middle/4.png</key>
+            <key type="filename">assets/ground/inferno_middle/5.png</key>
+            <key type="filename">assets/ground/inferno_middle/6.png</key>
+            <key type="filename">assets/ground/inferno_middle/7.png</key>
+            <key type="filename">assets/ground/inferno_middle/8.png</key>
+            <key type="filename">assets/ground/inferno_middle/9.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>125,125,250,250</rect>
+                <key>scale9Paddings</key>
+                <rect>125,125,250,250</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

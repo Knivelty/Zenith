@@ -4,8 +4,8 @@
 			"image": "abilityAtlas.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 1820,
-				"h": 1820
+				"w": 2080,
+				"h": 2080
 			},
 			"scale": 0.25,
 			"frames": [
@@ -111,6 +111,27 @@
 						"x": 1425,
 						"y": 1,
 						"w": 354,
+						"h": 258
+					}
+				},
+				{
+					"filename": "barbariansRage/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1781,
+						"y": 1,
+						"w": 258,
 						"h": 258
 					}
 				},
@@ -255,30 +276,9 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 357,
-						"y": 261,
+						"x": 1,
+						"y": 1821,
 						"w": 354,
-						"h": 258
-					}
-				},
-				{
-					"filename": "barbariansRage/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 258,
-						"h": 258
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 258,
-						"h": 258
-					},
-					"frame": {
-						"x": 713,
-						"y": 261,
-						"w": 258,
 						"h": 258
 					}
 				},
@@ -297,7 +297,7 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 973,
+						"x": 357,
 						"y": 261,
 						"w": 258,
 						"h": 258
@@ -318,7 +318,7 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1233,
+						"x": 617,
 						"y": 261,
 						"w": 258,
 						"h": 258
@@ -339,7 +339,7 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1493,
+						"x": 877,
 						"y": 261,
 						"w": 258,
 						"h": 258
@@ -360,8 +360,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 357,
-						"y": 521,
+						"x": 1137,
+						"y": 261,
 						"w": 258,
 						"h": 258
 					}
@@ -381,8 +381,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 357,
-						"y": 781,
+						"x": 1397,
+						"y": 261,
 						"w": 258,
 						"h": 258
 					}
@@ -402,8 +402,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 357,
-						"y": 1041,
+						"x": 1657,
+						"y": 261,
 						"w": 258,
 						"h": 258
 					}
@@ -424,7 +424,7 @@
 					},
 					"frame": {
 						"x": 357,
-						"y": 1301,
+						"y": 521,
 						"w": 258,
 						"h": 258
 					}
@@ -445,7 +445,7 @@
 					},
 					"frame": {
 						"x": 357,
-						"y": 1561,
+						"y": 781,
 						"w": 258,
 						"h": 258
 					}
@@ -465,8 +465,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 617,
-						"y": 521,
+						"x": 357,
+						"y": 1041,
 						"w": 258,
 						"h": 258
 					}
@@ -486,8 +486,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 877,
-						"y": 521,
+						"x": 357,
+						"y": 1301,
 						"w": 258,
 						"h": 258
 					}
@@ -507,8 +507,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1137,
-						"y": 521,
+						"x": 357,
+						"y": 1561,
 						"w": 258,
 						"h": 258
 					}
@@ -528,8 +528,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1397,
-						"y": 521,
+						"x": 357,
+						"y": 1821,
 						"w": 258,
 						"h": 258
 					}
@@ -550,13 +550,118 @@
 					},
 					"frame": {
 						"x": 617,
-						"y": 781,
+						"y": 521,
 						"w": 258,
 						"h": 258
 					}
 				},
 				{
 					"filename": "barbariansRage/14.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 877,
+						"y": 521,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "barbariansRage/15.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1137,
+						"y": 521,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "barbariansRage/16.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1397,
+						"y": 521,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "interlockedInferno/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1657,
+						"y": 521,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "interlockedInferno/1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 617,
+						"y": 781,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "interlockedInferno/2.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -577,7 +682,7 @@
 					}
 				},
 				{
-					"filename": "barbariansRage/15.png",
+					"filename": "interlockedInferno/3.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -598,7 +703,7 @@
 					}
 				},
 				{
-					"filename": "barbariansRage/16.png",
+					"filename": "interlockedInferno/4.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -619,7 +724,28 @@
 					}
 				},
 				{
-					"filename": "mountainCollapse/0.png",
+					"filename": "interlockedInferno/5.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 617,
+						"y": 1821,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "interlockedInferno/6.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -640,7 +766,7 @@
 					}
 				},
 				{
-					"filename": "mountainCollapse/1.png",
+					"filename": "interlockedInferno/7.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -661,7 +787,7 @@
 					}
 				},
 				{
-					"filename": "mountainCollapse/2.png",
+					"filename": "interlockedInferno/8.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -682,7 +808,28 @@
 					}
 				},
 				{
-					"filename": "mountainCollapse/3.png",
+					"filename": "interlockedInferno/9.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1657,
+						"y": 781,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "interlockedInferno/10.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -703,7 +850,7 @@
 					}
 				},
 				{
-					"filename": "mountainCollapse/4.png",
+					"filename": "interlockedInferno/11.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -724,7 +871,7 @@
 					}
 				},
 				{
-					"filename": "mountainCollapse/5.png",
+					"filename": "interlockedInferno/12.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -745,7 +892,28 @@
 					}
 				},
 				{
-					"filename": "mountainCollapse/6.png",
+					"filename": "interlockedInferno/13.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 877,
+						"y": 1821,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "interlockedInferno/14.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -761,6 +929,153 @@
 					"frame": {
 						"x": 1137,
 						"y": 1041,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "mountainCollapse/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1397,
+						"y": 1041,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "mountainCollapse/1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1657,
+						"y": 1041,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "mountainCollapse/2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1137,
+						"y": 1301,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "mountainCollapse/3.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1137,
+						"y": 1561,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "mountainCollapse/4.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1137,
+						"y": 1821,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "mountainCollapse/5.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1397,
+						"y": 1301,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "mountainCollapse/6.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1657,
+						"y": 1301,
 						"w": 258,
 						"h": 258
 					}
@@ -781,7 +1096,7 @@
 					},
 					"frame": {
 						"x": 1397,
-						"y": 1041,
+						"y": 1561,
 						"w": 258,
 						"h": 258
 					}
@@ -801,8 +1116,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1137,
-						"y": 1301,
+						"x": 1397,
+						"y": 1821,
 						"w": 258,
 						"h": 258
 					}
@@ -822,7 +1137,7 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1137,
+						"x": 1657,
 						"y": 1561,
 						"w": 258,
 						"h": 258
@@ -834,6 +1149,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:e362ae7893321942b999d382002cee8a:7cc25ab15e37ae5cfb28dfb28d348e35:ceec77ccbe7a6c347fe8fec448addb3a$"
+		"smartupdate": "$TexturePacker:SmartUpdate:60393536a0c7021fa9b47094eb83b05a:7bb64d8837983113665e812491a27db1:ceec77ccbe7a6c347fe8fec448addb3a$"
 	}
 }

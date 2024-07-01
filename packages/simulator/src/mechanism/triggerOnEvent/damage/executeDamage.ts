@@ -34,7 +34,7 @@ export function executeDamageOnEvent() {
       value,
     });
 
-    decreaseHealth(targetPieceId, value);
+    decreaseHealth(pieceId, targetPieceId, type, value);
   });
 }
 

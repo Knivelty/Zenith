@@ -20,7 +20,7 @@ import {
     EventMap,
     EventWithName,
 } from "@zenith/simulator/src/event/createEventSystem";
-import { getAnimationIndex } from "./animationHelper";
+import { getAnimation, getAnimationIndex } from "./animationHelper";
 import { logDebug } from "../../../ui/lib/utils";
 import { encodeGroundEntity } from "./entityEncoder";
 
@@ -237,7 +237,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 sprite.play(animation);
                 sprite.stopAfterRepeat(0);
 
-                const onAnimationStop = () => {
+                const onAnimationComplete = () => {
                     const idleAnimation =
                         config.animations[AnimationIndex[piece.creature_index]];
                     sprite.play(idleAnimation);
@@ -246,7 +246,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
                     resolve();
                 };
 
-                sprite.once("animationstop", onAnimationStop);
+                sprite.once("animationcomplete", onAnimationComplete);
 
                 const scale = TILE_HEIGHT / sprite.height;
                 sprite.setScale(scale);
@@ -257,9 +257,9 @@ export const battleAnimation = (layer: PhaserLayer) => {
 
         // play ground effect amination
         affectedGrounds.forEach((ag) => {
-            console.log("affectedGrounds: ", affectedGrounds);
+            // console.log("affectedGrounds: ", affectedGrounds);
 
-            const effectAnimationIndex = getAnimationIndex(
+            const effectAnimation = getAnimation(
                 ag.groundEffect as GroundAnimations
             );
             const groundSpriteEntity = encodeGroundEntity(ag.x, ag.y);
@@ -269,7 +269,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 id: groundSpriteEntity,
                 once: async (sprite: Phaser.GameObjects.Sprite) => {
                     sprite.setPosition(ag.x * TILE_HEIGHT, ag.y * TILE_HEIGHT);
-                    sprite.play(config.animations[effectAnimationIndex]);
+                    sprite.play(effectAnimation);
 
                     const scale = TILE_HEIGHT / sprite.height;
                     sprite.setScale(scale);
