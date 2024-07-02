@@ -349,6 +349,16 @@ const baseAnimations: AnimationsConfig = [
         suffix: ".png",
     },
     {
+        key: AbilityAnimations.penetrationInfection,
+        assetKey: Assets.AbilityAtlas,
+        startFrame: 1,
+        endFrame: 13,
+        frameRate: 13,
+        repeat: 0,
+        prefix: "penetrationInfection/",
+        suffix: ".png",
+    },
+    {
         key: GroundAnimations.fire,
         assetKey: Assets.GroundAtlas,
         startFrame: 0,

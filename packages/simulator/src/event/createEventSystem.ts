@@ -4,6 +4,7 @@ import { AffectedGround, GroundEffect } from "../misc/groundEffect";
 import { EffectParamType, EffectNameType } from "../effect/interface";
 import { NON_EXIST_EVENT_HANDLER } from "../utils";
 import { asyncMap } from "../utils/asyncHelper";
+import { BattleEntityType } from "../schema";
 
 // define event map
 export interface EventMap {
@@ -57,6 +58,9 @@ export interface EventMap {
     data: AbilityParamType;
     affectedGrounds: AffectedGround[];
   };
+
+  // summon event
+  pieceSpawn: BattleEntityType;
 }
 
 export type EventNameType = keyof EventMap;

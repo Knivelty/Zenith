@@ -1,22 +1,6 @@
 import { EffectNameType } from "../effect/interface";
 import { UNKNOWN_CREATURE_ERROR, UNKNOWN_PIECE_ERROR } from "./error";
 
-export async function getPieceBaseState(id: string) {
-  const db = globalThis.Simulator.db;
-
-  const piece = await db.base_state
-    .findOne({
-      selector: { id: id },
-    })
-    .exec();
-
-  if (!piece) {
-    throw UNKNOWN_PIECE_ERROR;
-  }
-
-  return piece;
-}
-
 export async function getBattlePiece(id: string) {
   const db = globalThis.Simulator.db;
 
@@ -77,15 +61,11 @@ export async function getAllUndeadPieceIds() {
 export async function getAwayUndeadPieceIds() {
   const db = globalThis.Simulator.db;
 
-  const undeadPieceIds = await getAllUndeadPieceIds();
-
-  const awayUndeadPieceIds = await db.base_state
+  const awayUndeadPieceIds = await db.battle_entity
     .find({
       selector: {
+        dead: false,
         isHome: false,
-        id: {
-          $in: undeadPieceIds,
-        },
       },
     })
 
@@ -97,15 +77,11 @@ export async function getAwayUndeadPieceIds() {
 export async function getHomeUndeadPieceIds() {
   const db = globalThis.Simulator.db;
 
-  const undeadPieceIds = await getAllUndeadPieceIds();
-
-  const alliedUndeadPieceIds = await db.base_state
+  const alliedUndeadPieceIds = await db.battle_entity
     .find({
       selector: {
         isHome: true,
-        id: {
-          $in: undeadPieceIds,
-        },
+        dead: false,
       },
     })
 
@@ -155,7 +131,12 @@ export async function movePiece(pieceId: string, toX: number, toY: number) {
     });
 }
 
-export async function decreaseHealth(source: string, pieceId: string, type: string, healthDiff: number) {
+export async function decreaseHealth(
+  source: string,
+  pieceId: string,
+  type: string,
+  healthDiff: number
+) {
   const db = globalThis.Simulator.db;
 
   await db.battle_entity
@@ -178,18 +159,6 @@ export async function decreaseHealth(source: string, pieceId: string, type: stri
       dmgSource: type,
     });
   }
-}
-
-export async function getHomePiece() {
-  const db = globalThis.Simulator.db;
-
-  return await db.base_state.find({ selector: { isHome: true } }).exec();
-}
-
-export async function getAwayPiece() {
-  const db = globalThis.Simulator.db;
-
-  return await db.base_state.find({ selector: { isHome: false } }).exec();
 }
 
 export async function decreaseMana(pieceId: string, manaDecrease: number) {

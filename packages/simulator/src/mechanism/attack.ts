@@ -1,6 +1,5 @@
-import { logAttack } from "../debug";
+import { logAttack, logJps } from "../debug";
 import { getBattlePiece } from "../utils/dbHelper";
-import { logJps } from "../utils/logger";
 import { manhattanDistance } from "./distance";
 
 export async function tryAttack(

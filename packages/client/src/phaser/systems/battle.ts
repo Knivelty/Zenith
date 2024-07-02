@@ -80,6 +80,8 @@ export const battle = (layer: PhaserLayer) => {
                     played: false,
                 });
             } else if (Boolean(v.end) === true && v.winner !== 0n) {
+                logDebug("before process battle log:", v, preV);
+
                 updateComponent(GameStatus, zeroEntity, {
                     status: GameStatusEnum.InBattle,
                 });

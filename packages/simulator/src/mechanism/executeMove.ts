@@ -1,5 +1,5 @@
+import { logJps } from "../debug";
 import { getBattlePiece, movePiece } from "../utils/dbHelper";
-import { logJps } from "../utils/logger";
 import { findPath } from "./pathFind";
 
 export async function executeMove(

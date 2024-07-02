@@ -4,15 +4,16 @@ import { SynergyName } from "../synergy";
 import { EventNameType } from "../event/createEventSystem";
 
 export const logSynergy = (synergyName: SynergyName) =>
-  debug(`synergy:${synergyName}`);
+  debug(`simulator:synergy:${synergyName}`);
 export const logEffect = (effectName: EffectNameType) =>
-  debug(`effect:${effectName}`);
+  debug(`simulator:effect:${effectName}`);
 
 export const logEvent = (eventName: EventNameType) =>
-  debug(`event:${eventName}`);
+  debug(`simulator:event:${eventName}`);
 
-export const logAttack = debug("attack");
-export const logSpellAttack = debug("spellAttack");
-export const logCast = debug("abilityCast");
+export const logAttack = debug("simulator:attack");
+export const logSpellAttack = debug("simulator:spellAttack");
+export const logCast = debug("simulator:abilityCast");
 
-export const logDebug = debug("debug");
+export const logDebug = debug("simulator:debug");
+export const logJps = debug("simulator:jps");

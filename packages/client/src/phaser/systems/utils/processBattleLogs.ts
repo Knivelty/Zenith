@@ -60,6 +60,10 @@ export const processBattle = (component: ClientComponents) => {
                     ability_name: "interlockedInferno",
                     requiredMana: 100,
                 },
+                {
+                    ability_name: "penetrationInfection",
+                    requiredMana: 80,
+                },
             ]
         );
 
@@ -177,16 +181,13 @@ export const processBattle = (component: ClientComponents) => {
             });
         }
 
-        const { calculateBattleLogs, destroyDB, getEmittedEvents } =
-            await createSimulator(
-                allCreatures,
-                allPieces,
-                allAbilitiesProfiles
-            );
+        const { calculateBattleLogs, getEmittedEvents } = await createSimulator(
+            allCreatures,
+            allPieces,
+            allAbilitiesProfiles
+        );
 
         const { result } = await calculateBattleLogs();
-
-        await destroyDB();
 
         const allEvents = getEmittedEvents();
 

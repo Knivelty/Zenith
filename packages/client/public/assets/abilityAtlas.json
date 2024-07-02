@@ -4,8 +4,8 @@
 			"image": "abilityAtlas.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 2080,
-				"h": 2080
+				"w": 2340,
+				"h": 2340
 			},
 			"scale": 0.25,
 			"frames": [
@@ -115,27 +115,6 @@
 					}
 				},
 				{
-					"filename": "barbariansRage/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 258,
-						"h": 258
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 258,
-						"h": 258
-					},
-					"frame": {
-						"x": 1781,
-						"y": 1,
-						"w": 258,
-						"h": 258
-					}
-				},
-				{
 					"filename": "burningBurst/5.png",
 					"rotated": false,
 					"trimmed": false,
@@ -150,8 +129,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1,
-						"y": 261,
+						"x": 1781,
+						"y": 1,
 						"w": 354,
 						"h": 258
 					}
@@ -172,7 +151,7 @@
 					},
 					"frame": {
 						"x": 1,
-						"y": 521,
+						"y": 261,
 						"w": 354,
 						"h": 258
 					}
@@ -193,7 +172,7 @@
 					},
 					"frame": {
 						"x": 1,
-						"y": 781,
+						"y": 521,
 						"w": 354,
 						"h": 258
 					}
@@ -214,7 +193,7 @@
 					},
 					"frame": {
 						"x": 1,
-						"y": 1041,
+						"y": 781,
 						"w": 354,
 						"h": 258
 					}
@@ -235,7 +214,7 @@
 					},
 					"frame": {
 						"x": 1,
-						"y": 1301,
+						"y": 1041,
 						"w": 354,
 						"h": 258
 					}
@@ -256,7 +235,7 @@
 					},
 					"frame": {
 						"x": 1,
-						"y": 1561,
+						"y": 1301,
 						"w": 354,
 						"h": 258
 					}
@@ -277,8 +256,29 @@
 					},
 					"frame": {
 						"x": 1,
-						"y": 1821,
+						"y": 1561,
 						"w": 354,
+						"h": 258
+					}
+				},
+				{
+					"filename": "barbariansRage/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1,
+						"y": 1821,
+						"w": 258,
 						"h": 258
 					}
 				},
@@ -297,8 +297,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 357,
-						"y": 261,
+						"x": 1,
+						"y": 2081,
 						"w": 258,
 						"h": 258
 					}
@@ -318,8 +318,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 617,
-						"y": 261,
+						"x": 261,
+						"y": 1821,
 						"w": 258,
 						"h": 258
 					}
@@ -339,8 +339,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 877,
-						"y": 261,
+						"x": 261,
+						"y": 2081,
 						"w": 258,
 						"h": 258
 					}
@@ -360,7 +360,7 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1137,
+						"x": 357,
 						"y": 261,
 						"w": 258,
 						"h": 258
@@ -381,48 +381,6 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1397,
-						"y": 261,
-						"w": 258,
-						"h": 258
-					}
-				},
-				{
-					"filename": "barbariansRage/6.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 258,
-						"h": 258
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 258,
-						"h": 258
-					},
-					"frame": {
-						"x": 1657,
-						"y": 261,
-						"w": 258,
-						"h": 258
-					}
-				},
-				{
-					"filename": "barbariansRage/7.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 258,
-						"h": 258
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 258,
-						"h": 258
-					},
-					"frame": {
 						"x": 357,
 						"y": 521,
 						"w": 258,
@@ -430,7 +388,7 @@
 					}
 				},
 				{
-					"filename": "barbariansRage/8.png",
+					"filename": "barbariansRage/6.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -451,7 +409,7 @@
 					}
 				},
 				{
-					"filename": "barbariansRage/9.png",
+					"filename": "barbariansRage/7.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -472,7 +430,7 @@
 					}
 				},
 				{
-					"filename": "barbariansRage/10.png",
+					"filename": "barbariansRage/8.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -493,7 +451,7 @@
 					}
 				},
 				{
-					"filename": "barbariansRage/11.png",
+					"filename": "barbariansRage/9.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -514,6 +472,48 @@
 					}
 				},
 				{
+					"filename": "barbariansRage/10.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 521,
+						"y": 1821,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "barbariansRage/11.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 521,
+						"y": 2081,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
 					"filename": "barbariansRage/12.png",
 					"rotated": false,
 					"trimmed": false,
@@ -528,8 +528,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 357,
-						"y": 1821,
+						"x": 617,
+						"y": 261,
 						"w": 258,
 						"h": 258
 					}
@@ -570,90 +570,6 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 877,
-						"y": 521,
-						"w": 258,
-						"h": 258
-					}
-				},
-				{
-					"filename": "barbariansRage/15.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 258,
-						"h": 258
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 258,
-						"h": 258
-					},
-					"frame": {
-						"x": 1137,
-						"y": 521,
-						"w": 258,
-						"h": 258
-					}
-				},
-				{
-					"filename": "barbariansRage/16.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 258,
-						"h": 258
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 258,
-						"h": 258
-					},
-					"frame": {
-						"x": 1397,
-						"y": 521,
-						"w": 258,
-						"h": 258
-					}
-				},
-				{
-					"filename": "interlockedInferno/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 258,
-						"h": 258
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 258,
-						"h": 258
-					},
-					"frame": {
-						"x": 1657,
-						"y": 521,
-						"w": 258,
-						"h": 258
-					}
-				},
-				{
-					"filename": "interlockedInferno/1.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 258,
-						"h": 258
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 258,
-						"h": 258
-					},
-					"frame": {
 						"x": 617,
 						"y": 781,
 						"w": 258,
@@ -661,7 +577,7 @@
 					}
 				},
 				{
-					"filename": "interlockedInferno/2.png",
+					"filename": "barbariansRage/15.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -682,7 +598,7 @@
 					}
 				},
 				{
-					"filename": "interlockedInferno/3.png",
+					"filename": "barbariansRage/16.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -703,7 +619,7 @@
 					}
 				},
 				{
-					"filename": "interlockedInferno/4.png",
+					"filename": "interlockedInferno/0.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -724,6 +640,90 @@
 					}
 				},
 				{
+					"filename": "interlockedInferno/1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 781,
+						"y": 1821,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "interlockedInferno/2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 781,
+						"y": 2081,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "interlockedInferno/3.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1041,
+						"y": 261,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "interlockedInferno/4.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1301,
+						"y": 261,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
 					"filename": "interlockedInferno/5.png",
 					"rotated": false,
 					"trimmed": false,
@@ -738,8 +738,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 617,
-						"y": 1821,
+						"x": 1561,
+						"y": 261,
 						"w": 258,
 						"h": 258
 					}
@@ -759,8 +759,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 877,
-						"y": 781,
+						"x": 1821,
+						"y": 261,
 						"w": 258,
 						"h": 258
 					}
@@ -780,8 +780,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1137,
-						"y": 781,
+						"x": 2081,
+						"y": 261,
 						"w": 258,
 						"h": 258
 					}
@@ -801,8 +801,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1397,
-						"y": 781,
+						"x": 877,
+						"y": 521,
 						"w": 258,
 						"h": 258
 					}
@@ -822,7 +822,7 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1657,
+						"x": 877,
 						"y": 781,
 						"w": 258,
 						"h": 258
@@ -906,7 +906,7 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 877,
+						"x": 1041,
 						"y": 1821,
 						"w": 258,
 						"h": 258
@@ -927,8 +927,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1137,
-						"y": 1041,
+						"x": 1041,
+						"y": 2081,
 						"w": 258,
 						"h": 258
 					}
@@ -948,8 +948,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1397,
-						"y": 1041,
+						"x": 1301,
+						"y": 521,
 						"w": 258,
 						"h": 258
 					}
@@ -969,8 +969,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1657,
-						"y": 1041,
+						"x": 1561,
+						"y": 521,
 						"w": 258,
 						"h": 258
 					}
@@ -990,8 +990,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1137,
-						"y": 1301,
+						"x": 1821,
+						"y": 521,
 						"w": 258,
 						"h": 258
 					}
@@ -1011,8 +1011,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1137,
-						"y": 1561,
+						"x": 2081,
+						"y": 521,
 						"w": 258,
 						"h": 258
 					}
@@ -1033,7 +1033,7 @@
 					},
 					"frame": {
 						"x": 1137,
-						"y": 1821,
+						"y": 781,
 						"w": 258,
 						"h": 258
 					}
@@ -1053,8 +1053,8 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1397,
-						"y": 1301,
+						"x": 1137,
+						"y": 1041,
 						"w": 258,
 						"h": 258
 					}
@@ -1074,7 +1074,7 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1657,
+						"x": 1137,
 						"y": 1301,
 						"w": 258,
 						"h": 258
@@ -1095,7 +1095,7 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1397,
+						"x": 1137,
 						"y": 1561,
 						"w": 258,
 						"h": 258
@@ -1116,7 +1116,7 @@
 						"h": 258
 					},
 					"frame": {
-						"x": 1397,
+						"x": 1301,
 						"y": 1821,
 						"w": 258,
 						"h": 258
@@ -1137,8 +1137,281 @@
 						"h": 258
 					},
 					"frame": {
+						"x": 1301,
+						"y": 2081,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "penetrationInfection/1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1561,
+						"y": 781,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "penetrationInfection/2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1821,
+						"y": 781,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "penetrationInfection/3.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 2081,
+						"y": 781,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "penetrationInfection/4.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1397,
+						"y": 1041,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "penetrationInfection/5.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1397,
+						"y": 1301,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "penetrationInfection/6.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1397,
+						"y": 1561,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "penetrationInfection/7.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1561,
+						"y": 1821,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "penetrationInfection/8.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1561,
+						"y": 2081,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "penetrationInfection/9.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1821,
+						"y": 1041,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "penetrationInfection/10.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 2081,
+						"y": 1041,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "penetrationInfection/11.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1657,
+						"y": 1301,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "penetrationInfection/12.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
 						"x": 1657,
 						"y": 1561,
+						"w": 258,
+						"h": 258
+					}
+				},
+				{
+					"filename": "penetrationInfection/13.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 258,
+						"h": 258
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 258,
+						"h": 258
+					},
+					"frame": {
+						"x": 1917,
+						"y": 1301,
 						"w": 258,
 						"h": 258
 					}
@@ -1149,6 +1422,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:60393536a0c7021fa9b47094eb83b05a:7bb64d8837983113665e812491a27db1:ceec77ccbe7a6c347fe8fec448addb3a$"
+		"smartupdate": "$TexturePacker:SmartUpdate:2cb8e88316050145ffb66df379c71550:23ff0383aa5295f5b386be9b3b4a0489:ceec77ccbe7a6c347fe8fec448addb3a$"
 	}
 }

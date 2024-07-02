@@ -13,10 +13,17 @@ import {
     HEALTH_PER_SEGMENT,
     TILE_HEIGHT,
 } from "../../config/constants";
-import { chainToWorldCoord, worldToChainCoord } from "./coorConvert";
+import {
+    chainToSimulatorCoord,
+    chainToWorldCoord,
+    simulatorToWorldCoord,
+    worldToChainCoord,
+} from "./coorConvert";
 import { zeroEntity } from "../../../utils";
 import { isEqual } from "lodash";
 import { logDebug } from "../../../ui/lib/utils";
+import { BattleEntityType } from "@zenith/simulator";
+import { getCreatureProfile } from "../../../utils/componentHelpers";
 
 export const pieceManage = (layer: PhaserLayer) => {
     const {
@@ -83,9 +90,7 @@ export const pieceManage = (layer: PhaserLayer) => {
             getEntityIdFromKeys([playerAddr, index])
         );
 
-        const status = getComponentValueStrict(GameStatus, zeroEntity);
-
-        pieceGid = playerPiece?.gid || pieceGid;
+        pieceGid = playerPiece?.gid ?? pieceGid;
 
         if (!playerPiece && pieceGid === 0) {
             logDebug("no piece for ", playerAddr, index);
@@ -100,7 +105,7 @@ export const pieceManage = (layer: PhaserLayer) => {
             throw Error(`try get piece ${playerAddr} ${index} ${pieceGid}`);
         }
 
-        const creatureProfile = getComponentValueStrict(
+        const creatureProfile = getCreatureProfile(
             CreatureProfile,
             getEntityIdFromKeys([
                 BigInt(piece.creature_index),
@@ -110,27 +115,57 @@ export const pieceManage = (layer: PhaserLayer) => {
 
         const isEnemy = BigInt(account.address) !== piece.owner;
 
-        const { worldX, worldY } = chainToWorldCoord(piece.x, piece.y, isEnemy);
+        // const { worldX, worldY } = chainToWorldCoord(piece.x, piece.y, isEnemy);
 
-        logDebug(
-            `spawn ${playerAddr} ${index} ${piece.gid} at ${worldX}, ${worldY} `
-        );
+        // logDebug(
+        //     `spawn ${playerAddr} ${index} ${piece.gid} at ${worldX}, ${worldY} `
+        // );
 
-        const hero = objectPool.get(entity, "Sprite");
+        const simulatorCoord = chainToSimulatorCoord({
+            posX: piece.x,
+            posY: piece.y,
+            isHome: !isEnemy,
+        });
 
-        if (!override && !isEqual(hero.position, { x: 0, y: 0 })) {
-            logDebug(`piece ${pieceGid} already spawned`);
-            return;
-        }
+        phaserSpawnPiece({
+            ...creatureProfile,
+            id: getEntityIdFromKeys([BigInt(piece.gid)]),
+            x: simulatorCoord.simulatorX,
+            y: simulatorCoord.simulatorY,
+            creature_idx: creatureProfile.creature_index,
+            spell_amp: 0,
+            isHome: !isEnemy,
+            maxHealth: creatureProfile.health,
+            mana: 0,
+            dead: false,
+        });
+    }
 
-        hero.setComponent({
-            id: entity,
+    /**
+     * phaser canvas spawn piece
+     */
+    function phaserSpawnPiece({
+        id,
+        x,
+        y,
+        creature_idx,
+        isHome,
+        health,
+        maxHealth,
+    }: BattleEntityType) {
+        const pieceSprite = objectPool.get(id, "Sprite");
+
+        const { worldX, worldY } = simulatorToWorldCoord({
+            posX: x,
+            posY: y,
+        });
+
+        pieceSprite.setComponent({
+            id: id,
             once: (sprite: Phaser.GameObjects.Sprite) => {
                 sprite.setVisible(true);
                 sprite.setPosition(worldX, worldY);
-                sprite.play(
-                    config.animations[AnimationIndex[piece.creature_index]]
-                );
+                sprite.play(config.animations[AnimationIndex[creature_idx]]);
                 sprite.setInteractive();
 
                 // TODO: use lossless scale method
@@ -141,13 +176,13 @@ export const pieceManage = (layer: PhaserLayer) => {
                     if (p.distance < DRAG_DISTANCE_THRESHOLD) {
                         updateComponent(UserOperation, zeroEntity, {
                             selected: true,
-                            selectGid: piece.gid,
+                            selectGid: Number(id),
                         });
                     }
                 });
 
                 // set draggable for self piece
-                if (!isEnemy) {
+                if (isHome) {
                     game.scene.getScene("Main")?.input.setDraggable(sprite);
 
                     sprite.off("dragstart");
@@ -157,7 +192,7 @@ export const pieceManage = (layer: PhaserLayer) => {
                         // set dragging to true
                         updateComponent(UserOperation, zeroEntity, {
                             dragging: true,
-                            draggingGid: piece.gid,
+                            draggingGid: Number(id),
                         });
                     });
 
@@ -190,17 +225,17 @@ export const pieceManage = (layer: PhaserLayer) => {
                             draggingGid: 0,
                         });
 
-                        const { posX, posY } = worldToChainCoord(
-                            p.worldX,
-                            p.worldY
-                        );
+                        const { posX, posY } = worldToChainCoord({
+                            worldX: p.worldX,
+                            worldY: p.worldY,
+                            isHome,
+                        });
                         if (posY > 4 || posY < 1 || posX < 1 || posX > 8) {
                             console.warn("invalid dst");
                             return;
                         }
 
                         // check whether is occupied
-
                         const occupiedEntity = getEntityIdFromKeys([
                             BigInt(posX),
                             BigInt(posY),
@@ -216,7 +251,7 @@ export const pieceManage = (layer: PhaserLayer) => {
                             return;
                         }
 
-                        updateComponent(LocalPiece, entity, {
+                        updateComponent(LocalPiece, id as Entity, {
                             x: posX,
                             y: posY,
                         });
@@ -225,37 +260,25 @@ export const pieceManage = (layer: PhaserLayer) => {
             },
         });
 
-        const segment = Math.ceil(creatureProfile.health / HEALTH_PER_SEGMENT);
+        const segment = Math.ceil(health / HEALTH_PER_SEGMENT);
 
         // initialize health bar
-        setComponent(HealthBar, `${entity}-health-bar` as Entity, {
+        setComponent(HealthBar, `${id}-health-bar` as Entity, {
             x: worldX,
             y: worldY,
-            currentHealth: creatureProfile.health,
+            currentHealth: health,
             segments: segment,
             filledSegments: segment,
-            isPlayer: !isEnemy,
+            isPlayer: isHome,
         });
 
-        const creature = getComponentValueStrict(
-            CreatureProfile,
-            getEntityIdFromKeys([
-                BigInt(piece.creature_index),
-                BigInt(piece.level),
-            ])
-        );
-
-        //health boost here
-        const dangerous = status.dangerous;
-        const boost = dangerous && isEnemy ? 1.2 : 1;
-
         // initialize health
-        setComponent(Health, `${entity}-health` as Entity, {
-            max: creature.health * boost,
-            current: creature.health * boost,
-            pieceEntity: entity,
+        setComponent(Health, `${id}-health` as Entity, {
+            max: maxHealth,
+            current: health,
+            pieceEntity: id,
         });
     }
 
-    return { spawnPiece, removePieceOnBoard };
+    return { spawnPiece, phaserSpawnPiece, removePieceOnBoard };
 };

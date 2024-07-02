@@ -1,6 +1,5 @@
 import { logEffect } from "../debug";
 import { EventMap } from "../event/createEventSystem";
-import { getPieceEffectProfile } from "../utils/dbHelper";
 import { EffectHandler } from "./interface";
 
 const ManaIncreased: Record<number, number> = {
@@ -23,27 +22,41 @@ function getHandler(actionPieceId: string) {
       dmgSource,
     }: EventMap["pieceDeath"]) => {
       const db = globalThis.Simulator.db;
-      const killerPiece = await db.battle_entity.findOne({
-        selector: {
-          id: killerPieceId,
-        },
-      }).exec();
+      const killerPiece = await db.battle_entity
+        .findOne({
+          selector: {
+            id: killerPieceId,
+          },
+        })
+        .exec();
       if (killerPiece && killerPiece.ability === "penetrationInfection") {
         logEffect("Revive")(`piece ${pieceId} revive`);
 
-        await db.battle_entity.findOne({
-          selector: {
-            id: pieceId,
-          },
-        }).incrementalModify((doc) => {
-          doc.health = doc.maxHealth;
-          doc.dead = false;
-          doc.isHome = !doc.isHome;
-          doc.mana = 0;
-          doc.maxMana = killerPiece.maxMana + ManaIncreased[killerPiece.level]
-          doc.ability = killerPiece.ability;
-          return doc;
-        });
+        await db.battle_entity
+          .findOne({
+            selector: {
+              id: pieceId,
+            },
+          })
+          .incrementalModify((doc) => {
+            doc.health = doc.maxHealth;
+            doc.dead = false;
+            doc.isHome = !doc.isHome;
+            doc.mana = 0;
+            doc.maxMana =
+              killerPiece.maxMana + ManaIncreased[killerPiece.level];
+            doc.ability = killerPiece.ability;
+            return doc;
+          });
+
+        const newPiece = await db.battle_entity
+          .findOne({ selector: { id: pieceId } })
+          .exec();
+
+        await globalThis.Simulator.eventSystem.emit(
+          "pieceSpawn",
+          newPiece!._data
+        );
       }
     };
     handlerMap.set(key, handler);
@@ -52,9 +65,10 @@ function getHandler(actionPieceId: string) {
   return handlerMap.get(key)!;
 }
 
-export const onEffectReviveChange: EffectHandler<
-  "Revive"
-> = async ({ preValue, value }) => {
+export const onEffectReviveChange: EffectHandler<"Revive"> = async ({
+  preValue,
+  value,
+}) => {
   // nothing happen on shield change
 
   if (preValue.stack === value.stack) {

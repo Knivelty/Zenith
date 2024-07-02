@@ -2,24 +2,22 @@ import {
   getHomeUndeadPieceIds,
   getBattlePiece,
   getAwayUndeadPieceIds,
-  getPieceBaseState,
 } from "../utils/dbHelper";
 import { manhattanDistance } from "./distance";
 
 export async function getAimedPiece(
   actionPieceId: string
 ): Promise<string | undefined> {
-  const actionPieceBase = await getPieceBaseState(actionPieceId);
   const actionPieceBattle = await getBattlePiece(actionPieceId);
 
-  if (!actionPieceBattle || !actionPieceBase) {
+  if (!actionPieceBattle) {
     throw Error("unknown piece gid");
   }
 
   // tgtSet = target set
   let tgtSet: Awaited<ReturnType<typeof getHomeUndeadPieceIds>>;
 
-  if (actionPieceBase?.isHome) {
+  if (actionPieceBattle.isHome) {
     tgtSet = await getAwayUndeadPieceIds();
   } else {
     tgtSet = await getHomeUndeadPieceIds();

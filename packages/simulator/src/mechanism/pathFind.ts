@@ -5,10 +5,10 @@ import {
   JumpPointFinder,
 } from "pathfinding";
 import { getAllUndeadPieceIds, getBattlePiece } from "../utils/dbHelper";
-import { logJps } from "../utils/logger";
 import { manhattanDistance } from "./distance";
 import { uniqWith } from "lodash";
 import { asyncMap } from "../utils/asyncHelper";
+import { logJps } from "../debug";
 
 export async function findPath(actionPieceId: string, targetPieceId: string) {
   const actionPieceInBattle = await getBattlePiece(actionPieceId);

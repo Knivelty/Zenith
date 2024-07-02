@@ -1,5 +1,5 @@
+import { logJps } from "../debug";
 import { getBattleResult, isBattleEnd } from "../utils/dbHelper";
-import { logJps } from "../utils/logger";
 import { getAllUndeadPieceIdsByInitiative } from "./actLev";
 import { battleForOnePieceOneTurn } from "./oneAction";
 

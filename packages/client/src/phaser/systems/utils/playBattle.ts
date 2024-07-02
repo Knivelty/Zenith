@@ -23,6 +23,7 @@ import {
 import { getAnimation, getAnimationIndex } from "./animationHelper";
 import { logDebug } from "../../../ui/lib/utils";
 import { encodeGroundEntity } from "./entityEncoder";
+import { pieceManage } from "./pieceManage";
 
 export const battleAnimation = (layer: PhaserLayer) => {
     const {
@@ -33,6 +34,8 @@ export const battleAnimation = (layer: PhaserLayer) => {
             clientComponents: { HealthBar, LocalPiece, Health },
         },
     } = layer;
+
+    const { phaserSpawnPiece } = pieceManage(layer);
 
     async function playBattle(events: EventWithName<keyof EventMap>[]) {
         console.log("logs: ", events);
@@ -117,6 +120,9 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 await handleHealthDecrease(
                     v as EventWithName<"healthDecrease">
                 );
+                break;
+            case "pieceSpawn":
+                await handlePieceSpawn(v as EventWithName<"pieceSpawn">);
                 break;
         }
     }
@@ -205,6 +211,12 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 );
             },
         });
+    }
+
+    async function handlePieceSpawn(data: EventWithName<"pieceSpawn">) {
+        //
+
+        phaserSpawnPiece(data);
     }
 
     async function handleAbilityCast({

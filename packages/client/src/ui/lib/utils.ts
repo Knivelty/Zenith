@@ -87,7 +87,7 @@ export function generateAvatar(address: string): string {
     return canvas.toDataURL();
 }
 
-export const logDebug = d("debug");
+export const logDebug = d("client:debug");
 export const logCall = d("debug:call");
 export const logPieceIdx = d("debug:pieceIdx");
 export const logPlayerAction = d("player:actions");

@@ -1,4 +1,5 @@
 import { createDB } from "./createDB";
+import { logDebug } from "./debug";
 import { createEventSystem } from "./event/createEventSystem";
 import { getEmittedEvents } from "./event/getEmittedEvents";
 import { calculateBattleLogs } from "./mechanism/roundBattle";
@@ -17,6 +18,11 @@ export async function createSimulator(
   initEntities: BaseStateType[],
   ability_profiles: AbilityProfileType[]
 ) {
+  logDebug("simulator input", initEntities);
+  if (globalThis?.Simulator?.db) {
+    await destroyDB();
+  }
+
   const db = await createDB();
   const eventSystem = createEventSystem();
   const handlerMap = new Map<string, (data: any) => Promise<void>>();
@@ -48,15 +54,15 @@ async function importData({
 }) {
   const db = globalThis.Simulator.db;
   const p1 = creatures.map(async (c) => {
-    await db.creature.upsert(c);
+    return await db.creature.upsert(c);
   });
 
   const p2 = initEntities.map(async (e) => {
-    await db.base_state.upsert(e);
+    return await db.base_state.upsert(e);
   });
 
   const p3 = ability_profiles.map(async (a) => {
-    await db.ability_profile.upsert(a);
+    return await db.ability_profile.upsert(a);
   });
 
   await Promise.all([...p1, ...p2, ...p3]);

@@ -44,6 +44,7 @@ export enum AbilityAnimations {
     barbariansRage = "barbariansRage",
     mountainCollapse = "mountainCollapse",
     interlockedInferno = "interlockedInferno",
+    penetrationInfection = "penetrationInfection",
 }
 
 export enum SynergyAnimations {

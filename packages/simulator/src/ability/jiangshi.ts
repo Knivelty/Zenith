@@ -5,6 +5,7 @@ import { getBattlePiece } from "../utils/dbHelper";
 import { asyncMap } from "../utils/asyncHelper";
 import { getAimedPiece } from "../mechanism/enemySearch";
 import { logDebug } from "../debug";
+import { addEffectToPiece } from "../effect/utils";
 
 const ConstDmg: Record<number, number> = {
   1: 150,
@@ -21,11 +22,13 @@ const AtkFactor: Record<number, number> = {
 export const jiangshi_penetrationInfection_passive = async () => {
   const db = globalThis.Simulator.db;
 
-  const jiangshiPieces = await db.battle_entity.find({
-    selector: {
-      creature_idx: 3005,
-    },
-  }).exec();
+  const jiangshiPieces = await db.battle_entity
+    .find({
+      selector: {
+        creature_idx: 3005,
+      },
+    })
+    .exec();
 
   // add initiative bonus to all hunter piece
   await asyncMap(jiangshiPieces, async (p) => {
@@ -39,7 +42,9 @@ export const jiangshi_penetrationInfection_passive = async () => {
   });
 };
 
-export const jiangshi_penetrationInfection: AbilityFunction = async ({ actionPieceId }) => {
+export const jiangshi_penetrationInfection: AbilityFunction = async ({
+  actionPieceId,
+}) => {
   const db = globalThis.Simulator.db;
 
   const pieceInBattle = await getBattlePiece(actionPieceId);
@@ -50,18 +55,26 @@ export const jiangshi_penetrationInfection: AbilityFunction = async ({ actionPie
     // no target piece means all enemy's piece are dead the same as battle end
     return;
   }
-  const target = await db.battle_entity.findOne({
-    selector: {
-      id: targetPieceId,
-    },
-  }).exec();
+  const target = await db.battle_entity
+    .findOne({
+      selector: {
+        id: targetPieceId,
+      },
+    })
+    .exec();
 
-  if(target) {
+  if (target) {
+    await globalThis.Simulator.eventSystem.emit("abilityCast", {
+      abilityName: "penetrationInfection",
+      data: { actionPieceId: actionPieceId },
+      affectedGrounds: [],
+    });
+
     // deal ConstDmg+AtkFactor*ATK+80%AP physical dmg to the target
     // if the target is killed, summon a zombie with 100% of the target's stats and penetrationInfection ability
-    await db.effect.insert({
-      id: target.id,
-      name: getEffectName("Revive"),
+    addEffectToPiece({
+      pieceId: target.id,
+      effectName: "Revive",
       stack: 1,
       duration: 1,
     });
@@ -69,7 +82,11 @@ export const jiangshi_penetrationInfection: AbilityFunction = async ({ actionPie
     await globalThis.Simulator.eventSystem.emit("damage", {
       pieceId: actionPieceId,
       targetPieceId: target.id,
-      value: Math.floor(ConstDmg[pieceInBattle.level] + pieceInBattle.attack * AtkFactor[pieceInBattle.level] + pieceInBattle.spell_amp * 0.8),
+      value: Math.floor(
+        ConstDmg[pieceInBattle.level] +
+          pieceInBattle.attack * AtkFactor[pieceInBattle.level] +
+          pieceInBattle.spell_amp * 0.8
+      ),
       type: "Physical",
     });
   } else {
