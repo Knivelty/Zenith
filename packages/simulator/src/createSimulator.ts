@@ -81,7 +81,7 @@ async function importData({
   });
 
   const p4 = allPlayerProfiles.map(async (p) => {
-    return await db.player_profile.insert(p);
+    return await db.player_profile.upsert(p);
   });
 
   await Promise.all([...p1, ...p2, ...p3, ...p4]);

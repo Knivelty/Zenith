@@ -13,9 +13,16 @@ export const createNetworkLayer = async () => {
     // override config from url param
     const urlParams = new URLSearchParams(queryString);
     const network = urlParams.get("network");
-    const config = supportedNetworks[network || "slot"];
 
-    const dojoConfig = { ...dojoRawConfig, ...config, name: network || "slot" };
+    const defaultLayer = "fly";
+
+    const config = supportedNetworks[network || defaultLayer];
+
+    const dojoConfig = {
+        ...dojoRawConfig,
+        ...config,
+        name: network || defaultLayer,
+    };
 
     // setup world
     const setupWorld = await setup(dojoConfig);

@@ -14,6 +14,12 @@ export const supportedNetworks: Record<
         worldAddress:
             "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0",
     },
+    fly: {
+        rpcUrl: "https://zenith-katana.fly.dev",
+        toriiUrl: "https://zenith-torii.fly.dev",
+        worldAddress:
+            "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0",
+    },
 };
 
 export const supportedNetworksArray = Object.entries(supportedNetworks).map(

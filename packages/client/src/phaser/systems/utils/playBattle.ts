@@ -41,7 +41,6 @@ export const battleAnimation = (layer: PhaserLayer) => {
         console.log("logs: ", events);
         for (const e of events) {
             await playSingleEvent(e);
-            await new Promise((resolve) => setTimeout(resolve, 200));
         }
     }
 
@@ -109,20 +108,30 @@ export const battleAnimation = (layer: PhaserLayer) => {
         switch (v.name) {
             case "pieceMove":
                 await handlePieceMove(v as EventWithName<"pieceMove">);
+                await new Promise((resolve) => setTimeout(resolve, 100));
+
                 break;
             case "pieceAttack":
                 await handleAttack(v as EventWithName<"pieceAttack">);
+                await new Promise((resolve) => setTimeout(resolve, 100));
+
                 break;
             case "abilityCast":
                 await handleAbilityCast(v as EventWithName<"abilityCast">);
+                await new Promise((resolve) => setTimeout(resolve, 100));
+
                 break;
             case "healthDecrease":
                 await handleHealthDecrease(
                     v as EventWithName<"healthDecrease">
                 );
+                await new Promise((resolve) => setTimeout(resolve, 100));
+
                 break;
             case "pieceSpawn":
                 await handlePieceSpawn(v as EventWithName<"pieceSpawn">);
+                await new Promise((resolve) => setTimeout(resolve, 100));
+
                 break;
         }
     }
@@ -148,7 +157,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 await tween(
                     {
                         targets: sprite,
-                        duration: 300,
+                        duration: 200,
                         props: {
                             x: "+=50",
                         },
@@ -167,7 +176,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
             },
         });
 
-        return await sleep(200);
+        // return await sleep(200);
     }
 
     async function handleHealthDecrease({

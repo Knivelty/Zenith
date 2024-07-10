@@ -13,6 +13,9 @@ export function getPieceTryCastHandler(actionPieceId: string) {
 
       if (!abilityProfile) {
         logDebug(`piece ${actionPieceId} no ability`);
+        await globalThis.Simulator.eventSystem.emit("pieceNotCast", {
+          actionPieceId,
+        });
         return;
       }
 
