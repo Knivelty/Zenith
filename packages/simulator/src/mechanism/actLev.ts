@@ -1,4 +1,4 @@
-export async function getAllUndeadPieceIdsByInitiative() {
+export async function getAllUndeadPiecesByInitiative() {
   const db = globalThis.Simulator.db;
 
   const pieces = await db.battle_entity
@@ -8,7 +8,5 @@ export async function getAllUndeadPieceIdsByInitiative() {
     })
     .exec();
 
-  return pieces.map((p) => {
-    return p.id;
-  });
+  return pieces;
 }

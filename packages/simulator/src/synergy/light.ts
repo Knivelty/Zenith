@@ -1,6 +1,9 @@
-import { logSynergy } from "../../debug";
-import { asyncMap } from "../../utils/asyncHelper";
-import { getAllPieceWithOrigin, getValidTraitCount } from "../utils";
+import { AbilityNameType } from "../ability/interface";
+import { logSynergy } from "../debug";
+import { getPieceTryCastHandler } from "../mechanism/cast";
+import { asyncMap } from "../utils/asyncHelper";
+import { getBattlePiece } from "../utils/dbHelper";
+import { getAllPieceWithOrigin, getValidTraitCount } from "./utils";
 
 export const ORIGIN_LIGHT_NAME = "LIGHT";
 
@@ -47,6 +50,7 @@ export async function applyLightSynergy(isHome: boolean) {
   await addLightInitiativeBonus(isHome);
   await addLightMaxManaBenefit(isHome);
   await addLightRangeBonus(isHome);
+  await castUseLessMana(isHome);
 }
 
 export async function addLightInitiativeBonus(isHome: boolean) {
@@ -117,9 +121,52 @@ export async function addLightMaxManaBenefit(isHome: boolean) {
           maxMana: -decrease,
         },
       });
-    // TODO: fix the cast lower mana logic
     logSynergy(ORIGIN_LIGHT_NAME)(
       `decrease ${decrease} max mana for piece ${p.id}`
+    );
+  });
+}
+
+export async function castUseLessMana(isHome: boolean) {
+  const allLightPieces = await getAllPieceWithOrigin(isHome, ORIGIN_LIGHT_NAME);
+  const allLightPiecesIds = allLightPieces.map((x) => x.id);
+  const validCount = getValidTraitCount(allLightPieces);
+
+  if (validCount < 6) {
+    return;
+  }
+
+  allLightPiecesIds.map((actionPieceId) => {
+    // off origin handler and register new handler
+    const originHandler = getPieceTryCastHandler(actionPieceId);
+
+    globalThis.Simulator.eventSystem.off("tryCast", originHandler);
+
+    globalThis.Simulator.eventSystem.on(
+      "tryCast",
+      async ({ actionPieceId }) => {
+        const actionPiece = await getBattlePiece(actionPieceId);
+
+        const requiredMana = Math.floor(actionPiece.maxMana * 0.3);
+
+        if (actionPiece.mana >= requiredMana) {
+          await globalThis.Simulator.eventSystem.emit("pieceUseMana", {
+            pieceId: actionPieceId,
+            manaAmount: requiredMana,
+          });
+
+          // emit event to trigger cast
+          await globalThis.Simulator.eventSystem.emit("beforeAbilityCast", {
+            // warn: assert type here
+            abilityName: actionPiece.ability as AbilityNameType,
+            data: { actionPieceId: actionPieceId },
+          });
+        } else {
+          await globalThis.Simulator.eventSystem.emit("pieceNotCast", {
+            actionPieceId,
+          });
+        }
+      }
     );
   });
 }

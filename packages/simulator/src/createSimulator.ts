@@ -10,14 +10,21 @@ import { registerSynergy } from "./registry/registerSynergy";
 import { BaseStateType } from "./schema";
 import { AbilityProfileType } from "./schema/ability_profile";
 import { CreatureType } from "./schema/creature";
+import { PlayerProfileType } from "./schema/player_profile";
 import { getPieceCreature } from "./utils/dbHelper";
 import { destroyDB } from "./utils/destroy";
 
-export async function createSimulator(
-  creatures: CreatureType[],
-  initEntities: BaseStateType[],
-  ability_profiles: AbilityProfileType[]
-) {
+export async function createSimulator({
+  creatures,
+  initEntities,
+  ability_profiles,
+  allPlayerProfiles,
+}: {
+  creatures: CreatureType[];
+  initEntities: BaseStateType[];
+  ability_profiles: AbilityProfileType[];
+  allPlayerProfiles: PlayerProfileType[];
+}) {
   logDebug("simulator input", initEntities);
   if (globalThis?.Simulator?.db) {
     await destroyDB();
@@ -33,8 +40,14 @@ export async function createSimulator(
     handlerMap,
   };
 
-  await importData({ creatures, initEntities, ability_profiles });
+  await importData({
+    creatures,
+    initEntities,
+    ability_profiles,
+    allPlayerProfiles,
+  });
   await initializeBattle();
+
   registerSynergy();
   registerEffect();
   registerAbilities();
@@ -47,10 +60,12 @@ async function importData({
   creatures,
   initEntities,
   ability_profiles,
+  allPlayerProfiles,
 }: {
   creatures: CreatureType[];
   initEntities: BaseStateType[];
   ability_profiles: AbilityProfileType[];
+  allPlayerProfiles: PlayerProfileType[];
 }) {
   const db = globalThis.Simulator.db;
   const p1 = creatures.map(async (c) => {
@@ -65,7 +80,11 @@ async function importData({
     return await db.ability_profile.upsert(a);
   });
 
-  await Promise.all([...p1, ...p2, ...p3]);
+  const p4 = allPlayerProfiles.map(async (p) => {
+    return await db.player_profile.insert(p);
+  });
+
+  await Promise.all([...p1, ...p2, ...p3, ...p4]);
 }
 
 async function initializeBattle() {

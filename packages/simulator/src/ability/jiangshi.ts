@@ -1,11 +1,9 @@
 import { AbilityFunction } from "./interface";
-
-import { getEffectName } from "../effect/interface";
 import { getBattlePiece } from "../utils/dbHelper";
 import { asyncMap } from "../utils/asyncHelper";
-import { getAimedPiece } from "../mechanism/enemySearch";
 import { logDebug } from "../debug";
 import { addEffectToPiece } from "../effect/utils";
+import { findTargetPiece } from "../mechanism/enemySearch";
 
 const ConstDmg: Record<number, number> = {
   1: 150,
@@ -50,7 +48,7 @@ export const jiangshi_penetrationInfection: AbilityFunction = async ({
   const pieceInBattle = await getBattlePiece(actionPieceId);
 
   // find the enemy piece
-  const targetPieceId = await getAimedPiece(actionPieceId);
+  const targetPieceId = await findTargetPiece(actionPieceId);
   if (!targetPieceId) {
     // no target piece means all enemy's piece are dead the same as battle end
     return;

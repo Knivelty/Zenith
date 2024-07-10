@@ -1,6 +1,4 @@
 import { AbilityFunction } from "./interface";
-
-import { getEffectName } from "../effect/interface";
 import { getBattlePiece } from "../utils/dbHelper";
 import { addEffectToPiece, overrideEffectToPiece } from "../effect/utils";
 

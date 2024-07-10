@@ -9,6 +9,7 @@ import {
 import { getOrder, getOrigins } from "../../utils";
 import * as R from "ramda";
 import { ClientComponents } from "../../dojo/createClientComponents";
+import { useEntityQuery } from "@dojoengine/react";
 
 export function getAllPiecesWithAllTraits({
     clientComponents: { LocalPiece, CreatureProfile },
@@ -56,7 +57,7 @@ export function useAllPiecesWithAllTraits() {
         },
     } = useDojo();
 
-    const onBoardPieceEntity = runQuery([
+    const onBoardPieceEntity = useEntityQuery([
         HasValue(LocalPiece, { owner: BigInt(address) }),
         NotValue(LocalPiece, { idx: 0 }),
     ]);

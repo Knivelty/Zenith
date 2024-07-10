@@ -1,6 +1,5 @@
 import {
     Entity,
-    getComponentValueStrict,
     getComponentValue,
     setComponent,
     updateComponent,
@@ -15,7 +14,6 @@ import {
 } from "../../config/constants";
 import {
     chainToSimulatorCoord,
-    chainToWorldCoord,
     simulatorToWorldCoord,
     worldToChainCoord,
 } from "./coorConvert";
@@ -40,7 +38,6 @@ export const pieceManage = (layer: PhaserLayer) => {
                 LocalPiece,
                 LocalPieceOccupation,
                 UserOperation,
-                GameStatus,
             },
             account,
         },

@@ -1,5 +1,5 @@
-import { asyncMap } from "../../utils/asyncHelper";
-import { getAllPieceWithOrigin, getValidTraitCount } from "../utils";
+import { asyncMap } from "../utils/asyncHelper";
+import { getAllPieceWithOrigin, getValidTraitCount } from "./utils";
 
 export const STRENGTH_NAME = "Strength";
 

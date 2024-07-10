@@ -17,6 +17,10 @@ import {
 import { EffectSchema } from "./schema/effect";
 import { handleEffectChange } from "./schema/effect/handler";
 import { AbilityProfileSchema } from "./schema/ability_profile";
+import { PlayerProfileSchema } from "./schema/player_profile";
+import { PieceSpellAmpSchema } from "./schema/spell_amp";
+import { calculatePieceSpellAmp } from "./schema/spell_amp/handler";
+import { ActionOrderStackSchema } from "./schema/action_order_stack";
 
 export type DB = Awaited<ReturnType<typeof createDB>>;
 
@@ -39,13 +43,18 @@ export async function createDB() {
     battle_entity: { schema: BattleEntitySchema },
     piece_attack: { schema: PieceAttackSchema },
     piece_max_health: { schema: PieceMaxHealthSchema },
+    piece_spell_amp: { schema: PieceSpellAmpSchema },
     effect: { schema: EffectSchema },
+    player_profile: { schema: PlayerProfileSchema },
+    action_order_stack: { schema: ActionOrderStackSchema },
   });
 
   //
   db.piece_attack.$.subscribe(calculatePieceAttack);
 
   db.piece_max_health.$.subscribe(calculateMaxHealth);
+
+  db.piece_spell_amp.$.subscribe(calculatePieceSpellAmp);
 
   db.battle_entity.$.subscribe(healthFollowMaxHealth);
 

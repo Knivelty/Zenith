@@ -8,10 +8,11 @@ import {
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { getAbility, getOrder, getOrigins, zeroEntity } from "../../../utils";
 import { ClientComponents } from "../../../dojo/createClientComponents";
-import { logDebug } from "../../../ui/lib/utils";
+import { bigIntToAddress, logDebug } from "../../../ui/lib/utils";
 import { BaseStateType, createSimulator } from "@zenith/simulator";
 import { CreatureType } from "@zenith/simulator/src/schema/creature";
 import { AbilityProfileType } from "@zenith/simulator/src/schema/ability_profile";
+import { PlayerProfileType } from "@zenith/simulator/src/schema/player_profile";
 
 export const processBattle = (component: ClientComponents) => {
     const {
@@ -40,6 +41,7 @@ export const processBattle = (component: ClientComponents) => {
         const allCreatures = new Array<CreatureType>();
         const allPieces = new Array<BaseStateType>();
         const allAbilitiesProfiles = new Array<AbilityProfileType>();
+        const allPlayerProfiles = new Array<PlayerProfileType>();
 
         // TODO: read it from csv
         allAbilitiesProfiles.push(
@@ -64,6 +66,7 @@ export const processBattle = (component: ClientComponents) => {
                     ability_name: "penetrationInfection",
                     requiredMana: 80,
                 },
+                { ability_name: "spikeShell", requiredMana: 150 },
             ]
         );
 
@@ -181,10 +184,25 @@ export const processBattle = (component: ClientComponents) => {
             });
         }
 
+        allPlayerProfiles.push({
+            address: bigIntToAddress(v.homePlayer),
+            coin: player.coin,
+            isHome: true,
+        });
+
+        allPlayerProfiles.push({
+            address: bigIntToAddress(v.awayPlayer),
+            coin: 0,
+            isHome: false,
+        });
+
         const { calculateBattleLogs, getEmittedEvents } = await createSimulator(
-            allCreatures,
-            allPieces,
-            allAbilitiesProfiles
+            {
+                creatures: allCreatures,
+                initEntities: allPieces,
+                ability_profiles: allAbilitiesProfiles,
+                allPlayerProfiles: allPlayerProfiles,
+            }
         );
 
         const { result } = await calculateBattleLogs();

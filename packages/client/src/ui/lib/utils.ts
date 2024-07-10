@@ -87,8 +87,11 @@ export function generateAvatar(address: string): string {
     return canvas.toDataURL();
 }
 
+export function bigIntToAddress(num: bigint) {
+    return "0x" + num.toString(16);
+}
+
 export const logDebug = d("client:debug");
-export const logCall = d("debug:call");
-export const logPieceIdx = d("debug:pieceIdx");
-export const logPlayerAction = d("player:actions");
-export const logJps = d("jps");
+export const logCall = d("client:call");
+export const logPieceIdx = d("client:pieceIdx");
+export const logPlayerAction = d("client:player:actions");

@@ -4,6 +4,7 @@ export interface AbilityMap {
   mountainCollapse: { actionPieceId: string };
   interlockedInferno: { actionPieceId: string };
   penetrationInfection: { actionPieceId: string };
+  spikeShell: { actionPieceId: string };
 }
 export type AbilityNameType = keyof AbilityMap;
 export type AbilityParamType = AbilityMap[keyof AbilityMap];

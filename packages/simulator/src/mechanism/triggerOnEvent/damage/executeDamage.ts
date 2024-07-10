@@ -1,5 +1,9 @@
 import { overrideEffectToPiece } from "../../../effect/utils";
-import { decreaseHealth, getPieceEffectProfile } from "../../../utils/dbHelper";
+import {
+  decreaseHealth,
+  getBattlePiece,
+  getPieceEffectProfile,
+} from "../../../utils/dbHelper";
 
 export function executeDamageOnEvent() {
   const eventSystem = globalThis.Simulator.eventSystem;
@@ -7,7 +11,11 @@ export function executeDamageOnEvent() {
   eventSystem.on("damage", async ({ pieceId, targetPieceId, type, value }) => {
     // const db = globalThis.Simulator.db;
 
-    // TODO: deal with different attack type
+    // calculate armor
+    if (type === "Physical") {
+      const targetPiece = await getBattlePiece(targetPieceId);
+      value = value * (1 - targetPiece.armor / (100 + targetPiece.armor));
+    }
 
     // decrease by shield
     const shield = await getPieceEffectProfile(targetPieceId, "Shield");
@@ -30,7 +38,6 @@ export function executeDamageOnEvent() {
 
     await eventSystem.emit("healthDecrease", {
       pieceId: targetPieceId,
-      type,
       value,
     });
 

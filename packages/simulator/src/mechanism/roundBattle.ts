@@ -1,7 +1,6 @@
 import { logJps } from "../debug";
 import { getBattleResult, isBattleEnd } from "../utils/dbHelper";
-import { getAllUndeadPieceIdsByInitiative } from "./actLev";
-import { battleForOnePieceOneTurn } from "./oneAction";
+import { getAllUndeadPiecesByInitiative } from "./actLev";
 
 export type TurnLog = {
   entity: string;
@@ -23,8 +22,9 @@ export async function calculateBattleLogs(): Promise<BattleResult> {
   await eventSystem.emit("beforeBattleStart", { isHome: true });
   await eventSystem.emit("beforeBattleStart", { isHome: false });
 
-  for (let i = 0; i < 500; i++) {
-    await battleForATurn();
+  for (let i = 1; i <= 500; i++) {
+    await generateActionOrderStack();
+    await pieceActionOnceInATurn(i);
 
     if (await isBattleEnd()) {
       logJps("battle end");
@@ -39,12 +39,36 @@ export async function calculateBattleLogs(): Promise<BattleResult> {
   };
 }
 
-export async function battleForATurn() {
-  const undeadPieceIds = await getAllUndeadPieceIdsByInitiative();
+async function generateActionOrderStack() {
+  const undeadPieces = await getAllUndeadPiecesByInitiative();
 
-  for (const p of undeadPieceIds) {
-    await battleForOnePieceOneTurn(p);
+  // remove old value
+  await globalThis.Simulator.db.action_order_stack.find({}).remove();
+
+  await globalThis.Simulator.db.action_order_stack.bulkInsert(
+    undeadPieces.map((p) => {
+      return { piece_id: p.id, initiative: p.initiative };
+    })
+  );
+}
+
+async function pieceActionOnceInATurn(turn: number) {
+  const query = globalThis.Simulator.db.action_order_stack.findOne({
+    sort: [{ initiative: "desc" }],
+  });
+
+  const piece = await query.exec();
+  if (piece) {
+    await globalThis.Simulator.eventSystem.emit("beforePieceAction", {
+      pieceId: piece?.piece_id,
+      initiative: piece.initiative,
+    });
+    // remove the stack after exec
+    await query.remove();
+
+    // recursive run
+    await pieceActionOnceInATurn(turn);
+  } else {
+    await globalThis.Simulator.eventSystem.emit("turnEnd", { turn });
   }
-
-  await globalThis.Simulator.eventSystem.emit("turnEnd", {});
 }

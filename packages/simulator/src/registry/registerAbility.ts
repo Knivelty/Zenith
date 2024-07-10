@@ -4,7 +4,11 @@ import { burningBurst } from "../ability/burningBurst";
 import { logCast } from "../debug";
 import { mountainCollapse } from "../ability/mountainCollapse";
 import { warlock_interlockedInferno } from "../ability/warlock";
-import { jiangshi_penetrationInfection, jiangshi_penetrationInfection_passive } from "../ability/jiangshi";
+import {
+  jiangshi_penetrationInfection,
+  jiangshi_penetrationInfection_passive,
+} from "../ability/jiangshi";
+import { spikeShell, spikeShellPassive } from "../ability/spikeShell";
 
 export function registerAbilities() {
   registerSingleAbility("burningBurst", burningBurst);
@@ -12,8 +16,11 @@ export function registerAbilities() {
   registerSingleAbility("mountainCollapse", mountainCollapse);
   registerSingleAbility("interlockedInferno", warlock_interlockedInferno);
   registerSingleAbility("penetrationInfection", jiangshi_penetrationInfection);
+  registerSingleAbility("spikeShell", spikeShell);
   // passive ability
-  jiangshi_penetrationInfection_passive()
+  jiangshi_penetrationInfection_passive();
+
+  spikeShellPassive();
 }
 
 function registerSingleAbility(

@@ -1,5 +1,9 @@
 import { EffectNameType } from "../effect/interface";
-import { UNKNOWN_CREATURE_ERROR, UNKNOWN_PIECE_ERROR } from "./error";
+import {
+  UNKNOWN_CREATURE_ERROR,
+  UNKNOWN_PIECE_ERROR,
+  UNKNOWN_PLAYER_PROFILE,
+} from "./error";
 
 export async function getBattlePiece(id: string) {
   const db = globalThis.Simulator.db;
@@ -131,6 +135,22 @@ export async function movePiece(pieceId: string, toX: number, toY: number) {
     });
 }
 
+export async function increaseHealth(
+  source: string,
+  target: string,
+  type: string,
+  value: number
+) {
+  const db = globalThis.Simulator.db;
+
+  await db.battle_entity
+    .findOne({ selector: { id: target } })
+    .incrementalModify((doc) => {
+      doc.health += value;
+      return doc;
+    });
+}
+
 export async function decreaseHealth(
   source: string,
   pieceId: string,
@@ -168,6 +188,16 @@ export async function decreaseMana(pieceId: string, manaDecrease: number) {
     .update({ $inc: { mana: -manaDecrease } });
 }
 
+export async function increaseArmor(pieceId: string, armorIncrease: number) {
+  const db = globalThis.Simulator.db;
+  await db.battle_entity
+    .findOne({ selector: { id: pieceId } })
+    .incrementalModify((doc) => {
+      doc.armor += armorIncrease;
+      return doc;
+    });
+}
+
 export async function getPieceAbilityProfile(pieceId: string) {
   const db = globalThis.Simulator.db;
   const piece = await db.battle_entity
@@ -198,3 +228,19 @@ export async function getPieceEffectProfile(
 
   return effect;
 }
+
+export async function getPlayerProfileBySide(isHome: boolean) {
+  const db = globalThis.Simulator.db;
+
+  const playerProfile = await db.player_profile
+    .findOne({ selector: { isHome: isHome } })
+    .exec();
+
+  if (!playerProfile) {
+    throw UNKNOWN_PLAYER_PROFILE;
+  }
+
+  return playerProfile;
+}
+
+

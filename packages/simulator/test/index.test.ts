@@ -2,10 +2,11 @@ import { BaseStateType } from "../src";
 import { createSimulator } from "../src/createSimulator";
 import { AbilityProfileType } from "../src/schema/ability_profile";
 import { CreatureType } from "../src/schema/creature";
-import { ORDER_BRUTE_NAME } from "../src/synergy/order/brute";
-import { ORDER_HUNTER_NAME } from "../src/synergy/order/hunter";
-import { ORIGIN_DARK_NAME } from "../src/synergy/origin/dark";
-import { ORIGIN_LIGHT_NAME } from "../src/synergy/origin/light";
+import { ORDER_BRUTE_NAME } from "../src/synergy/brute";
+import { ORDER_HUNTER_NAME } from "../src/synergy/hunter";
+import { ORIGIN_DARK_NAME } from "../src/synergy/dark";
+import { ORIGIN_LIGHT_NAME } from "../src/synergy/light";
+import { PlayerProfileType } from "../src/schema/player_profile";
 
 export const MOCK_CREATURES: CreatureType[] = [
   {
@@ -94,12 +95,18 @@ export const MOCK_INIT_ENTITY: BaseStateType[] = [
   },
 ];
 
+export const MOCK_PLAYER_PROFILE: PlayerProfileType[] = [
+  { isHome: true, address: "1", coin: 1 },
+  { isHome: false, address: "2", coin: 1 },
+];
+
 test("test progress", async () => {
-  const { calculateBattleLogs, getEmittedEvents } = await createSimulator(
-    MOCK_CREATURES,
-    MOCK_INIT_ENTITY,
-    MOCK_ABILITY_PROFILE
-  );
+  const { calculateBattleLogs, getEmittedEvents } = await createSimulator({
+    creatures: MOCK_CREATURES,
+    initEntities: MOCK_INIT_ENTITY,
+    ability_profiles: MOCK_ABILITY_PROFILE,
+    allPlayerProfiles: MOCK_PLAYER_PROFILE,
+  });
 
   const { result } = await calculateBattleLogs();
 

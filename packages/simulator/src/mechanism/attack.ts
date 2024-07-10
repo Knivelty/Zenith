@@ -1,45 +1,72 @@
 import { logAttack, logJps } from "../debug";
+import { EventMap } from "../event/createEventSystem";
 import { getBattlePiece } from "../utils/dbHelper";
 import { manhattanDistance } from "./distance";
 
-export async function tryAttack(
-  actionPieceId: string,
-  targetPieceId: string
-): Promise<string | undefined> {
-  const eventSystem = globalThis.Simulator.eventSystem;
+export async function tryAttack({ actionPieceId }: EventMap["pieceNotCast"]) {
+  await globalThis.Simulator.eventSystem.emit("beforePieceAttack", {
+    actionPieceId: actionPieceId,
+  });
 
-  const actionPiece = await getBattlePiece(actionPieceId);
-  const targetPiece = await getBattlePiece(targetPieceId);
+  await globalThis.Simulator.eventSystem.emit("afterPieceBasicAttack", {
+    actionPieceId,
+  });
+}
 
-  // judge wether can attack
-  if (
-    manhattanDistance(
-      actionPiece.x,
-      actionPiece.y,
-      targetPiece.x,
-      targetPiece.y
-    ) <= actionPiece.range
-  ) {
-    const damage =
-      actionPiece.attack * (1 - targetPiece.armor / (100 + targetPiece.armor));
+export function registerTryAttack() {
+  // piece will try attack on not cast
+  globalThis.Simulator.eventSystem.on("pieceNotCast", tryAttack);
 
-    logAttack(
-      `piece ${actionPieceId} attack ${targetPieceId} with damage ${damage}`
-    );
+  globalThis.Simulator.eventSystem.on(
+    "beforePieceAttack",
+    async ({ actionPieceId }) => {
+      const eventSystem = globalThis.Simulator.eventSystem;
 
-    await emitAttack(actionPieceId, targetPieceId);
+      await eventSystem.emit("beforePieceSearchAttackTarget", {
+        actionPieceId,
+      });
+    }
+  );
+}
 
-    await eventSystem.emit("damage", {
-      pieceId: actionPieceId,
-      targetPieceId: targetPieceId,
-      value: damage,
-      type: "Physical",
-    });
+export function registerExecuteAttack() {
+  globalThis.Simulator.eventSystem.on(
+    "afterPieceSearchAttackTarget",
+    async ({ actionPieceId, targetPieceId }) => {
+      const actionPiece = await getBattlePiece(actionPieceId);
 
-    return targetPieceId;
-  } else {
-    logJps("cannot attack due to range");
-  }
+      if (!targetPieceId) {
+        return;
+      }
+
+      const targetPiece = await getBattlePiece(targetPieceId);
+
+      // judge wether can attack
+      if (
+        manhattanDistance(
+          actionPiece.x,
+          actionPiece.y,
+          targetPiece.x,
+          targetPiece.y
+        ) <= actionPiece.range
+      ) {
+        logAttack(
+          `piece ${actionPieceId} attack ${targetPieceId} with attack ${actionPiece.attack}`
+        );
+
+        await emitAttack(actionPieceId, targetPieceId);
+
+        await globalThis.Simulator.eventSystem.emit("damage", {
+          pieceId: actionPieceId,
+          targetPieceId: targetPieceId,
+          value: actionPiece.attack,
+          type: "Physical",
+        });
+      } else {
+        logJps("cannot attack due to range");
+      }
+    }
+  );
 }
 
 export async function emitAttack(pieceId: string, targetPieceId: string) {

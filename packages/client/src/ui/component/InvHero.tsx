@@ -72,7 +72,12 @@ export const InvHero = ({
             const worldX = rawCoord.x;
             const worldY = rawCoord.y;
 
-            const { posX, posY } = worldToChainCoord(worldX, worldY);
+            // note: always is home on pve
+            const { posX, posY } = worldToChainCoord({
+                worldX,
+                worldY,
+                isHome: true,
+            });
 
             console.log(posX, posY);
 

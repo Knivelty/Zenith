@@ -1,3 +1,4 @@
+import { EventMap } from "../event/createEventSystem";
 import {
   getHomeUndeadPieceIds,
   getBattlePiece,
@@ -5,9 +6,69 @@ import {
 } from "../utils/dbHelper";
 import { manhattanDistance } from "./distance";
 
-export async function getAimedPiece(
-  actionPieceId: string
-): Promise<string | undefined> {
+export async function registerPieceSearchMoveTarget() {
+  globalThis.Simulator.eventSystem.on(
+    "beforePieceSearchMoveTarget",
+    getPieceSearchMoveTargetHandler()
+  );
+}
+
+export async function registerPieceSearchAttackTarget() {
+  globalThis.Simulator.eventSystem.on(
+    "beforePieceSearchAttackTarget",
+    getPieceSearchAttackTargetHandler()
+  );
+}
+
+function getPieceSearchMoveTargetHandler() {
+  const handlerMap = globalThis.Simulator.handlerMap;
+  // TODO: perf key design
+  const key = `findMoveTarget`;
+
+  if (!handlerMap.has(key)) {
+    const handler = async ({
+      actionPieceId,
+    }: EventMap["beforePieceSearchMoveTarget"]) => {
+      const targetPieceId = await findTargetPiece(actionPieceId);
+      if (targetPieceId) {
+        await globalThis.Simulator.eventSystem.emit(
+          "afterPieceSearchMoveTarget",
+          { actionPieceId, targetPieceId }
+        );
+      }
+    };
+
+    handlerMap.set(key, handler);
+  }
+
+  return handlerMap.get(key)!;
+}
+
+export function getPieceSearchAttackTargetHandler() {
+  const handlerMap = globalThis.Simulator.handlerMap;
+  // TODO: perf key design
+  const key = `findAttackTarget`;
+
+  if (!handlerMap.has(key)) {
+    const handler = async ({
+      actionPieceId,
+    }: EventMap["beforePieceSearchAttackTarget"]) => {
+      const targetPieceId = await findTargetPiece(actionPieceId);
+      if (targetPieceId) {
+        await globalThis.Simulator.eventSystem.emit(
+          "afterPieceSearchAttackTarget",
+          { actionPieceId, targetPieceId }
+        );
+      }
+    };
+
+    handlerMap.set(key, handler);
+  }
+
+  return handlerMap.get(key)!;
+}
+
+export async function findTargetPiece(actionPieceId: string) {
   const actionPieceBattle = await getBattlePiece(actionPieceId);
 
   if (!actionPieceBattle) {
@@ -40,5 +101,5 @@ export async function getAimedPiece(
     })
   );
 
-  return pieceWithDistance?.length ? pieceWithDistance[0].id : undefined;
+  return pieceWithDistance?.[0].id;
 }
