@@ -21,7 +21,7 @@ async function giveExtraAction(isHome: boolean) {
     globalThis.Simulator.eventSystem.on(
       "afterPieceAction",
       async ({ pieceId, initiative }) => {
-        if (p.id === pieceId) {
+        if (p.entity === pieceId) {
           if (initiative >= 75) {
             await globalThis.Simulator.db.action_order_stack.insert({
               piece_id: pieceId,

@@ -82,14 +82,15 @@ export const pieceManage = (layer: PhaserLayer) => {
         override = false,
         pieceGid = 0
     ) {
-        const playerPiece = getComponentValue(
-            LocalPlayerPiece,
-            getEntityIdFromKeys([playerAddr, index])
-        );
+        pieceGid =
+            pieceGid ||
+            getComponentValue(
+                LocalPlayerPiece,
+                getEntityIdFromKeys([playerAddr, index])
+            )?.gid ||
+            0;
 
-        pieceGid = playerPiece?.gid ?? pieceGid;
-
-        if (!playerPiece && pieceGid === 0) {
+        if (!pieceGid) {
             logDebug("no piece for ", playerAddr, index);
             return;
         }
@@ -104,19 +105,11 @@ export const pieceManage = (layer: PhaserLayer) => {
 
         const creatureProfile = getCreatureProfile(
             CreatureProfile,
-            getEntityIdFromKeys([
-                BigInt(piece.creature_index),
-                BigInt(piece.level),
-            ])
+            piece.creature_index,
+            piece.level
         );
 
         const isEnemy = BigInt(account.address) !== piece.owner;
-
-        // const { worldX, worldY } = chainToWorldCoord(piece.x, piece.y, isEnemy);
-
-        // logDebug(
-        //     `spawn ${playerAddr} ${index} ${piece.gid} at ${worldX}, ${worldY} `
-        // );
 
         const simulatorCoord = chainToSimulatorCoord({
             posX: piece.x,
@@ -126,7 +119,8 @@ export const pieceManage = (layer: PhaserLayer) => {
 
         phaserSpawnPiece({
             ...creatureProfile,
-            id: getEntityIdFromKeys([BigInt(piece.gid)]),
+            gid: piece.gid,
+            entity: getEntityIdFromKeys([BigInt(piece.gid)]),
             x: simulatorCoord.simulatorX,
             y: simulatorCoord.simulatorY,
             creature_idx: creatureProfile.creature_index,
@@ -142,15 +136,16 @@ export const pieceManage = (layer: PhaserLayer) => {
      * phaser canvas spawn piece
      */
     function phaserSpawnPiece({
-        id,
+        gid,
+        entity,
         x,
         y,
         creature_idx,
         isHome,
         health,
         maxHealth,
-    }: BattleEntityType) {
-        const pieceSprite = objectPool.get(id, "Sprite");
+    }: BattleEntityType & { gid: number }) {
+        const pieceSprite = objectPool.get(entity, "Sprite");
 
         const { worldX, worldY } = simulatorToWorldCoord({
             posX: x,
@@ -158,7 +153,7 @@ export const pieceManage = (layer: PhaserLayer) => {
         });
 
         pieceSprite.setComponent({
-            id: id,
+            id: entity,
             once: (sprite: Phaser.GameObjects.Sprite) => {
                 sprite.setVisible(true);
                 sprite.setPosition(worldX, worldY);
@@ -173,7 +168,7 @@ export const pieceManage = (layer: PhaserLayer) => {
                     if (p.distance < DRAG_DISTANCE_THRESHOLD) {
                         updateComponent(UserOperation, zeroEntity, {
                             selected: true,
-                            selectGid: Number(id),
+                            selectGid: gid,
                         });
                     }
                 });
@@ -182,18 +177,20 @@ export const pieceManage = (layer: PhaserLayer) => {
                 if (isHome) {
                     game.scene.getScene("Main")?.input.setDraggable(sprite);
 
-                    sprite.off("dragstart");
+                    sprite.removeAllListeners("dragstart");
                     sprite.on("dragstart", () => {
                         sprite.setTint(0x50dfb6);
+
+                        logDebug(`piece ${gid} dragstart`);
 
                         // set dragging to true
                         updateComponent(UserOperation, zeroEntity, {
                             dragging: true,
-                            draggingGid: Number(id),
+                            draggingGid: gid,
                         });
                     });
 
-                    sprite.off("drag");
+                    sprite.removeAllListeners("drag");
                     sprite.on(
                         "drag",
                         (
@@ -204,7 +201,7 @@ export const pieceManage = (layer: PhaserLayer) => {
                         }
                     );
 
-                    sprite.off("dragend");
+                    sprite.removeAllListeners("dragend");
                     sprite.on("dragend", (p: Phaser.Input.Pointer) => {
                         logDebug("drag end");
                         if (p.distance < DRAG_DISTANCE_THRESHOLD) {
@@ -248,7 +245,7 @@ export const pieceManage = (layer: PhaserLayer) => {
                             return;
                         }
 
-                        updateComponent(LocalPiece, id as Entity, {
+                        updateComponent(LocalPiece, entity as Entity, {
                             x: posX,
                             y: posY,
                         });
@@ -260,7 +257,7 @@ export const pieceManage = (layer: PhaserLayer) => {
         const segment = Math.ceil(health / HEALTH_PER_SEGMENT);
 
         // initialize health bar
-        setComponent(HealthBar, `${id}-health-bar` as Entity, {
+        setComponent(HealthBar, `${entity}-health-bar` as Entity, {
             x: worldX,
             y: worldY,
             currentHealth: health,
@@ -270,10 +267,10 @@ export const pieceManage = (layer: PhaserLayer) => {
         });
 
         // initialize health
-        setComponent(Health, `${id}-health` as Entity, {
+        setComponent(Health, `${entity}-health` as Entity, {
             max: maxHealth,
             current: health,
-            pieceEntity: id,
+            pieceEntity: entity,
         });
     }
 

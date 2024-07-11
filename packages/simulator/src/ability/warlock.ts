@@ -76,7 +76,7 @@ async function hitAndFission({
   if (centerTarget) {
     await globalThis.Simulator.eventSystem.emit("damage", {
       pieceId: actionPieceId,
-      targetPieceId: centerTarget.id,
+      targetPieceId: centerTarget.entity,
       value:
         ConstPrimaryDmg[pieceInBattle.level] +
         Math.floor(pieceInBattle.spell_amp * 0.4),
@@ -99,7 +99,7 @@ async function hitAndFission({
     affectedPiece.map(async (p) => {
       await globalThis.Simulator.eventSystem.emit("damage", {
         pieceId: actionPieceId,
-        targetPieceId: p.id,
+        targetPieceId: p.entity,
         value:
           ConstSecondaryDmg[pieceInBattle.level] +
           Math.floor(pieceInBattle.spell_amp * 0.15),

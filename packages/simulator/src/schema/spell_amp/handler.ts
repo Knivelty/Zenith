@@ -19,7 +19,7 @@ export async function calculatePieceSpellAmp({
 
   await db.battle_entity
     .findOne({
-      selector: { id: documentData.id },
+      selector: { entity: documentData.entity },
     })
     .incrementalPatch({ spell_amp: spell_amp });
 }

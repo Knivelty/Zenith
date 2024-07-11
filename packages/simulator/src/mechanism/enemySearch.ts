@@ -87,10 +87,10 @@ export async function findTargetPiece(actionPieceId: string) {
   // get nearest piece
   const pieceWithDistance = await Promise.all(
     tgtSet.map(async (opp) => {
-      const p = await getBattlePiece(opp.id);
+      const p = await getBattlePiece(opp.entity);
 
       return {
-        id: opp.id,
+        id: opp.entity,
         distance: manhattanDistance(
           actionPieceBattle?.x,
           actionPieceBattle?.y,

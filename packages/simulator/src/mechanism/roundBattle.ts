@@ -47,7 +47,7 @@ async function generateActionOrderStack() {
 
   await globalThis.Simulator.db.action_order_stack.bulkInsert(
     undeadPieces.map((p) => {
-      return { piece_id: p.id, initiative: p.initiative };
+      return { piece_id: p.entity, initiative: p.initiative };
     })
   );
 }

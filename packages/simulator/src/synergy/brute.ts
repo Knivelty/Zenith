@@ -39,12 +39,12 @@ export async function addArmorBonus(isHome: boolean) {
 
   // add initiative bonus to all hunter piece
   await asyncMap(allBrutePieces, async (p) => {
-    await db.battle_entity.findOne({ selector: { id: p.id } }).update({
+    await db.battle_entity.findOne({ selector: { entity: p.entity } }).update({
       $inc: {
         armor: armerBonus,
       },
     });
-    logSynergy("BRUTE")(`add ${armerBonus} armor to piece ${p.id}`);
+    logSynergy("BRUTE")(`add ${armerBonus} armor to piece ${p.entity}`);
   });
 }
 
@@ -55,16 +55,16 @@ async function addShield(isHome: boolean) {
   const shieldPercentage = SHIELD_PERCENTAGE[validCount];
 
   await asyncMap(allBrutePieces, async (p) => {
-    const battle_entity = await getBattlePiece(p.id);
+    const battle_entity = await getBattlePiece(p.entity);
     const shieldStack = shieldPercentage * battle_entity.health;
 
     await addEffectToPiece({
-      pieceId: p.id,
+      pieceId: p.entity,
       effectName: "Shield",
       stack: shieldStack,
       duration: 999,
     });
-    logSynergy("BRUTE")(`add ${shieldStack} shield to piece ${p.id}`);
+    logSynergy("BRUTE")(`add ${shieldStack} shield to piece ${p.entity}`);
   });
 }
 
@@ -79,7 +79,7 @@ async function addArmorOn4Round(isHome: boolean) {
   globalThis.Simulator.eventSystem.on("turnEnd", async ({ turn }) => {
     if (turn === 4) {
       await asyncMap(allBrutePieces, async (p) => {
-        await increaseArmor(p.id, MIDDLE_ARMOR_BONUS);
+        await increaseArmor(p.entity, MIDDLE_ARMOR_BONUS);
       });
     }
   });
@@ -95,14 +95,14 @@ async function addArmorAndHealthOnTurnEnd(isHome: boolean) {
 
   globalThis.Simulator.eventSystem.on("turnEnd", async ({}) => {
     await asyncMap(allBrutePieces, async (p) => {
-      await increaseArmor(p.id, ULTRA_ARMOR_BONUS_PER_TURN);
+      await increaseArmor(p.entity, ULTRA_ARMOR_BONUS_PER_TURN);
 
       // get increase piece
-      const piece = await getBattlePiece(p.id);
+      const piece = await getBattlePiece(p.entity);
 
       await globalThis.Simulator.eventSystem.emit("heal", {
-        sourcePieceId: p.id,
-        targetPieceId: p.id,
+        sourcePieceId: p.entity,
+        targetPieceId: p.entity,
         type: "Active Heal",
         value: piece.armor,
       });

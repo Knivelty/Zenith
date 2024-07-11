@@ -8,11 +8,11 @@ import {
 export const BattleEntitySchemaJson = {
   title: "battle entity schema",
   version: 0,
-  primaryKey: "id",
+  primaryKey: "entity",
   type: "object",
   properties: {
     // id = piece gid
-    id: {
+    entity: {
       type: "string",
       maxLength: 100,
     },
@@ -74,7 +74,7 @@ export const BattleEntitySchemaJson = {
     },
   },
   required: [
-    "id",
+    "entity",
     "isHome",
     "health",
     "maxHealth",

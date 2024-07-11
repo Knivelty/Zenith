@@ -23,7 +23,7 @@ export const onEffectRageChange: EffectHandler<"Rage"> = async ({
   const atkPerStack = ATTACK_BONUS_PER_STACK[piece.level];
 
   await db.piece_attack
-    .findOne({ selector: { id: piece.id } })
+    .findOne({ selector: { entity: piece.entity } })
     .incrementalModify((doc) => {
       doc.addition += stackDiff * atkPerStack;
       return doc;

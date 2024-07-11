@@ -31,7 +31,7 @@ export const spikeShellPassive = async () => {
     globalThis.Simulator.eventSystem.on(
       "afterPieceAttack",
       async ({ pieceId, targetPieceId }) => {
-        if (targetPieceId === p.id) {
+        if (targetPieceId === p.entity) {
           await globalThis.Simulator.eventSystem.emit("damage", {
             pieceId: targetPieceId,
             targetPieceId: pieceId,
@@ -40,7 +40,7 @@ export const spikeShellPassive = async () => {
           });
 
           await globalThis.Simulator.db.battle_entity
-            .findOne({ selector: { id: targetPieceId } })
+            .findOne({ selector: { entity: targetPieceId } })
             .update({
               $inc: { mana: 10 },
             });

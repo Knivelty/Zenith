@@ -205,7 +205,7 @@ export const health = (layer: PhaserLayer) => {
                     await tween(
                         {
                             targets: text,
-                            duration: 300,
+                            duration: 200,
                             props: {
                                 alpha: 1,
                             },

@@ -120,7 +120,7 @@ export const processBattle = (component: ClientComponents) => {
             });
 
             allPieces.push({
-                id: pieceEntity,
+                entity: pieceEntity,
                 initX: piece.x - 1,
                 initY: 8 - piece.y,
                 isHome: true,
@@ -175,7 +175,7 @@ export const processBattle = (component: ClientComponents) => {
             });
 
             allPieces.push({
-                id: pieceEntity,
+                entity: pieceEntity,
                 initX: piece.x - 1,
                 initY: piece.y - 1,
                 isHome: false,

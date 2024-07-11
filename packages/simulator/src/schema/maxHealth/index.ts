@@ -8,11 +8,11 @@ import {
 export const PieceMaxHealthSchemaJson = {
   title: "piece max health",
   version: 0,
-  primaryKey: "id",
+  primaryKey: "entity",
   type: "object",
   properties: {
     // id = piece gid
-    id: {
+    entity: {
       type: "string",
       maxLength: 100,
     },
@@ -32,7 +32,7 @@ export const PieceMaxHealthSchemaJson = {
       type: "number",
     },
   },
-  required: ["id", "base", "addition", "times", "isFixed", "fixedValue"],
+  required: ["entity", "base", "addition", "times", "isFixed", "fixedValue"],
   indexes: [],
 } as const;
 

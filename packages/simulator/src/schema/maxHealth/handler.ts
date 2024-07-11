@@ -9,7 +9,7 @@ export async function calculateMaxHealth({
 
   let maxHealth: number;
 
-  const id = documentData.id;
+  const entity = documentData.entity;
 
   if (documentData.isFixed) {
     maxHealth = documentData.fixedValue;
@@ -22,7 +22,7 @@ export async function calculateMaxHealth({
 
   await db.battle_entity
     .find({
-      selector: { id: id },
+      selector: { entity: entity },
     })
     .incrementalPatch({
       maxHealth: maxHealth,
@@ -49,7 +49,7 @@ export async function healthFollowMaxHealth({
 
   await db.battle_entity
     .findOne({
-      selector: { id: documentData.id },
+      selector: { entity: documentData.entity },
     })
     .update({
       $set: { health: currentHealth },

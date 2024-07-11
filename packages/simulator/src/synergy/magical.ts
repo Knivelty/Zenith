@@ -1,5 +1,4 @@
 import { asyncMap } from "../utils/asyncHelper";
-import { getAllUndeadPieceIds } from "../utils/dbHelper";
 import { getAllPieceWithOrder, getValidTraitCount } from "./utils";
 
 //note: wip
@@ -55,7 +54,7 @@ async function addSpPowerBonus(isHome: boolean) {
   // add sp power bonus to all magical piece
   await asyncMap(allMagicalPieces, async (p) => {
     await db.piece_spell_amp
-      .findOne({ selector: { id: p.id } })
+      .findOne({ selector: { entity: p.entity } })
       .incrementalModify((doc) => {
         doc.addition += magicalSpBonus;
         return doc;
@@ -65,7 +64,7 @@ async function addSpPowerBonus(isHome: boolean) {
   // add sp power bonus to all piece
   await asyncMap(allPieces, async (p) => {
     await db.piece_spell_amp
-      .findOne({ selector: { id: p.id } })
+      .findOne({ selector: { entity: p.entity } })
       .incrementalModify((doc) => {
         doc.addition += allSpPowerBonus;
         return doc;
@@ -78,7 +77,7 @@ async function addSpPowerOnCast(isHome: boolean) {
     isHome,
     ORDER_MAGICAL_NAME
   );
-  const allMagicalPieceIds = allMagicalPieces.map((x) => x.id);
+  const allMagicalPieceIds = allMagicalPieces.map((x) => x.entity);
   const validCount = getValidTraitCount(allMagicalPieces);
 
   if (validCount < 9) {
@@ -90,7 +89,7 @@ async function addSpPowerOnCast(isHome: boolean) {
     async ({ data: { actionPieceId } }) => {
       if (allMagicalPieceIds.includes(actionPieceId)) {
         await globalThis.Simulator.db.piece_spell_amp
-          .findOne({ selector: { id: actionPieceId } })
+          .findOne({ selector: { entity: actionPieceId } })
           .incrementalModify((doc) => {
             doc.addition += 20;
             return doc;

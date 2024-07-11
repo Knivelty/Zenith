@@ -12,7 +12,7 @@ import { AbilityProfileType } from "./schema/ability_profile";
 import { CreatureType } from "./schema/creature";
 import { PlayerProfileType } from "./schema/player_profile";
 import { getPieceCreature } from "./utils/dbHelper";
-import { destroyDB } from "./utils/destroy";
+import { cleanDB } from "./utils/destroy";
 
 export async function createSimulator({
   creatures,
@@ -27,7 +27,7 @@ export async function createSimulator({
 }) {
   logDebug("simulator input", initEntities);
   if (globalThis?.Simulator?.db) {
-    await destroyDB();
+    await cleanDB();
   }
 
   const db = await createDB();
@@ -94,9 +94,9 @@ async function initializeBattle() {
   const allPieces = await db.base_state.find().exec();
 
   for (const p of allPieces) {
-    const c = await getPieceCreature(p.id);
+    const c = await getPieceCreature(p.entity);
     await db.battle_entity.insert({
-      id: p.id,
+      entity: p.entity,
       isHome: p.isHome,
       health: c.health,
       maxHealth: c.health,
@@ -120,7 +120,7 @@ async function initializeBattle() {
 
     // initial piece attack
     await db.piece_attack.insert({
-      id: p.id,
+      entity: p.entity,
       base: c.attack,
       addition: 0,
       times: 1,

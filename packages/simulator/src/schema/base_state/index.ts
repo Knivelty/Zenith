@@ -8,11 +8,11 @@ import {
 export const BaseStateSchemaJson = {
   title: "entity base status",
   version: 0,
-  primaryKey: "id",
+  primaryKey: "entity",
   type: "object",
   properties: {
     // id = piece gid
-    id: {
+    entity: {
       type: "string",
       maxLength: 100,
     },
@@ -30,7 +30,7 @@ export const BaseStateSchemaJson = {
       type: "number",
     },
   },
-  required: ["id", "initX", "initY", "isHome", "creature_idx", "level"],
+  required: ["entity", "initX", "initY", "isHome", "creature_idx", "level"],
   indexes: [],
 } as const;
 

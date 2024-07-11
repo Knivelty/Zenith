@@ -194,6 +194,8 @@ export const battleAnimation = (layer: PhaserLayer) => {
             current: modifiedHealth,
         });
 
+        const [resolve, , promise] = deferred<void>();
+
         // attacked blink
         const attackedSprite = objectPool.get(pieceId, "Sprite");
         attackedSprite.setComponent({
@@ -202,7 +204,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 await tween(
                     {
                         targets: sprite,
-                        duration: 200,
+                        duration: 100,
                         props: {
                             alpha: 0,
                         },
@@ -210,7 +212,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
                         yoyo: true,
                         onComplete: async () => {
                             // resolve to allow next tween
-                            // resolve();
+                            resolve();
                         },
                         onUpdate: () => {
                             //
@@ -220,12 +222,15 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 );
             },
         });
+
+        return promise;
     }
 
     async function handlePieceSpawn(data: EventWithName<"pieceSpawn">) {
         //
 
-        phaserSpawnPiece(data);
+        // gid does not affected here
+        phaserSpawnPiece({ gid: 1, ...data });
     }
 
     async function handleAbilityCast({

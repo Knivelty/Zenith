@@ -18,7 +18,7 @@ export async function calculatePieceAttack({
 
   await db.battle_entity
     .findOne({
-      selector: { id: documentData.id },
+      selector: { entity: documentData.entity },
     })
     .incrementalPatch({ attack: attack });
 }

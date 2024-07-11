@@ -70,7 +70,7 @@ export const MOCK_ABILITY_PROFILE: AbilityProfileType[] = [
 
 export const MOCK_INIT_ENTITY: BaseStateType[] = [
   {
-    id: "1001",
+    entity: "1001",
     initX: 1,
     initY: 1,
     isHome: true,
@@ -78,7 +78,7 @@ export const MOCK_INIT_ENTITY: BaseStateType[] = [
     level: 1,
   },
   {
-    id: "1002",
+    entity: "1002",
     initX: 1,
     initY: 3,
     isHome: true,
@@ -86,7 +86,7 @@ export const MOCK_INIT_ENTITY: BaseStateType[] = [
     level: 1,
   },
   {
-    id: "2001",
+    entity: "2001",
     initX: 1,
     initY: 7,
     isHome: false,

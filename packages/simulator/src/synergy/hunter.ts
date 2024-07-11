@@ -62,12 +62,12 @@ export async function addInitiativeBonus(isHome: boolean) {
 
   // add initiative bonus to all hunter piece
   await asyncMap(allHunterPieces, async (p) => {
-    await db.battle_entity.findOne({ selector: { id: p.id } }).update({
+    await db.battle_entity.findOne({ selector: { entity: p.entity } }).update({
       $inc: {
         initiative: initiativeBonus,
       },
     });
-    logSynergy("HUNTER")(`add ${initiativeBonus} initiative to piece ${p.id}`);
+    logSynergy("HUNTER")(`add ${initiativeBonus} initiative to piece ${p.entity}`);
   });
 }
 
@@ -80,18 +80,18 @@ export async function addRangeBonus(isHome: boolean) {
 
   // add initiative bonus to all hunter piece
   await asyncMap(allHunterPieces, async (p) => {
-    await db.battle_entity.findOne({ selector: { id: p.id } }).update({
+    await db.battle_entity.findOne({ selector: { entity: p.entity } }).update({
       $inc: {
         range: rangeBonus,
       },
     });
-    logSynergy("HUNTER")(`add ${rangeBonus} range to piece ${p.id}`);
+    logSynergy("HUNTER")(`add ${rangeBonus} range to piece ${p.entity}`);
   });
 }
 
 async function addExtraDamage(isHome: boolean) {
   const allHunterPieces = await getAllPieceWithOrder(isHome, ORDER_HUNTER_NAME);
-  const allHunterPieceIds = allHunterPieces.map((x) => x.id);
+  const allHunterPieceIds = allHunterPieces.map((x) => x.entity);
   const validCount = getValidTraitCount(allHunterPieces);
 
   const pureAttackDivisor = PURE_ATTACK_DIVISOR[validCount];
@@ -106,7 +106,7 @@ async function addExtraDamage(isHome: boolean) {
       if (allHunterPieceIds.includes(pieceId)) {
         const piece = await getBattlePiece(pieceId);
         await globalThis.Simulator.eventSystem.emit("damage", {
-          pieceId: piece.id,
+          pieceId: piece.entity,
           targetPieceId: targetPieceId,
           type: "Pure",
           value: piece.initiative / pureAttackDivisor,
@@ -118,7 +118,7 @@ async function addExtraDamage(isHome: boolean) {
 
 async function addExtraAttackAction(isHome: boolean) {
   const allHunterPieces = await getAllPieceWithOrder(isHome, ORDER_HUNTER_NAME);
-  const allHunterPieceIds = allHunterPieces.map((x) => x.id);
+  const allHunterPieceIds = allHunterPieces.map((x) => x.entity);
   const validCount = getValidTraitCount(allHunterPieces);
 
   if (validCount < 9) {

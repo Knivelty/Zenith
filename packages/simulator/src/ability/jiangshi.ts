@@ -36,7 +36,9 @@ export const jiangshi_penetrationInfection_passive = async () => {
         attack: p.armor,
       },
     });
-    logDebug(`add ${p.armor} * 5 HP and ${p.armor} attack to piece ${p.id}`);
+    logDebug(
+      `add ${p.armor} * 5 HP and ${p.armor} attack to piece ${p.entity}`
+    );
   });
 };
 
@@ -56,7 +58,7 @@ export const jiangshi_penetrationInfection: AbilityFunction = async ({
   const target = await db.battle_entity
     .findOne({
       selector: {
-        id: targetPieceId,
+        entity: targetPieceId,
       },
     })
     .exec();
@@ -71,7 +73,7 @@ export const jiangshi_penetrationInfection: AbilityFunction = async ({
     // deal ConstDmg+AtkFactor*ATK+80%AP physical dmg to the target
     // if the target is killed, summon a zombie with 100% of the target's stats and penetrationInfection ability
     addEffectToPiece({
-      pieceId: target.id,
+      pieceId: target.entity,
       effectName: "Revive",
       stack: 1,
       duration: 1,
@@ -79,7 +81,7 @@ export const jiangshi_penetrationInfection: AbilityFunction = async ({
     // TODO 75% armor penetration
     await globalThis.Simulator.eventSystem.emit("damage", {
       pieceId: actionPieceId,
-      targetPieceId: target.id,
+      targetPieceId: target.entity,
       value: Math.floor(
         ConstDmg[pieceInBattle.level] +
           pieceInBattle.attack * AtkFactor[pieceInBattle.level] +

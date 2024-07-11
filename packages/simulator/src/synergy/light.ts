@@ -67,11 +67,11 @@ export async function addLightInitiativeBonus(isHome: boolean) {
     await db.battle_entity
       .find({
         selector: {
-          id: p.id,
+          entity: p.entity,
         },
       })
       .update({ $inc: { initiative: bonus } });
-    logSynergy(ORIGIN_LIGHT_NAME)(`add ${bonus} initiative to piece ${p.id}`);
+    logSynergy(ORIGIN_LIGHT_NAME)(`add ${bonus} initiative to piece ${p.entity}`);
   });
 }
 
@@ -88,7 +88,7 @@ export async function addLightRangeBonus(isHome: boolean) {
     await db.battle_entity
       .find({
         selector: {
-          id: p.id,
+          entity: p.entity,
         },
       })
       .update({
@@ -96,7 +96,7 @@ export async function addLightRangeBonus(isHome: boolean) {
           range: bonus,
         },
       });
-    logSynergy(ORIGIN_LIGHT_NAME)(`add ${bonus} range to piece ${p.id}`);
+    logSynergy(ORIGIN_LIGHT_NAME)(`add ${bonus} range to piece ${p.entity}`);
   });
 }
 
@@ -113,7 +113,7 @@ export async function addLightMaxManaBenefit(isHome: boolean) {
     await db.battle_entity
       .find({
         selector: {
-          id: p.id,
+          entity: p.entity,
         },
       })
       .update({
@@ -122,14 +122,14 @@ export async function addLightMaxManaBenefit(isHome: boolean) {
         },
       });
     logSynergy(ORIGIN_LIGHT_NAME)(
-      `decrease ${decrease} max mana for piece ${p.id}`
+      `decrease ${decrease} max mana for piece ${p.entity}`
     );
   });
 }
 
 export async function castUseLessMana(isHome: boolean) {
   const allLightPieces = await getAllPieceWithOrigin(isHome, ORIGIN_LIGHT_NAME);
-  const allLightPiecesIds = allLightPieces.map((x) => x.id);
+  const allLightPiecesIds = allLightPieces.map((x) => x.entity);
   const validCount = getValidTraitCount(allLightPieces);
 
   if (validCount < 6) {

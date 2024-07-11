@@ -43,7 +43,7 @@ async function addDarknessToAllDarkPiece(
     // ignore death
     if (piece.dead) return;
     await addEffectToPiece({
-      pieceId: piece.id,
+      pieceId: piece.entity,
       effectName: "Darkness",
       stack: 1,
       duration: duration,

@@ -5,6 +5,7 @@ import { zeroEntity } from "../../utils";
 import { getComponentValueStrict } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { getHeroAttr } from "../hooks/useHeroAttr";
+import { logDebug } from "../lib/utils";
 
 export function DraggableImg() {
     const [dragImageSrc, setDragImageSrc] = useState("");
@@ -30,6 +31,7 @@ export function DraggableImg() {
 
     useEffect(() => {
         if (userO?.dragging) {
+            logDebug("user Operation",userO)
             const piece = getComponentValueStrict(
                 LocalPiece,
                 getEntityIdFromKeys([BigInt(userO.draggingGid)])

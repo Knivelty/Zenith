@@ -121,7 +121,7 @@ async function makeColAttack({
   await asyncMap(affectedPiece, async (p) => {
     await globalThis.Simulator.eventSystem.emit("damage", {
       pieceId: actionPieceId,
-      targetPieceId: p.id,
+      targetPieceId: p.entity,
       value: damage,
       type: "Magical",
     });
@@ -155,7 +155,7 @@ async function makeColBurn({
 
   await asyncMap(affectedPiece, async (p) => {
     await addEffectToPiece({
-      pieceId: p.id,
+      pieceId: p.entity,
       effectName: "Burn",
       stack,
       duration: 999,

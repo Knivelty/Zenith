@@ -37,7 +37,7 @@ export async function addStrengthBonus(isHome: boolean) {
     await db.piece_attack
       .find({
         selector: {
-          id: p.id,
+          entity: p.entity,
         },
       })
       .update({

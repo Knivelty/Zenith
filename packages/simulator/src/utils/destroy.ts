@@ -1,4 +1,5 @@
-export async function destroyDB() {
+export async function cleanDB() {
   const db = globalThis.Simulator.db;
-  await db.destroy();
+
+  await db.remove();
 }

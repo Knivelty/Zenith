@@ -5,12 +5,12 @@ import {
   UNKNOWN_PLAYER_PROFILE,
 } from "./error";
 
-export async function getBattlePiece(id: string) {
+export async function getBattlePiece(entity: string) {
   const db = globalThis.Simulator.db;
 
   const piece = await db.battle_entity
     .findOne({
-      selector: { id: id },
+      selector: { entity: entity },
     })
     .exec();
 
@@ -21,12 +21,12 @@ export async function getBattlePiece(id: string) {
   return piece;
 }
 
-export async function getPieceCreature(id: string) {
+export async function getPieceCreature(entity: string) {
   const db = globalThis.Simulator.db;
 
   const pieceProfile = await db.base_state
     .findOne({
-      selector: { id: id },
+      selector: { entity: entity },
     })
     .exec();
 
@@ -58,7 +58,7 @@ export async function getAllUndeadPieceIds() {
       selector: { dead: false },
     })
     .exec();
-  const ids = pieces.map((p) => p.id);
+  const ids = pieces.map((p) => p.entity);
   return ids;
 }
 
@@ -126,7 +126,7 @@ export async function movePiece(pieceId: string, toX: number, toY: number) {
   await db.battle_entity
     .findOne({
       selector: {
-        id: pieceId,
+        entity: pieceId,
       },
     })
     .patch({
@@ -144,7 +144,7 @@ export async function increaseHealth(
   const db = globalThis.Simulator.db;
 
   await db.battle_entity
-    .findOne({ selector: { id: target } })
+    .findOne({ selector: { entity: target } })
     .incrementalModify((doc) => {
       doc.health += value;
       return doc;
@@ -160,7 +160,7 @@ export async function decreaseHealth(
   const db = globalThis.Simulator.db;
 
   await db.battle_entity
-    .findOne({ selector: { id: pieceId } })
+    .findOne({ selector: { entity: pieceId } })
     .incrementalModify((doc) => {
       doc.health -= healthDiff;
       return doc;
@@ -169,7 +169,7 @@ export async function decreaseHealth(
   // if health lower than zero, set to dead
   if ((await getBattlePiece(pieceId)).health <= 0) {
     await db.battle_entity
-      .findOne({ selector: { id: pieceId } })
+      .findOne({ selector: { entity: pieceId } })
       .incrementalPatch({ health: 0, dead: true });
 
     // emit death event
@@ -184,14 +184,14 @@ export async function decreaseHealth(
 export async function decreaseMana(pieceId: string, manaDecrease: number) {
   const db = globalThis.Simulator.db;
   await db.battle_entity
-    .findOne({ selector: { id: pieceId } })
+    .findOne({ selector: { entity: pieceId } })
     .update({ $inc: { mana: -manaDecrease } });
 }
 
 export async function increaseArmor(pieceId: string, armorIncrease: number) {
   const db = globalThis.Simulator.db;
   await db.battle_entity
-    .findOne({ selector: { id: pieceId } })
+    .findOne({ selector: { entity: pieceId } })
     .incrementalModify((doc) => {
       doc.armor += armorIncrease;
       return doc;
@@ -201,7 +201,7 @@ export async function increaseArmor(pieceId: string, armorIncrease: number) {
 export async function getPieceAbilityProfile(pieceId: string) {
   const db = globalThis.Simulator.db;
   const piece = await db.battle_entity
-    .findOne({ selector: { id: pieceId } })
+    .findOne({ selector: { entity: pieceId } })
     .exec();
 
   const abilityProfile = await db.ability_profile

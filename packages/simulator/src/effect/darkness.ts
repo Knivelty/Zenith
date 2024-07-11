@@ -12,13 +12,13 @@ export const onEffectDarknessChange: EffectHandler<"Darkness"> = async ({
 async function onDarknessActive({ pieceId, stack }: EffectMap["Darkness"]) {
   const db = globalThis.Simulator.db;
 
-  await db.piece_attack.findOne({ selector: { id: pieceId } }).update({
+  await db.piece_attack.findOne({ selector: { entity: pieceId } }).update({
     $inc: {
       times: stack * 0.05,
     },
   });
 
-  await db.piece_max_health.findOne({ selector: { id: pieceId } }).update({
+  await db.piece_max_health.findOne({ selector: { entity: pieceId } }).update({
     $inc: {
       times: stack * 0.05,
     },
@@ -32,13 +32,13 @@ async function onDarknessActive({ pieceId, stack }: EffectMap["Darkness"]) {
 async function onDarknessDeActive({ pieceId, stack }: EffectMap["Darkness"]) {
   const db = globalThis.Simulator.db;
 
-  await db.piece_attack.findOne({ selector: { id: pieceId } }).update({
+  await db.piece_attack.findOne({ selector: { entity: pieceId } }).update({
     $inc: {
       times: -stack * 0.05,
     },
   });
 
-  await db.piece_max_health.findOne({ selector: { id: pieceId } }).update({
+  await db.piece_max_health.findOne({ selector: { entity: pieceId } }).update({
     $inc: {
       times: -stack * 0.05,
     },

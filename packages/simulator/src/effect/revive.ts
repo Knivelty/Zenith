@@ -25,7 +25,7 @@ function getHandler(actionPieceId: string) {
       const killerPiece = await db.battle_entity
         .findOne({
           selector: {
-            id: killerPieceId,
+            entity: killerPieceId,
           },
         })
         .exec();
@@ -35,7 +35,7 @@ function getHandler(actionPieceId: string) {
         await db.battle_entity
           .findOne({
             selector: {
-              id: pieceId,
+              entity: pieceId,
             },
           })
           .incrementalModify((doc) => {
@@ -50,7 +50,7 @@ function getHandler(actionPieceId: string) {
           });
 
         const newPiece = await db.battle_entity
-          .findOne({ selector: { id: pieceId } })
+          .findOne({ selector: { entity: pieceId } })
           .exec();
 
         await globalThis.Simulator.eventSystem.emit(
