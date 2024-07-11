@@ -74,7 +74,7 @@ function SynergyActiveStatus({ traits }: ISynergyActiveStatus) {
                     })}
                 </div>
                 <div className="text-sm -mt-2 -ml-6  w-auto text-[#D6A541]">
-                    {count}
+                    {count || ""}
                 </div>
             </div>
         </div>

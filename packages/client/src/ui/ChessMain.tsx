@@ -14,7 +14,7 @@ import { SettleDialog } from "./component/SettleDialog";
 import { DangerBorder } from "./component/DangerBorder";
 import { Shade } from "./component/Shade";
 import { HeroInfoDialog } from "./HeroInfoDialog";
-import { SynergyBar } from "./SynegyBar";
+import { SynergyBar } from "./SynergyBar";
 
 export function ChessMain() {
     const {
