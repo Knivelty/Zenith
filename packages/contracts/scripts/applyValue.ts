@@ -104,7 +104,7 @@ function initializeStage() {
   fs.createReadStream("../data/stages.csv")
     .pipe(csv())
     .on("data", (row) => {
-      const stage = row["Stage"];
+      const stage = Number(row["Stage"]);
       const enemy1 = row["Enemy1"];
       const enemy2 = row["Enemy2"];
       const enemy3 = row["Enemy3"];
@@ -197,6 +197,10 @@ function getPieceProfileElement(stage: number, allEnemies: string[]): string[] {
 }
 
 function numberToHexString(n: number, length: number) {
+  if (typeof n !== "number") {
+    throw new Error("Invalid Number Input");
+  }
+
   return "0x" + n.toString(16).padStart(length, "0");
 }
 

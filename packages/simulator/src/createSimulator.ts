@@ -53,7 +53,7 @@ export async function createSimulator({
   registerAbilities();
   registerEventHandler();
 
-  return { calculateBattleLogs, destroyDB, getEmittedEvents };
+  return { calculateBattleLogs, cleanDB, getEmittedEvents };
 }
 
 async function importData({

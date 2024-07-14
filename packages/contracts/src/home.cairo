@@ -403,6 +403,11 @@ mod home {
     }
 
     fn _settleChoice(world: IWorldDispatcher, choice: CurseOptionType, round: u8) {
+        // don't need to make choice before round 4
+        if (round < 4) {
+            return;
+        }
+
         let playerAddr = get_caller_address();
         let mut player = get!(world, playerAddr, Player);
 
@@ -1137,7 +1142,7 @@ mod home {
 
             // get new piece
             let enemyAddr = lastInningBattle.awayPlayer;
-            _spawnEnemyPiece(world, currentRound + 1, enemyAddr);
+            _spawnEnemyPiece(world, newRound, enemyAddr);
 
             // get cursed on round 4
             if (newRound == 4) {
@@ -1159,7 +1164,7 @@ mod home {
                 (
                     // update match state
                     currentMatchState,
-                    // create battle
+                    // create inning battle
                     InningBattle {
                         currentMatch: currentMatchState.index,
                         round: newRound,

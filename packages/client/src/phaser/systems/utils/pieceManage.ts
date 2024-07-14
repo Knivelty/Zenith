@@ -147,6 +147,8 @@ export const pieceManage = (layer: PhaserLayer) => {
     }: BattleEntityType & { gid: number }) {
         const pieceSprite = objectPool.get(entity, "Sprite");
 
+        logDebug(`spawn piece ${gid} ${entity} on ${x} ${y}`);
+
         const { worldX, worldY } = simulatorToWorldCoord({
             posX: x,
             posY: y,
