@@ -402,7 +402,14 @@ mod home {
         );
     }
 
-    fn _settleChoice(world: IWorldDispatcher, choice: CurseOptionType, round: u8) {
+    fn _settleChoice(world: IWorldDispatcher, choice: CurseOptionType) {
+        let playerAddr = get_caller_address();
+
+        let player = get!(world, playerAddr, Player);
+        let currentMatchState = get!(world, player.inMatch, MatchState);
+
+        let round = currentMatchState.round;
+
         // don't need to make choice before round 4
         if (round < 4) {
             return;
@@ -1126,11 +1133,11 @@ mod home {
         fn nextRound(world: IWorldDispatcher, choice: CurseOptionType) {
             let playerAddr = get_caller_address();
 
+            // settle player's choice
+            _settleChoice(world, choice);
+
             let mut player = get!(world, playerAddr, Player);
             let mut currentMatchState = get!(world, player.inMatch, MatchState);
-
-            // settle player's choice
-            _settleChoice(world, choice, currentMatchState.round);
 
             let lastInningBattle = get!(
                 world, (player.inMatch, currentMatchState.round), InningBattle
