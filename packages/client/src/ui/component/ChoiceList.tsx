@@ -19,7 +19,7 @@ export function ChoiceList() {
     } = useDojo();
     const choices = useChoice();
     return (
-        <div className="flex h-full w-full justify-center mt-12">
+        <div className="flex w-full justify-center mt-12">
             {choices.map((c, i) => {
                 return (
                     <Choice
