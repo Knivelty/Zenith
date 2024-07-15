@@ -35,7 +35,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "minotaur/",
+        prefix: "monsters/minotaur/",
         suffix: ".png",
     },
     {
@@ -45,7 +45,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "colossus/",
+        prefix: "monsters/colossus/",
         suffix: ".png",
     },
     {
@@ -55,7 +55,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "behemoth/",
+        prefix: "monsters/behemoth/",
         suffix: ".png",
     },
     {
@@ -65,7 +65,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "wyvern/",
+        prefix: "monsters/wyvern/",
         suffix: ".png",
     },
     {
@@ -75,7 +75,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "berserker/",
+        prefix: "monsters/berserker/",
         suffix: ".png",
     },
     {
@@ -85,7 +85,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "golem/",
+        prefix: "monsters/golem/",
         suffix: ".png",
     },
     {
@@ -95,7 +95,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "bear/",
+        prefix: "monsters/bear/",
         suffix: ".png",
     },
     {
@@ -105,7 +105,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "kitsune/",
+        prefix: "monsters/kitsune/",
         suffix: ".png",
     },
     {
@@ -115,7 +115,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "nue/",
+        prefix: "monsters/nue/",
         suffix: ".png",
     },
     {
@@ -125,7 +125,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "cyclops/",
+        prefix: "monsters/cyclops/",
         suffix: ".png",
     },
     {
@@ -135,7 +135,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "wraith/",
+        prefix: "monsters/wraith/",
         suffix: ".png",
     },
     {
@@ -145,7 +145,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "fairy/",
+        prefix: "monsters/fairy/",
         suffix: ".png",
     },
     {
@@ -155,7 +155,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "leprechaun/",
+        prefix: "monsters/leprechaun/",
         suffix: ".png",
     },
     {
@@ -165,7 +165,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "dragon/",
+        prefix: "monsters/dragon/",
         suffix: ".png",
     },
     {
@@ -175,7 +175,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "wendigo/",
+        prefix: "monsters/wendigo/",
         suffix: ".png",
     },
     {
@@ -185,7 +185,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "rakshasa/",
+        prefix: "monsters/rakshasa/",
         suffix: ".png",
     },
     {
@@ -195,7 +195,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "vampire/",
+        prefix: "monsters/vampire/",
         suffix: ".png",
     },
     {
@@ -205,7 +205,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "fenrir/",
+        prefix: "monsters/fenrir/",
         suffix: ".png",
     },
     {
@@ -215,7 +215,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "ogre/",
+        prefix: "monsters/ogre/",
         suffix: ".png",
     },
     {
@@ -225,7 +225,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "warlock/",
+        prefix: "monsters/warlock/",
         suffix: ".png",
     },
     {
@@ -235,7 +235,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "jiangshi/",
+        prefix: "monsters/jiangshi/",
         suffix: ".png",
     },
     {
@@ -245,7 +245,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "tarrasque/",
+        prefix: "monsters/tarrasque/",
         suffix: ".png",
     },
     {
@@ -255,7 +255,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "chupacabra/",
+        prefix: "monsters/chupacabra/",
         suffix: ".png",
     },
     {
@@ -265,7 +265,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "ettin/",
+        prefix: "monsters/ettin/",
         suffix: ".png",
     },
     {
@@ -275,7 +275,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "satori/",
+        prefix: "monsters/satori/",
         suffix: ".png",
     },
     {
@@ -285,7 +285,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "mantis/",
+        prefix: "monsters/mantis/",
         suffix: ".png",
     },
     {
@@ -295,7 +295,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "orc/",
+        prefix: "monsters/orc/",
         suffix: ".png",
     },
     {
@@ -305,7 +305,7 @@ const baseAnimations: AnimationsConfig = [
         endFrame: 0,
         frameRate: 1,
         repeat: -1,
-        prefix: "basilisk/",
+        prefix: "monsters/basilisk/",
         suffix: ".png",
     },
     {

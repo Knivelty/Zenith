@@ -24,8 +24,9 @@ export const createPhaserLayer = async (
 
     camera.phaserCamera.setBounds(0, 0, TILE_WIDTH * 8, TILE_HEIGHT * 8);
     // camera.phaserCamera.centerOn(0, 0);
-    camera.centerOn(0, 0);
-    camera.setZoom(0.3125);
+    // camera.centerOn(0, 0);
+    // camera.centerOnCoord({ x: 3, y: 3 }, TILE_WIDTH, TILE_HEIGHT);
+    // camera.setZoom(0.3125);
 
     const components = {};
 
@@ -40,6 +41,12 @@ export const createPhaserLayer = async (
     await sleep(1000);
 
     registerSystems(layer);
+
+    // const render = game.renderer as Phaser.Renderer.WebGL.WebGLRenderer;
+
+    // const gl = render.gl;
+    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
     return layer;
 };

@@ -35,7 +35,7 @@ export type CreatureKeys = {
 };
 
 export function getHeroThumb(creatureIdx: number) {
-    return `/assets/sprites/${Monster[creatureIdx].toLowerCase()}/0.png`;
+    return `/assets/monsters/${Monster[creatureIdx].toLowerCase()}/0.png`;
 }
 
 export function getHeroName(creatureIdx: number) {

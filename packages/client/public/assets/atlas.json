@@ -4,114 +4,639 @@
 			"image": "atlas.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 3691,
-				"h": 1908
+				"w": 246,
+				"h": 820
 			},
 			"scale": 1,
 			"frames": [
 				{
-					"filename": "golem/0.png",
+					"filename": "monsters/basilisk/0.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 779,
-						"h": 900
+						"w": 80,
+						"h": 80
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 779,
-						"h": 900
+						"w": 80,
+						"h": 80
 					},
 					"frame": {
 						"x": 1,
 						"y": 1,
-						"w": 779,
-						"h": 900
+						"w": 80,
+						"h": 80
 					}
 				},
 				{
-					"filename": "tarrasque/0.png",
+					"filename": "monsters/bear/0.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 546,
-						"h": 489
+						"w": 80,
+						"h": 80
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 546,
-						"h": 489
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 83,
+						"y": 1,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/behemoth/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 165,
+						"y": 1,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/berserker/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
 					},
 					"frame": {
 						"x": 1,
-						"y": 903,
-						"w": 546,
-						"h": 489
+						"y": 83,
+						"w": 80,
+						"h": 80
 					}
 				},
 				{
-					"filename": "basilisk/0.png",
+					"filename": "monsters/chupacabra/0.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 513,
-						"h": 513
+						"w": 80,
+						"h": 80
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 513,
-						"h": 513
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 83,
+						"y": 83,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/colossus/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 165,
+						"y": 83,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/cyclops/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
 					},
 					"frame": {
 						"x": 1,
-						"y": 1394,
-						"w": 513,
-						"h": 513
+						"y": 165,
+						"w": 80,
+						"h": 80
 					}
 				},
 				{
-					"filename": "bear/0.png",
+					"filename": "monsters/dragon/0.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 513,
-						"h": 513
+						"w": 80,
+						"h": 80
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 513,
-						"h": 513
+						"w": 80,
+						"h": 80
 					},
 					"frame": {
-						"x": 516,
-						"y": 1394,
-						"w": 513,
-						"h": 513
+						"x": 83,
+						"y": 165,
+						"w": 80,
+						"h": 80
 					}
 				},
 				{
-					"filename": "mantis/0.png",
+					"filename": "monsters/ettin/0.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 359,
-						"h": 359
+						"w": 80,
+						"h": 80
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 359,
-						"h": 359
+						"w": 80,
+						"h": 80
 					},
 					"frame": {
-						"x": 549,
-						"y": 903,
-						"w": 359,
-						"h": 359
+						"x": 165,
+						"y": 165,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/fairy/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 1,
+						"y": 247,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/fenrir/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 83,
+						"y": 247,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/jiangshi/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 165,
+						"y": 247,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/kitsune/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 1,
+						"y": 329,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/leprechaun/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 83,
+						"y": 329,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/mantis/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 165,
+						"y": 329,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/minotaur/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 1,
+						"y": 411,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/nue/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 83,
+						"y": 411,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/ogre/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 165,
+						"y": 411,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/orc/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 1,
+						"y": 493,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/qilin/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 83,
+						"y": 493,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/rakshasa/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 165,
+						"y": 493,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/satori/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 1,
+						"y": 575,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/skinwalker/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 83,
+						"y": 575,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/vampire/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 165,
+						"y": 575,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/warlock/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 1,
+						"y": 657,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/wendigo/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 83,
+						"y": 657,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/wraith/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 165,
+						"y": 657,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/wyvern/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 80
+					},
+					"frame": {
+						"x": 1,
+						"y": 739,
+						"w": 80,
+						"h": 80
+					}
+				},
+				{
+					"filename": "monsters/tarrasque/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 80,
+						"h": 72
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 80,
+						"h": 72
+					},
+					"frame": {
+						"x": 83,
+						"y": 739,
+						"w": 80,
+						"h": 72
+					}
+				},
+				{
+					"filename": "monsters/golem/0.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 69,
+						"h": 80
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 69,
+						"h": 80
+					},
+					"frame": {
+						"x": 165,
+						"y": 739,
+						"w": 69,
+						"h": 80
 					}
 				},
 				{
@@ -129,8 +654,8 @@
 						"h": 2
 					},
 					"frame": {
-						"x": 549,
-						"y": 1264,
+						"x": 83,
+						"y": 813,
 						"w": 25,
 						"h": 2
 					}
@@ -150,535 +675,10 @@
 						"h": 2
 					},
 					"frame": {
-						"x": 549,
-						"y": 1268,
+						"x": 110,
+						"y": 813,
 						"w": 25,
 						"h": 2
-					}
-				},
-				{
-					"filename": "behemoth/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 782,
-						"y": 1,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "minotaur/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 782,
-						"y": 516,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "berserker/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 910,
-						"y": 877,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "nue/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 1143,
-						"y": 516,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "chupacabra/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 1297,
-						"y": 1,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "colossus/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 1031,
-						"y": 1392,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "cyclops/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 1425,
-						"y": 877,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "ogre/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 1504,
-						"y": 516,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "dragon/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 1812,
-						"y": 1,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "orc/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 1865,
-						"y": 516,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "ettin/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 1546,
-						"y": 1392,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "fairy/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 1940,
-						"y": 877,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "qilin/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 2226,
-						"y": 516,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "fenrir/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 2327,
-						"y": 1,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "jiangshi/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 2061,
-						"y": 1392,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "kitsune/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 2455,
-						"y": 877,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "rakshasa/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 2587,
-						"y": 516,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "leprechaun/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 513,
-						"h": 513
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 513,
-						"h": 513
-					},
-					"frame": {
-						"x": 2842,
-						"y": 1,
-						"w": 513,
-						"h": 513
-					}
-				},
-				{
-					"filename": "satori/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 2948,
-						"y": 516,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "skinwalker/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 3309,
-						"y": 516,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "vampire/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 2576,
-						"y": 1392,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "warlock/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 2937,
-						"y": 1392,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "wendigo/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 2970,
-						"y": 877,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "wraith/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 3298,
-						"y": 1238,
-						"w": 359,
-						"h": 359
-					}
-				},
-				{
-					"filename": "wyvern/0.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 359,
-						"h": 359
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 359,
-						"h": 359
-					},
-					"frame": {
-						"x": 3331,
-						"y": 877,
-						"w": 359,
-						"h": 359
 					}
 				}
 			]
@@ -687,6 +687,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:d2145095ea490d9e46a307fcecf651d7:077645df6fa9e9ffd8ac9f9209a2e090:cbce6b53f0f49e0bf15173c25c41f876$"
+		"smartupdate": "$TexturePacker:SmartUpdate:e48343141aa1b4c2b82b35b818688f66:244efca13a5744ee137163107128d3e0:cbce6b53f0f49e0bf15173c25c41f876$"
 	}
 }

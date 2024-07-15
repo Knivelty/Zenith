@@ -7,12 +7,22 @@ export function definePhaserConfig(options: {
   return {
     type: Phaser.WEBGL,
     scale: options.scale,
-    pixelArt: true,
-    autoFocus: true,
+
+    // pixelArt: false,
+    // autoFocus: true,
+    // antialias: false,
+    // roundPixels: true,
+    // antialiasGL: true,
     render: {
-      antialiasGL: false,
-      pixelArt: true,
+      antialiasGL: true,
+      antialias: false,
+      pixelArt: false,
+      // transparent: true,
+      // clearBeforeRender: true,
+      // preserveDrawingBuffer: true,
+      // transparent: true,
     },
+
     scene: options.scenes,
   };
 }

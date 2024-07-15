@@ -26,7 +26,7 @@ const mainMap = defineMapConfig({
     chunkSize: TILE_WIDTH * 8,
     tileWidth: TILE_WIDTH,
     tileHeight: TILE_HEIGHT,
-    backgroundTile: [Tileset.Land], // 4 is undefined
+    backgroundTile: [Tileset.Land],
     animationInterval: ANIMATION_INTERVAL,
     tileAnimations: TileAnimations,
     layers: {
@@ -95,10 +95,11 @@ export const phaserConfig = {
     },
     scale: defineScaleConfig({
         parent: "phaser-game",
-        mode: Phaser.Scale.RESIZE,
-        zoom: 1,
-        height: "40rem",
-        width: "40rem",
+        // mode: Phaser.Scale.RESIZE,
+        // zoom: 1,
+        // height: "100%",
+        // width: "100%",
+        // autoCenter: Phaser.Scale.Center.NO_CENTER,
     }),
     cameraConfig: defineCameraConfig({
         pinchSpeed: 1,

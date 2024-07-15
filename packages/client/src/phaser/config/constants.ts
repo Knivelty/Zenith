@@ -146,8 +146,8 @@ export enum Assets {
     Tileset = "Tileset",
 }
 
-export const TILE_HEIGHT = 256;
-export const TILE_WIDTH = 256;
+export const TILE_HEIGHT = 80;
+export const TILE_WIDTH = 80;
 
 export const TILE_IMAGE_HEIGHT = 32;
 export const TILE_IMAGE_WEIGHT = 32;
@@ -158,18 +158,18 @@ export const ORIGIN_OFFSET = 100;
 export const MAP_AMPLITUDE = 16;
 
 export const HealthBarOffSetX = 0;
-export const HealthBarOffSetY = 15;
+export const HealthBarOffSetY = 5;
 
-export const Health_CHANGE_OFFSET_X = 256;
-export const Health_CHANGE_OFFSET_Y = -15;
+export const Health_CHANGE_OFFSET_X = TILE_WIDTH;
+export const Health_CHANGE_OFFSET_Y = -6;
 
 export const MOVE_TIME_PER_LENGTH = 300;
 
 export const HEALTH_PER_SEGMENT = 100;
 
-export const HEALTH_BAR_WIDTH = 240;
-export const HEALTH_BAR_HEIGHT = 40;
-export const HEALTH_BAR_BORDER_WIDTH = 8;
+export const HEALTH_BAR_WIDTH = 80;
+export const HEALTH_BAR_HEIGHT = 10;
+export const HEALTH_BAR_BORDER_WIDTH = 2;
 
 export const HEALTH_BAR_PLAYER_COLOR = 0x06ff00;
 export const HEALTH_BAR_ENEMY_COLOR = 0xff3d00;
@@ -177,6 +177,6 @@ export const HEALTH_BAR_ENEMY_COLOR = 0xff3d00;
 export const HEALTH_BAR_BORDER_COLOR = 0x000000;
 export const HEALTH_BAR_EMPTY_COLOR = 0x2b432b;
 
-export const DRAG_DISTANCE_THRESHOLD = 10;
+export const DRAG_DISTANCE_THRESHOLD = 5;
 
 export const BATTLE_END_WAIT_TIME = 1000;
