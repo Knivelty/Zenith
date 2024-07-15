@@ -16,21 +16,15 @@ import { PhaserLayer } from "../..";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import * as R from "ramda";
 import { getAllSynergies } from "../../../ui/hooks/useAllSynergies";
-import { getAllPiecesWithAllTraits } from "../../../ui/hooks/usePieceCountWithTrait";
+import { getAllBoardPiecesWithAllTraits } from "../../../ui/hooks/usePieceCountWithTrait";
 import { encodeGroundEntity } from "../utils/entityEncoder";
-import {
-    getAnimation,
-    getAnimationIndex,
-    playAnimationForOnce,
-} from "../utils/animationHelper";
+import { getAnimation, playAnimationForOnce } from "../utils/animationHelper";
 import {
     SynergyAnimations,
     TILE_HEIGHT,
     TILE_WIDTH,
 } from "../../config/constants";
 import { logDebug } from "../../../ui/lib/utils";
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { deferred } from "@latticexyz/utils";
 
 export const synergy = (layer: PhaserLayer) => {
     const {
@@ -155,7 +149,7 @@ export const synergy = (layer: PhaserLayer) => {
                 // console.log("synergy", v.name, "upgrade");
 
                 // get all relevant piece
-                const allPieces = getAllPiecesWithAllTraits({
+                const allPieces = getAllBoardPiecesWithAllTraits({
                     clientComponents,
                     playerAddress: address,
                 });

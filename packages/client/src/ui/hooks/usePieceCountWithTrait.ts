@@ -1,6 +1,6 @@
-import { useDojo } from "./useDojo";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import {
+    Entity,
     HasValue,
     NotValue,
     getComponentValueStrict,
@@ -9,9 +9,8 @@ import {
 import { getOrder, getOrigins } from "../../utils";
 import * as R from "ramda";
 import { ClientComponents } from "../../dojo/createClientComponents";
-import { useEntityQuery } from "@dojoengine/react";
 
-export function getAllPiecesWithAllTraits({
+export function getAllBoardPiecesWithAllTraits({
     clientComponents: { LocalPiece, CreatureProfile },
     playerAddress,
 }: {
@@ -49,20 +48,18 @@ export function getAllPiecesWithAllTraits({
     return piecesWithTraits;
 }
 
-export function useAllPiecesWithAllTraits() {
-    const {
-        clientComponents: { LocalPiece, CreatureProfile },
-        account: {
-            account: { address },
-        },
-    } = useDojo();
-
-    const onBoardPieceEntity = useEntityQuery([
-        HasValue(LocalPiece, { owner: BigInt(address) }),
-        NotValue(LocalPiece, { idx: 0 }),
-    ]);
-
-    const piecesWithTraits = Array.from(onBoardPieceEntity).map((entity) => {
+export function getTraitPieceCount({
+    traitName,
+    clientComponents: { LocalPiece, CreatureProfile },
+    inventoryPieceEntities,
+    onBoardPieceEntities,
+}: {
+    traitName: string;
+    clientComponents: ClientComponents;
+    inventoryPieceEntities: Entity[];
+    onBoardPieceEntities: Entity[];
+}) {
+    function getPieceWithTraitAndCreatureIdx(entity: Entity) {
         const piece = getComponentValueStrict(LocalPiece, entity);
 
         const pieceCreature = getComponentValueStrict(
@@ -83,16 +80,42 @@ export function useAllPiecesWithAllTraits() {
             traits,
             creature_index: pieceCreature.creature_index,
         };
-    });
+    }
 
-    return piecesWithTraits;
+    const onBoardPiecesWithTraits = Array.from(onBoardPieceEntities).map(
+        getPieceWithTraitAndCreatureIdx
+    );
+
+    const inventoryPiecesWithTraits = Array.from(inventoryPieceEntities).map(
+        getPieceWithTraitAndCreatureIdx
+    );
+
+    const onBoardPieceCount = getPieceCountWithTrait(
+        onBoardPiecesWithTraits,
+        traitName
+    );
+    const inventoryPieceCount = getPieceCountWithTrait(
+        inventoryPiecesWithTraits,
+        traitName
+    );
+
+    return {
+        onBoardPiecesWithTraits,
+        inventoryPiecesWithTraits,
+        onBoardPieceCount,
+        inventoryPieceCount,
+    };
 }
 
-export function usePieceCountWithTrait(trait: string | undefined) {
-    const piecesWithTraits = useAllPiecesWithAllTraits();
-
-    console.log("piecesWithTraits: ", piecesWithTraits);
-
+export function getPieceCountWithTrait(
+    piecesWithTraits: {
+        pieceId: number;
+        traits: string[];
+        creature_index: number;
+    }[],
+    trait: string | undefined
+) {
+    // console.log("piecesWithTraits: ", piecesWithTraits);
     if (!trait) {
         return 0;
     }
