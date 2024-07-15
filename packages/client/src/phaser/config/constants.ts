@@ -167,7 +167,7 @@ export const MOVE_TIME_PER_LENGTH = 300;
 
 export const HEALTH_PER_SEGMENT = 100;
 
-export const HEALTH_BAR_WIDTH = 80;
+export const HEALTH_BAR_WIDTH = TILE_HEIGHT - 5;
 export const HEALTH_BAR_HEIGHT = 10;
 export const HEALTH_BAR_BORDER_WIDTH = 2;
 
@@ -180,3 +180,5 @@ export const HEALTH_BAR_EMPTY_COLOR = 0x2b432b;
 export const DRAG_DISTANCE_THRESHOLD = 5;
 
 export const BATTLE_END_WAIT_TIME = 1000;
+
+export const DAMAGE_TEXT_FONT_SIZE = "20px";

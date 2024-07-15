@@ -8,6 +8,7 @@ import {
 import { defineSystemST } from "../../../utils";
 import { PhaserLayer } from "../..";
 import {
+    DAMAGE_TEXT_FONT_SIZE,
     HEALTH_BAR_BORDER_COLOR,
     HEALTH_BAR_BORDER_WIDTH,
     HEALTH_BAR_EMPTY_COLOR,
@@ -196,7 +197,7 @@ export const health = (layer: PhaserLayer) => {
                     text.setVisible(true);
                     text.setFont("Dogica Pixel");
                     text.setColor("#FF3D00");
-                    text.setFontSize("64px");
+                    text.setFontSize(DAMAGE_TEXT_FONT_SIZE);
                     text.setPosition(
                         v.x + Health_CHANGE_OFFSET_X,
                         v.y + Health_CHANGE_OFFSET_Y

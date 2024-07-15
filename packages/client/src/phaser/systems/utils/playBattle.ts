@@ -159,7 +159,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
                         targets: sprite,
                         duration: 200,
                         props: {
-                            x: "+=50",
+                            x: "+=15",
                         },
                         ease: Phaser.Math.Easing.Linear,
                         yoyo: true,
