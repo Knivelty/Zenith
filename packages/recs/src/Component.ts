@@ -454,6 +454,15 @@ export function overridableComponent<
     setOverriddenComponentValue(update.entity, update.value);
   }
 
+  // check whether the entity is override
+  function isEntityOverride(entity: Entity): boolean {
+    return [...overrides.values()]
+      .map((v) => {
+        return v.update.entity;
+      })
+      .includes(entity);
+  }
+
   // Remove an override from an entity
   function removeOverride(id: string) {
     const affectedEntity = overrides.get(id)?.update.entity;
@@ -537,6 +546,7 @@ export function overridableComponent<
     get(target, prop) {
       if (prop === "addOverride") return addOverride;
       if (prop === "removeOverride") return removeOverride;
+      if (prop === "isEntityOverride") return isEntityOverride;
       if (prop === "values") return valuesProxy;
       if (prop === "update$") return update$;
       if (prop === "entities")
@@ -552,7 +562,12 @@ export function overridableComponent<
       return Reflect.get(target, prop);
     },
     has(target, prop) {
-      if (prop === "addOverride" || prop === "removeOverride") return true;
+      if (
+        prop === "addOverride" ||
+        prop === "removeOverride" ||
+        prop === "isEntityOverride"
+      )
+        return true;
       return prop in target;
     },
   }) as OverridableComponent<S, M, T>;

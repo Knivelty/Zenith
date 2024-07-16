@@ -27,6 +27,7 @@ export interface HeroBaseAttr {
 
 export interface PieceAttr extends HeroBaseAttr {
     gid: number;
+    isOverride: boolean;
 }
 
 export type CreatureKeys = {

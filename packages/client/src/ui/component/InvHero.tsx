@@ -12,7 +12,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { worldToChainCoord } from "../../phaser/systems/utils/coorConvert";
 import { useComponentValue } from "@dojoengine/react";
 import { zeroEntity } from "../../utils";
-import { logDebug, logPlayerAction } from "../lib/utils";
+import { cn, logDebug, logPlayerAction } from "../lib/utils";
 import _ from "lodash";
 
 export const InvHero = ({
@@ -46,12 +46,15 @@ export const InvHero = ({
     const dragRef = useRef(null);
 
     const phaserRect = useUIStore((s) => s.phaserRect);
-    const userOp = useComponentValue(UserOperation, zeroEntity);
-    const setSelectPieceId = userOp?.selectGid;
-    const setShow = useUIStore((s) => s.setShow);
 
     useDrag(pieceAttr, dragRef, {
         onDragStart: (e) => {
+            if (pieceAttr?.isOverride) {
+                e.preventDefault();
+                console.log(" piece is optimisticly updated, prevent");
+
+                return;
+            }
             e.dataTransfer.setData(
                 "text/plain",
                 pieceAttr?.gid.toString() || ""
@@ -60,6 +63,9 @@ export const InvHero = ({
 
         onDragEnd: (e) => {
             e.preventDefault();
+            if (pieceAttr?.isOverride) {
+                return;
+            }
             if (!pieceAttr) {
                 return;
             }
@@ -285,7 +291,10 @@ export const InvHero = ({
                 >
                     <img
                         ref={dragRef}
-                        className={`w-auto h-auto object-contain ${!pieceAttr?.creature ? "invisible" : ""} `}
+                        className={cn(
+                            `w-auto h-auto object-contain ${!pieceAttr?.creature ? "invisible" : ""} `,
+                            { "opacity-25": pieceAttr?.isOverride }
+                        )}
                         src={pieceAttr?.thumb}
                         alt={pieceAttr?.thumb}
                     />

@@ -53,7 +53,7 @@ export const pieceManage = (layer: PhaserLayer) => {
         }
         logDebug(`removed piece, entity: ${entity} gid: ${gid}`);
 
-        hero.despawn();
+        hero?.despawn();
         // hero.setComponent({
         //     id: entity,
         //     now: (sprite: Phaser.GameObjects.Sprite) => {

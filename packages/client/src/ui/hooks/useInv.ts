@@ -8,7 +8,12 @@ import { logDebug } from "../lib/utils";
 
 export function useLocalInv() {
     const {
-        clientComponents: { LocalPlayerInvPiece, LocalPiece, CreatureProfile },
+        clientComponents: {
+            LocalPlayerInvPiece,
+            LocalPiece,
+            CreatureProfile,
+            Piece,
+        },
         systemCalls: { buyHero },
         account: {
             playerEntity,
@@ -20,6 +25,7 @@ export function useLocalInv() {
         LocalPlayerInvPiece,
         getEntityIdFromKeys([BigInt(playerAddr), 1n])
     );
+
     const localInv2 = useComponentValue(
         LocalPlayerInvPiece,
         getEntityIdFromKeys([BigInt(playerAddr), 2n])
@@ -56,6 +62,7 @@ export function useLocalInv() {
             if (!gid) {
                 return undefined;
             }
+            const pieceEntity = getEntityIdFromKeys([BigInt(gid)]);
             const piece = getComponentValue(
                 LocalPiece,
                 getEntityIdFromKeys([BigInt(gid)])
@@ -70,6 +77,7 @@ export function useLocalInv() {
                     level: piece.level,
                 }),
                 gid: gid,
+                isOverride: Piece.isEntityOverride(pieceEntity),
             } as PieceAttr;
         });
     }, [
