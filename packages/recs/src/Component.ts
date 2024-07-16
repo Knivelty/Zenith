@@ -456,11 +456,7 @@ export function overridableComponent<
 
   // check whether the entity is override
   function isEntityOverride(entity: Entity): boolean {
-    return [...overrides.values()]
-      .map((v) => {
-        return v.update.entity;
-      })
-      .includes(entity);
+    return overriddenEntityValues.has(getEntitySymbol(entity));
   }
 
   // Remove an override from an entity
@@ -549,6 +545,7 @@ export function overridableComponent<
       if (prop === "isEntityOverride") return isEntityOverride;
       if (prop === "values") return valuesProxy;
       if (prop === "update$") return update$;
+      if (prop === "originUpdate$") return component.update$;
       if (prop === "entities")
         return () =>
           new Set([
@@ -565,7 +562,8 @@ export function overridableComponent<
       if (
         prop === "addOverride" ||
         prop === "removeOverride" ||
-        prop === "isEntityOverride"
+        prop === "isEntityOverride" ||
+        prop === "originUpdate$"
       )
         return true;
       return prop in target;

@@ -3,10 +3,11 @@ import {
     ComponentValue,
     Entity,
     Metadata,
+    OverridableComponent,
     Schema,
     getComponentValue,
 } from "@dojoengine/recs";
-import { sleep } from "@latticexyz/utils";
+import { deferred, sleep } from "@latticexyz/utils";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import d from "debug";
@@ -49,6 +50,36 @@ export async function getComponentValueUtilNotNull<
     }
 
     return value;
+}
+
+export async function waitForComponentOriginValueCome<S extends Schema = Schema>(
+    component: OverridableComponent<S>,
+    entity: Entity,
+    expectValue: Partial<ComponentValue<S>>
+) {
+    const [resolve, , promise] = deferred<void>();
+
+    const sub = component.originUpdate$.subscribe({
+        next(v) {
+            if (v.entity === entity) {
+                const newValue = v.value[0];
+                if (!newValue) {
+                    return;
+                }
+                console.log(newValue, expectValue);
+                for (const key of Object.keys(expectValue)) {
+                    if (expectValue[key] !== newValue[key]) return;
+                }
+                resolve();
+            }
+        },
+    });
+
+    promise.then(() => {
+        sub.unsubscribe();
+    });
+
+    return promise;
 }
 
 export function generateColor(str: string): string {

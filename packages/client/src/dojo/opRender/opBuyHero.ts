@@ -4,7 +4,7 @@ import { ClientComponents } from "../createClientComponents";
 import { getComponentValueStrict } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { poseidonHashMany } from "micro-starknet";
-import { logDebug } from "../../ui/lib/utils";
+import { logDebug, waitForComponentOriginValueCome } from "../../ui/lib/utils";
 import { uuid } from "@latticexyz/utils";
 
 export const opBuyHero = async (
@@ -102,8 +102,12 @@ export const opBuyHero = async (
             altarSlot,
             invSlot,
         });
-        await rpcProvider.waitForTransaction(tx.transaction_hash, {
-            retryInterval: 100,
+        // await rpcProvider.waitForTransaction(tx.transaction_hash, {
+        //     retryInterval: 100,
+        // });
+
+        await waitForComponentOriginValueCome(Piece, pieceEntity, {
+            owner: BigInt(account.address),
         });
     } catch (e) {
         console.error(e);
