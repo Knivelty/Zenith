@@ -52,7 +52,9 @@ export async function getComponentValueUtilNotNull<
     return value;
 }
 
-export async function waitForComponentOriginValueCome<S extends Schema = Schema>(
+export async function waitForComponentOriginValueCome<
+    S extends Schema = Schema,
+>(
     component: OverridableComponent<S>,
     entity: Entity,
     expectValue: Partial<ComponentValue<S>>
@@ -66,7 +68,7 @@ export async function waitForComponentOriginValueCome<S extends Schema = Schema>
                 if (!newValue) {
                     return;
                 }
-                console.log(newValue, expectValue);
+                logDebug("compare value: ", newValue, expectValue);
                 for (const key of Object.keys(expectValue)) {
                     if (expectValue[key] !== newValue[key]) return;
                 }

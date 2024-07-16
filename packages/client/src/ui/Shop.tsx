@@ -7,16 +7,6 @@ import { useInv } from "./hooks/useInv";
 import { ShowItem, UIStore, useUIStore } from "../store";
 import { logDebug } from "./lib/utils";
 
-const SHOW_INFO_LIST = ["health", "attack", "defense", "range"] as const;
-
-export const BG_COLOR = [
-    "bg-white",
-    "bg-green-500",
-    "bg-blue-500",
-    "bg-purple-500",
-    "bg-yellow-500",
-];
-
 const Shop = () => {
     const {
         clientComponents: { Player, Altar, CreatureProfile },
@@ -41,17 +31,12 @@ const Shop = () => {
             });
     }, [refreshAltar, account]);
 
-    // const [n, forceRender] = useState(0);
-
     const playerValue = useComponentValue(Player, playerEntity);
     const heroAltar = useComponentValue(Altar, playerEntity);
 
     logDebug("heroAltar: ", heroAltar);
-    // console.log("playerEntity: ", playerEntity);
 
     const { firstEmptyInv } = useInv();
-
-    console.log("firstEmptyInv: ", firstEmptyInv);
 
     const buyHeroFn = useCallback(
         (index: number) => {
@@ -59,8 +44,6 @@ const Shop = () => {
         },
         [account, buyHero, firstEmptyInv]
     );
-
-    console.log("getShow(ShowItem.Shop): ", shopShow);
 
     return (
         <div
@@ -70,46 +53,46 @@ const Shop = () => {
             <div className="flex flex-col justify-center items-start">
                 <div className="flex items-center justify-around ml-4 mt-4">
                     <HeroCard
-                        heroAttr={getHeroAttr(CreatureProfile, {
+                        creatureKey={{
                             id: heroAltar?.slot1,
                             level: 1,
-                        })}
+                        }}
                         onClick={() => {
                             buyHeroFn(1);
                         }}
                     />
                     <HeroCard
-                        heroAttr={getHeroAttr(CreatureProfile, {
+                        creatureKey={{
                             id: heroAltar?.slot2,
                             level: 1,
-                        })}
+                        }}
                         onClick={() => {
                             buyHeroFn(2);
                         }}
                     />
                     <HeroCard
-                        heroAttr={getHeroAttr(CreatureProfile, {
+                        creatureKey={{
                             id: heroAltar?.slot3,
                             level: 1,
-                        })}
+                        }}
                         onClick={() => {
                             buyHeroFn(3);
                         }}
                     />
                     <HeroCard
-                        heroAttr={getHeroAttr(CreatureProfile, {
+                        creatureKey={{
                             id: heroAltar?.slot4,
                             level: 1,
-                        })}
+                        }}
                         onClick={() => {
                             buyHeroFn(4);
                         }}
                     />
                     <HeroCard
-                        heroAttr={getHeroAttr(CreatureProfile, {
+                        creatureKey={{
                             id: heroAltar?.slot5,
                             level: 1,
-                        })}
+                        }}
                         onClick={() => {
                             buyHeroFn(5);
                         }}

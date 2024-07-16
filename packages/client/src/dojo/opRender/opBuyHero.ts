@@ -106,9 +106,14 @@ export const opBuyHero = async (
         //     retryInterval: 100,
         // });
 
-        await waitForComponentOriginValueCome(Piece, pieceEntity, {
-            owner: BigInt(account.address),
-        });
+        await Promise.all([
+            waitForComponentOriginValueCome(Piece, pieceEntity, {
+                owner: BigInt(account.address),
+            }),
+            waitForComponentOriginValueCome(Altar, playerEntity, {
+                [`slot${altarSlot}`]: 0,
+            }),
+        ]);
     } catch (e) {
         console.error(e);
         throw e;

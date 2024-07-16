@@ -30,7 +30,7 @@ export interface PieceAttr extends HeroBaseAttr {
     isOverride: boolean;
 }
 
-export type CreatureKeys = {
+export type CreatureKey = {
     id?: number;
     level?: number;
 };
@@ -45,7 +45,7 @@ export function getHeroName(creatureIdx: number) {
 
 export function getHeroAttr(
     creatureProfile: ClientComponents["CreatureProfile"],
-    creature: CreatureKeys
+    creature: CreatureKey
 ): HeroBaseAttr | undefined {
     if (!creature.id || !creature.level) {
         return undefined;
@@ -77,37 +77,14 @@ export function getHeroAttr(
     };
 }
 
-export function useHeroesAttr(creatures: CreatureKeys[]): HeroBaseAttr[] {
+export function useHeroesAttr(
+    creature: CreatureKey
+): HeroBaseAttr | undefined {
     const {
         clientComponents: { CreatureProfile },
     } = useDojo();
-    const [attrs, setAttrs] = useState<HeroBaseAttr[]>([]);
 
-    useEffect(() => {
-        setAttrs(
-            creatures.map((c) => {
-                const creatureProfile = getComponentValueStrict(
-                    CreatureProfile,
-                    getEntityIdFromKeys([
-                        BigInt(c.id || 0),
-                        BigInt(c.level || 0),
-                    ])
-                );
+    const attr = getHeroAttr(CreatureProfile, creature);
 
-                return {
-                    attack: creatureProfile.attack,
-                    creature: creatureProfile.creature_index,
-                    armor: creatureProfile.armor,
-                    health: creatureProfile.health,
-                    speed: creatureProfile.speed,
-                    range: creatureProfile.range,
-                    cost: creatureProfile.level,
-                    level: creatureProfile.level,
-                    thumb: getHeroThumb(creatureProfile.creature_index),
-                };
-            }) as HeroBaseAttr[]
-        );
-    }, [creatures, CreatureProfile]);
-
-    return attrs;
+    return attr;
 }

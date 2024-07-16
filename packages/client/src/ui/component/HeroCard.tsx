@@ -1,4 +1,4 @@
-import { HeroBaseAttr } from "../hooks/useHeroAttr";
+import { CreatureKey, HeroBaseAttr, useHeroesAttr } from "../hooks/useHeroAttr";
 
 const rarityBgColor: Record<number, string> = {
     1: "#4F84AF",
@@ -6,13 +6,14 @@ const rarityBgColor: Record<number, string> = {
     3: "#B97C34",
 };
 
-export const HeroCard = ({
-    heroAttr,
-    onClick,
-}: {
-    heroAttr: HeroBaseAttr | undefined;
+interface IHeroCard {
+    creatureKey: CreatureKey;
     onClick?: (...args: unknown[]) => unknown | Promise<unknown>;
-}) => {
+}
+
+export const HeroCard = ({ creatureKey, onClick }: IHeroCard) => {
+    const heroAttr = useHeroesAttr(creatureKey);
+
     const bgColor = rarityBgColor[heroAttr?.rarity || 1];
 
     return (
