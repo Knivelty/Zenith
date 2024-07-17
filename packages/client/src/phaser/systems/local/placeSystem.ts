@@ -46,12 +46,7 @@ export function placeSystem(layer: PhaserLayer) {
                     removePieceOnBoard(v.gid);
                 }
                 if (v.idx === 0) {
-                    // wait 0.5s for op render override remove
-                    setTimeout(() => {
-                        if (v.idx === 0) {
-                            removePieceOnBoard(v.gid);
-                        }
-                    }, 500);
+                    removePieceOnBoard(v.gid);
                 }
             }
         }

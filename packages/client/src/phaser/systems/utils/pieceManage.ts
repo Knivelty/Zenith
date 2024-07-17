@@ -53,13 +53,13 @@ export const pieceManage = (layer: PhaserLayer) => {
         }
         logDebug(`removed piece, entity: ${entity} gid: ${gid}`);
 
-        hero?.despawn();
-        // hero.setComponent({
-        //     id: entity,
-        //     now: (sprite: Phaser.GameObjects.Sprite) => {
-        //         sprite.destroy();
-        //     },
-        // });
+        hero.setComponent({
+            id: entity,
+            now: (sprite: Phaser.GameObjects.Sprite) => {
+                // Note: may have some side effect, to check later if side effec occur
+                sprite.setVisible(false);
+            },
+        });
 
         // remove health bar
         updateComponent(Health, `${entity}-health` as Entity, {
