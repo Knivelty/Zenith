@@ -16,7 +16,7 @@ trait IHome {
     fn spawn();
     fn refreshAltar();
     fn buyHero(altarSlot: u8, invSlot: u8);
-    fn mergeHero(gid1: u32, gid2: u32, gid3: u32, invSlot: u8);
+    fn mergeHero(gid1: u32, gid2: u32, gid3: u32, onBoardIdx: u8, x: u8, y: u8, invSlot: u8);
     fn buyExp();
     fn sellHero(gid: u32);
     fn commitPreparation(changes: Array<PieceChange>, result: RoundResult);
@@ -850,7 +850,21 @@ mod home {
         }
 
 
-        fn mergeHero(world: IWorldDispatcher, gid1: u32, gid2: u32, gid3: u32, invSlot: u8) {
+        fn mergeHero(
+            world: IWorldDispatcher,
+            gid1: u32,
+            gid2: u32,
+            gid3: u32,
+            onBoardIdx: u8,
+            x: u8,
+            y: u8,
+            invSlot: u8
+        ) {
+            // check args
+            if (onBoardIdx + invSlot != 1) {
+                panic!("invalid args");
+            }
+
             // validate piece
             let playerAddr = get_caller_address();
 
@@ -892,26 +906,56 @@ mod home {
             let gid = gen_piece_gid(playerAddr, playerProfile.pieceCounter);
 
             let mut playerV = get!(world, playerAddr, Player);
-            playerV.inventoryCount += 1;
 
-            // spawn Piece
-            set!(
-                world,
-                (
-                    Piece {
-                        gid: gid,
-                        owner: playerAddr,
-                        idx: 0,
-                        slot: invSlot,
-                        level: piece1.level + 1,
-                        creature_index: piece1.creature_index,
-                        x: 0,
-                        y: 0
-                    },
-                    PlayerInvPiece { owner: playerAddr, slot: invSlot, gid: gid, },
-                    playerV
-                )
-            );
+            if (onBoardIdx == 1) {
+                playerV.heroesCount += 1;
+                let oldPlyaerPiece = get!(world, (playerAddr, onBoardIdx), PlayerPiece);
+                if (oldPlyaerPiece.gid != 0) {
+                    panic!("on board idx piece id not empty");
+                }
+                set!(
+                    world,
+                    (
+                        PlayerPiece { owner: playerAddr, idx: onBoardIdx, gid: gid, },
+                        Piece {
+                            gid: gid,
+                            owner: playerAddr,
+                            idx: onBoardIdx,
+                            slot: 0,
+                            level: piece1.level + 1,
+                            creature_index: piece1.creature_index,
+                            x: x,
+                            y: y
+                        },
+                    )
+                );
+            } else if (invSlot == 1) {
+                playerV.inventoryCount += 1;
+                let oldInvPiece = get!(world, (playerAddr, invSlot), PlayerInvPiece);
+                if (oldInvPiece.gid != 0) {
+                    panic!("inv slot piece id not empty");
+                }
+                set!(
+                    world,
+                    (
+                        PlayerInvPiece { owner: playerAddr, slot: invSlot, gid: gid, },
+                        Piece {
+                            gid: gid,
+                            owner: playerAddr,
+                            idx: 0,
+                            slot: invSlot,
+                            level: piece1.level + 1,
+                            creature_index: piece1.creature_index,
+                            x: 0,
+                            y: 0
+                        },
+                    )
+                );
+            } else {
+                panic!("invalid args");
+            }
+
+            set!(world, (playerV));
         }
 
         // commit preparation in one function

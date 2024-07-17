@@ -127,16 +127,11 @@ export function createSystemCalls(
     };
 
     const mergeHero = async (
-        account: Account,
-        gid1: number,
-        gid2: number,
-        gid3: number,
-        invSlot: number
+        props: { account: Account, gid1: number, gid2: number, gid3: number, onBoardIdx: number, x: number, y: number, invSlot: number } & { account: Account }
     ) => {
         try {
-            logCall(`merge hero: `, gid1, gid2, gid3, invSlot);
 
-            await client.home.mergeHero({ account, gid1, gid2, gid3, invSlot });
+            await client.home.mergeHero(props);
         } catch (e) {
             console.error(e);
             throw e;

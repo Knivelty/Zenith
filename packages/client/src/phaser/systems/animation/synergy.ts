@@ -122,7 +122,6 @@ export const synergy = (layer: PhaserLayer) => {
         world,
         [Has(LocalSynergyStatus)],
         ({ entity, type, value: [v, preV] }) => {
-            console.log("LocalSynergy", v);
 
             const currentUnlockLevel = v?.unlockLevels.filter(
                 (i) => i <= v.count

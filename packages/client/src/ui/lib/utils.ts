@@ -11,6 +11,7 @@ import { deferred, sleep } from "@latticexyz/utils";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import d from "debug";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -82,6 +83,14 @@ export async function waitForComponentOriginValueCome<
     });
 
     return promise;
+}
+
+export function getPieceEntity(gid: number) {
+    return getEntityIdFromKeys([BigInt(gid)])
+}
+
+export function getPlayerBoardPieceEntity(playerAddr: string, idx: number) {
+    return getEntityIdFromKeys([BigInt(playerAddr), BigInt(idx)])
 }
 
 export function generateColor(str: string): string {

@@ -117,13 +117,13 @@ export function Debugger() {
             </Button>
             <Button
                 onClick={async () => {
-                    await mergeHero(
-                        account,
-                        3619631714,
-                        9547523,
-                        3433969428,
-                        3
-                    );
+                    // await mergeHero(
+                    //     account,
+                    //     3619631714,
+                    //     9547523,
+                    //     3433969428,
+                    //     3
+                    // );
                 }}
             >
                 Merge Hero

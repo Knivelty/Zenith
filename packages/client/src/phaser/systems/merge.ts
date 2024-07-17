@@ -5,10 +5,9 @@ import {
     setComponent,
 } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { defineSystemST, zeroEntity } from "../../utils";
 import _ from "lodash";
-import { logDebug } from "../../ui/lib/utils";
+import { getPieceEntity, getPlayerBoardPieceEntity, logDebug } from "../../ui/lib/utils";
 import { localPlayerInv } from "./utils/localPlayerInv";
 
 export const merge = (layer: PhaserLayer) => {
@@ -16,9 +15,9 @@ export const merge = (layer: PhaserLayer) => {
         world,
         networkLayer: {
             clientComponents: {
-                GameStatus,
-                InningBattle,
                 Piece,
+                LocalPiece,
+                LocalPlayerPiece,
                 PlayerOwnPiece,
             },
             clientComponents,
@@ -85,7 +84,7 @@ export const merge = (layer: PhaserLayer) => {
             const piecesValues = pieces?.gids.map((p: number) => {
                 return getComponentValueStrict(
                     Piece,
-                    getEntityIdFromKeys([BigInt(p)])
+                    getPieceEntity(p)
                 );
             });
 
@@ -104,16 +103,46 @@ export const merge = (layer: PhaserLayer) => {
                 // call delay
                 setTimeout(() => {
                     const emptySlot = getFirstEmptyLocalInvSlot();
-                    mergeHero(
-                        account,
-                        result[0].gid,
-                        result[1].gid,
-                        result[2].gid,
-                        result[0].slot ||
-                            result[1].slot ||
-                            result[2].slot ||
-                            emptySlot
-                    );
+                    const gid1 = result[0].gid
+                    const gid2 = result[1].gid
+                    const gid3 = result[2].gid
+                    const gids = [gid1, gid2, gid3]
+
+                    // find the
+                    const pieces = gids.map(id => getComponentValueStrict(LocalPiece, getPieceEntity(id)))
+
+                    const onBoardIdx = pieces.filter((v) => { return v.idx !== 0 })?.[0].idx;
+                    if (onBoardIdx) {
+                        const replacedPlayerPiece = getComponentValueStrict(LocalPlayerPiece, getPlayerBoardPieceEntity(address, onBoardIdx))
+                        const replacedPiece = getComponentValueStrict(LocalPiece, getPieceEntity(replacedPlayerPiece.gid))
+                        mergeHero(
+                            {
+                                account,
+                                gid1: result[0].gid,
+                                gid2: result[1].gid,
+                                gid3: result[2].gid,
+                                onBoardIdx,
+                                x: replacedPiece.x, y: replacedPiece.y,
+                                invSlot: 0
+                            }
+                        );
+                    } else {
+                        const invSlot = pieces.filter((v) => { return v.slot !== 0 })?.[0].slot || 0
+                        mergeHero(
+                            {
+                                account,
+                                gid1: result[0].gid,
+                                gid2: result[1].gid,
+                                gid3: result[2].gid,
+                                onBoardIdx: 0,
+                                x: 0, y: 0,
+                                invSlot
+                            }
+                        );
+                    }
+
+
+
                 }, 1000);
             }
         }
