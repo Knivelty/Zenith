@@ -96,7 +96,13 @@ export const opCommitPrepare = async (
     const innitBattleOverride = uuid();
     InningBattle.addOverride(innitBattleOverride, {
         entity: inningBattleEntity,
-        value: { ...inningBattleValue, end: true },
+        value: {
+            ...inningBattleValue,
+            end: true,
+            winner: result.win
+                ? inningBattleValue.homePlayer
+                : inningBattleValue.awayPlayer,
+        },
     });
 
     try {
