@@ -7,7 +7,11 @@ import {
 import { PhaserLayer } from "..";
 import { defineSystemST, zeroEntity } from "../../utils";
 import _ from "lodash";
-import { getPieceEntity, getPlayerBoardPieceEntity, logDebug } from "../../ui/lib/utils";
+import {
+    getPieceEntity,
+    getPlayerBoardPieceEntity,
+    logDebug,
+} from "../../ui/lib/utils";
 import { localPlayerInv } from "./utils/localPlayerInv";
 
 export const merge = (layer: PhaserLayer) => {
@@ -26,9 +30,6 @@ export const merge = (layer: PhaserLayer) => {
             systemCalls: { mergeHero },
         },
     } = layer;
-
-    // note: here should use not local value, but there maybe conflict
-    const { getFirstEmptyLocalInvSlot } = localPlayerInv(layer);
 
     // this function track piece change and save
     defineSystemST<typeof Piece.schema>(
@@ -82,10 +83,7 @@ export const merge = (layer: PhaserLayer) => {
             const pieces = getComponentValue(PlayerOwnPiece, zeroEntity);
 
             const piecesValues = pieces?.gids.map((p: number) => {
-                return getComponentValueStrict(
-                    Piece,
-                    getPieceEntity(p)
-                );
+                return getComponentValueStrict(Piece, getPieceEntity(p));
             });
 
             const fields = ["creature_index", "level"];
@@ -102,47 +100,58 @@ export const merge = (layer: PhaserLayer) => {
             if (result) {
                 // call delay
                 setTimeout(() => {
-                    const emptySlot = getFirstEmptyLocalInvSlot();
-                    const gid1 = result[0].gid
-                    const gid2 = result[1].gid
-                    const gid3 = result[2].gid
-                    const gids = [gid1, gid2, gid3]
+                    const gid1 = result[0].gid;
+                    const gid2 = result[1].gid;
+                    const gid3 = result[2].gid;
+                    const gids = [gid1, gid2, gid3];
 
                     // find the
-                    const pieces = gids.map(id => getComponentValueStrict(LocalPiece, getPieceEntity(id)))
+                    const pieces = gids.map((id) =>
+                        getComponentValueStrict(LocalPiece, getPieceEntity(id))
+                    );
 
-                    const onBoardIdx = pieces.filter((v) => { return v.idx !== 0 })?.[0].idx;
+                    const onBoardIdx = pieces
+                        .filter((v) => {
+                            return v.idx !== 0;
+                        })
+                        ?.sort((a, b) => a.idx - b.idx)?.[0]?.idx;
                     if (onBoardIdx) {
-                        const replacedPlayerPiece = getComponentValueStrict(LocalPlayerPiece, getPlayerBoardPieceEntity(address, onBoardIdx))
-                        const replacedPiece = getComponentValueStrict(LocalPiece, getPieceEntity(replacedPlayerPiece.gid))
-                        mergeHero(
-                            {
-                                account,
-                                gid1: result[0].gid,
-                                gid2: result[1].gid,
-                                gid3: result[2].gid,
-                                onBoardIdx,
-                                x: replacedPiece.x, y: replacedPiece.y,
-                                invSlot: 0
-                            }
+                        const replacedPlayerPiece = getComponentValueStrict(
+                            LocalPlayerPiece,
+                            getPlayerBoardPieceEntity(address, onBoardIdx)
                         );
+                        const replacedPiece = getComponentValueStrict(
+                            LocalPiece,
+                            getPieceEntity(replacedPlayerPiece.gid)
+                        );
+                        mergeHero({
+                            account,
+                            gid1: result[0].gid,
+                            gid2: result[1].gid,
+                            gid3: result[2].gid,
+                            onBoardIdx,
+                            x: replacedPiece.x,
+                            y: replacedPiece.y,
+                            invSlot: 0,
+                        });
                     } else {
-                        const invSlot = pieces.filter((v) => { return v.slot !== 0 })?.[0].slot || 0
-                        mergeHero(
-                            {
-                                account,
-                                gid1: result[0].gid,
-                                gid2: result[1].gid,
-                                gid3: result[2].gid,
-                                onBoardIdx: 0,
-                                x: 0, y: 0,
-                                invSlot
-                            }
-                        );
+                        const invSlot =
+                            pieces
+                                .filter((v) => {
+                                    return v.slot !== 0;
+                                })
+                                ?.sort((a, b) => a.idx - b.idx)?.[0].slot || 0;
+                        mergeHero({
+                            account,
+                            gid1: result[0].gid,
+                            gid2: result[1].gid,
+                            gid3: result[2].gid,
+                            onBoardIdx: 0,
+                            x: 0,
+                            y: 0,
+                            invSlot,
+                        });
                     }
-
-
-
                 }, 1000);
             }
         }

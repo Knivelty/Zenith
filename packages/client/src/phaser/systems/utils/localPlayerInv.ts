@@ -1,6 +1,7 @@
 import { getComponentValue } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { PhaserLayer } from "../..";
+import { getFirstEmptySlot } from "../../../ui/hooks/useInv";
 
 export const localPlayerInv = (layer: PhaserLayer) => {
     const {
@@ -45,13 +46,7 @@ export const localPlayerInv = (layer: PhaserLayer) => {
             inv6?.gid,
         ];
 
-        const emptySlots = invGids
-            .map((item, index) =>
-                item == 0 || item == undefined ? index + 1 : undefined
-            )
-            .filter((index) => index !== undefined) as number[];
-
-        return emptySlots.length ? emptySlots[0] : 0;
+        return getFirstEmptySlot(invGids)
     }
 
     return { getFirstEmptyLocalInvSlot };

@@ -162,6 +162,12 @@ export function useInv() {
         });
     }, [CreatureProfile, Piece, Piece.update$.asObservable, invGids]);
 
+    const firstEmptyInv = getFirstEmptySlot(invGids);
+
+    return { invPieces, firstEmptyInv };
+}
+
+export function getFirstEmptySlot(invGids: (number | undefined)[]) {
     const emptySlots = invGids
         .map((item, index) =>
             item == 0 || item == undefined ? index + 1 : undefined
@@ -170,5 +176,5 @@ export function useInv() {
 
     const firstEmptyInv = emptySlots.length > 0 ? emptySlots[0] : 0;
 
-    return { invPieces, emptySlots, firstEmptyInv };
+    return firstEmptyInv;
 }

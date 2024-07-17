@@ -25,7 +25,7 @@ export function placeSystem(layer: PhaserLayer) {
         world,
         [Has(LocalPiece)],
         ({ entity, type, value: [v, preV] }) => {
-            logDebug("incoming LocalPiece change: ", v);
+            logDebug("incoming LocalPiece change: ", v, preV);
             if (v) {
                 // only dynamic sync player's piece
                 const status = getComponentValue(GameStatus, zeroEntity);

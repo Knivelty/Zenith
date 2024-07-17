@@ -861,7 +861,7 @@ mod home {
             invSlot: u8
         ) {
             // check args
-            if (onBoardIdx + invSlot != 1) {
+            if (onBoardIdx != 0 && invSlot != 0) {
                 panic!("invalid args");
             }
 
@@ -907,7 +907,7 @@ mod home {
 
             let mut playerV = get!(world, playerAddr, Player);
 
-            if (onBoardIdx == 1) {
+            if (onBoardIdx != 0) {
                 playerV.heroesCount += 1;
                 let oldPlyaerPiece = get!(world, (playerAddr, onBoardIdx), PlayerPiece);
                 if (oldPlyaerPiece.gid != 0) {
@@ -929,7 +929,7 @@ mod home {
                         },
                     )
                 );
-            } else if (invSlot == 1) {
+            } else if (invSlot != 0) {
                 playerV.inventoryCount += 1;
                 let oldInvPiece = get!(world, (playerAddr, invSlot), PlayerInvPiece);
                 if (oldInvPiece.gid != 0) {

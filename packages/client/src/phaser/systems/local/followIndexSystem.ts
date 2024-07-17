@@ -10,6 +10,8 @@ import {
 } from "@dojoengine/recs";
 import { logDebug, logPieceIdx } from "../../../ui/lib/utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { localPlayerInv } from "../utils/localPlayerInv";
+import { isEqual } from "lodash";
 
 export function followIndexSystem(layer: PhaserLayer) {
     const {
@@ -25,6 +27,8 @@ export function followIndexSystem(layer: PhaserLayer) {
         },
     } = layer;
 
+    const { getFirstEmptyLocalInvSlot } = localPlayerInv(layer);
+
     // local player piece and local player inv piece should follow local piece change
     defineSystemST<typeof LocalPiece.schema>(
         world,
@@ -33,7 +37,10 @@ export function followIndexSystem(layer: PhaserLayer) {
             if (!v) {
                 return;
             }
-            // logDebug("local p aaaa", v);
+            // ignore the update without value change
+            if (isEqual(v, preV)) {
+                return;
+            }
 
             // don't care piece which doesn't belong to player
             if (v.owner !== BigInt(address)) {
@@ -57,13 +64,51 @@ export function followIndexSystem(layer: PhaserLayer) {
                 if (v.slot === 0 && v.gid === 0) {
                     throw Error("sync local piece logic error");
                 }
+                logDebug("sync localPiece without prev value", v);
 
                 if (v.slot !== 0) {
-                    setComponent(LocalPlayerInvPiece, localInvPieceEntity, {
-                        owner: v.owner,
-                        slot: v.slot,
-                        gid: v.gid,
-                    });
+                    // it's a buy event
+                    // check whether is occupied on frontend
+
+                    const lpip = getComponentValue(
+                        LocalPlayerInvPiece,
+                        getEntityIdFromKeys([BigInt(address), BigInt(v.slot)])
+                    );
+
+                    // if not occupied, set
+                    if (!lpip || lpip.gid === 0) {
+                        logDebug(`not occupied, set slot ${v.slot}`);
+                        setComponent(LocalPlayerInvPiece, localInvPieceEntity, {
+                            owner: v.owner,
+                            slot: v.slot,
+                            gid: v.gid,
+                        });
+                    } else {
+                        if (lpip.gid === v.gid) {
+                            logDebug("local inv slot already set");
+                            return;
+                        }
+
+                        const slot = getFirstEmptyLocalInvSlot();
+                        logDebug(`occupied, try set to slot ${slot}`);
+
+                        if (slot !== 0) {
+                            setComponent(
+                                LocalPlayerInvPiece,
+                                getEntityIdFromKeys([
+                                    BigInt(address),
+                                    BigInt(slot),
+                                ]),
+                                {
+                                    owner: BigInt(address),
+                                    slot: slot,
+                                    gid: v.gid,
+                                }
+                            );
+                        } else {
+                            console.error("place logic error");
+                        }
+                    }
                 } else if (v.idx !== 0) {
                     setComponent(LocalPlayerPiece, localPlayerPieceEntity, {
                         owner: v.owner,

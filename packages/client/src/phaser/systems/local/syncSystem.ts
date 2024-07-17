@@ -34,65 +34,67 @@ export function syncSystem(layer: PhaserLayer) {
 
     const { getFirstEmptyLocalInvSlot } = localPlayerInv(layer);
 
-    // sync inventory if buy or sell
-    defineSystemST<typeof PlayerInvPiece.schema>(
-        world,
-        [Has(PlayerInvPiece)],
-        ({ entity, type, value: [v, preV] }) => {
-            if (!v) {
-                return;
-            }
-            // TODO: allow inv drag and find accurate slot
 
-            // ignore irrelevant piece
-            if (
-                v.owner !== BigInt(address) &&
-                preV?.owner !== BigInt(address)
-            ) {
-                return;
-            }
+    // defineSystemST<typeof PlayerInvPiece.schema>(
+    //     world,
+    //     [Has(PlayerInvPiece)],
+    //     ({ entity, type, value: [v, preV] }) => {
+    //         if (!v) {
+    //             return;
+    //         }
+    //         // TODO: allow inv drag and find accurate slot
 
-            // delete player inv piece operation
-            if (v.gid === 0) {
-                setComponent(LocalPlayerInvPiece, entity, v);
-                return;
-            }
+    //         // ignore irrelevant piece
+    //         if (
+    //             v.owner !== BigInt(address) &&
+    //             preV?.owner !== BigInt(address)
+    //         ) {
+    //             return;
+    //         }
 
-            // check whether is occupied on frontend
-            const lpip = getComponentValue(
-                LocalPlayerInvPiece,
-                getEntityIdFromKeys([BigInt(address), BigInt(v.slot)])
-            );
+    //         // delete player inv piece operation
+    //         if (v.gid === 0) {
+    //             setComponent(LocalPlayerInvPiece, entity, v);
+    //             return;
+    //         }
 
-            // if not occupied, set
-            if (!lpip || lpip.gid === 0) {
-                console.log(`not occupied, set slot ${v.slot}`);
-                setComponent(LocalPlayerInvPiece, entity, v);
-            } else {
-                if (lpip.gid === v.gid) {
-                    console.log("already set");
-                    return;
-                }
+    //         // TODO: check whether it works or not
+    //         // check whether is occupied on frontend
 
-                const slot = getFirstEmptyLocalInvSlot();
-                console.log(`occupied, try set to slot ${slot}`);
+    //         const lpip = getComponentValue(
+    //             LocalPlayerInvPiece,
+    //             getEntityIdFromKeys([BigInt(address), BigInt(v.slot)])
+    //         );
 
-                if (slot !== 0) {
-                    setComponent(
-                        LocalPlayerInvPiece,
-                        getEntityIdFromKeys([BigInt(address), BigInt(slot)]),
-                        {
-                            owner: BigInt(address),
-                            slot: slot,
-                            gid: v.gid,
-                        }
-                    );
-                } else {
-                    console.error("place logic error");
-                }
-            }
-        }
-    );
+    //         // if not occupied, set
+    //         if (!lpip || lpip.gid === 0) {
+    //             logDebug(`not occupied, set slot ${v.slot}`);
+    //             setComponent(LocalPlayerInvPiece, entity, v);
+    //         } else {
+    //             if (lpip.gid === v.gid) {
+    //                 logDebug("already set");
+    //                 return;
+    //             }
+
+    //             const slot = getFirstEmptyLocalInvSlot();
+    //             logDebug(`occupied, try set to slot ${slot}`);
+
+    //             if (slot !== 0) {
+    //                 setComponent(
+    //                     LocalPlayerInvPiece,
+    //                     getEntityIdFromKeys([BigInt(address), BigInt(slot)]),
+    //                     {
+    //                         owner: BigInt(address),
+    //                         slot: slot,
+    //                         gid: v.gid,
+    //                     }
+    //                 );
+    //             } else {
+    //                 console.error("place logic error");
+    //             }
+    //         }
+    //     }
+    // );
 
     // only sync non-player local player piece
     defineSystemST<typeof PlayerPiece.schema>(
