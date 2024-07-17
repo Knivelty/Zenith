@@ -1,18 +1,21 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useDojo } from "./hooks/useDojo";
 import { useComponentValue } from "@dojoengine/react";
-import { getHeroAttr } from "./hooks/useHeroAttr";
 import { HeroCard } from "./component/HeroCard";
 import { useInv } from "./hooks/useInv";
 import { ShowItem, UIStore, useUIStore } from "../store";
 import { logDebug } from "./lib/utils";
+import { zeroEntity } from "../utils";
+import { GameStatusEnum } from "../dojo/types";
 
 const Shop = () => {
     const {
-        clientComponents: { Player, Altar, CreatureProfile },
+        clientComponents: { Player, Altar, CreatureProfile, GameStatus },
         systemCalls: { refreshAltar, buyHero },
         account: { playerEntity, account },
     } = useDojo();
+
+    const gameStatus = useComponentValue(GameStatus, zeroEntity);
 
     const shopShow = useUIStore((state: UIStore) =>
         state.getShow(ShowItem.Shop)
@@ -40,14 +43,20 @@ const Shop = () => {
 
     const buyHeroFn = useCallback(
         (index: number) => {
+            if (gameStatus?.status != GameStatusEnum.Prepare) {
+                alert("can only buy piece during prepare");
+                return;
+            }
             buyHero(account, index, firstEmptyInv);
         },
-        [account, buyHero, firstEmptyInv]
+        [account, buyHero, firstEmptyInv, gameStatus?.status]
     );
 
     return (
         <div
-            className={`relative flex justify-center mt-16 select-none transform duration-700 z-10 ${shopShow ? "scale-100" : "scale-0"} z-20`}
+            className={`relative flex justify-center mt-16 select-none transform duration-700 z-10 ${
+                shopShow ? "scale-100" : "scale-0"
+            } z-20`}
         >
             {/* {contextHolder} */}
             <div className="flex flex-col justify-center items-start">
