@@ -1,7 +1,7 @@
 import {
     Entity,
     Has,
-    getComponentValueStrict,
+    getComponentValue,
     setComponent,
     updateComponent,
 } from "@dojoengine/recs";
@@ -93,12 +93,12 @@ export const health = (layer: PhaserLayer) => {
             const healthBar = objectPool.get(entity, "Graphics");
             const pieceEntity = entity.split("-")[0];
 
-            const localPiece = getComponentValueStrict(
+            const localPiece = getComponentValue(
                 LocalPiece,
                 pieceEntity as Entity
             );
 
-            if (localPiece.idx === 0) {
+            if (localPiece?.idx === 0 || !localPiece) {
                 // it mean piece is not on board
                 return;
             }

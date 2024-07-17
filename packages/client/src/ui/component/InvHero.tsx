@@ -102,7 +102,7 @@ export const InvHero = ({
 
             if (player.heroesCount > player.level) {
                 alert("piece exceed limit");
-                console.warn("piece exceed limit");
+                logDebug("piece on board exceed limit");
                 return;
             }
 

@@ -1,5 +1,8 @@
+import { updateComponent } from "@dojoengine/recs";
 import { useDojo } from "../hooks/useDojo";
 import { HeroBaseAttr } from "../hooks/useHeroAttr";
+import { zeroEntity } from "../../utils";
+import { ShowItem, useUIStore } from "../../store";
 
 interface HeroDetailProp {
     gid?: number;
@@ -16,9 +19,12 @@ export function SynergyName({ name }: { name: string }) {
 
 export function HeroDetail(props: HeroDetailProp) {
     const {
+        clientComponents: { UserOperation },
         systemCalls: { sellHero },
         account: { account },
     } = useDojo();
+
+    const setShow = useUIStore((s) => s.setShow);
 
     return (
         <div className="flex flex-col items-center justify-start w-96 h-[40rem] bg-black border border-[#06FF00] box-border">
@@ -85,6 +91,11 @@ export function HeroDetail(props: HeroDetailProp) {
                         return;
                     }
                     sellHero(account, props.gid);
+                    updateComponent(UserOperation, zeroEntity, {
+                        selected: false,
+                        selectGid: 0,
+                    });
+                    setShow(ShowItem.Shade, false);
                 }}
             >
                 <div>

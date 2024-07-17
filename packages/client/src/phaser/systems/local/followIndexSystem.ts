@@ -8,7 +8,12 @@ import {
     setComponent,
     updateComponent,
 } from "@dojoengine/recs";
-import { logDebug, logPieceIdx } from "../../../ui/lib/utils";
+import {
+    getPieceEntity,
+    getPlayerBoardPieceEntity,
+    logDebug,
+    logPieceIdx,
+} from "../../../ui/lib/utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { localPlayerInv } from "../utils/localPlayerInv";
 import { isEqual } from "lodash";
@@ -43,7 +48,10 @@ export function followIndexSystem(layer: PhaserLayer) {
             }
 
             // don't care piece which doesn't belong to player
-            if (v.owner !== BigInt(address)) {
+            if (
+                v.owner !== BigInt(address) &&
+                preV?.owner !== BigInt(address)
+            ) {
                 return;
             }
 
@@ -121,12 +129,12 @@ export function followIndexSystem(layer: PhaserLayer) {
             }
 
             const preLocalInvPieceEntity = getEntityIdFromKeys([
-                v.owner,
+                preV.owner,
                 BigInt(preV.slot),
             ]);
 
             const preLocalPlayerPieceEntity = getEntityIdFromKeys([
-                v.owner,
+                preV.owner,
                 BigInt(preV.idx),
             ]);
 
@@ -254,7 +262,7 @@ export function followIndexSystem(layer: PhaserLayer) {
                 /**
                  * @dev piece in inventory sold or be merged
                  */
-                logDebug(`piece ${v.gid} sold or merged from inventory`);
+                logPieceIdx(`piece ${v.gid} sold or merged from inventory`);
                 // update prev inventory index
                 updateComponent(LocalPlayerInvPiece, preLocalInvPieceEntity, {
                     gid: 0,
@@ -295,15 +303,57 @@ export function followIndexSystem(layer: PhaserLayer) {
                  */
                 logPieceIdx(`piece ${v.gid} merged or sold from board`);
 
-                // update prev board index
-                updateComponent(LocalPlayerPiece, preLocalPlayerPieceEntity, {
-                    gid: 0,
-                });
+                // adjust board piece idx
+                if (preV.idx !== player.heroesCount) {
+                    const lastBoardPieceEntity = getPlayerBoardPieceEntity(
+                        address,
+                        player.heroesCount
+                    );
+
+                    const lastBoardPiece = getComponentValueStrict(
+                        LocalPlayerPiece,
+                        lastBoardPieceEntity
+                    );
+                    const lastBoarPieceGidEntity = getPieceEntity(
+                        lastBoardPiece.gid
+                    );
+
+                    updateComponent(LocalPiece, lastBoarPieceGidEntity, {
+                        idx: preV.idx,
+                    });
+
+                    updateComponent(LocalPlayerPiece, lastBoardPieceEntity, {
+                        idx: 0,
+                    });
+
+                    updateComponent(
+                        LocalPlayerPiece,
+                        preLocalPlayerPieceEntity,
+                        {
+                            idx: lastBoardPiece.gid,
+                        }
+                    );
+
+                    logDebug(
+                        `piece ${lastBoardPiece.gid} idx change from ${lastBoardPiece.idx} to ${preV.idx}`
+                    );
+                } else {
+                    // update prev board index
+                    updateComponent(
+                        LocalPlayerPiece,
+                        preLocalPlayerPieceEntity,
+                        {
+                            gid: 0,
+                        }
+                    );
+                }
 
                 // update local player's hero count and inv count
                 updateComponent(LocalPlayer, playerEntity, {
                     heroesCount: player.heroesCount - 1,
                 });
+            } else {
+                logPieceIdx("uncaught case", preV, v);
             }
         }
     );

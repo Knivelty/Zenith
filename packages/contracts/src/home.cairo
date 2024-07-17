@@ -1148,28 +1148,35 @@ mod home {
             let playerAddr = get_caller_address();
 
             let mut piece = get!(world, gid, Piece);
-            let mut invPiece = get!(world, (playerAddr, piece.slot), PlayerInvPiece);
             let mut player = get!(world, playerAddr, Player);
 
-            if (invPiece.gid == 0) {
-                panic!("empty slot, cannot sell");
+            if (piece.slot != 0) {
+                let mut invPiece = get!(world, (playerAddr, piece.slot), PlayerInvPiece);
+                // set gid equal 0 to mark it as deleted
+                invPiece.gid = 0;
+                player.inventoryCount -= 1;
+
+                set!(world, (invPiece));
+            } else if (piece.idx != 0) {
+                let mut boardPiece = get!(world, (playerAddr, piece.idx), PlayerPiece);
+                boardPiece.gid = 0;
+
+                player.heroesCount -= 1;
+
+                set!(world, (boardPiece));
             }
 
             // refund coin
             // TODO: judge by level
             player.coin += 1;
-            player.inventoryCount -= 1;
 
             // by default, consider the piece are sold from inv
             // TODO: delete! will break torii https://github.com/dojoengine/dojo/issues/1635
             // delete!(world, (piece));
-
-            // set gid equal 0 to mark it as deleted
-            invPiece.gid = 0;
             piece.slot = 0;
             piece.idx = 0;
             piece.owner = Zeroable::zero();
-            set!(world, (invPiece, piece));
+            set!(world, (piece));
 
             set!(world, (player));
         }
@@ -1265,7 +1272,7 @@ mod home {
 
             // delete player inv piece
             loop {
-                if (idx > player.level) {
+                if (idx > 6) {
                     break;
                 }
                 let mut playerInvPiece = get!(world, (playerAddr, idx), PlayerInvPiece);
