@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>6</int>
         <key>texturePackerVersion</key>
-        <string>7.1.0</string>
+        <string>7.4.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -173,49 +173,6 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">assets/sprites/basilisk/0.png</key>
-            <key type="filename">assets/sprites/bear/0.png</key>
-            <key type="filename">assets/sprites/behemoth/0.png</key>
-            <key type="filename">assets/sprites/berserker/0.png</key>
-            <key type="filename">assets/sprites/chupacabra/0.png</key>
-            <key type="filename">assets/sprites/colossus/0.png</key>
-            <key type="filename">assets/sprites/cyclops/0.png</key>
-            <key type="filename">assets/sprites/dragon/0.png</key>
-            <key type="filename">assets/sprites/ettin/0.png</key>
-            <key type="filename">assets/sprites/fairy/0.png</key>
-            <key type="filename">assets/sprites/fenrir/0.png</key>
-            <key type="filename">assets/sprites/jiangshi/0.png</key>
-            <key type="filename">assets/sprites/kitsune/0.png</key>
-            <key type="filename">assets/sprites/leprechaun/0.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>128,128,257,257</rect>
-                <key>scale9Paddings</key>
-                <rect>128,128,257,257</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">assets/sprites/golem/0.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>195,225,389,450</rect>
-                <key>scale9Paddings</key>
-                <rect>195,225,389,450</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">assets/sprites/healthbar/green.png</key>
             <key type="filename">assets/sprites/healthbar/red.png</key>
             <struct type="IndividualSpriteSettings">
@@ -232,20 +189,34 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">assets/sprites/mantis/0.png</key>
-            <key type="filename">assets/sprites/minotaur/0.png</key>
-            <key type="filename">assets/sprites/nue/0.png</key>
-            <key type="filename">assets/sprites/ogre/0.png</key>
-            <key type="filename">assets/sprites/orc/0.png</key>
-            <key type="filename">assets/sprites/qilin/0.png</key>
-            <key type="filename">assets/sprites/rakshasa/0.png</key>
-            <key type="filename">assets/sprites/satori/0.png</key>
-            <key type="filename">assets/sprites/skinwalker/0.png</key>
-            <key type="filename">assets/sprites/vampire/0.png</key>
-            <key type="filename">assets/sprites/warlock/0.png</key>
-            <key type="filename">assets/sprites/wendigo/0.png</key>
-            <key type="filename">assets/sprites/wraith/0.png</key>
-            <key type="filename">assets/sprites/wyvern/0.png</key>
+            <key type="filename">assets/sprites/monsters/basilisk/0.png</key>
+            <key type="filename">assets/sprites/monsters/bear/0.png</key>
+            <key type="filename">assets/sprites/monsters/behemoth/0.png</key>
+            <key type="filename">assets/sprites/monsters/berserker/0.png</key>
+            <key type="filename">assets/sprites/monsters/chupacabra/0.png</key>
+            <key type="filename">assets/sprites/monsters/colossus/0.png</key>
+            <key type="filename">assets/sprites/monsters/cyclops/0.png</key>
+            <key type="filename">assets/sprites/monsters/dragon/0.png</key>
+            <key type="filename">assets/sprites/monsters/ettin/0.png</key>
+            <key type="filename">assets/sprites/monsters/fairy/0.png</key>
+            <key type="filename">assets/sprites/monsters/fenrir/0.png</key>
+            <key type="filename">assets/sprites/monsters/jiangshi/0.png</key>
+            <key type="filename">assets/sprites/monsters/kitsune/0.png</key>
+            <key type="filename">assets/sprites/monsters/leprechaun/0.png</key>
+            <key type="filename">assets/sprites/monsters/mantis/0.png</key>
+            <key type="filename">assets/sprites/monsters/minotaur/0.png</key>
+            <key type="filename">assets/sprites/monsters/nue/0.png</key>
+            <key type="filename">assets/sprites/monsters/ogre/0.png</key>
+            <key type="filename">assets/sprites/monsters/orc/0.png</key>
+            <key type="filename">assets/sprites/monsters/qilin/0.png</key>
+            <key type="filename">assets/sprites/monsters/rakshasa/0.png</key>
+            <key type="filename">assets/sprites/monsters/satori/0.png</key>
+            <key type="filename">assets/sprites/monsters/skinwalker/0.png</key>
+            <key type="filename">assets/sprites/monsters/vampire/0.png</key>
+            <key type="filename">assets/sprites/monsters/warlock/0.png</key>
+            <key type="filename">assets/sprites/monsters/wendigo/0.png</key>
+            <key type="filename">assets/sprites/monsters/wraith/0.png</key>
+            <key type="filename">assets/sprites/monsters/wyvern/0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -254,13 +225,13 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>90,90,179,179</rect>
+                <rect>20,20,40,40</rect>
                 <key>scale9Paddings</key>
-                <rect>90,90,179,179</rect>
+                <rect>20,20,40,40</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">assets/sprites/tarrasque/0.png</key>
+            <key type="filename">assets/sprites/monsters/golem/0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -269,9 +240,24 @@
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>137,122,273,245</rect>
+                <rect>17,20,35,40</rect>
                 <key>scale9Paddings</key>
-                <rect>137,122,273,245</rect>
+                <rect>17,20,35,40</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/sprites/monsters/tarrasque/0.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>20,18,40,36</rect>
+                <key>scale9Paddings</key>
+                <rect>20,18,40,36</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
