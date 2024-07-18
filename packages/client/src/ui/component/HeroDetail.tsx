@@ -3,6 +3,8 @@ import { useDojo } from "../hooks/useDojo";
 import { HeroBaseAttr } from "../hooks/useHeroAttr";
 import { zeroEntity } from "../../utils";
 import { ShowItem, useUIStore } from "../../store";
+import { useComponentValue } from "@dojoengine/react";
+import { GameStatusEnum } from "../../dojo/types";
 
 interface HeroDetailProp {
     gid?: number;
@@ -19,12 +21,13 @@ export function SynergyName({ name }: { name: string }) {
 
 export function HeroDetail(props: HeroDetailProp) {
     const {
-        clientComponents: { UserOperation },
+        clientComponents: { UserOperation, GameStatus },
         systemCalls: { sellHero },
         account: { account },
     } = useDojo();
 
     const setShow = useUIStore((s) => s.setShow);
+    const status = useComponentValue(GameStatus, zeroEntity);
 
     return (
         <div className="flex flex-col items-center justify-start w-96 h-[40rem] bg-black border border-[#06FF00] box-border">
@@ -90,6 +93,12 @@ export function HeroDetail(props: HeroDetailProp) {
                     if (!props?.gid) {
                         return;
                     }
+
+                    if (status?.status !== GameStatusEnum.Prepare) {
+                        alert("can only sell piece during preparation");
+                        return;
+                    }
+
                     sellHero(account, props.gid);
                     updateComponent(UserOperation, zeroEntity, {
                         selected: false,
