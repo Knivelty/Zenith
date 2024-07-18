@@ -4,7 +4,11 @@ import { ClientComponents } from "../createClientComponents";
 import { getComponentValueStrict } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { poseidonHashMany } from "micro-starknet";
-import { logDebug, waitForComponentOriginValueCome } from "../../ui/lib/utils";
+import {
+    logDebug,
+    waitForComponentOriginValueCome,
+    waitForPromiseOrTxRevert,
+} from "../../ui/lib/utils";
 import { uuid } from "@latticexyz/utils";
 
 export const opBuyHero = async (
@@ -73,13 +77,10 @@ export const opBuyHero = async (
     altarArray[altarSlot][1] = 0;
     Altar.addOverride(altarOverride, {
         entity: playerEntity,
-        value: altarArray.reduce(
-            (accumulator, [key, value]) => {
-                accumulator[key] = value;
-                return accumulator;
-            },
-            {} as { [key: string]: any }
-        ),
+        value: altarArray.reduce((accumulator, [key, value]) => {
+            accumulator[key] = value;
+            return accumulator;
+        }, {} as { [key: string]: any }),
     });
 
     // player override
@@ -102,11 +103,8 @@ export const opBuyHero = async (
             altarSlot,
             invSlot,
         });
-        // await rpcProvider.waitForTransaction(tx.transaction_hash, {
-        //     retryInterval: 100,
-        // });
 
-        await Promise.all([
+        await waitForPromiseOrTxRevert(rpcProvider, tx, [
             waitForComponentOriginValueCome(Piece, pieceEntity, {
                 owner: BigInt(account.address),
             }),

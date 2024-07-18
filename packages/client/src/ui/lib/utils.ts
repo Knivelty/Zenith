@@ -12,6 +12,8 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import d from "debug";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { RpcProvider } from "starknet";
+import { DojoProvider } from "@dojoengine/core";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -30,7 +32,7 @@ export function shortenAddress(address: string) {
 
 export async function getComponentValueUtilNotNull<
     S extends Schema,
-    T = unknown,
+    T = unknown
 >(
     component: Component<S, Metadata, T>,
     entity: Entity,
@@ -53,8 +55,49 @@ export async function getComponentValueUtilNotNull<
     return value;
 }
 
+export async function waitForPromiseOrTxRevert(
+    rpcProvider: RpcProvider,
+    tx: Awaited<ReturnType<DojoProvider["execute"]>>,
+    promises: Promise<any>[]
+) {
+    const [resolve, , promise] = deferred<void>();
+
+    const txDetail = rpcProvider.getTransactionByHash(tx.transaction_hash);
+
+    // get transaction fail means tx is not found
+    txDetail.catch((e) => {
+        resolve();
+    });
+
+    const res = rpcProvider.waitForTransaction(tx.transaction_hash, {
+        retryInterval: 1000,
+    });
+
+    res.then((v) => {
+        logDebug(`get tx ${tx.transaction_hash} `, v);
+        if (v.execution_status === "REVERTED") {
+            logDebug(
+                `tx ${tx.transaction_hash} revert with reason ${v.revert_reason}`
+            );
+            resolve();
+        }
+    });
+
+    let completedPromises = 0;
+    promises.forEach((p) => {
+        p.then(() => {
+            completedPromises += 1;
+            if (completedPromises === promises.length) {
+                resolve();
+            }
+        });
+    });
+
+    return promise;
+}
+
 export async function waitForComponentOriginValueCome<
-    S extends Schema = Schema,
+    S extends Schema = Schema
 >(
     component: OverridableComponent<S>,
     entity: Entity,
@@ -86,11 +129,11 @@ export async function waitForComponentOriginValueCome<
 }
 
 export function getPieceEntity(gid: number) {
-    return getEntityIdFromKeys([BigInt(gid)])
+    return getEntityIdFromKeys([BigInt(gid)]);
 }
 
 export function getPlayerBoardPieceEntity(playerAddr: string, idx: number) {
-    return getEntityIdFromKeys([BigInt(playerAddr), BigInt(idx)])
+    return getEntityIdFromKeys([BigInt(playerAddr), BigInt(idx)]);
 }
 
 export function generateColor(str: string): string {

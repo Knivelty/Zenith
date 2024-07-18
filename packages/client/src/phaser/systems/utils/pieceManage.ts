@@ -49,12 +49,16 @@ export const pieceManage = (layer: PhaserLayer) => {
 
         objectPool.remove(entity);
 
-        // remove health bar
-        updateComponent(Health, `${entity}-health` as Entity, {
-            pieceEntity: entity,
-            max: 0,
-            current: 0,
-        });
+        const pieceHealthEntity = `${entity}-health` as Entity;
+
+        if (getComponentValue(Health, pieceHealthEntity)) {
+            // remove health bar
+            updateComponent(Health, pieceHealthEntity, {
+                pieceEntity: entity,
+                max: 0,
+                current: 0,
+            });
+        }
     }
 
     /**

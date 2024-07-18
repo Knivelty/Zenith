@@ -29,7 +29,7 @@ export function placeSystem(layer: PhaserLayer) {
             if (v) {
                 // only dynamic sync player's piece
                 const status = getComponentValue(GameStatus, zeroEntity);
-                if (!status) {
+                if (status?.status === GameStatusEnum.Invalid || !status) {
                     logDebug("no game status, skip local piece place");
                     return;
                 }
@@ -42,20 +42,18 @@ export function placeSystem(layer: PhaserLayer) {
                         spawnPiece(v.owner, BigInt(v.idx), false, v.gid);
                     }
                 }
-                if (v.owner === 0n && BigInt(preV?.idx || 0) !== 0n) {
-                    removePieceOnBoard(v.gid);
-                }
-                if (v.idx === 0 && preV?.idx !== 0) {
+                // if (v.owner === 0n && BigInt(preV?.idx || 0) !== 0n) {
+                //     removePieceOnBoard(v.gid);
+                // }
+                if (
+                    v.idx === 0 &&
+                    preV?.idx !== 0 &&
+                    (v.owner === BigInt(address) ||
+                        preV?.owner === BigInt(address))
+                ) {
                     removePieceOnBoard(v.gid);
                 }
             }
         }
     );
-
-    input.drag$.subscribe({
-        next(value) {
-            // console.log("value: ", value);
-            // get start point piece
-        },
-    });
 }

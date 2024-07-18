@@ -89,7 +89,7 @@ export function createSystemCalls(
         altarSlot: number,
         invSlot: number
     ) => {
-        logCall(`buy hero: `, altarSlot, invSlot);
+        logCall(`buy hero altarSlot ${altarSlot} invSlot ${invSlot}`);
         await opBuyHero(
             { client },
             clientComponents,
@@ -127,10 +127,26 @@ export function createSystemCalls(
     };
 
     const mergeHero = async (
-        props: { account: Account, gid1: number, gid2: number, gid3: number, onBoardIdx: number, x: number, y: number, invSlot: number } & { account: Account }
+        props: {
+            account: Account;
+            gid1: number;
+            gid2: number;
+            gid3: number;
+            onBoardIdx: number;
+            x: number;
+            y: number;
+            invSlot: number;
+        } & { account: Account }
     ) => {
         try {
-            logCall(`merge hero`, props.gid1, props.gid2, props.gid3, `to board ${props.onBoardIdx} ${props.x} ${props.y}`, `to inv ${props.invSlot}`)
+            logCall(
+                `merge hero`,
+                props.gid1,
+                props.gid2,
+                props.gid3,
+                `to board ${props.onBoardIdx} ${props.x} ${props.y}`,
+                `to inv ${props.invSlot}`
+            );
             await client.home.mergeHero(props);
         } catch (e) {
             console.error(e);

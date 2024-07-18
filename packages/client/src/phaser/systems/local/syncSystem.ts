@@ -34,7 +34,6 @@ export function syncSystem(layer: PhaserLayer) {
 
     const { getFirstEmptyLocalInvSlot } = localPlayerInv(layer);
 
-
     // defineSystemST<typeof PlayerInvPiece.schema>(
     //     world,
     //     [Has(PlayerInvPiece)],
@@ -148,16 +147,16 @@ export function syncSystem(layer: PhaserLayer) {
         world,
         [Has(Piece)],
         async ({ entity, type, value: [v, preV] }) => {
-            if (!v) {
-                return;
-            }
+            logDebug(`incoming Piece Change`, v, preV);
 
-            // sync all kinds of values
-            const oldValue = getComponentValue(LocalPiece, entity);
-            if (!oldValue) {
-                setComponent(LocalPiece, entity, v);
-            } else {
-                updateComponent(LocalPiece, entity, v);
+            if (v) {
+                // sync all kinds of values
+                const oldValue = getComponentValue(LocalPiece, entity);
+                if (!oldValue) {
+                    setComponent(LocalPiece, entity, v);
+                } else {
+                    updateComponent(LocalPiece, entity, v);
+                }
             }
 
             // add the gid to local pieces track
@@ -166,7 +165,7 @@ export function syncSystem(layer: PhaserLayer) {
                 playerEntity
             );
 
-            if (v.owner === BigInt(address)) {
+            if (v?.owner === BigInt(address)) {
                 if (piecesTrack) {
                     const gids = piecesTrack.gids;
                     logDebug("gids: ", piecesTrack, gids);
@@ -182,19 +181,19 @@ export function syncSystem(layer: PhaserLayer) {
                 }
             }
 
-            // piece sold, remove from array
-            if (preV?.owner !== 0n && v.owner === 0n) {
+            // piece sold, remove from track array
+            if (preV && preV?.owner !== 0n && (!v || v.owner === 0n)) {
                 // TODO: remove gids when user sell this piece
 
                 if (piecesTrack) {
                     const gids = piecesTrack.gids;
                     updateComponent(LocalPiecesChangeTrack, playerEntity, {
-                        gids: [...new Set(gids.filter((x) => x !== v.gid))],
+                        gids: [...new Set(gids.filter((x) => x !== preV.gid))],
                     });
                 }
 
                 // remove the local piece entity
-                const pEntity = getEntityIdFromKeys([BigInt(v.gid)]);
+                const pEntity = getEntityIdFromKeys([BigInt(preV?.gid)]);
                 removeComponent(LocalPiece, pEntity);
             }
         }
