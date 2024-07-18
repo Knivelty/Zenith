@@ -8,7 +8,7 @@ import { processBattle } from "../../phaser/systems/utils/processBattleLogs";
 import { PieceChange } from "../types";
 import { isEqual } from "lodash";
 import { zeroEntity } from "../../utils";
-import { logDebug } from "../../ui/lib/utils";
+import { logDebug, waitForComponentOriginValueCome } from "../../ui/lib/utils";
 
 export const opCommitPrepare = async (
     { client }: { client: IWorld },
@@ -114,13 +114,12 @@ export const opCommitPrepare = async (
                 healthDecrease: result.healthDecrease!,
             },
         });
-        const res = await rpcProvider.waitForTransaction(tx.transaction_hash, {
-            retryInterval: 1000,
-        });
 
-        if (res.revert_reason) {
-            logDebug(`commit prepare revert, reason ${res.revert_reason}`);
-        }
+        await waitForComponentOriginValueCome(
+            InningBattle,
+            inningBattleEntity,
+            { end: true }
+        );
     } catch (e) {
         console.error(e);
         throw e;

@@ -42,10 +42,10 @@ export function placeSystem(layer: PhaserLayer) {
                         spawnPiece(v.owner, BigInt(v.idx), false, v.gid);
                     }
                 }
-                if (v.owner === 0n) {
+                if (v.owner === 0n && BigInt(preV?.idx || 0) !== 0n) {
                     removePieceOnBoard(v.gid);
                 }
-                if (v.idx === 0) {
+                if (v.idx === 0 && preV?.idx !== 0) {
                     removePieceOnBoard(v.gid);
                 }
             }

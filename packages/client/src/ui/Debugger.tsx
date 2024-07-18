@@ -18,6 +18,7 @@ export function Debugger() {
             mergeHero,
         },
         clientComponents: { MatchState, Player, GameStatus, LocalPlayer },
+        phaserLayer: { scenes },
     } = useDojo();
 
     const queryParams = new URLSearchParams(window.location.search);
@@ -43,7 +44,13 @@ export function Debugger() {
     );
 
     const increaseFontSize = () => {
-        document.documentElement.style.fontSize = `${Number(window.getComputedStyle(document.documentElement).fontSize.slice(0, -2)) + 2}px`;
+        document.documentElement.style.fontSize = `${
+            Number(
+                window
+                    .getComputedStyle(document.documentElement)
+                    .fontSize.slice(0, -2)
+            ) + 2
+        }px`;
     };
 
     const decreaseFontSize = () => {
@@ -53,7 +60,13 @@ export function Debugger() {
                 .getComputedStyle(document.documentElement)
                 .fontSize.slice(0, -2)
         );
-        document.documentElement.style.fontSize = `${Number(window.getComputedStyle(document.documentElement).fontSize.slice(0, -2)) - 2}px`;
+        document.documentElement.style.fontSize = `${
+            Number(
+                window
+                    .getComputedStyle(document.documentElement)
+                    .fontSize.slice(0, -2)
+            ) - 2
+        }px`;
     };
 
     if (debug != "true") {
@@ -117,16 +130,18 @@ export function Debugger() {
             </Button>
             <Button
                 onClick={async () => {
-                    // await mergeHero(
-                    //     account,
-                    //     3619631714,
-                    //     9547523,
-                    //     3433969428,
-                    //     3
-                    // );
+                    const sprites =
+                        scenes.Main.phaserScene.children.list.filter(
+                            (child) =>
+                                child instanceof Phaser.GameObjects.Sprite
+                        );
+
+                    sprites.forEach((v) => {
+                        console.log(v);
+                    });
                 }}
             >
-                Merge Hero
+                Log All Sprite
             </Button>
 
             <Button

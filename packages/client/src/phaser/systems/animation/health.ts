@@ -2,10 +2,11 @@ import {
     Entity,
     Has,
     getComponentValue,
+    getComponentValueStrict,
     setComponent,
     updateComponent,
 } from "@dojoengine/recs";
-import { defineSystemST } from "../../../utils";
+import { defineSystemST, zeroEntity } from "../../../utils";
 import { PhaserLayer } from "../..";
 import {
     DAMAGE_TEXT_FONT_SIZE,
@@ -24,7 +25,7 @@ import {
 import { tween } from "@latticexyz/phaserx";
 import { logDebug } from "../../../ui/lib/utils";
 import { deferred } from "@latticexyz/utils";
-import { isEqual } from "lodash";
+import { GameStatusEnum } from "../../../dojo/types";
 
 export const health = (layer: PhaserLayer) => {
     const {
@@ -33,7 +34,13 @@ export const health = (layer: PhaserLayer) => {
             Main: { config, objectPool },
         },
         networkLayer: {
-            clientComponents: { HealthBar, Health, HealthChange, LocalPiece },
+            clientComponents: {
+                HealthBar,
+                Health,
+                HealthChange,
+                LocalPiece,
+                GameStatus,
+            },
         },
     } = layer;
 
@@ -44,7 +51,7 @@ export const health = (layer: PhaserLayer) => {
             if (!v) {
                 return;
             }
-            //
+            logDebug("incomming health change", preV, v);
 
             // update health bar
             const healthBarEntity = `${entity}-bar`;
@@ -60,7 +67,7 @@ export const health = (layer: PhaserLayer) => {
             if (v.current <= 0) {
                 const piece = objectPool.get(v.pieceEntity, "Sprite");
 
-                console.warn(`${v.pieceEntity} removed`);
+                logDebug(`${v.pieceEntity} piece removed`);
 
                 // TODO: delete ecs component and let a system to despawn
                 // healthBar.despawn();
@@ -153,6 +160,8 @@ export const health = (layer: PhaserLayer) => {
                     }
 
                     graphics.setPosition(v.x, v.y - HealthBarOffSetY);
+
+                    logDebug(`spawn health bar on ${v.x} ${v.y}`);
                 },
             });
 
@@ -181,6 +190,13 @@ export const health = (layer: PhaserLayer) => {
             }
 
             if (v.change === 0) {
+                return;
+            }
+
+            const gameStatus = getComponentValueStrict(GameStatus, zeroEntity);
+
+            // only play health change animation when in battle
+            if (gameStatus.status !== GameStatusEnum.InBattle) {
                 return;
             }
 
