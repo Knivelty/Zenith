@@ -44,8 +44,7 @@ export function HeroDetail(props: HeroDetailProp) {
                         ></img>
                         <div className="pl-2">
                             {"Cost "}
-                            {(props.attr?.level ?? 0) *
-                                (props.attr?.rarity ?? 0)}
+                            {props.attr?.cost}
                         </div>
                     </div>
                 </div>
@@ -110,7 +109,7 @@ export function HeroDetail(props: HeroDetailProp) {
                 <div>
                     <img src="assets/ui/recycle_bin.png"></img>
                 </div>
-                <div className="text-black ml-6">{`$ ${props.attr?.level}`}</div>
+                <div className="text-black ml-6">{`$ ${props.attr?.sellPrice}`}</div>
             </button>
         </div>
     );

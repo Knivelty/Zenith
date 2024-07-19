@@ -88,6 +88,15 @@ struct StageProfilePiece {
     level: u8,
 }
 
+#[derive(Model, Copy, Drop, Serde)]
+struct SellPriceConfig {
+    #[key]
+    level: u8,
+    #[key]
+    rarity: u8,
+    price: u8
+}
+
 
 #[derive(Model, Copy, Drop, Serde)]
 struct PlayerPiece {

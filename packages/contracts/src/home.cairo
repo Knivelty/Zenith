@@ -45,7 +45,7 @@ mod home {
     use autochessia::models::{
         CreatureProfile, Position, Piece, Player, InningBattle, GlobalState, MatchState, Altar,
         PlayerPiece, PlayerInvPiece, StageProfile, StageProfilePiece, LevelConfig, PlayerProfile,
-        ChoiceProfile, CurseOption, LevelRarityProb, SynergyProfile
+        ChoiceProfile, CurseOption, LevelRarityProb, SynergyProfile, SellPriceConfig
     };
 
     use autochessia::utils::{
@@ -693,7 +693,23 @@ mod home {
                     LevelRarityProb { level: 9, r1: 35, r2: 45, r3: 20 },
                     LevelRarityProb { level: 10, r1: 35, r2: 35, r3: 30 },
                 )
-            )
+            );
+
+            // set sell piece price LevelConfig
+            set!(
+                world,
+                (
+                    SellPriceConfig { rarity: 1, level: 1, price: 1 },
+                    SellPriceConfig { rarity: 1, level: 2, price: 3 },
+                    SellPriceConfig { rarity: 1, level: 3, price: 8 },
+                    SellPriceConfig { rarity: 2, level: 1, price: 3 },
+                    SellPriceConfig { rarity: 2, level: 2, price: 7 },
+                    SellPriceConfig { rarity: 2, level: 3, price: 20 },
+                    SellPriceConfig { rarity: 3, level: 1, price: 5 },
+                    SellPriceConfig { rarity: 3, level: 2, price: 11 },
+                    SellPriceConfig { rarity: 3, level: 3, price: 32 }
+                )
+            );
         }
 
         fn setCreatureProfile(world: IWorldDispatcher, profiles: Array<CreatureProfile>) {
@@ -1109,8 +1125,8 @@ mod home {
             // get creature profile
             let creatureProfile = get!(world, (creatureId, 1), CreatureProfile);
 
-            // player coin minus 1
-            player.coin -= creatureProfile.rarity;
+            // player coin minus piece cost
+            player.coin -= 2*creatureProfile.rarity-1;
             player.inventoryCount += 1;
 
             // check wether this slot is full
@@ -1168,7 +1184,11 @@ mod home {
 
             // refund coin
             // TODO: judge by level
-            player.coin += 1;
+            let creatureProfile = get!(world, (piece.creature_index, piece.level), CreatureProfile);
+            let sellPrice = get!(
+                world, (creatureProfile.level, creatureProfile.rarity), SellPriceConfig
+            );
+            player.coin += sellPrice.price;
 
             // by default, consider the piece are sold from inv
             // TODO: delete! will break torii https://github.com/dojoengine/dojo/issues/1635

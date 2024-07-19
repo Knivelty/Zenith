@@ -37,7 +37,7 @@ export const HeroCard = ({ creatureKey, onClick }: IHeroCard) => {
                     <div className="flex items-center justify-center my-2">
                         <div className="-mt-1 w-4 h-4 bg-cover bg-[url('/assets/ui/gold.png')]" />
                         <div className="text-xs ml-2">
-                            Cost {heroAttr?.rarity}
+                            Cost {heroAttr?.cost}
                         </div>
                     </div>
                     <div className="ml-4"></div>
