@@ -1,10 +1,13 @@
 import { useComponentValue } from "@dojoengine/react";
 import { Button } from "./button";
 import { useDojo } from "./hooks/useDojo";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useUIStore } from "../store";
 import { zeroEntity } from "../utils";
+import { Component, getComponentValue } from "@dojoengine/recs";
+import { stringify } from "json-bigint";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export function Debugger() {
     const {
@@ -15,14 +18,17 @@ export function Debugger() {
             playAnimation,
             getCoin,
             exit,
-            mergeHero,
         },
         clientComponents: { MatchState, Player, GameStatus, LocalPlayer },
+        clientComponents,
         phaserLayer: { scenes },
     } = useDojo();
 
-    const queryParams = new URLSearchParams(window.location.search);
-    const debug = queryParams.get("debug");
+    const [debugShow, setDebugShow] = useState(false);
+
+    useHotkeys("d", () => {
+        setDebugShow(!debugShow);
+    });
 
     const player = useComponentValue(
         Player,
@@ -69,7 +75,7 @@ export function Debugger() {
         }px`;
     };
 
-    if (debug != "true") {
+    if (!debugShow) {
         return <div></div>;
     }
 
@@ -127,6 +133,44 @@ export function Debugger() {
                 }}
             >
                 copy private key
+            </Button>
+            <Button
+                onClick={() => {
+                    const allStates = Object.values(clientComponents).reduce(
+                        (acc: { [key: string]: any }, c) => {
+                            const oneCompValues = Array.from(c.entities()).map(
+                                (e) => {
+                                    const obj = getComponentValue(
+                                        c as Component,
+                                        e
+                                    );
+
+                                    return obj;
+                                }
+                            );
+
+                            acc[c.metadata.name] = oneCompValues;
+                            return acc;
+                        },
+                        {}
+                    );
+
+                    const blob = new Blob([stringify(allStates)], {
+                        type: "application/json;charset=utf-8",
+                    });
+
+                    const url = URL.createObjectURL(blob);
+
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "allStates.json";
+
+                    a.click();
+
+                    URL.revokeObjectURL(url);
+                }}
+            >
+                Dump States
             </Button>
             <Button
                 onClick={async () => {
