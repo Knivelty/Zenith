@@ -52,5 +52,6 @@ export async function setup({
             rpcProvider
         ),
         config,
+        toriiClient,
     };
 }

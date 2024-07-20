@@ -22,6 +22,7 @@ export function Debugger() {
         clientComponents: { MatchState, Player, GameStatus, LocalPlayer },
         clientComponents,
         phaserLayer: { scenes },
+        networkLayer: { toriiClient },
     } = useDojo();
 
     const [debugShow, setDebugShow] = useState(false);
@@ -29,6 +30,21 @@ export function Debugger() {
     useHotkeys("d", () => {
         setDebugShow(!debugShow);
     });
+
+    useEffect(() => {
+        const t = setInterval(async () => {
+            try {
+                await toriiClient.getEntities(1, 0);
+            } catch (e) {
+                alert("network disconnect, please refresh the page");
+                clearInterval(t);
+            }
+        }, 1000);
+
+        return () => {
+            clearInterval(t);
+        };
+    }, [toriiClient]);
 
     const player = useComponentValue(
         Player,
