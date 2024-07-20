@@ -53,7 +53,7 @@ fn roll_rarity(r: felt252, r1: u8, r2: u8, r3: u8) -> u8 {
 
     if (m < r1) {
         return 1;
-    } else if (m < r2) {
+    } else if (m < r1 + r2) {
         return 2;
     } else {
         return 3;
