@@ -37,6 +37,7 @@ export const InvHero = ({
             LocalPlayer,
             LocalPlayerPiece,
             UserOperation,
+            LocalPieceOccupation,
         },
         account: {
             playerEntity,
@@ -89,6 +90,22 @@ export const InvHero = ({
 
             if (posX < 1 || posX > 8 || posY < 1 || posY > 4) {
                 console.warn("invalid dst place");
+                return;
+            }
+
+            // check whether is occupied
+            const occupiedEntity = getEntityIdFromKeys([
+                BigInt(posX),
+                BigInt(posY),
+            ]);
+
+            const pieceOccu = getComponentValue(
+                LocalPieceOccupation,
+                occupiedEntity
+            );
+
+            if (pieceOccu?.occupied) {
+                logDebug(`pos ${posX}, ${posY} occupied`);
                 return;
             }
 
