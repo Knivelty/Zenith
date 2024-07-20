@@ -18,6 +18,7 @@ export const prepare = (layer: PhaserLayer) => {
         world,
         scenes: {
             Main: { config, objectPool },
+            Main,
         },
         networkLayer: {
             clientComponents: { Player, InningBattle, GameStatus },
@@ -88,6 +89,10 @@ export const prepare = (layer: PhaserLayer) => {
                 v?.status === GameStatusEnum.Prepare
             ) {
                 //
+
+                // clear all existing sprite
+                clearAllObject();
+
                 const player = getComponentValueStrict(
                     Player,
                     getEntityIdFromKeys([BigInt(account.address)])
@@ -135,4 +140,12 @@ export const prepare = (layer: PhaserLayer) => {
             }
         }
     );
+
+    function clearAllObject() {
+        const objects = Main.phaserScene.children.list;
+
+        objects.forEach((v) => {
+            objectPool.remove(v.data?.list.objectPoolId);
+        });
+    }
 };
