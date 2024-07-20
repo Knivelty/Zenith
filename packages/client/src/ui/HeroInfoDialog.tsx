@@ -29,6 +29,14 @@ export function HeroInfoDialog() {
 
     const dialogRef = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+        if (userOp?.selected) {
+            setShow(ShowItem.Shade, true);
+        } else {
+            setShow(ShowItem.Shade, false);
+        }
+    }, [setShow, userOp?.selected]);
+
     const handleClickOutside = useCallback(
         (event: MouseEvent) => {
             if (
@@ -39,10 +47,9 @@ export function HeroInfoDialog() {
                     selected: false,
                     selectGid: 0,
                 });
-                setShow(ShowItem.Shade, false);
             }
         },
-        [UserOperation, setShow]
+        [UserOperation]
     );
 
     // TODO: this is shade is not the same as show

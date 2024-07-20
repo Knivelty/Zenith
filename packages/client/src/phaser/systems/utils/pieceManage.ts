@@ -172,16 +172,8 @@ export const pieceManage = (layer: PhaserLayer) => {
                     game.scene.getScene("Main")?.input.setDraggable(sprite);
 
                     sprite.removeAllListeners("dragstart");
-                    sprite.on("dragstart", () => {
-                        sprite.setTint(0x50dfb6);
-
-                        logDebug(`piece ${gid} dragstart`);
-
-                        // set dragging to true
-                        updateComponent(UserOperation, zeroEntity, {
-                            dragging: true,
-                            draggingGid: gid,
-                        });
+                    sprite.on("dragstart", (p: Phaser.Input.Pointer) => {
+                        //
                     });
 
                     sprite.removeAllListeners("drag");
@@ -191,7 +183,11 @@ export const pieceManage = (layer: PhaserLayer) => {
                             p: Phaser.Input.Pointer,
                             gameObj: Phaser.GameObjects.GameObject
                         ) => {
-                            //
+                            // set dragging to true
+                            updateComponent(UserOperation, zeroEntity, {
+                                dragging: true,
+                                draggingGid: gid,
+                            });
                         }
                     );
 
