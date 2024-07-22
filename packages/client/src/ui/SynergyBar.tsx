@@ -1,19 +1,14 @@
-import { useDojo } from "./hooks/useDojo";
 import { useAllSynergiesCounts } from "./hooks/useAllSynergies";
 import { cn } from "./lib/utils";
 
 export function SynergyBar() {
-    const { clientComponents } = useDojo();
-
     const all = useAllSynergiesCounts();
-
-    console.log("all:", all);
 
     return (
         <div className="fixed left-4 top-[5rem] h-[38rem] border border-[#06FF00] bg-black bg-contain bg-no-repeat w-60 ">
             <div className="mt-2">
                 {Object.values(all).map((t) => {
-                    return <SynergyActiveStatus {...t} />;
+                    return <SynergyActiveStatus {...t} key={t.traitName} />;
                 })}
             </div>
         </div>
@@ -73,7 +68,7 @@ function SynergyActiveStatus({
                         }
 
                         return (
-                            <div className="flex flex-row">
+                            <div className="flex flex-row" key={index}>
                                 <div
                                     className={cn({
                                         "text-[#05FF00]": unlocked,

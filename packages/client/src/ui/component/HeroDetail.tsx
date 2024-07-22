@@ -30,7 +30,10 @@ export function HeroDetail(props: HeroDetailProp) {
     const status = useComponentValue(GameStatus, zeroEntity);
 
     return (
-        <div className="flex flex-col items-center justify-start w-96 h-[40rem] bg-black border border-[#06FF00] box-border">
+        <div
+            key={props.gid}
+            className="flex flex-col items-center justify-start w-96 h-[40rem] bg-black border border-[#06FF00] box-border"
+        >
             <div className="flex flex-row pl-8 pt-8 w-full">
                 <div className="w-20 border border-[#06FF00]">
                     <img src={props.attr?.thumb}></img>
@@ -55,6 +58,7 @@ export function HeroDetail(props: HeroDetailProp) {
                             <img
                                 className="w-8 h-8"
                                 src="/assets/ui/level_star.png"
+                                key={i}
                             ></img>
                         ))}
                 </div>
