@@ -1,5 +1,6 @@
 import { logEffect } from "../debug";
 import { EventMap } from "../event/createEventSystem";
+import { UNKNOWN_ERROR } from "../utils";
 import { EffectHandler } from "./interface";
 
 const ManaIncreased: Record<number, number> = {
@@ -29,7 +30,21 @@ function getHandler(actionPieceId: string) {
           },
         })
         .exec();
-      if (killerPiece && killerPiece.ability === "penetrationInfection") {
+
+      if (!killerPiece) {
+        throw UNKNOWN_ERROR;
+      }
+
+      const effect = await db.effect
+        .findOne({ selector: { id: pieceId, name: "Revive" } })
+        .exec();
+
+      if (
+        killerPiece.ability === "penetrationInfection" &&
+        effect &&
+        effect?.duration > 0 &&
+        effect?.stack > 0
+      ) {
         logEffect("Revive")(`piece ${pieceId} revive`);
 
         await db.battle_entity
@@ -43,9 +58,7 @@ function getHandler(actionPieceId: string) {
             doc.dead = false;
             doc.isHome = !doc.isHome;
             doc.mana = 0;
-            doc.maxMana =
-              killerPiece.maxMana + ManaIncreased[killerPiece.level];
-            doc.ability = killerPiece.ability;
+            doc.maxMana = doc.maxMana + ManaIncreased[killerPiece.level];
             return doc;
           });
 

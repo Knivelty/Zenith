@@ -10,6 +10,7 @@ export function decreaseEffectDurationOnTurnEnd() {
           doc.duration -= 1;
         } else {
           doc.duration = 0;
+          doc.stack = 0;
         }
         return doc;
       });
