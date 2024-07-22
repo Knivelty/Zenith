@@ -318,7 +318,12 @@ mod home {
             totalIncome = totalIncome * 3 / 2;
         }
 
-        player.coin += totalIncome;
+        // restrict the max coin
+        if (255 - player.coin < totalIncome) {
+            player.coin = 255;
+        } else {
+            player.coin += totalIncome;
+        }
 
         // give the free refresh change
         player.refreshed = false;
@@ -1126,7 +1131,7 @@ mod home {
             let creatureProfile = get!(world, (creatureId, 1), CreatureProfile);
 
             // player coin minus piece cost
-            player.coin -= 2*creatureProfile.rarity-1;
+            player.coin -= 2 * creatureProfile.rarity - 1;
             player.inventoryCount += 1;
 
             // check wether this slot is full
@@ -1222,13 +1227,13 @@ mod home {
             let enemyAddr = lastInningBattle.awayPlayer;
             _spawnEnemyPiece(world, newRound, enemyAddr);
 
-            // get cursed on round 4
-            if (newRound == 4) {
-                player.curse += 10;
-            }
-
             // increase danger by curse
-            player.danger += player.curse;
+            // limit max danger to 255
+            if (255 - player.danger < player.curse) {
+                player.danger = 255;
+            } else {
+                player.danger += player.curse;
+            }
 
             let mut dangerous = false;
             // judge whether next round is a dangerous round
