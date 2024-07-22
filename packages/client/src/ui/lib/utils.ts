@@ -32,7 +32,7 @@ export function shortenAddress(address: string) {
 
 export async function getComponentValueUtilNotNull<
     S extends Schema,
-    T = unknown
+    T = unknown,
 >(
     component: Component<S, Metadata, T>,
     entity: Entity,
@@ -66,7 +66,10 @@ export async function waitForPromiseOrTxRevert(
 
     // get transaction fail means tx is not found
     txDetail.catch((e) => {
-        resolve();
+        // resolve after 1s to avoid tx not found on dev net
+        setTimeout(() => {
+            resolve();
+        }, 1000);
     });
 
     const res = rpcProvider.waitForTransaction(tx.transaction_hash, {
@@ -97,7 +100,7 @@ export async function waitForPromiseOrTxRevert(
 }
 
 export async function waitForComponentOriginValueCome<
-    S extends Schema = Schema
+    S extends Schema = Schema,
 >(
     component: OverridableComponent<S>,
     entity: Entity,
