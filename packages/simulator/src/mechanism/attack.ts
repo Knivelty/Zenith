@@ -63,7 +63,13 @@ export function registerExecuteAttack() {
           type: "Physical",
         });
       } else {
-        logJps("cannot attack due to range");
+        logJps(
+          "cannot attack due to range",
+          "actionPiece: ",
+          actionPiece._data,
+          "targetPiece: ",
+          targetPiece._data
+        );
       }
     }
   );

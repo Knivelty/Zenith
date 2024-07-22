@@ -8,7 +8,7 @@ import { getAllUndeadPieceIds, getBattlePiece } from "../utils/dbHelper";
 import { manhattanDistance } from "./distance";
 import { uniqWith } from "lodash";
 import { asyncMap } from "../utils/asyncHelper";
-import { logJps } from "../debug";
+import { logDebug, logJps } from "../debug";
 
 export async function findPath(actionPieceId: string, targetPieceId: string) {
   const actionPieceInBattle = await getBattlePiece(actionPieceId);
@@ -48,7 +48,7 @@ export async function findPath(actionPieceId: string, targetPieceId: string) {
 
   let actPath: { x: number; y: number }[] = [];
 
-  if (targetPoint.needMove && targetPoint.x) {
+  if (targetPoint.needMove && targetPoint.x !== undefined) {
     actPath = findActPath(
       grid,
       finder,
@@ -145,14 +145,14 @@ function findActPath(
   // calculate path
   const paths = finder.findPath(fromX, fromY, toX, toY, grid);
 
-  // console.log("paths: ", paths);
+  logDebug("jps find paths: ", paths);
 
   // calculate doable path
   let totalDistance = 0;
   const doablePath: { x: number; y: number }[] = [];
 
   // it means no paths to go, just return
-  if (!paths?.[0]?.[0]) {
+  if (paths?.[0]?.[0] === undefined) {
     return [{ x: fromX, y: fromY }];
   }
 

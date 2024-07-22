@@ -1,3 +1,4 @@
+import { logDebug } from "../debug";
 import { EventMap } from "../event/createEventSystem";
 import {
   getHomeUndeadPieceIds,
@@ -83,6 +84,8 @@ export async function findTargetPiece(actionPieceId: string) {
   } else {
     tgtSet = await getHomeUndeadPieceIds();
   }
+
+  logDebug(`piece ${actionPieceId}'s target set: `, tgtSet);
 
   // get nearest piece
   const pieceWithDistance = await Promise.all(

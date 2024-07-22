@@ -106,6 +106,7 @@ export const opCommitPrepare = async (
     });
 
     try {
+        logDebug(`commit preparation: `, changes, result);
         const tx = await client.home.commitPreparation({
             account,
             changes,

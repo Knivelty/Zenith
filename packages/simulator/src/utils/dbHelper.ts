@@ -106,6 +106,9 @@ export async function getBattleResult() {
   if (end) {
     win = homeUndeadPieceIds.length ? true : false;
     healthDecrease = awayUndeadPieceIds.length;
+  } else {
+    win = false;
+    healthDecrease = 0;
   }
 
   return { end, win, healthDecrease };
@@ -242,5 +245,3 @@ export async function getPlayerProfileBySide(isHome: boolean) {
 
   return playerProfile;
 }
-
-

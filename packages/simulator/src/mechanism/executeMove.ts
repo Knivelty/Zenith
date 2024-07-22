@@ -18,7 +18,9 @@ export async function executeMove(
     await movePiece(pieceId, toX, toY);
 
     logJps(
-      `piece ${pieceId} move from ${actPath[0].x},${actPath[0].y} to ${toX},${toY}`
+      `piece ${pieceId} move from ${actPath[0].x},${actPath[0].y} to ${toX},${toY}`,
+      "origin paths: ",
+      actPath
     );
   }
   await globalThis.Simulator.eventSystem.emit("pieceMove", {
