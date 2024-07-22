@@ -44,7 +44,7 @@ export function SettleDialog() {
     return (
         <div
             className={cn(
-                "absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 border bg-black border-[#06FF00] flex flex-col items-center justify-start w-4/5 z-30 h-[32rem]",
+                "absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 border bg-black border-[#06FF00] flex flex-col items-center justify-start w-4/5 z-30 h-[42rem]",
                 { invisible: !visible }
             )}
         >
@@ -64,8 +64,14 @@ function MakeChoice() {
         <div className="w-full flex flex-col items-center">
             <ChoiceList />
 
-            <div className="text-white ">
-                Choose any option to proceed to the next level
+            <div className="mt-12 text-[#06FF00] ">
+                Choose one to affect either the Curse value or the Danger value.
+            </div>
+            <div className="flex text-[#06FF00] flex-row mt-2">
+                <img className="w-6 h-6" src="/assets/ui/warning.png"></img>
+                <div className="ml-2">
+                    You must choose one before entering the next round
+                </div>
             </div>
         </div>
     );

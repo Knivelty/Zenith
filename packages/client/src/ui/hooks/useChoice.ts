@@ -35,7 +35,7 @@ export function getChoices(
             getEntityIdFromKeys([BigInt(address), BigInt(i)])
         );
 
-        logDebug(`choice profile: ${i} ${co?.order}`);
+        logDebug(`choice profile: ${i} ${co?.order}`, co);
         return getComponentValue(
             ChoiceProfile,
             getEntityIdFromKeys([BigInt(i), BigInt(co?.order || 0)])

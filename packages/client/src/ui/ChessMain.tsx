@@ -15,6 +15,7 @@ import { DangerBorder } from "./component/DangerBorder";
 import { Shade } from "./component/Shade";
 import { HeroInfoDialog } from "./HeroInfoDialog";
 import { SynergyBar } from "./SynergyBar";
+import { CurseDetails } from "./component/CurseDetail";
 
 export function ChessMain() {
     const {
@@ -49,6 +50,7 @@ export function ChessMain() {
             <Shade />
             <DangerBorder />
             <HeroInfoDialog />
+            <CurseDetails />
         </div>
     );
 }

@@ -10,6 +10,7 @@ export type Store = {
 export enum ShowItem {
     Shop,
     Shade,
+    CurseDetail,
 }
 
 export type UIStore = {

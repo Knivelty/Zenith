@@ -3,6 +3,8 @@ import { useDojo } from "./hooks/useDojo";
 import { zeroEntity } from "../utils";
 import { numToStatus } from "../dojo/types";
 import { logDebug } from "./lib/utils";
+import { ShowItem, UIStore, useUIStore } from "../store";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export function TopBar() {
     const {
@@ -10,8 +12,17 @@ export function TopBar() {
         account: { playerEntity },
     } = useDojo();
 
+    const setShow = useUIStore((state: UIStore) => state.setShow);
+    const getShow = useUIStore((state: UIStore) => state.getShow);
+
     const gameStatus = useComponentValue(GameStatus, zeroEntity);
     const player = useComponentValue(Player, playerEntity);
+
+    useHotkeys("esc", () => {
+        Object.values(ShowItem).map((v) => {
+            setShow(v as ShowItem, false);
+        });
+    });
 
     logDebug("player value: ", player);
 
@@ -22,8 +33,20 @@ export function TopBar() {
                 <div className="">{numToStatus(gameStatus?.status)}</div>
             </div>
             <div className="flex justify-between items-center align-middle top-1 w-[40rem] h-8 bg-black border-x-2 border-b-2 border-[#FF3D00] font-bold ">
-                <div className="bg-[#FF3D00] h-full flex items-center justify-center w-40">
-                    <div className=" text-black text-xs">
+                <div className="bg-[#FF3D00] h-full flex items-center justify-center w-40 hover:cursor-pointer">
+                    <div
+                        className=" text-black text-xs"
+                        onClick={() => {
+                            setShow(
+                                ShowItem.Shade,
+                                !getShow(ShowItem.CurseDetail)
+                            );
+                            setShow(
+                                ShowItem.CurseDetail,
+                                !getShow(ShowItem.CurseDetail)
+                            );
+                        }}
+                    >
                         Curse {player?.curse}
                     </div>
                 </div>

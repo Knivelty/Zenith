@@ -154,7 +154,6 @@ export const pieceManage = (layer: PhaserLayer) => {
                 sprite.play(config.animations[AnimationIndex[creature_idx]]);
                 sprite.setInteractive();
 
-                // TODO: use lossless scale method
                 const scale = TILE_HEIGHT / sprite.height;
                 sprite.setScale(scale);
 
