@@ -165,7 +165,7 @@ export const Health_CHANGE_OFFSET_Y = -6;
 
 export const MOVE_TIME_PER_LENGTH = 300;
 
-export const HEALTH_PER_SEGMENT = 100;
+export const HEALTH_PER_SEGMENT = 200;
 
 export const HEALTH_BAR_WIDTH = TILE_HEIGHT - 5;
 export const HEALTH_BAR_HEIGHT = 10;
