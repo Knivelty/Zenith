@@ -3,16 +3,17 @@
 
 Zenith loot suvivior beast based auto chess game built with dojo. This project is funded by Frontinius House & BilbiothecaDAO. See <https://frontinus.house/proposal/30> for detail.
 
-![](https://drive.google.com/file/d/11DRtcxctpD7a-_YK9itRWgxiIRbXK1bZ/view?usp=sharing)
-
+![](./preview.png)
 
 
 # Get started
 
 Require:
 
-1. [dojo](https://www.dojoengine.org/en/)
-2. [pnpm](https://pnpm.io/)
+1. Linux/MacOS/WSL
+2. [dojo](https://www.dojoengine.org/en/)
+3. [pnpm](https://pnpm.io/)
+4. [jq](https://github.com/jqlang/jq)
 
 
 Install dependencies
