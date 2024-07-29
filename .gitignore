@@ -3,3 +3,4 @@ node_modules
 indexer.db
 .vercel
 manifests
+.DS_Store
