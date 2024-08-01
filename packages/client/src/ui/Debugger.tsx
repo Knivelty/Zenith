@@ -153,17 +153,6 @@ export function Debugger() {
                 Get Coin
             </Button>
             <Button
-                onClick={async () => {
-                    const keyJson = localStorage.getItem("burners_KATANA");
-                    if (keyJson) {
-                        navigator.clipboard.writeText(keyJson);
-                        alert("private key copied");
-                    }
-                }}
-            >
-                copy private key
-            </Button>
-            <Button
                 onClick={() => {
                     const allStates = Object.values(clientComponents).reduce(
                         (acc: { [key: string]: any }, c) => {
@@ -182,6 +171,11 @@ export function Debugger() {
                             return acc;
                         },
                         {}
+                    );
+
+                    // export private key also
+                    allStates["privateKey"] = JSON.parse(
+                        localStorage.getItem("burners_KATANA") || "{}"
                     );
 
                     const blob = new Blob([stringify(allStates)], {
