@@ -15,8 +15,9 @@ trait IHome {
 
     fn spawn();
     fn refreshAltar();
-    fn buyHero(altarSlot: u8, invSlot: u8);
+    fn buyHero(altarSlot: u8, invSlot: u8) -> u32;
     fn mergeHero(gid1: u32, gid2: u32, gid3: u32, onBoardIdx: u8, x: u8, y: u8, invSlot: u8);
+    fn buyAndMerge(altarSlot: u8, gid2: u32, gid3: u32, onBoardIdx: u8, x: u8, y: u8, invSlot: u8);
     fn buyExp();
     fn sellHero(gid: u32);
     fn commitPreparation(changes: Array<PieceChange>, result: RoundResult);
@@ -979,6 +980,33 @@ mod home {
             set!(world, (playerV));
         }
 
+
+        fn buyAndMerge(
+            world: IWorldDispatcher,
+            altarSlot: u8,
+            gid2: u32,
+            gid3: u32,
+            onBoardIdx: u8,
+            x: u8,
+            y: u8,
+            invSlot: u8
+        ) {
+            // note: always use the extra slot for merge
+            let gid = self.buyHero(altarSlot, 7);
+            self.mergeHero(gid, gid2, gid3, onBoardIdx, x, y, invSlot);
+
+            let playerAddr = get_caller_address();
+
+            // TODO: perf the extra slot
+            // check wether the extra slot is occupied
+            let invPiece = get!(world, (playerAddr, 7), PlayerInvPiece);
+
+            if (invPiece.gid != 0) {
+                panic!("extra slot occupied");
+            }
+        }
+
+
         // commit preparation in one function
         // include: refresh, move
         // the contract side need to valid the validity
@@ -1084,7 +1112,7 @@ mod home {
             set!(world, (player));
         }
 
-        fn buyHero(world: IWorldDispatcher, altarSlot: u8, invSlot: u8) {
+        fn buyHero(world: IWorldDispatcher, altarSlot: u8, invSlot: u8) -> u32 {
             let playerAddr = get_caller_address();
 
             let mut player = get!(world, playerAddr, Player);
@@ -1161,7 +1189,9 @@ mod home {
                     altar,
                     player
                 )
-            )
+            );
+
+            return gid;
         // 
         }
 

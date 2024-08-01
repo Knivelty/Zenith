@@ -13,7 +13,10 @@ interface HeroDetailProp {
 
 export function SynergyName({ name }: { name: string }) {
     return (
-        <div className="border border-[#06FF00] text-sm h-8 w-32 mr-6 flex flex-col justify-center items-center">
+        <div
+            key={name}
+            className="border border-[#06FF00] text-sm h-8 w-32 mr-6 flex flex-col justify-center items-center"
+        >
             <div>{name}</div>
         </div>
     );

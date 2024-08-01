@@ -8,6 +8,7 @@ import { opSellHero } from "./opRender/opSellHero";
 import { opCommitPrepare } from "./opRender/opCommitPrepare";
 import { logCall, logDebug } from "../ui/lib/utils";
 import { opRefreshAltar } from "./opRender/opRefreshAltar";
+import { opBuyAndMerge } from "./opRender/opBuyAndMerge";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -27,15 +28,6 @@ export function createSystemCalls(
             // await client.provider.provider.waitForTransaction(txHash);
         } catch (e) {
             console.error(e);
-        }
-    };
-
-    const startBattle = async (account: Account) => {
-        try {
-            return await client.home.startBattle({ account });
-        } catch (e) {
-            console.error(e);
-            throw e;
         }
     };
 
@@ -134,7 +126,6 @@ export function createSystemCalls(
 
     const mergeHero = async (
         props: {
-            account: Account;
             gid1: number;
             gid2: number;
             gid3: number;
@@ -160,6 +151,45 @@ export function createSystemCalls(
         }
     };
 
+    const buyAndMerge = async (
+        props: {
+            altarSlot: number;
+            gid2: number;
+            gid3: number;
+            onBoardIdx: number;
+            x: number;
+            y: number;
+            invSlot: number;
+        } & { account: Account }
+    ) => {
+        try {
+            logCall(
+                `buy and merge hero`,
+                props.altarSlot,
+                props.gid2,
+                props.gid3,
+                `to board ${props.onBoardIdx} ${props.x} ${props.y}`,
+                `to inv ${props.invSlot}`
+            );
+            await opBuyAndMerge({
+                clientComponents,
+                client,
+                rpcProvider,
+                account: props.account,
+                gid2: props.gid2,
+                gid3: props.gid3,
+                altarSlot: props.altarSlot,
+                onBoardIdx: props.onBoardIdx,
+                x: props.x,
+                y: props.y,
+                invSlot: props.invSlot,
+            });
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    };
+
     const playAnimation = async () => {
         updateComponent(GameStatus, zeroEntity, {
             shouldPlay: false,
@@ -171,7 +201,6 @@ export function createSystemCalls(
 
     return {
         spawn,
-        startBattle,
         playAnimation,
         nextRound,
         refreshAltar,
@@ -179,6 +208,7 @@ export function createSystemCalls(
         buyHero,
         buyExp,
         sellHero,
+        buyAndMerge,
         mergeHero,
         commitPreparation,
         exit,

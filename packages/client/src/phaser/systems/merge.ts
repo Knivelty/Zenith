@@ -75,85 +75,85 @@ export const merge = (layer: PhaserLayer) => {
         }
     );
 
-    // deal with the automatically merge logic
-    defineSystemST<typeof PlayerOwnPiece.schema>(
-        world,
-        [Has(PlayerOwnPiece)],
-        ({ entity, type, value: [v, preV] }) => {
-            const pieces = getComponentValue(PlayerOwnPiece, zeroEntity);
+    // // deal with the automatically merge logic
+    // defineSystemST<typeof PlayerOwnPiece.schema>(
+    //     world,
+    //     [Has(PlayerOwnPiece)],
+    //     ({ entity, type, value: [v, preV] }) => {
+    //         const pieces = getComponentValue(PlayerOwnPiece, zeroEntity);
 
-            const piecesValues = pieces?.gids.map((p: number) => {
-                return getComponentValueStrict(Piece, getPieceEntity(p));
-            });
+    //         const piecesValues = pieces?.gids.map((p: number) => {
+    //             return getComponentValueStrict(Piece, getPieceEntity(p));
+    //         });
 
-            const fields = ["creature_index", "level"];
-            type fieldsType = "creature_index" | "level";
+    //         const fields = ["creature_index", "level"];
+    //         type fieldsType = "creature_index" | "level";
 
-            const grouped = _.groupBy(piecesValues, (obj) =>
-                fields.map((attr: string) => obj[attr as fieldsType]).join("|")
-            );
+    //         const grouped = _.groupBy(piecesValues, (obj) =>
+    //             fields.map((attr: string) => obj[attr as fieldsType]).join("|")
+    //         );
 
-            const result = _.find(grouped, (group) => group.length >= 3);
+    //         const result = _.find(grouped, (group) => group.length >= 3);
 
-            logDebug(`find mergable result: `, result);
+    //         logDebug(`find mergable result: `, result);
 
-            if (result) {
-                // call delay
-                setTimeout(() => {
-                    const gid1 = result[0].gid;
-                    const gid2 = result[1].gid;
-                    const gid3 = result[2].gid;
-                    const gids = [gid1, gid2, gid3];
+    //         if (result) {
+    //             // call delay
+    //             setTimeout(() => {
+    //                 const gid1 = result[0].gid;
+    //                 const gid2 = result[1].gid;
+    //                 const gid3 = result[2].gid;
+    //                 const gids = [gid1, gid2, gid3];
 
-                    // find the
-                    const pieces = gids.map((id) =>
-                        getComponentValueStrict(LocalPiece, getPieceEntity(id))
-                    );
+    //                 // find the
+    //                 const pieces = gids.map((id) =>
+    //                     getComponentValueStrict(LocalPiece, getPieceEntity(id))
+    //                 );
 
-                    const onBoardIdx = pieces
-                        .filter((v) => {
-                            return v.idx !== 0;
-                        })
-                        ?.sort((a, b) => a.idx - b.idx)?.[0]?.idx;
-                    if (onBoardIdx) {
-                        const replacedPlayerPiece = getComponentValueStrict(
-                            LocalPlayerPiece,
-                            getPlayerBoardPieceEntity(address, onBoardIdx)
-                        );
-                        const replacedPiece = getComponentValueStrict(
-                            LocalPiece,
-                            getPieceEntity(replacedPlayerPiece.gid)
-                        );
-                        mergeHero({
-                            account,
-                            gid1: result[0].gid,
-                            gid2: result[1].gid,
-                            gid3: result[2].gid,
-                            onBoardIdx,
-                            x: replacedPiece.x,
-                            y: replacedPiece.y,
-                            invSlot: 0,
-                        });
-                    } else {
-                        const invSlot =
-                            pieces
-                                .filter((v) => {
-                                    return v.slot !== 0;
-                                })
-                                ?.sort((a, b) => a.idx - b.idx)?.[0].slot || 0;
-                        mergeHero({
-                            account,
-                            gid1: result[0].gid,
-                            gid2: result[1].gid,
-                            gid3: result[2].gid,
-                            onBoardIdx: 0,
-                            x: 0,
-                            y: 0,
-                            invSlot,
-                        });
-                    }
-                }, 1000);
-            }
-        }
-    );
+    //                 const onBoardIdx = pieces
+    //                     .filter((v) => {
+    //                         return v.idx !== 0;
+    //                     })
+    //                     ?.sort((a, b) => a.idx - b.idx)?.[0]?.idx;
+    //                 if (onBoardIdx) {
+    //                     const replacedPlayerPiece = getComponentValueStrict(
+    //                         LocalPlayerPiece,
+    //                         getPlayerBoardPieceEntity(address, onBoardIdx)
+    //                     );
+    //                     const replacedPiece = getComponentValueStrict(
+    //                         LocalPiece,
+    //                         getPieceEntity(replacedPlayerPiece.gid)
+    //                     );
+    //                     mergeHero({
+    //                         account,
+    //                         gid1: result[0].gid,
+    //                         gid2: result[1].gid,
+    //                         gid3: result[2].gid,
+    //                         onBoardIdx,
+    //                         x: replacedPiece.x,
+    //                         y: replacedPiece.y,
+    //                         invSlot: 0,
+    //                     });
+    //                 } else {
+    //                     const invSlot =
+    //                         pieces
+    //                             .filter((v) => {
+    //                                 return v.slot !== 0;
+    //                             })
+    //                             ?.sort((a, b) => a.idx - b.idx)?.[0].slot || 0;
+    //                     mergeHero({
+    //                         account,
+    //                         gid1: result[0].gid,
+    //                         gid2: result[1].gid,
+    //                         gid3: result[2].gid,
+    //                         onBoardIdx: 0,
+    //                         x: 0,
+    //                         y: 0,
+    //                         invSlot,
+    //                     });
+    //                 }
+    //             }, 1000);
+    //         }
+    //     }
+    // );
 };

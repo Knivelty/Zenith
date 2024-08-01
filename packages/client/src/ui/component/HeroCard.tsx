@@ -1,4 +1,13 @@
+import { useCallback } from "react";
 import { CreatureKey, HeroBaseAttr, useHeroesAttr } from "../hooks/useHeroAttr";
+import { useInv } from "../hooks/useInv";
+import { useComponentValue } from "@dojoengine/react";
+import { zeroEntity } from "../../utils";
+import { useDojo } from "../hooks/useDojo";
+import { GameStatusEnum } from "../../dojo/types";
+import { useMergeAble } from "../hooks/useMergable";
+import { debug } from "console";
+import { logDebug } from "../lib/utils";
 
 const rarityBgColor: Record<number, string> = {
     1: "#4F84AF",
@@ -8,10 +17,30 @@ const rarityBgColor: Record<number, string> = {
 
 interface IHeroCard {
     creatureKey: CreatureKey;
-    onClick?: (...args: unknown[]) => unknown | Promise<unknown>;
+    altarSlot: number;
 }
 
-export const HeroCard = ({ creatureKey, onClick }: IHeroCard) => {
+export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
+    const {
+        clientComponents: { Player, Altar, CreatureProfile, GameStatus },
+        systemCalls: { refreshAltar, buyHero, buyAndMerge },
+        account: { playerEntity, account },
+    } = useDojo();
+
+    const { firstEmptyInv } = useInv();
+    const gameStatus = useComponentValue(GameStatus, zeroEntity);
+
+    const buyHeroFn = useCallback(
+        (index: number) => {
+            buyHero(account, index, firstEmptyInv);
+        },
+        [account, buyHero, firstEmptyInv]
+    );
+
+    const mergeAble = useMergeAble(creatureKey?.id || 0);
+
+    logDebug(`altar slot ${altarSlot} mergeAble:`, mergeAble);
+
     const heroAttr = useHeroesAttr(creatureKey);
 
     const bgColor = rarityBgColor[heroAttr?.rarity || 1];
@@ -19,7 +48,26 @@ export const HeroCard = ({ creatureKey, onClick }: IHeroCard) => {
     return (
         <div
             className={`${!heroAttr?.creature ? "invisible" : ""}`}
-            onClick={onClick}
+            onClick={() => {
+                if (gameStatus?.status != GameStatusEnum.Prepare) {
+                    alert("can only buy piece during prepare");
+                    return;
+                }
+                if (mergeAble.canMerge) {
+                    buyAndMerge({
+                        account,
+                        altarSlot,
+                        gid2: mergeAble.gids[0],
+                        gid3: mergeAble.gids[1],
+                        onBoardIdx: mergeAble.boardIdx,
+                        x: mergeAble.onBoardCoord.x,
+                        y: mergeAble.onBoardCoord.y,
+                        invSlot: mergeAble.invSlot,
+                    });
+                } else {
+                    buyHeroFn(altarSlot);
+                }
+            }}
         >
             <div
                 className="flex flex-col border-1 items-start m-2"

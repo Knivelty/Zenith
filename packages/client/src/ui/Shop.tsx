@@ -2,11 +2,8 @@ import { useCallback, useState } from "react";
 import { useDojo } from "./hooks/useDojo";
 import { useComponentValue } from "@dojoengine/react";
 import { HeroCard } from "./component/HeroCard";
-import { useInv } from "./hooks/useInv";
 import { ShowItem, UIStore, useUIStore } from "../store";
 import { logDebug } from "./lib/utils";
-import { zeroEntity } from "../utils";
-import { GameStatusEnum } from "../dojo/types";
 import { ClipLoader } from "react-spinners";
 
 const Shop = () => {
@@ -15,8 +12,6 @@ const Shop = () => {
         systemCalls: { refreshAltar, buyHero },
         account: { playerEntity, account },
     } = useDojo();
-
-    const gameStatus = useComponentValue(GameStatus, zeroEntity);
 
     const shopShow = useUIStore((state: UIStore) =>
         state.getShow(ShowItem.Shop)
@@ -40,19 +35,6 @@ const Shop = () => {
 
     logDebug("heroAltar: ", heroAltar);
 
-    const { firstEmptyInv } = useInv();
-
-    const buyHeroFn = useCallback(
-        (index: number) => {
-            if (gameStatus?.status != GameStatusEnum.Prepare) {
-                alert("can only buy piece during prepare");
-                return;
-            }
-            buyHero(account, index, firstEmptyInv);
-        },
-        [account, buyHero, firstEmptyInv, gameStatus?.status]
-    );
-
     return (
         <div
             className={`relative flex justify-center mt-16 select-none transform duration-700 z-10 ${
@@ -67,45 +49,35 @@ const Shop = () => {
                             id: heroAltar?.slot1,
                             level: 1,
                         }}
-                        onClick={() => {
-                            buyHeroFn(1);
-                        }}
+                        altarSlot={1}
                     />
                     <HeroCard
                         creatureKey={{
                             id: heroAltar?.slot2,
                             level: 1,
                         }}
-                        onClick={() => {
-                            buyHeroFn(2);
-                        }}
+                        altarSlot={2}
                     />
                     <HeroCard
                         creatureKey={{
                             id: heroAltar?.slot3,
                             level: 1,
                         }}
-                        onClick={() => {
-                            buyHeroFn(3);
-                        }}
+                        altarSlot={3}
                     />
                     <HeroCard
                         creatureKey={{
                             id: heroAltar?.slot4,
                             level: 1,
                         }}
-                        onClick={() => {
-                            buyHeroFn(4);
-                        }}
+                        altarSlot={4}
                     />
                     <HeroCard
                         creatureKey={{
                             id: heroAltar?.slot5,
                             level: 1,
                         }}
-                        onClick={() => {
-                            buyHeroFn(5);
-                        }}
+                        altarSlot={5}
                     />
                 </div>
 
