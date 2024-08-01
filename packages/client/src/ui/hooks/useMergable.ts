@@ -5,19 +5,19 @@ import { useDojo } from "./useDojo";
 // TODO: recursively merge
 export function useMergeAble(creature_id: number) {
     const {
-        clientComponents: { LocalPiece },
+        clientComponents: { Piece },
         account: {
             account: { address },
         },
     } = useDojo();
 
     const allOwnedPiecesEntities = useEntityQuery([
-        HasValue(LocalPiece, { owner: BigInt(address) }),
+        HasValue(Piece, { owner: BigInt(address) }),
     ]);
 
     const allMetPieces = allOwnedPiecesEntities
         .map((entity) => {
-            const p = getComponentValueStrict(LocalPiece, entity);
+            const p = getComponentValueStrict(Piece, entity);
             return p;
         })
         .filter((p) => {

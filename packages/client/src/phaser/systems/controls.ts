@@ -1,14 +1,11 @@
 import { PhaserLayer } from "..";
-import { Direction } from "../../dojo/utils";
 
 export const controls = (layer: PhaserLayer) => {
     const {
         scenes: {
             Main: { input },
         },
-        networkLayer: {
-            account: signer,
-        },
+        networkLayer: { account: signer },
     } = layer;
 
     // input.onKeyPress(

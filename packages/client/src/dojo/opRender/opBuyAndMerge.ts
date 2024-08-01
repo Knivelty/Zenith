@@ -185,6 +185,9 @@ export const opBuyAndMerge = async ({
             waitForComponentOriginValueCome(Altar, playerEntity, {
                 [`slot${altarSlot}`]: 0,
             }),
+            waitForComponentOriginValueCome(Piece, pieceEntity, {
+                owner: BigInt(account.address),
+            }),
         ]);
     } catch (e) {
         console.error(e);
