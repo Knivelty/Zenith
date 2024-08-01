@@ -7,6 +7,7 @@ import { ShowItem, UIStore, useUIStore } from "../store";
 import { logDebug } from "./lib/utils";
 import { zeroEntity } from "../utils";
 import { GameStatusEnum } from "../dojo/types";
+import { ClipLoader } from "react-spinners";
 
 const Shop = () => {
     const {
@@ -116,7 +117,7 @@ const Shop = () => {
                         className="flex items-center justify-center refresh h-20 w-[150px] bg-contain bg-no-repeat bg-[#06FF00] mr-8"
                     >
                         <div className="flex item-center justify-center w-4/5 h-auto text-black font-bold">
-                            {!loading && (
+                            {!loading ? (
                                 <div className="flex flex-col">
                                     <div>Refresh</div>
                                     <div className="flex items-center justify-center mt-2">
@@ -125,6 +126,10 @@ const Shop = () => {
                                         </div>
                                         <div className="ml-2 -mt-1 w-4 h-4 bg-cover bg-[url('/assets/ui/gold.png')]" />
                                     </div>
+                                </div>
+                            ) : (
+                                <div>
+                                    <ClipLoader />
                                 </div>
                             )}
                         </div>

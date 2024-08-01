@@ -7,6 +7,7 @@ import { opBuyHero } from "./opRender/opBuyHero";
 import { opSellHero } from "./opRender/opSellHero";
 import { opCommitPrepare } from "./opRender/opCommitPrepare";
 import { logCall, logDebug } from "../ui/lib/utils";
+import { opRefreshAltar } from "./opRender/opRefreshAltar";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -59,7 +60,12 @@ export function createSystemCalls(
 
     const refreshAltar = async (account: Account) => {
         try {
-            return await client.home.refreshAltar({ account });
+            return await opRefreshAltar(
+                { client },
+                clientComponents,
+                rpcProvider,
+                account
+            );
         } catch (e) {
             console.error(e);
             throw e;

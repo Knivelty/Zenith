@@ -137,6 +137,9 @@ importers:
       react-hotkeys-hook:
         specifier: ^4.5.0
         version: 4.5.0(react-dom@18.2.0)(react@18.2.0)
+      react-spinners:
+        specifier: ^0.14.1
+        version: 0.14.1(react-dom@18.2.0)(react@18.2.0)
       rxjs:
         specifier: ^7.8.1
         version: 7.8.1
@@ -9532,6 +9535,16 @@ packages:
     resolution: {integrity: sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /react-spinners@0.14.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-2Izq+qgQ08HTofCVEdcAQCXFEYfqTDdfeDQJeo/HHQiQJD4imOicNLhkfN2eh1NYEWVOX4D9ok2lhuDB0z3Aag==}
+    peerDependencies:
+      react: ^16.0.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
 
   /react@18.2.0:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
