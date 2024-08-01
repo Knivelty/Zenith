@@ -18,7 +18,7 @@ export const opRefreshAltar = async (
     const playerEntity = getEntityIdFromKeys([BigInt(account.address)]);
     const player = getComponentValueStrict(Player, playerEntity);
 
-    if (player.coin <= 2) {
+    if (player?.refreshed && player.coin <= 2) {
         alert("not enough coins");
         return;
     }

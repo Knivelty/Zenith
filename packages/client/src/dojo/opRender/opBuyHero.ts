@@ -40,12 +40,14 @@ export const opBuyHero = async (
         getEntityIdFromKeys([BigInt(creatureId), 1n])
     );
 
-    player.coin -= creatureProfile.rarity;
+    const piecePrice = creatureProfile.rarity * 2 - 1;
+
+    player.coin -= piecePrice;
     player.inventoryCount += 1;
 
     // check
-    if (player.coin < 0 || player.inventoryCount > 6) {
-        alert("cannot buy");
+    if (player.inventoryCount > 6) {
+        alert("inventory full");
         return;
     }
 
@@ -77,10 +79,13 @@ export const opBuyHero = async (
     altarArray[altarSlot][1] = 0;
     Altar.addOverride(altarOverride, {
         entity: playerEntity,
-        value: altarArray.reduce((accumulator, [key, value]) => {
-            accumulator[key] = value;
-            return accumulator;
-        }, {} as { [key: string]: any }),
+        value: altarArray.reduce(
+            (accumulator, [key, value]) => {
+                accumulator[key] = value;
+                return accumulator;
+            },
+            {} as { [key: string]: any }
+        ),
     });
 
     // player override
