@@ -5,7 +5,11 @@ import { useEffect, useState } from "react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useUIStore } from "../store";
 import { zeroEntity } from "../utils";
-import { Component, getComponentValue } from "@dojoengine/recs";
+import {
+    Component,
+    getComponentValue,
+    updateComponent,
+} from "@dojoengine/recs";
 import { stringify } from "json-bigint";
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -15,11 +19,17 @@ export function Debugger() {
         systemCalls: {
             nextRound,
             commitPreparation,
-            playAnimation,
+
             getCoin,
             exit,
         },
-        clientComponents: { MatchState, Player, GameStatus, LocalPlayer },
+        clientComponents: {
+            MatchState,
+            Player,
+            GameStatus,
+            LocalPlayer,
+            UserOperation,
+        },
         clientComponents,
         phaserLayer: { scenes },
         networkLayer: { toriiClient },
@@ -64,6 +74,7 @@ export function Debugger() {
         MatchState,
         getEntityIdFromKeys([BigInt(player?.inMatch || 0)])
     );
+    const userOp = useComponentValue(UserOperation, zeroEntity);
 
     const increaseFontSize = () => {
         document.documentElement.style.fontSize = `${
@@ -120,10 +131,12 @@ export function Debugger() {
             </Button>
             <Button
                 onClick={async () => {
-                    playAnimation();
+                    updateComponent(UserOperation, zeroEntity, {
+                        skipAnimation: !userOp?.skipAnimation,
+                    });
                 }}
             >
-                Play Animation
+                {userOp?.skipAnimation ? "Play" : "Skip"} Animation
             </Button>
             <Button
                 onClick={async () => {

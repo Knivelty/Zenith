@@ -427,7 +427,12 @@ mod home {
         let co = get!(world, (playerAddr, choice), CurseOption);
         let choiceP = get!(world, (choice, co.order), ChoiceProfile);
         player.coin -= choiceP.coinDec;
-        player.coin += choiceP.coinInc;
+
+        if (255 - player.coin < choiceP.coinInc) {
+            player.coin = 255;
+        } else {
+            player.coin += choiceP.coinInc;
+        }
 
         if (player.curse > choiceP.curseDec) {
             player.curse -= choiceP.curseDec;

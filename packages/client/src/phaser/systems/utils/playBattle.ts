@@ -24,6 +24,7 @@ import { getAnimation, getAnimationIndex } from "./animationHelper";
 import { logDebug } from "../../../ui/lib/utils";
 import { encodeGroundEntity } from "./entityEncoder";
 import { pieceManage } from "./pieceManage";
+import { zeroEntity } from "../../../utils";
 
 export const battleAnimation = (layer: PhaserLayer) => {
     const {
@@ -31,7 +32,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
             Main: { config, objectPool },
         },
         networkLayer: {
-            clientComponents: { HealthBar, LocalPiece, Health },
+            clientComponents: { HealthBar, LocalPiece, Health, UserOperation },
         },
     } = layer;
 
@@ -105,6 +106,11 @@ export const battleAnimation = (layer: PhaserLayer) => {
     }
 
     async function playSingleEvent(v: EventWithName<keyof EventMap>) {
+        const userO = getComponentValueStrict(UserOperation, zeroEntity);
+        if (userO.skipAnimation) {
+            return;
+        }
+
         switch (v.name) {
             case "pieceMove":
                 await handlePieceMove(v as EventWithName<"pieceMove">);

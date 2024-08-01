@@ -15,5 +15,6 @@ export const initialize = (layer: PhaserLayer) => {
         draggingGid: 0,
         selected: false,
         selectGid: 0,
+        skipAnimation: false,
     });
 };
