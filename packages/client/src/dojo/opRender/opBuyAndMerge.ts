@@ -1,7 +1,7 @@
 import { Account, RpcProvider } from "starknet";
 import { IWorld } from "../generated/typescript/contracts.gen";
 import { ClientComponents } from "../createClientComponents";
-import { getComponentValueStrict } from "@dojoengine/recs";
+import { getComponentValue, getComponentValueStrict } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import {
     getPieceEntity,
@@ -78,8 +78,8 @@ export const opBuyAndMerge = async ({
 
     const piece2 = getComponentValueStrict(Piece, getPieceEntity(gid2));
     const piece3 = getComponentValueStrict(Piece, getPieceEntity(gid3));
-    const piece4 = getComponentValueStrict(Piece, getPieceEntity(gid4));
-    const piece5 = getComponentValueStrict(Piece, getPieceEntity(gid5));
+    const piece4 = getComponentValue(Piece, getPieceEntity(gid4));
+    const piece5 = getComponentValue(Piece, getPieceEntity(gid5));
 
     if (onBoardIdx != 0) {
         player.heroesCount += 1;
@@ -98,16 +98,18 @@ export const opBuyAndMerge = async ({
         player.inventoryCount -= 1;
     }
 
-    if (piece4.idx != 0) {
-        player.heroesCount -= 1;
-    } else {
-        player.inventoryCount -= 1;
-    }
+    if (piece4 && piece5) {
+        if (piece4.idx != 0) {
+            player.heroesCount -= 1;
+        } else {
+            player.inventoryCount -= 1;
+        }
 
-    if (piece5.idx != 0) {
-        player.heroesCount -= 1;
-    } else {
-        player.inventoryCount -= 1;
+        if (piece5?.idx != 0) {
+            player.heroesCount -= 1;
+        } else {
+            player.inventoryCount -= 1;
+        }
     }
 
     // // check

@@ -8,14 +8,22 @@ import { zeroEntity } from "../utils";
 import {
     Component,
     getComponentValue,
+    getComponentValueStrict,
+    HasValue,
+    runQuery,
     updateComponent,
 } from "@dojoengine/recs";
 import { stringify } from "json-bigint";
 import { useHotkeys } from "react-hotkeys-hook";
+import { getPlayerBoardPieceEntity, logDebug } from "./lib/utils";
 
 export function Debugger() {
     const {
-        account: { account, playerEntity },
+        account: {
+            account,
+            account: { address },
+            playerEntity,
+        },
         systemCalls: {
             nextRound,
             commitPreparation,
@@ -29,6 +37,8 @@ export function Debugger() {
             GameStatus,
             LocalPlayer,
             UserOperation,
+            Piece,
+            PlayerPiece,
         },
         clientComponents,
         phaserLayer: { scenes },
@@ -151,6 +161,43 @@ export function Debugger() {
                 }}
             >
                 Get Coin
+            </Button>
+            <Button
+                onClick={() => {
+                    const allOwnedPiecesEntities = runQuery([
+                        HasValue(Piece, { owner: BigInt(address) }),
+                    ]);
+
+                    const allOwnPieces = Array.from(allOwnedPiecesEntities).map(
+                        (entity) => {
+                            const p = getComponentValueStrict(Piece, entity);
+                            return p;
+                        }
+                    );
+
+                    const playerValue = getComponentValueStrict(
+                        Player,
+                        playerEntity
+                    );
+
+                    const playerPieceValue = Array.from(
+                        {
+                            length: playerValue.heroesCount,
+                        },
+                        (v, k) => k + 1
+                    ).map((i) => {
+                        return getComponentValue(
+                            PlayerPiece,
+                            getPlayerBoardPieceEntity(address, i)
+                        );
+                    });
+
+                    logDebug("allOwnPieces: ", allOwnPieces);
+                    logDebug("playerValue: ", playerValue);
+                    logDebug("playerPieceValue: ", playerPieceValue);
+                }}
+            >
+                All Own Pieces
             </Button>
             <Button
                 onClick={() => {

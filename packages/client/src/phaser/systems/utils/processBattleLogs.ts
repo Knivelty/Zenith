@@ -88,7 +88,7 @@ export const processBattle = (component: ClientComponents) => {
 
             const piece = getComponentValue(LocalPiece, pieceEntity);
 
-            if (!piece) {
+            if (!piece || !playerPiece.gid) {
                 throw Error(
                     `try get piece error:  ${v.homePlayer}, ${BigInt(i)}`
                 );

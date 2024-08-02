@@ -4,7 +4,10 @@ import { ClientComponents } from "../createClientComponents";
 import { getComponentValueStrict } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { uuid } from "@latticexyz/utils";
-import { waitForComponentOriginValueCome } from "../../ui/lib/utils";
+import {
+    waitForComponentOriginValueCome,
+    waitForPromiseOrTxRevert,
+} from "../../ui/lib/utils";
 
 export const opSellHero = async (
     { client }: { client: IWorld },
@@ -39,13 +42,16 @@ export const opSellHero = async (
     });
 
     try {
-        const tx = await client.home.sellHero({
+        const txPromise = client.home.sellHero({
             account,
             gid,
         });
-        await waitForComponentOriginValueCome(Piece, pieceEntity, {
-            owner: 0n,
-        });
+
+        await waitForPromiseOrTxRevert(rpcProvider, txPromise, [
+            waitForComponentOriginValueCome(Piece, pieceEntity, {
+                owner: 0n,
+            }),
+        ]);
     } catch (e) {
         console.error(e);
         throw e;

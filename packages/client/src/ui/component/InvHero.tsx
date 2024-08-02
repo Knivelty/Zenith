@@ -132,7 +132,7 @@ export const InvHero = ({
             });
 
             logPlayerAction(
-                `move piece ${piece.gid} from slot ${id} to ${posX},${posY}`
+                `move piece ${piece.gid} from slot ${id} to on board ${player.heroesCount} ${posX},${posY}`
             );
         },
     });

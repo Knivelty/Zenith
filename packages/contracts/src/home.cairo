@@ -348,6 +348,10 @@ mod home {
         let mut player = get!(world, playerAddr, Player);
         let mut piece = get!(world, gid, Piece);
 
+        if (gid == 0) {
+            panic!("invalid gid to remove");
+        }
+
         if (piece.slot != 0) {
             // remove this piece from inventory
             set!(world, PlayerInvPiece { owner: playerAddr, slot: piece.slot, gid: 0, });
@@ -359,14 +363,25 @@ mod home {
                 // if the piece is the last piece, just remove it
                 set!(world, PlayerPiece { owner: playerAddr, idx: piece.idx, gid: 0, });
             } else {
-                // should switch the last piece
-                let lastPiece = get!(world, (playerAddr, player.heroesCount), PlayerPiece);
+                // should switch the last piece then remove
+                let lastPlayerPiece = get!(world, (playerAddr, player.heroesCount), PlayerPiece);
 
-                set!(world, PlayerPiece { owner: playerAddr, idx: piece.idx, gid: lastPiece.gid, });
+                if (lastPlayerPiece.gid == 0) {
+                    panic!("board index {} has zero gid, logic err", player.heroesCount)
+                }
+
+                let mut lastPiece = get!(world, lastPlayerPiece.gid, Piece);
+                lastPiece.idx = piece.idx;
+
+                // clear last player piece
+                set!(world, PlayerPiece { owner: playerAddr, idx: player.heroesCount, gid: 0 });
 
                 set!(
                     world,
-                    PlayerPiece { owner: playerAddr, idx: player.heroesCount, gid: lastPiece.gid, }
+                    (
+                        PlayerPiece { owner: playerAddr, idx: lastPiece.idx, gid: lastPiece.gid },
+                        lastPiece
+                    )
                 );
             }
 
@@ -376,9 +391,34 @@ mod home {
             panic!("logic error");
         }
 
-        // update piece owner
+        // update piece owner, idx, slot
         piece.owner = Zeroable::zero();
+        piece.idx = 0;
+        piece.slot = 0;
+        piece.x = 0;
+        piece.y = 0;
         set!(world, (piece));
+    }
+
+    fn _checkPlayerPieceValidity(world: IWorldDispatcher) {
+        let playerAddr = get_caller_address();
+        let playerValue = get!(world, (playerAddr), Player);
+        let mut index = 9;
+        loop {
+            if (index == 0) {
+                break;
+            }
+
+            if (index <= playerValue.heroesCount) {
+                let playerPiece = get!(world, (playerAddr, index), PlayerPiece);
+
+                if (playerPiece.gid == 0) {
+                    panic!("invalid request");
+                }
+            }
+
+            index -= 1;
+        }
     }
 
     fn _rollChoiceType(world: IWorldDispatcher) {
@@ -885,6 +925,7 @@ mod home {
         ) -> u32 {
             // validate piece
             let playerAddr = get_caller_address();
+            let playerValue = get!(world, (playerAddr), Player);
 
             let piece1 = get!(world, gid1, Piece);
             let piece2 = get!(world, gid2, Piece);
@@ -913,7 +954,23 @@ mod home {
             }
 
             // calculate on board idx, should be smallest idx among three
-            let onBoardIdx = get_min_non_zero_between_three(piece1.idx, piece2.idx, piece3.idx);
+
+            // on board idx should minus 1 if it's not last one because it will be swapped and removed
+            let mut onBoardCount = 0;
+            if (piece1.idx != 0) {
+                onBoardCount += 1;
+            }
+            if (piece2.idx != 0) {
+                onBoardCount += 1;
+            }
+            if (piece3.idx != 0) {
+                onBoardCount += 1;
+            }
+
+            let mut onBoardIdx = 0;
+            if (onBoardCount != 0) {
+                onBoardIdx = playerValue.heroesCount + 1 - onBoardCount;
+            }
 
             let invSlot = get_min_non_zero_between_three(piece1.slot, piece2.slot, piece3.slot);
 
@@ -939,7 +996,7 @@ mod home {
                 playerV.heroesCount += 1;
                 let oldPlyaerPiece = get!(world, (playerAddr, onBoardIdx), PlayerPiece);
                 if (oldPlyaerPiece.gid != 0) {
-                    panic!("on board idx piece id not empty");
+                    panic!("on board idx {} piece id not empty", onBoardIdx);
                 }
                 set!(
                     world,
@@ -1016,6 +1073,8 @@ mod home {
             if (invPiece.gid != 0) {
                 panic!("extra slot occupied");
             }
+
+            _checkPlayerPieceValidity(world);
         }
 
 
@@ -1082,6 +1141,8 @@ mod home {
             set!(world, (inningBattle, player));
 
             _rollChoiceType(world);
+
+            _checkPlayerPieceValidity(world);
         }
 
         fn refreshAltar(world: IWorldDispatcher) {
@@ -1210,42 +1271,26 @@ mod home {
         fn sellHero(world: IWorldDispatcher, gid: u32) {
             let playerAddr = get_caller_address();
 
-            let mut piece = get!(world, gid, Piece);
-            let mut player = get!(world, playerAddr, Player);
-
-            if (piece.slot != 0) {
-                let mut invPiece = get!(world, (playerAddr, piece.slot), PlayerInvPiece);
-                // set gid equal 0 to mark it as deleted
-                invPiece.gid = 0;
-                player.inventoryCount -= 1;
-
-                set!(world, (invPiece));
-            } else if (piece.idx != 0) {
-                let mut boardPiece = get!(world, (playerAddr, piece.idx), PlayerPiece);
-                boardPiece.gid = 0;
-
-                player.heroesCount -= 1;
-
-                set!(world, (boardPiece));
-            }
-
             // refund coin
-            // TODO: judge by level
+            let mut player = get!(world, playerAddr, Player);
+            let mut piece = get!(world, gid, Piece);
+
             let creatureProfile = get!(world, (piece.creature_index, piece.level), CreatureProfile);
             let sellPrice = get!(
                 world, (creatureProfile.level, creatureProfile.rarity), SellPriceConfig
             );
-            player.coin += sellPrice.price;
-
-            // by default, consider the piece are sold from inv
-            // TODO: delete! will break torii https://github.com/dojoengine/dojo/issues/1635
-            // delete!(world, (piece));
-            piece.slot = 0;
-            piece.idx = 0;
-            piece.owner = Zeroable::zero();
-            set!(world, (piece));
+            if (255 - sellPrice.price < player.coin) {
+                player.coin = 255;
+            } else {
+                player.coin += sellPrice.price;
+            }
 
             set!(world, (player));
+
+            // remove piece
+            _removePiece(world, gid);
+
+            _checkPlayerPieceValidity(world);
         }
 
         fn nextRound(world: IWorldDispatcher, choice: CurseOptionType) {

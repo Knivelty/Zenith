@@ -172,7 +172,7 @@ export function createSystemCalls(
                 props.gid3,
                 props.gid4,
                 props.gid5,
-                `to board ${props.x} ${props.y}`,
+                `to board ${props.onBoardIdx} ${props.x} ${props.y}`,
                 `to inv ${props.invSlot}`
             );
             await opBuyAndMerge({
