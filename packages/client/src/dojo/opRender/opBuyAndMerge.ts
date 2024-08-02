@@ -78,6 +78,8 @@ export const opBuyAndMerge = async ({
 
     const piece2 = getComponentValueStrict(Piece, getPieceEntity(gid2));
     const piece3 = getComponentValueStrict(Piece, getPieceEntity(gid3));
+    const piece4 = getComponentValueStrict(Piece, getPieceEntity(gid4));
+    const piece5 = getComponentValueStrict(Piece, getPieceEntity(gid5));
 
     if (onBoardIdx != 0) {
         player.heroesCount += 1;
@@ -91,6 +93,18 @@ export const opBuyAndMerge = async ({
         player.inventoryCount -= 1;
     }
     if (piece3.idx != 0) {
+        player.heroesCount -= 1;
+    } else {
+        player.inventoryCount -= 1;
+    }
+
+    if (piece4.idx != 0) {
+        player.heroesCount -= 1;
+    } else {
+        player.inventoryCount -= 1;
+    }
+
+    if (piece5.idx != 0) {
         player.heroesCount -= 1;
     } else {
         player.inventoryCount -= 1;

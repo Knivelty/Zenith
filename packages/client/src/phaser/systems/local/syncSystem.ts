@@ -125,11 +125,11 @@ export function syncSystem(layer: PhaserLayer) {
             const localP = getComponentValue(LocalPlayer, playerEntity);
 
             if (entity === playerEntity) {
+                // don't heroes count calculate locally and don't follow on chain number
                 if (!localP) {
                     // TODO: resolve conflict case by case
-                    setComponent(LocalPlayer, entity, v);
+                    setComponent(LocalPlayer, entity, { ...v, heroesCount: 0 });
                 } else {
-                    // don't update heroes count
                     updateComponent(LocalPlayer, entity, {
                         ...v,
                         heroesCount: localP.heroesCount,

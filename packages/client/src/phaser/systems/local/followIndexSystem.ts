@@ -118,11 +118,18 @@ export function followIndexSystem(layer: PhaserLayer) {
                         }
                     }
                 } else if (v.idx !== 0) {
+                    // it could be a merge event or initial sync
                     setComponent(LocalPlayerPiece, localPlayerPieceEntity, {
                         owner: v.owner,
                         idx: v.idx,
                         gid: v.gid,
                     });
+
+                    updateComponent(LocalPlayer, playerEntity, {
+                        heroesCount: player.heroesCount + 1,
+                    });
+                } else {
+                    logDebug("uncaught case");
                 }
 
                 return;
