@@ -75,7 +75,7 @@ export const merge = (layer: PhaserLayer) => {
         }
     );
 
-    // // deal with the automatically merge logic
+    // // // deal with the automatically merge logic
     // defineSystemST<typeof PlayerOwnPiece.schema>(
     //     world,
     //     [Has(PlayerOwnPiece)],

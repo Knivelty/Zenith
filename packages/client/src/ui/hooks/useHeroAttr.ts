@@ -75,7 +75,7 @@ export function getHeroAttr(
         return undefined;
     }
 
-    logDebug("get creature profile", creature.id, creature.level);
+    // logDebug("get creature profile", creature.id, creature.level);
 
     const profile = getComponentValueStrict(
         creatureProfile,

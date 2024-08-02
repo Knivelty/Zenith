@@ -16,8 +16,10 @@ trait IHome {
     fn spawn();
     fn refreshAltar();
     fn buyHero(altarSlot: u8, invSlot: u8) -> u32;
-    fn mergeHero(gid1: u32, gid2: u32, gid3: u32, onBoardIdx: u8, x: u8, y: u8, invSlot: u8);
-    fn buyAndMerge(altarSlot: u8, gid2: u32, gid3: u32, onBoardIdx: u8, x: u8, y: u8, invSlot: u8);
+    fn mergeHero(gid1: u32, gid2: u32, gid3: u32, x: u8, y: u8, placeholder: u8) -> u32;
+    fn buyAndMerge(
+        altarSlot: u8, gid2: u32, gid3: u32, gid4: u32, gid5: u32, x: u8, y: u8, invSlot: u8
+    );
     fn buyExp();
     fn sellHero(gid: u32);
     fn commitPreparation(changes: Array<PieceChange>, result: RoundResult);
@@ -51,7 +53,8 @@ mod home {
 
     use autochessia::utils::{
         next_position, generate_pseudo_random_address, generate_pseudo_random_u8,
-        generate_pseudo_random, get_felt_mod, gen_piece_gid, roll_rarity, roll_creature
+        generate_pseudo_random, get_felt_mod, gen_piece_gid, roll_rarity, roll_creature,
+        get_min_num, get_min_between_three
     };
     use autochessia::customType::{PieceChange, RoundResult, CurseOptionType};
 
@@ -878,20 +881,8 @@ mod home {
 
 
         fn mergeHero(
-            world: IWorldDispatcher,
-            gid1: u32,
-            gid2: u32,
-            gid3: u32,
-            onBoardIdx: u8,
-            x: u8,
-            y: u8,
-            invSlot: u8
-        ) {
-            // check args
-            if (onBoardIdx != 0 && invSlot != 0) {
-                panic!("invalid args");
-            }
-
+            world: IWorldDispatcher, gid1: u32, gid2: u32, gid3: u32, x: u8, y: u8, placeholder: u8
+        ) -> u32 {
             // validate piece
             let playerAddr = get_caller_address();
 
@@ -919,6 +910,16 @@ mod home {
 
             if (piece1.level > 2) {
                 panic!("piece level capped")
+            }
+
+            // calculate on board idx, should be smallest idx among three
+            let onBoardIdx = get_min_between_three(piece1.idx, piece2.idx, piece3.idx);
+
+            let invSlot = get_min_between_three(piece1.slot, piece2.slot, piece3.slot);
+
+            // check args
+            if (onBoardIdx != 0 && invSlot != 0) {
+                panic!("invalid args");
             }
 
             // remove the three merged pieces
@@ -983,6 +984,8 @@ mod home {
             }
 
             set!(world, (playerV));
+
+            return gid;
         }
 
 
@@ -991,14 +994,18 @@ mod home {
             altarSlot: u8,
             gid2: u32,
             gid3: u32,
-            onBoardIdx: u8,
+            gid4: u32,
+            gid5: u32,
             x: u8,
             y: u8,
             invSlot: u8
         ) {
             // note: always use the extra slot for merge
             let gid = self.buyHero(altarSlot, 7);
-            self.mergeHero(gid, gid2, gid3, onBoardIdx, x, y, invSlot);
+            let mergedGid = self.mergeHero(gid, gid2, gid3, x, y, invSlot);
+            if (gid4 != 0 && gid5 != 0) {
+                self.mergeHero(mergedGid, gid4, gid5, x, y, invSlot);
+            }
 
             let playerAddr = get_caller_address();
 

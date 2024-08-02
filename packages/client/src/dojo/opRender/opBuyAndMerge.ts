@@ -19,6 +19,8 @@ export const opBuyAndMerge = async ({
     account,
     gid2,
     gid3,
+    gid4,
+    gid5,
     altarSlot,
     onBoardIdx,
     x,
@@ -33,6 +35,8 @@ export const opBuyAndMerge = async ({
     altarSlot: number;
     gid2: number;
     gid3: number;
+    gid4: number;
+    gid5: number;
     onBoardIdx: number;
     x: number;
     y: number;
@@ -46,12 +50,20 @@ export const opBuyAndMerge = async ({
     // plus 2 bsc buy consume one and merge consume another
     playerProfile.pieceCounter += 2;
 
+    // recursive add extra one
+    if (gid4 && gid5) {
+        playerProfile.pieceCounter += 1;
+    }
+
     const pieceGid = Number(
         poseidonHashMany([
             BigInt(account.address),
             BigInt(playerProfile.pieceCounter),
         ]) & BigInt(0xffffffff)
     );
+
+    logDebug(`calculate genned piece gid, ${pieceGid}`);
+
     const pieceEntity = getEntityIdFromKeys([BigInt(pieceGid)]);
 
     const creatureId = Number(Object.entries(altar)[altarSlot][1]);
@@ -124,6 +136,32 @@ export const opBuyAndMerge = async ({
         },
     });
 
+    const piece4OverUuid = uuid();
+    Piece.addOverride(piece4OverUuid, {
+        entity: getPieceEntity(gid4),
+        value: {
+            gid: gid4,
+            owner: 0n,
+            idx: 0,
+            slot: 0,
+            x: 0,
+            y: 0,
+        },
+    });
+
+    const piece5OverUuid = uuid();
+    Piece.addOverride(piece5OverUuid, {
+        entity: getPieceEntity(gid5),
+        value: {
+            gid: gid5,
+            owner: 0n,
+            idx: 0,
+            slot: 0,
+            x: 0,
+            y: 0,
+        },
+    });
+
     // new piece override
     const pieceOverUuid = uuid();
     Piece.addOverride(pieceOverUuid, {
@@ -175,7 +213,8 @@ export const opBuyAndMerge = async ({
             altarSlot,
             gid2,
             gid3,
-            onBoardIdx,
+            gid4,
+            gid5,
             x,
             y,
             invSlot,
@@ -196,6 +235,8 @@ export const opBuyAndMerge = async ({
         Piece.removeOverride(pieceOverUuid);
         Piece.removeOverride(piece2OverUuid);
         Piece.removeOverride(piece3OverUuid);
+        Piece.removeOverride(piece4OverUuid);
+        Piece.removeOverride(piece5OverUuid);
         Altar.removeOverride(altarOverride);
         Player.removeOverride(playerOverride);
         PlayerProfile.removeOverride(playerProfileOverride);

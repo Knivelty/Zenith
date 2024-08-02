@@ -5,6 +5,7 @@ import { HeroCard } from "./component/HeroCard";
 import { ShowItem, UIStore, useUIStore } from "../store";
 import { logDebug } from "./lib/utils";
 import { ClipLoader } from "react-spinners";
+import { useHotkeys } from "react-hotkeys-hook";
 
 const Shop = () => {
     const {
@@ -12,6 +13,12 @@ const Shop = () => {
         systemCalls: { refreshAltar, buyHero },
         account: { playerEntity, account },
     } = useDojo();
+
+    useHotkeys("r", () => {
+        if (shopShow && !loading) {
+            buyRefreshHeroFn();
+        }
+    });
 
     const shopShow = useUIStore((state: UIStore) =>
         state.getShow(ShowItem.Shop)

@@ -6,7 +6,6 @@ import { zeroEntity } from "../../utils";
 import { useDojo } from "../hooks/useDojo";
 import { GameStatusEnum } from "../../dojo/types";
 import { useMergeAble } from "../hooks/useMergable";
-import { debug } from "console";
 import { logDebug } from "../lib/utils";
 
 const rarityBgColor: Record<number, string> = {
@@ -59,10 +58,12 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
                         altarSlot,
                         gid2: mergeAble.gids[0],
                         gid3: mergeAble.gids[1],
-                        onBoardIdx: mergeAble.boardIdx,
+                        gid4: mergeAble.gids?.[2] || 0,
+                        gid5: mergeAble.gids?.[3] || 0,
                         x: mergeAble.onBoardCoord.x,
                         y: mergeAble.onBoardCoord.y,
                         invSlot: mergeAble.invSlot,
+                        onBoardIdx: mergeAble.boardIdx,
                     });
                 } else {
                     buyHeroFn(altarSlot);

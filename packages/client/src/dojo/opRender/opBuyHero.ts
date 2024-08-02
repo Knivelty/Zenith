@@ -32,6 +32,9 @@ export const opBuyHero = async (
             BigInt(playerProfile.pieceCounter),
         ]) & BigInt(0xffffffff)
     );
+
+    logDebug(`calculate genned piece gid, ${pieceGid}`);
+
     const pieceEntity = getEntityIdFromKeys([BigInt(pieceGid)]);
 
     const creatureId = Number(Object.entries(altar)[altarSlot][1]);

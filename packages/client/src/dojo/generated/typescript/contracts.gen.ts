@@ -128,7 +128,6 @@ export async function setupWorld(provider: DojoProvider) {
             gid1: number;
             gid2: number;
             gid3: number;
-            onBoardIdx: number;
             x: number;
             y: number;
             invSlot: number;
@@ -142,7 +141,6 @@ export async function setupWorld(provider: DojoProvider) {
                         props.gid1,
                         props.gid2,
                         props.gid3,
-                        props.onBoardIdx,
                         props.x,
                         props.y,
                         props.invSlot,
@@ -160,7 +158,8 @@ export async function setupWorld(provider: DojoProvider) {
             altarSlot: number;
             gid2: number;
             gid3: number;
-            onBoardIdx: number;
+            gid4: number;
+            gid5: number;
             x: number;
             y: number;
             invSlot: number;
@@ -174,7 +173,8 @@ export async function setupWorld(provider: DojoProvider) {
                         props.altarSlot,
                         props.gid2,
                         props.gid3,
-                        props.onBoardIdx,
+                        props.gid4,
+                        props.gid5,
                         props.x,
                         props.y,
                         props.invSlot,

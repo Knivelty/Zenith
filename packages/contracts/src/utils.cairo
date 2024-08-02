@@ -73,6 +73,39 @@ fn gen_piece_gid(player: ContractAddress, counter: u32) -> u32 {
     return (hash.into() & MASK_32).try_into().unwrap();
 }
 
+fn get_min_between_three(num1: u8, num2: u8, num3: u8) -> u8 {
+    let mut min = num1;
+    if (num2 < min) {
+        min = num2;
+    }
+    if (num3 < min) {
+        min = num3;
+    }
+    return min;
+}
+
+fn get_min_num(nums: @Array<u8>) -> u8 {
+    let length = nums.len();
+    if (length == 0) {
+        panic!("empty array")
+    }
+    let mut idx = 1;
+    let mut min = *nums.at(0);
+    loop {
+        if (idx >= length) {
+            break;
+        }
+
+        let value = *nums.at(idx);
+        if (value < min) {
+            min = value;
+        }
+
+        idx += 1;
+    };
+    return min;
+}
+
 fn two_to(mut power: usize) -> felt252 {
     assert(power < 252, 'Power too large');
     let mut result = 1;

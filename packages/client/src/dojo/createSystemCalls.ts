@@ -156,10 +156,12 @@ export function createSystemCalls(
             altarSlot: number;
             gid2: number;
             gid3: number;
-            onBoardIdx: number;
+            gid4: number;
+            gid5: number;
             x: number;
             y: number;
             invSlot: number;
+            onBoardIdx: number;
         } & { account: Account }
     ) => {
         try {
@@ -168,7 +170,9 @@ export function createSystemCalls(
                 props.altarSlot,
                 props.gid2,
                 props.gid3,
-                `to board ${props.onBoardIdx} ${props.x} ${props.y}`,
+                props.gid4,
+                props.gid5,
+                `to board ${props.x} ${props.y}`,
                 `to inv ${props.invSlot}`
             );
             await opBuyAndMerge({
@@ -178,11 +182,13 @@ export function createSystemCalls(
                 account: props.account,
                 gid2: props.gid2,
                 gid3: props.gid3,
+                gid4: props.gid4,
+                gid5: props.gid5,
                 altarSlot: props.altarSlot,
-                onBoardIdx: props.onBoardIdx,
                 x: props.x,
                 y: props.y,
                 invSlot: props.invSlot,
+                onBoardIdx: props.onBoardIdx,
             });
         } catch (e) {
             console.error(e);
