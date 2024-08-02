@@ -20,7 +20,7 @@ export const opRefreshAltar = async (
 
     const cost = player?.refreshed ? 2 : 0;
 
-    if (player.coin <= cost) {
+    if (player.coin < cost) {
         alert("not enough coins");
         return;
     }
