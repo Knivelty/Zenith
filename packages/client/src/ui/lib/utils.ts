@@ -57,11 +57,23 @@ export async function getComponentValueUtilNotNull<
 
 export async function waitForPromiseOrTxRevert(
     rpcProvider: RpcProvider,
-    tx: Awaited<ReturnType<DojoProvider["execute"]>>,
+    txPromise: ReturnType<DojoProvider["execute"]>,
     promises: Promise<any>[]
 ) {
     const [resolve, , promise] = deferred<void>();
 
+    // process expected value check first, avoid entity update before sendTx response
+    let completedPromises = 0;
+    promises.forEach((p) => {
+        p.then(() => {
+            completedPromises += 1;
+            if (completedPromises === promises.length) {
+                resolve();
+            }
+        });
+    });
+
+    const tx = await txPromise;
     const txDetail = rpcProvider.getTransactionByHash(tx.transaction_hash);
 
     // get transaction fail means tx is not found
@@ -84,16 +96,6 @@ export async function waitForPromiseOrTxRevert(
             );
             resolve();
         }
-    });
-
-    let completedPromises = 0;
-    promises.forEach((p) => {
-        p.then(() => {
-            completedPromises += 1;
-            if (completedPromises === promises.length) {
-                resolve();
-            }
-        });
     });
 
     return promise;

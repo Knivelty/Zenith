@@ -18,7 +18,9 @@ export const opRefreshAltar = async (
     const playerEntity = getEntityIdFromKeys([BigInt(account.address)]);
     const player = getComponentValueStrict(Player, playerEntity);
 
-    if (player?.refreshed && player.coin <= 2) {
+    const cost = player?.refreshed ? 2 : 0;
+
+    if (player.coin <= cost) {
         alert("not enough coins");
         return;
     }
@@ -36,10 +38,13 @@ export const opRefreshAltar = async (
     });
 
     try {
-        const tx = await client.home.refreshAltar({
+        const txPromise = client.home.refreshAltar({
             account,
         });
-        await waitForPromiseOrTxRevert(rpcProvider, tx, [
+        await waitForPromiseOrTxRevert(rpcProvider, txPromise, [
+            waitForComponentOriginValueCome(Player, playerEntity, {
+                coin: player.coin - cost,
+            }),
             waitForComponentOriginValueCome(Altar, playerEntity, {
                 player: BigInt(account.address),
             }),

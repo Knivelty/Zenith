@@ -222,7 +222,7 @@ export const opBuyAndMerge = async ({
     });
 
     try {
-        const tx = await client.home.buyAndMerge({
+        const txPromise = client.home.buyAndMerge({
             account,
             altarSlot,
             gid2,
@@ -234,7 +234,7 @@ export const opBuyAndMerge = async ({
             invSlot,
         });
 
-        await waitForPromiseOrTxRevert(rpcProvider, tx, [
+        await waitForPromiseOrTxRevert(rpcProvider, txPromise, [
             waitForComponentOriginValueCome(Altar, playerEntity, {
                 [`slot${altarSlot}`]: 0,
             }),

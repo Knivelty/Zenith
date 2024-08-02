@@ -106,13 +106,13 @@ export const opBuyHero = async (
     });
 
     try {
-        const tx = await client.home.buyHero({
+        const txPromise = client.home.buyHero({
             account,
             altarSlot,
             invSlot,
         });
 
-        await waitForPromiseOrTxRevert(rpcProvider, tx, [
+        await waitForPromiseOrTxRevert(rpcProvider, txPromise, [
             waitForComponentOriginValueCome(Piece, pieceEntity, {
                 owner: BigInt(account.address),
             }),
