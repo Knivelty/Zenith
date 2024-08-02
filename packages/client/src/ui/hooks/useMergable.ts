@@ -53,11 +53,13 @@ export function useMergeAble(creature_id: number) {
         })
         .filter((c) => c.x !== 0 && c.y !== 0)?.[0] || { x: 0, y: 0 };
 
-    const invSlot =
-        mergedToWith
-            .map((p) => p.slot)
-            .filter(Boolean)
-            .sort((a, b) => a - b)?.[0] || 0;
+    // if have board idx, no inv slot
+    const invSlot = boardIdx
+        ? 0
+        : mergedToWith
+              .map((p) => p.slot)
+              .filter(Boolean)
+              .sort((a, b) => a - b)?.[0] || 0;
 
     const gids = mergedToWith.map((p) => p.gid);
 

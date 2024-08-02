@@ -73,12 +73,21 @@ fn gen_piece_gid(player: ContractAddress, counter: u32) -> u32 {
     return (hash.into() & MASK_32).try_into().unwrap();
 }
 
-fn get_min_between_three(num1: u8, num2: u8, num3: u8) -> u8 {
-    let mut min = num1;
-    if (num2 < min) {
+fn get_min_non_zero_between_three(num1: u8, num2: u8, num3: u8) -> u8 {
+    if (num1 + num2 + num3 == 0) {
+        return 0;
+    }
+
+    let mut min = 255;
+
+    if (num1 < min && num1 != 0) {
+        min = num1;
+    }
+
+    if (num2 < min && num2 != 0) {
         min = num2;
     }
-    if (num3 < min) {
+    if (num3 < min && num3 != 0) {
         min = num3;
     }
     return min;

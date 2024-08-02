@@ -54,7 +54,7 @@ mod home {
     use autochessia::utils::{
         next_position, generate_pseudo_random_address, generate_pseudo_random_u8,
         generate_pseudo_random, get_felt_mod, gen_piece_gid, roll_rarity, roll_creature,
-        get_min_num, get_min_between_three
+        get_min_num, get_min_non_zero_between_three
     };
     use autochessia::customType::{PieceChange, RoundResult, CurseOptionType};
 
@@ -913,12 +913,12 @@ mod home {
             }
 
             // calculate on board idx, should be smallest idx among three
-            let onBoardIdx = get_min_between_three(piece1.idx, piece2.idx, piece3.idx);
+            let onBoardIdx = get_min_non_zero_between_three(piece1.idx, piece2.idx, piece3.idx);
 
-            let invSlot = get_min_between_three(piece1.slot, piece2.slot, piece3.slot);
+            let invSlot = get_min_non_zero_between_three(piece1.slot, piece2.slot, piece3.slot);
 
             // check args
-            if (onBoardIdx != 0 && invSlot != 0) {
+            if (onBoardIdx == 0 && invSlot == 0) {
                 panic!("invalid args");
             }
 

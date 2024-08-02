@@ -147,10 +147,14 @@ export function useInv() {
             if (!gid) {
                 return undefined;
             }
-            const piece = getComponentValueStrict(
+            const piece = getComponentValue(
                 Piece,
                 getEntityIdFromKeys([BigInt(gid)])
             );
+
+            if (!piece) {
+                return undefined;
+            }
 
             return {
                 ...getHeroAttr(CreatureProfile, {
