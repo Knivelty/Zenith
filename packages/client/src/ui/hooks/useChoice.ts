@@ -1,11 +1,9 @@
 import { useDojo } from "./useDojo";
 import { ClientComponents } from "../../dojo/createClientComponents";
-import { getComponentValue, getComponentValueStrict } from "@dojoengine/recs";
+import { getComponentValue } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { logDebug } from "../lib/utils";
-import { useComponentValue } from "@dojoengine/react";
-import { zeroEntity } from "../../utils";
 
 export function useChoice() {
     const {
@@ -15,11 +13,18 @@ export function useChoice() {
         },
     } = useDojo();
 
-    const status = useComponentValue(GameStatus, zeroEntity);
+    const [value, setValue] = useState<any>();
+    useEffect(() => {
+        const subscription = CurseOption.update$.subscribe((newValue) => {
+            setValue(newValue);
+        });
+
+        return () => subscription.unsubscribe();
+    }, [CurseOption.update$, setValue]);
 
     const choices = useMemo(() => {
         return getChoices(ChoiceProfile, CurseOption, address);
-    }, [address, ChoiceProfile, status?.status, CurseOption]);
+    }, [address, ChoiceProfile, CurseOption]);
 
     return choices;
 }
