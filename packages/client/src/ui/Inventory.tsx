@@ -4,6 +4,7 @@ import { InvHero } from "./component/InvHero";
 import { useCallback } from "react";
 import { useLocalInv } from "./hooks/useInv";
 import { DraggableImg } from "./component/DraggableImg";
+import { logDebug } from "./lib/utils";
 
 export function Inventory() {
     const {
@@ -24,6 +25,8 @@ export function Inventory() {
     );
 
     const { invPieces } = useLocalInv();
+
+    logDebug("invPieces: ", invPieces);
 
     return (
         <div className="fixed bottom-0 text-center w-screen  mx-auto flex justify-center mt-2 z-10">

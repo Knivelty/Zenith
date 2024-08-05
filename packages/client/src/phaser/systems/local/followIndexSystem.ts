@@ -3,17 +3,13 @@ import { defineSystemST } from "../../../utils";
 import { world } from "../../../dojo/generated/world";
 import {
     Has,
-    getComponentValue,
+    HasValue,
+    NotValue,
     getComponentValueStrict,
-    setComponent,
+    runQuery,
     updateComponent,
 } from "@dojoengine/recs";
-import {
-    getPieceEntity,
-    getPlayerBoardPieceEntity,
-    logDebug,
-    logPieceIdx,
-} from "../../../ui/lib/utils";
+import { getPieceEntity, logDebug, logPieceIdx } from "../../../ui/lib/utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { localPlayerInv } from "../utils/localPlayerInv";
 import { isEqual } from "lodash";
@@ -21,12 +17,7 @@ import { isEqual } from "lodash";
 export function followIndexSystem(layer: PhaserLayer) {
     const {
         networkLayer: {
-            clientComponents: {
-                LocalPiece,
-                LocalPlayerInvPiece,
-                LocalPlayerPiece,
-                LocalPlayer,
-            },
+            clientComponents: { LocalPiece, LocalPlayer },
             account: { address },
             playerEntity,
         },
@@ -57,18 +48,9 @@ export function followIndexSystem(layer: PhaserLayer) {
 
             const player = getComponentValueStrict(LocalPlayer, playerEntity);
 
-            const localInvPieceEntity = getEntityIdFromKeys([
-                v.owner,
-                BigInt(v.slot),
-            ]);
-
-            const localPlayerPieceEntity = getEntityIdFromKeys([
-                v.owner,
-                BigInt(v.idx),
-            ]);
-
             // if no previous value, it could be buy/merge event or new sync
-            if (!preV) {
+            // if two value the same, it means it op render removed
+            if (!preV || isEqual(preV, v)) {
                 if (v.slot === 0 && v.gid === 0) {
                     throw Error("sync local piece logic error");
                 }
@@ -77,54 +59,28 @@ export function followIndexSystem(layer: PhaserLayer) {
                 if (v.slot !== 0) {
                     // it's a buy event
                     // check whether is occupied on frontend
+                    const entities = runQuery([
+                        HasValue(LocalPiece, { owner: v.owner, slot: v.slot }),
+                        NotValue(LocalPiece, { gid: v.gid }),
+                    ]);
 
-                    const lpip = getComponentValue(
-                        LocalPlayerInvPiece,
-                        getEntityIdFromKeys([BigInt(address), BigInt(v.slot)])
-                    );
-
-                    // if not occupied, set
-                    if (!lpip || lpip.gid === 0) {
-                        logDebug(`not occupied, set slot ${v.slot}`);
-                        setComponent(LocalPlayerInvPiece, localInvPieceEntity, {
-                            owner: v.owner,
-                            slot: v.slot,
-                            gid: v.gid,
-                        });
-                    } else {
-                        if (lpip.gid === v.gid) {
-                            logDebug("local inv slot already set");
-                            return;
-                        }
-
+                    // if occupied, set
+                    if (entities.size > 0) {
                         const slot = getFirstEmptyLocalInvSlot();
-                        logDebug(`occupied, try set to slot ${slot}`);
+                        logDebug(
+                            `piece ${v.gid} at slot ${v.slot} occupied, try set to slot ${slot}`
+                        );
 
                         if (slot !== 0) {
-                            setComponent(
-                                LocalPlayerInvPiece,
-                                getEntityIdFromKeys([
-                                    BigInt(address),
-                                    BigInt(slot),
-                                ]),
-                                {
-                                    owner: BigInt(address),
-                                    slot: slot,
-                                    gid: v.gid,
-                                }
-                            );
+                            updateComponent(LocalPiece, entity, {
+                                slot,
+                            });
                         } else {
                             console.error("place logic error");
                         }
                     }
                 } else if (v.idx !== 0) {
                     // it could be a merge event
-                    setComponent(LocalPlayerPiece, localPlayerPieceEntity, {
-                        owner: v.owner,
-                        idx: v.idx,
-                        gid: v.gid,
-                    });
-
                     updateComponent(LocalPlayer, playerEntity, {
                         heroesCount: player.heroesCount + 1,
                     });
@@ -134,16 +90,6 @@ export function followIndexSystem(layer: PhaserLayer) {
 
                 return;
             }
-
-            const preLocalInvPieceEntity = getEntityIdFromKeys([
-                preV.owner,
-                BigInt(preV.slot),
-            ]);
-
-            const preLocalPlayerPieceEntity = getEntityIdFromKeys([
-                preV.owner,
-                BigInt(preV.idx),
-            ]);
 
             if (
                 preV.slot !== 0 &&
@@ -158,25 +104,6 @@ export function followIndexSystem(layer: PhaserLayer) {
                 logPieceIdx(
                     `piece ${v.gid} move from slot ${preV.slot} to slot ${v.slot}`
                 );
-
-                // update prev slot
-                updateComponent(LocalPlayerInvPiece, preLocalInvPieceEntity, {
-                    gid: 0,
-                });
-                // update new slot
-                if (
-                    !getComponentValue(LocalPlayerInvPiece, localInvPieceEntity)
-                ) {
-                    setComponent(LocalPlayerInvPiece, localInvPieceEntity, {
-                        owner: v.owner,
-                        slot: v.slot,
-                        gid: v.gid,
-                    });
-                } else {
-                    updateComponent(LocalPlayerInvPiece, localInvPieceEntity, {
-                        gid: v.gid,
-                    });
-                }
             } else if (
                 preV.slot !== 0 &&
                 v.slot === 0 &&
@@ -190,38 +117,10 @@ export function followIndexSystem(layer: PhaserLayer) {
                     `piece ${v.gid} move from slot ${preV.slot} to index ${v.idx} pos ${v.x} ${v.y}`
                 );
 
-                // update local player's hero count and inv count
+                // update local player's hero count
                 updateComponent(LocalPlayer, playerEntity, {
                     heroesCount: player.heroesCount + 1,
-                    inventoryCount: player.inventoryCount - 1,
                 });
-
-                // update prev slot
-                updateComponent(LocalPlayerInvPiece, preLocalInvPieceEntity, {
-                    gid: 0,
-                });
-                // update new board index
-                const preVPlayerPiece = getComponentValue(
-                    LocalPlayerPiece,
-                    localPlayerPieceEntity
-                );
-                if (!preVPlayerPiece) {
-                    logDebug(
-                        `set local player piece ${localPlayerPieceEntity}`
-                    );
-                    setComponent(LocalPlayerPiece, localPlayerPieceEntity, {
-                        owner: v.owner,
-                        idx: v.idx,
-                        gid: v.gid,
-                    });
-                } else {
-                    logDebug(
-                        `set local player piece ${localPlayerPieceEntity} ${v.gid}`
-                    );
-                    updateComponent(LocalPlayerPiece, localPlayerPieceEntity, {
-                        gid: v.gid,
-                    });
-                }
             } else if (
                 preV.idx !== 0 &&
                 v.idx === 0 &&
@@ -240,26 +139,6 @@ export function followIndexSystem(layer: PhaserLayer) {
                     heroesCount: player.heroesCount - 1,
                     inventoryCount: player.inventoryCount + 1,
                 });
-
-                // update prev board index
-                updateComponent(LocalPlayerPiece, preLocalPlayerPieceEntity, {
-                    gid: 0,
-                });
-
-                // update new inventory slot
-                if (
-                    !getComponentValue(LocalPlayerInvPiece, localInvPieceEntity)
-                ) {
-                    setComponent(LocalPlayerInvPiece, localInvPieceEntity, {
-                        owner: v.owner,
-                        slot: v.slot,
-                        gid: v.gid,
-                    });
-                } else {
-                    updateComponent(LocalPlayerInvPiece, localInvPieceEntity, {
-                        gid: v.gid,
-                    });
-                }
             } else if (
                 preV.idx === 0 &&
                 preV.slot !== 0 &&
@@ -270,10 +149,6 @@ export function followIndexSystem(layer: PhaserLayer) {
                  * @dev piece in inventory sold or be merged
                  */
                 logPieceIdx(`piece ${v.gid} sold or merged from inventory`);
-                // update prev inventory index
-                updateComponent(LocalPlayerInvPiece, preLocalInvPieceEntity, {
-                    gid: 0,
-                });
 
                 // update local player's inv count
                 updateComponent(LocalPlayer, playerEntity, {
@@ -291,23 +166,6 @@ export function followIndexSystem(layer: PhaserLayer) {
                 logPieceIdx(
                     `player piece ${v.gid} on board index change from ${preV.idx} to ${v.idx}`
                 );
-
-                if (preV.idx === player.heroesCount) {
-                    updateComponent(
-                        LocalPlayerPiece,
-                        preLocalPlayerPieceEntity,
-                        {
-                            gid: 0,
-                        }
-                    );
-                }
-
-                // TODO: don't know why update may fail
-                setComponent(LocalPlayerPiece, localPlayerPieceEntity, {
-                    gid: v.gid,
-                    owner: v.owner,
-                    idx: v.idx,
-                });
             } else if (
                 preV.idx !== 0 &&
                 v.idx == 0 &&
@@ -324,16 +182,6 @@ export function followIndexSystem(layer: PhaserLayer) {
                 // just follow on chain change because on chain do a lot of things
 
                 // if this piece is last piece, clear that player piece
-
-                if (preV.idx === player.heroesCount) {
-                    updateComponent(
-                        LocalPlayerPiece,
-                        preLocalPlayerPieceEntity,
-                        {
-                            gid: 0,
-                        }
-                    );
-                }
 
                 // update local player's hero count
                 updateComponent(LocalPlayer, playerEntity, {

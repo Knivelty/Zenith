@@ -8,10 +8,18 @@ import {
 import { PhaserLayer } from "..";
 
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { defineSystemST, zeroEntity } from "../../utils";
+import {
+    defineSystemST,
+    getLocalPlayerBoardPieceEntities,
+    zeroEntity,
+} from "../../utils";
 import { GameStatusEnum } from "../../dojo/types";
 import { pieceManage } from "./utils/pieceManage";
-import { getComponentValueUtilNotNull, logDebug } from "../../ui/lib/utils";
+import {
+    getComponentValueUtilNotNull,
+    getPlayerBoardPieceEntity,
+    logDebug,
+} from "../../ui/lib/utils";
 
 export const prepare = (layer: PhaserLayer) => {
     const {
@@ -21,7 +29,7 @@ export const prepare = (layer: PhaserLayer) => {
             Main,
         },
         networkLayer: {
-            clientComponents: { Player, InningBattle, GameStatus },
+            clientComponents: { Player, InningBattle, GameStatus, LocalPiece },
             account,
             playerEntity,
         },
@@ -93,14 +101,14 @@ export const prepare = (layer: PhaserLayer) => {
                 // clear all existing sprite
                 clearAllObject();
 
-                const player = getComponentValueStrict(
-                    Player,
-                    getEntityIdFromKeys([BigInt(account.address)])
-                );
-
                 // spawn players piece
-                for (let i = 1; i <= player.heroesCount; i++) {
-                    spawnPiece(player.player, BigInt(i), true);
+                const playerOnBoardPieceEntities =
+                    getLocalPlayerBoardPieceEntities(
+                        LocalPiece,
+                        BigInt(account.address)
+                    );
+                for (const entity of playerOnBoardPieceEntities) {
+                    spawnPiece(entity, true);
                 }
 
                 if (v.currentMatch === 0) {
@@ -124,9 +132,14 @@ export const prepare = (layer: PhaserLayer) => {
 
                 console.log("enemy: ", enemy.heroesCount, enemy.player);
 
+                const enemyOnBoardPieceEntities =
+                    getLocalPlayerBoardPieceEntities(
+                        LocalPiece,
+                        inningBattle.awayPlayer
+                    );
                 // spawn enemy's piece
-                for (let i = 1; i <= enemy.heroesCount; i++) {
-                    spawnPiece(enemy.player, BigInt(i), true);
+                for (const enemyEntity of enemyOnBoardPieceEntities) {
+                    spawnPiece(enemyEntity, true);
                 }
             }
 

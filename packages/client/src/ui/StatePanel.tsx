@@ -7,14 +7,7 @@ import { getPlayerBoardPieceEntity } from "./lib/utils";
 
 export function StatesPanel() {
     const {
-        clientComponents: {
-            LocalPiece,
-            Piece,
-            LocalPlayerPiece,
-            PlayerPiece,
-            LocalPlayerInvPiece,
-            PlayerInvPiece,
-        },
+        clientComponents: { LocalPiece, Piece, PlayerPiece, PlayerInvPiece },
         account: {
             account: { address },
         },
@@ -57,10 +50,7 @@ export function StatesPanel() {
                 <div className="flex flex-row">
                     {localPieceOnBoard.map((entity) => {
                         const piece = getComponentValue(LocalPiece, entity);
-                        const playerPiece = getComponentValue(
-                            LocalPlayerPiece,
-                            getPlayerBoardPieceEntity(address, piece?.idx || 0)
-                        );
+
                         return (
                             <div className="flex flex-col text-sm mx-2">
                                 <div>gid: {piece?.gid}</div>
@@ -69,7 +59,6 @@ export function StatesPanel() {
                                 <div>idx: {piece?.idx}</div>
                                 <div>creature: {piece?.creature_index}</div>
                                 <div>level: {piece?.level}</div>
-                                <div>mapGid: {playerPiece?.gid}</div>
                             </div>
                         );
                     })}
@@ -103,10 +92,7 @@ export function StatesPanel() {
                 <div className="flex flex-row">
                     {localPieceAtInv.map((entity) => {
                         const piece = getComponentValue(LocalPiece, entity);
-                        const playerPiece = getComponentValue(
-                            LocalPlayerInvPiece,
-                            getPlayerBoardPieceEntity(address, piece?.slot || 0)
-                        );
+
                         return (
                             <div className="flex flex-col text-sm mx-2">
                                 <div>gid: {piece?.gid}</div>
@@ -115,7 +101,6 @@ export function StatesPanel() {
                                 <div>slot: {piece?.slot}</div>
                                 <div>creature: {piece?.creature_index}</div>
                                 <div>level: {piece?.level}</div>
-                                <div>mapGid: {playerPiece?.gid}</div>
                             </div>
                         );
                     })}

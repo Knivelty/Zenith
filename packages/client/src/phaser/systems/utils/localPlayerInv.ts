@@ -1,52 +1,35 @@
-import { getComponentValue } from "@dojoengine/recs";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
+import {
+    getComponentValueStrict,
+    HasValue,
+    NotValue,
+    runQuery,
+} from "@dojoengine/recs";
 import { PhaserLayer } from "../..";
 import { getFirstEmptySlot } from "../../../ui/hooks/useInv";
 
 export const localPlayerInv = (layer: PhaserLayer) => {
     const {
         networkLayer: {
-            clientComponents: { LocalPlayerInvPiece },
+            clientComponents: { LocalPiece },
             account: { address },
         },
     } = layer;
 
     function getFirstEmptyLocalInvSlot() {
-        const inv1 = getComponentValue(
-            LocalPlayerInvPiece,
-            getEntityIdFromKeys([BigInt(address), 1n])
-        );
-        const inv2 = getComponentValue(
-            LocalPlayerInvPiece,
-            getEntityIdFromKeys([BigInt(address), 2n])
-        );
-        const inv3 = getComponentValue(
-            LocalPlayerInvPiece,
-            getEntityIdFromKeys([BigInt(address), 3n])
-        );
-        const inv4 = getComponentValue(
-            LocalPlayerInvPiece,
-            getEntityIdFromKeys([BigInt(address), 4n])
-        );
-        const inv5 = getComponentValue(
-            LocalPlayerInvPiece,
-            getEntityIdFromKeys([BigInt(address), 5n])
-        );
-        const inv6 = getComponentValue(
-            LocalPlayerInvPiece,
-            getEntityIdFromKeys([BigInt(address), 6n])
-        );
+        const pieceEntities = runQuery([
+            HasValue(LocalPiece, { owner: BigInt(address) }),
+            NotValue(LocalPiece, { slot: 0 }),
+        ]);
 
-        const invGids = [
-            inv1?.gid,
-            inv2?.gid,
-            inv3?.gid,
-            inv4?.gid,
-            inv5?.gid,
-            inv6?.gid,
-        ];
+        const invGids = Array(6).fill(undefined);
 
-        return getFirstEmptySlot(invGids)
+        Array.from(pieceEntities).forEach((pieceEntity) => {
+            const p = getComponentValueStrict(LocalPiece, pieceEntity);
+
+            invGids[p.slot - 1] = p.gid;
+        });
+
+        return getFirstEmptySlot(invGids);
     }
 
     return { getFirstEmptyLocalInvSlot };

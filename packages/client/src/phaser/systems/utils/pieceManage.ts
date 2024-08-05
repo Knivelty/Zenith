@@ -34,7 +34,6 @@ export const pieceManage = (layer: PhaserLayer) => {
                 HealthBar,
                 Health,
                 CreatureProfile,
-                LocalPlayerPiece,
                 LocalPiece,
                 LocalPieceOccupation,
                 UserOperation,
@@ -68,31 +67,10 @@ export const pieceManage = (layer: PhaserLayer) => {
      * @param override whether to override previous one
      * @returns
      */
-    function spawnPiece(
-        playerAddr: bigint,
-        index: bigint,
-        override = false,
-        pieceGid = 0
-    ) {
-        pieceGid =
-            pieceGid ||
-            getComponentValue(
-                LocalPlayerPiece,
-                getEntityIdFromKeys([playerAddr, index])
-            )?.gid ||
-            0;
-
-        if (!pieceGid) {
-            logDebug("no piece for ", playerAddr, index);
-            return;
-        }
-
-        const entity = getEntityIdFromKeys([BigInt(pieceGid)]);
-
-        logDebug(`try get piece ${playerAddr} ${index} ${pieceGid}`);
+    function spawnPiece(entity: Entity, override = false) {
         const piece = getComponentValue(LocalPiece, entity);
         if (!piece) {
-            throw Error(`try get piece ${playerAddr} ${index} ${pieceGid}`);
+            throw Error(`try get piece ${entity}`);
         }
 
         const creatureProfile = getCreatureProfile(

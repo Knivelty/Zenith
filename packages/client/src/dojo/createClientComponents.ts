@@ -40,20 +40,6 @@ export function createClientComponents({
             },
             { metadata: { name: "LocalPlayer" } }
         ),
-        LocalPlayerPiece: defineComponent(
-            world,
-            {
-                ...contractComponents.PlayerPiece.schema,
-            },
-            { metadata: { name: "LocalPlayerPiece" } }
-        ),
-        LocalPlayerInvPiece: defineComponent(
-            world,
-            {
-                ...contractComponents.PlayerInvPiece.schema,
-            },
-            { metadata: { name: "LocalPlayerInvPiece" } }
-        ),
         // record all player owned piece
         PlayerOwnPiece: defineComponent(
             world,

@@ -31,7 +31,6 @@ export const synergy = (layer: PhaserLayer) => {
         world,
         networkLayer: {
             clientComponents: {
-                LocalPlayerPiece,
                 LocalPiece,
                 CreatureProfile,
                 SynergyProfile,

@@ -6,11 +6,13 @@ import { useUIStore } from "../../store";
 import {
     getComponentValue,
     getComponentValueStrict,
+    HasValue,
+    runQuery,
     updateComponent,
 } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { worldToChainCoord } from "../../phaser/systems/utils/coorConvert";
-import { useComponentValue } from "@dojoengine/react";
+import { useComponentValue, useEntityQuery } from "@dojoengine/react";
 import { zeroEntity } from "../../utils";
 import { cn, logDebug, logPlayerAction } from "../lib/utils";
 import _ from "lodash";
@@ -33,9 +35,7 @@ export const InvHero = ({
         },
         clientComponents: {
             LocalPiece,
-            LocalPlayerInvPiece,
             LocalPlayer,
-            LocalPlayerPiece,
             UserOperation,
             LocalPieceOccupation,
         },
@@ -47,6 +47,13 @@ export const InvHero = ({
     const dragRef = useRef(null);
 
     const phaserRect = useUIStore((s) => s.phaserRect);
+
+    const invPieceEntities = useEntityQuery([
+        HasValue(LocalPiece, {
+            owner: BigInt(address),
+            slot: id,
+        }),
+    ]);
 
     useDrag(pieceAttr, dragRef, {
         onDragStart: (e) => {
@@ -150,14 +157,9 @@ export const InvHero = ({
                 return;
             }
 
-            const invPiece = getComponentValue(
-                LocalPlayerInvPiece,
-                getEntityIdFromKeys([BigInt(address), BigInt(id)])
-            );
-
             // logDebug(` ${invPiece}`);
 
-            if (invPiece && invPiece.gid !== 0) {
+            if (invPieceEntities.length > 0) {
                 console.warn("slot occupied");
                 return;
             }
@@ -206,18 +208,8 @@ export const InvHero = ({
                 );
 
                 // check whether this slot is occupied
-                const localPlayerInvPieceEntity = getEntityIdFromKeys([
-                    BigInt(address),
-                    BigInt(id),
-                ]);
-                const playerInvPiece = getComponentValue(
-                    LocalPlayerInvPiece,
-                    localPlayerInvPieceEntity
-                );
 
-                console.log("playerInvPiece: ", playerInvPiece);
-
-                if (playerInvPiece?.gid && playerInvPiece?.gid !== 0) {
+                if (invPieceEntities.length > 0) {
                     console.warn("slot occupied");
                     return;
                 }
@@ -245,12 +237,16 @@ export const InvHero = ({
                     // it means the piece is the last one of player
                 } else {
                     // if not, should switch the last piece
+                    const lastPieceEntity = runQuery([
+                        HasValue(LocalPiece, {
+                            owner: BigInt(address),
+                            idx: playerV.heroesCount,
+                        }),
+                    ]);
+
                     const lastPiece = getComponentValueStrict(
-                        LocalPlayerPiece,
-                        getEntityIdFromKeys([
-                            BigInt(address),
-                            BigInt(playerV.heroesCount),
-                        ])
+                        LocalPiece,
+                        Array.from(lastPieceEntity)[0]
                     );
 
                     // update piece
@@ -267,14 +263,13 @@ export const InvHero = ({
             }
         },
         [
-            LocalPlayerInvPiece,
-            LocalPlayerPiece,
             LocalPiece,
             LocalPlayer,
             UserOperation,
             address,
             playerEntity,
             id,
+            invPieceEntities,
         ]
     );
 

@@ -12,18 +12,12 @@ import {
     getPlayerBoardPieceEntity,
     logDebug,
 } from "../../ui/lib/utils";
-import { localPlayerInv } from "./utils/localPlayerInv";
 
 export const merge = (layer: PhaserLayer) => {
     const {
         world,
         networkLayer: {
-            clientComponents: {
-                Piece,
-                LocalPiece,
-                LocalPlayerPiece,
-                PlayerOwnPiece,
-            },
+            clientComponents: { Piece, LocalPiece, PlayerOwnPiece },
             clientComponents,
             account: { address },
             account,

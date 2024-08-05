@@ -29,7 +29,6 @@ export const processBattle = (component: ClientComponents) => {
         GameStatus,
         InningBattle,
         LocalPlayer,
-        LocalPlayerPiece,
         LocalPiece,
         CreatureProfile,
         BattleLogs,
@@ -142,15 +141,12 @@ export const processBattle = (component: ClientComponents) => {
 
         const boost = status.dangerous ? 1.2 : 1;
 
-        for (let i = 1; i <= enemy.heroesCount; i++) {
-            const playerPiece = getComponentValueStrict(
-                LocalPlayerPiece,
-                getEntityIdFromKeys([v.awayPlayer, BigInt(i)])
-            );
+        const enemyPieceEntities = getLocalPlayerBoardPieceEntities(
+            LocalPiece,
+            v.awayPlayer
+        );
 
-            const pieceEntity = getEntityIdFromKeys([BigInt(playerPiece.gid)]);
-
-            console.log("piece: ", playerPiece);
+        for (const pieceEntity of enemyPieceEntities) {
             const piece = getComponentValueStrict(LocalPiece, pieceEntity);
 
             const creatureEntity = getEntityIdFromKeys([

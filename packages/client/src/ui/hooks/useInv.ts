@@ -1,99 +1,64 @@
-import { getComponentValue, getComponentValueStrict } from "@dojoengine/recs";
+import {
+    getComponentValue,
+    getComponentValueStrict,
+    HasValue,
+    NotValue,
+} from "@dojoengine/recs";
 import { useDojo } from "./useDojo";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useMemo } from "react";
-import { useComponentValue } from "@dojoengine/react";
-import { HeroBaseAttr, PieceAttr, getHeroAttr } from "./useHeroAttr";
+import { useComponentValue, useEntityQuery } from "@dojoengine/react";
+import { PieceAttr, getHeroAttr } from "./useHeroAttr";
 import { logDebug } from "../lib/utils";
 
 export function useLocalInv() {
     const {
-        clientComponents: {
-            LocalPlayerInvPiece,
-            LocalPiece,
-            CreatureProfile,
-            Piece,
-        },
-        systemCalls: { buyHero },
+        clientComponents: { LocalPiece, CreatureProfile, Piece },
         account: {
-            playerEntity,
             account: { address: playerAddr },
         },
     } = useDojo();
 
-    const localInv1 = useComponentValue(
-        LocalPlayerInvPiece,
-        getEntityIdFromKeys([BigInt(playerAddr), 1n])
-    );
-
-    const localInv2 = useComponentValue(
-        LocalPlayerInvPiece,
-        getEntityIdFromKeys([BigInt(playerAddr), 2n])
-    );
-    const localInv3 = useComponentValue(
-        LocalPlayerInvPiece,
-        getEntityIdFromKeys([BigInt(playerAddr), 3n])
-    );
-    const localInv4 = useComponentValue(
-        LocalPlayerInvPiece,
-        getEntityIdFromKeys([BigInt(playerAddr), 4n])
-    );
-    const localInv5 = useComponentValue(
-        LocalPlayerInvPiece,
-        getEntityIdFromKeys([BigInt(playerAddr), 5n])
-    );
-
-    const localInv6 = useComponentValue(
-        LocalPlayerInvPiece,
-        getEntityIdFromKeys([BigInt(playerAddr), 6n])
-    );
-
-    const localInvGids = [
-        localInv1?.gid,
-        localInv2?.gid,
-        localInv3?.gid,
-        localInv4?.gid,
-        localInv5?.gid,
-        localInv6?.gid,
-    ];
+    const localInvPieces = useEntityQuery([
+        HasValue(LocalPiece, { owner: BigInt(playerAddr) }),
+        NotValue(LocalPiece, { slot: 0 }),
+    ]);
 
     const invPieces = useMemo(() => {
-        return localInvGids.map((gid) => {
-            if (!gid) {
-                return undefined;
-            }
-            const pieceEntity = getEntityIdFromKeys([BigInt(gid)]);
-            const piece = getComponentValue(
-                LocalPiece,
-                getEntityIdFromKeys([BigInt(gid)])
-            );
-            if (!piece) {
-                return undefined;
-            }
+        const pieces = Array(6).fill(undefined);
+        localInvPieces.forEach((pieceEntity) => {
+            const piece = getComponentValueStrict(LocalPiece, pieceEntity);
 
-            return {
+            pieces[piece.slot - 1] = {
                 ...getHeroAttr(CreatureProfile, {
                     id: piece.creature_index,
                     level: piece.level,
                 }),
-                gid: gid,
+                gid: piece.gid,
                 isOverride: Piece.isEntityOverride(pieceEntity),
             } as PieceAttr;
         });
-    }, [
-        CreatureProfile,
-        LocalPiece,
-        LocalPiece.update$.asObservable,
-        localInvGids,
-    ]);
 
-    const emptySlots = localInvGids
-        .map((item, index) =>
-            item == 0 || item == undefined ? index + 1 : undefined
-        )
-        .filter((index) => index !== undefined) as number[];
+        return pieces;
+    }, [CreatureProfile, LocalPiece, Piece, localInvPieces]);
 
-    // const firstEmptyInv = emptySlots.length > 0 ? emptySlots[0] : 0;
+    const emptyMap: Record<number, boolean> = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false,
+        6: false,
+    };
+
+    localInvPieces.forEach((pieceEntity) => {
+        const piece = getComponentValueStrict(LocalPiece, pieceEntity);
+        emptyMap[piece.slot] = true;
+    });
+
+    const emptySlots = Object.entries(emptyMap)
+        .filter((v) => v[1] === false)
+        .map((v) => Number(v[0]) - 1);
 
     return { invPieces, emptySlots };
 }

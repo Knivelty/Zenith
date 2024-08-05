@@ -4,7 +4,7 @@ import { defineSystemST, zeroEntity } from "../../../utils";
 import { world } from "../../../dojo/generated/world";
 import { Has, getComponentValue } from "@dojoengine/recs";
 import { pieceManage } from "../utils/pieceManage";
-import { logDebug } from "../../../ui/lib/utils";
+import { getPieceEntity, logDebug } from "../../../ui/lib/utils";
 import { GameStatusEnum } from "../../../dojo/types";
 
 export function placeSystem(layer: PhaserLayer) {
@@ -37,9 +37,9 @@ export function placeSystem(layer: PhaserLayer) {
                 if (v.owner === BigInt(address) && v.idx !== 0) {
                     // only allow override on prepare
                     if (status.status == GameStatusEnum.Prepare) {
-                        spawnPiece(v.owner, BigInt(v.idx), true, v.gid);
+                        spawnPiece(getPieceEntity(v.gid), true);
                     } else {
-                        spawnPiece(v.owner, BigInt(v.idx), false, v.gid);
+                        spawnPiece(getPieceEntity(v.gid), false);
                     }
                 }
                 // if (v.owner === 0n && BigInt(preV?.idx || 0) !== 0n) {

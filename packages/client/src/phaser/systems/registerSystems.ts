@@ -8,10 +8,10 @@ import { health } from "./animation/health";
 import { placeSystem } from "./local/placeSystem";
 import { syncSystem } from "./local/syncSystem";
 import { coordOccupationSystem } from "./local/coordOccupationSystem";
-import { followIndexSystem } from "./local/followIndexSystem";
 import { merge } from "./merge";
 import { initialize } from "./initialize";
 import { synergy } from "./animation/synergy";
+import { followIndexSystem } from "./local/followIndexSystem";
 
 export const registerSystems = (layer: PhaserLayer) => {
     initialize(layer);
