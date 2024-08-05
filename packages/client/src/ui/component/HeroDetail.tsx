@@ -5,6 +5,8 @@ import { zeroEntity } from "../../utils";
 import { ShowItem, useUIStore } from "../../store";
 import { useComponentValue } from "@dojoengine/react";
 import { GameStatusEnum } from "../../dojo/types";
+import { useCallback } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 
 interface HeroDetailProp {
     gid?: number;
@@ -31,6 +33,29 @@ export function HeroDetail(props: HeroDetailProp) {
 
     const setShow = useUIStore((s) => s.setShow);
     const status = useComponentValue(GameStatus, zeroEntity);
+
+    const sellHeroFn = useCallback(async () => {
+        if (!props?.gid) {
+            return;
+        }
+
+        if (status?.status !== GameStatusEnum.Prepare) {
+            alert("can only sell piece during preparation");
+            return;
+        }
+
+        sellHero(account, props.gid);
+
+        updateComponent(UserOperation, zeroEntity, {
+            selected: false,
+            selectGid: 0,
+        });
+        setShow(ShowItem.Shade, false);
+    }, [account, props?.gid, UserOperation, sellHero, status?.status, setShow]);
+
+    useHotkeys("s", () => {
+        sellHeroFn();
+    });
 
     return (
         <div
@@ -95,23 +120,7 @@ export function HeroDetail(props: HeroDetailProp) {
             </div>
             <button
                 className="bg-[#06FF00] w-40 h-10 flex flex-row items-center justify-center"
-                onClick={() => {
-                    if (!props?.gid) {
-                        return;
-                    }
-
-                    if (status?.status !== GameStatusEnum.Prepare) {
-                        alert("can only sell piece during preparation");
-                        return;
-                    }
-
-                    sellHero(account, props.gid);
-                    updateComponent(UserOperation, zeroEntity, {
-                        selected: false,
-                        selectGid: 0,
-                    });
-                    setShow(ShowItem.Shade, false);
-                }}
+                onClick={sellHeroFn}
             >
                 <div>
                     <img src="assets/ui/recycle_bin.png"></img>

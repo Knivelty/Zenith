@@ -1,4 +1,3 @@
-import { Button } from "./button";
 import { GreenButton } from "./component/GreenButton";
 import { useDojo } from "./hooks/useDojo";
 import { shortenAddress } from "./lib/utils";

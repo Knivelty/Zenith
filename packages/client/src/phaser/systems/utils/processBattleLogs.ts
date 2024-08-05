@@ -6,9 +6,19 @@ import {
 } from "@dojoengine/recs";
 
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { getAbility, getOrder, getOrigins, zeroEntity } from "../../../utils";
+import {
+    getAbility,
+    getLocalPlayerBoardPieceEntities,
+    getOrder,
+    getOrigins,
+    zeroEntity,
+} from "../../../utils";
 import { ClientComponents } from "../../../dojo/createClientComponents";
-import { bigIntToAddress, logDebug } from "../../../ui/lib/utils";
+import {
+    bigIntToAddress,
+    getPlayerBoardPieceEntity,
+    logDebug,
+} from "../../../ui/lib/utils";
 import { BaseStateType, createSimulator } from "@zenith/simulator";
 import { CreatureType } from "@zenith/simulator/src/schema/creature";
 import { AbilityProfileType } from "@zenith/simulator/src/schema/ability_profile";
@@ -76,22 +86,16 @@ export const processBattle = (component: ClientComponents) => {
             getEntityIdFromKeys([v.homePlayer])
         );
 
-        for (let i = 1; i <= player.heroesCount; i++) {
-            const playerPiece = getComponentValueStrict(
-                LocalPlayerPiece,
-                getEntityIdFromKeys([v.homePlayer, BigInt(i)])
-            );
+        const pieceEntities = getLocalPlayerBoardPieceEntities(
+            LocalPiece,
+            v.homePlayer
+        );
 
-            logDebug("playerPiece", playerPiece.gid);
-
-            const pieceEntity = getEntityIdFromKeys([BigInt(playerPiece.gid)]);
-
+        for (const pieceEntity of pieceEntities) {
             const piece = getComponentValue(LocalPiece, pieceEntity);
 
-            if (!piece || !playerPiece.gid) {
-                throw Error(
-                    `try get piece error:  ${v.homePlayer}, ${BigInt(i)}`
-                );
+            if (!piece) {
+                throw Error(`try get piece error:  ${pieceEntity}`);
             }
 
             const creatureEntity = getEntityIdFromKeys([

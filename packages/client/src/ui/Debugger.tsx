@@ -1,5 +1,4 @@
 import { useComponentValue } from "@dojoengine/react";
-import { Button } from "./button";
 import { useDojo } from "./hooks/useDojo";
 import { useEffect, useState } from "react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
@@ -16,6 +15,7 @@ import {
 import { stringify } from "json-bigint";
 import { useHotkeys } from "react-hotkeys-hook";
 import { getPlayerBoardPieceEntity, logDebug } from "./lib/utils";
+import { Button } from "../ui/component/button";
 
 export function Debugger() {
     const {

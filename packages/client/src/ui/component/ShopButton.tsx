@@ -13,7 +13,7 @@ export function ShopButton() {
         return state.getShow;
     });
 
-    useHotkeys("p", () => {
+    useHotkeys("b", () => {
         setShow(ShowItem.Shop, !getShow(ShowItem.Shop));
     });
 

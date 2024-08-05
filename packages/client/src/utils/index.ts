@@ -1,12 +1,16 @@
 import {
     ComponentUpdate,
     Entity,
+    HasValue,
+    NotValue,
     QueryFragment,
     Schema,
     UpdateType,
     World,
     defineSystem,
+    runQuery,
 } from "@dojoengine/recs";
+import { ClientComponents } from "../dojo/createClientComponents";
 
 /**
  * @dev add generic type to define system
@@ -64,4 +68,16 @@ export function getOrigins(hexStringBigInt: bigint): string[] {
 
 export function getAbility(hexStringBigInt: bigint): string {
     return hexStringToUtf8(hexStringBigInt);
+}
+
+export function getLocalPlayerBoardPieceEntities(
+    LocalPiece: ClientComponents["LocalPiece"],
+    playerAddrBigInt: bigint
+) {
+    const onBoardPieceEntities = runQuery([
+        HasValue(LocalPiece, { owner: playerAddrBigInt }),
+        NotValue(LocalPiece, { idx: 0 }),
+    ]);
+
+    return onBoardPieceEntities;
 }

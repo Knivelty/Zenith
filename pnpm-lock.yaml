@@ -156,7 +156,7 @@ importers:
         specifier: ^0.11.0
         version: 0.11.0(graphql@16.8.1)
       tailwind-merge:
-        specifier: ^2.0.0
+        specifier: ^2.2.0
         version: 2.2.0
       tailwindcss-animate:
         specifier: ^1.0.7

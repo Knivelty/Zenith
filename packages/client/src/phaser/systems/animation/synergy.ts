@@ -46,7 +46,7 @@ export const synergy = (layer: PhaserLayer) => {
     } = layer;
 
     // track synergy
-    defineSystemST<typeof LocalPlayerPiece.schema>(
+    defineSystemST<typeof LocalPiece.schema>(
         world,
         [Has(LocalPiece)],
         ({ entity, type, value: [v, preV] }) => {
@@ -122,7 +122,6 @@ export const synergy = (layer: PhaserLayer) => {
         world,
         [Has(LocalSynergyStatus)],
         ({ entity, type, value: [v, preV] }) => {
-
             const currentUnlockLevel = v?.unlockLevels.filter(
                 (i) => i <= v.count
             ).length;
