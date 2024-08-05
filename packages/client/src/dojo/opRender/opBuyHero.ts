@@ -115,6 +115,7 @@ export const opBuyHero = async (
         await waitForPromiseOrTxRevert(rpcProvider, txPromise, [
             waitForComponentOriginValueCome(Piece, pieceEntity, {
                 owner: BigInt(account.address),
+                slot: invSlot,
             }),
             waitForComponentOriginValueCome(Altar, playerEntity, {
                 [`slot${altarSlot}`]: 0,

@@ -1387,12 +1387,10 @@ mod home {
                 if (idx > 6) {
                     break;
                 }
-                let mut playerInvPiece = get!(world, (playerAddr, idx), PlayerInvPiece);
-                let mut piece = get!(world, playerInvPiece.gid, Piece);
 
-                playerInvPiece.gid = 0;
-                piece.owner = Zeroable::zero();
-                set!(world, (playerInvPiece, piece));
+                let mut playerInvPiece = get!(world, (playerAddr, idx), PlayerInvPiece);
+
+                _removePiece(playerInvPiece.gid);
 
                 idx += 1;
             };
@@ -1406,9 +1404,7 @@ mod home {
                 let mut playerPiece = get!(world, (playerAddr, idx), PlayerPiece);
                 let mut piece = get!(world, playerPiece.gid, Piece);
 
-                playerPiece.gid = 0;
-                piece.owner = Zeroable::zero();
-                set!(world, (playerPiece, piece));
+                _removePiece(playerPiece.gid);
 
                 idx += 1;
             };
