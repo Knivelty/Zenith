@@ -1,4 +1,4 @@
-import { useEntityQuery } from "@dojoengine/react";
+import { useComponentValue, useEntityQuery } from "@dojoengine/react";
 import { useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useDojo } from "./hooks/useDojo";
@@ -7,9 +7,16 @@ import { getPlayerBoardPieceEntity } from "./lib/utils";
 
 export function StatesPanel() {
     const {
-        clientComponents: { LocalPiece, Piece, PlayerPiece, PlayerInvPiece },
+        clientComponents: {
+            LocalPiece,
+            Piece,
+            PlayerPiece,
+            PlayerInvPiece,
+            Player,
+        },
         account: {
             account: { address },
+            playerEntity,
         },
     } = useDojo();
     const [statesShow, setStatesShow] = useState(false);
@@ -17,6 +24,8 @@ export function StatesPanel() {
     useHotkeys("p", () => {
         setStatesShow(!statesShow);
     });
+
+    const playerValue = useComponentValue(Player, playerEntity);
 
     const localPieceOnBoard = useEntityQuery([
         HasValue(LocalPiece, { owner: BigInt(address) }),
@@ -125,6 +134,13 @@ export function StatesPanel() {
                             </div>
                         );
                     })}
+                </div>
+                <div>Player</div>
+                <div className="flex flex-row">
+                    <div className="flex flex-col text-sm mx-2">
+                        <div>heroesCount: {playerValue?.heroesCount}</div>
+                        <div>invCount: {playerValue?.inventoryCount}</div>
+                    </div>
                 </div>
             </div>
         </div>

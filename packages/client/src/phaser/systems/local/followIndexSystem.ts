@@ -179,10 +179,6 @@ export function followIndexSystem(layer: PhaserLayer) {
                     `piece ${v.gid} on ${preV.idx} merged or sold from board`
                 );
 
-                // just follow on chain change because on chain do a lot of things
-
-                // if this piece is last piece, clear that player piece
-
                 // update local player's hero count
                 updateComponent(LocalPlayer, playerEntity, {
                     heroesCount: player.heroesCount - 1,

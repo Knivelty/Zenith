@@ -163,8 +163,13 @@ mod home {
             panic!("change gid = 0, panic");
         }
 
-        // only piece move on board
-        if (oldPiece.slot == 0 && change.slot == 0) { // idx should be the same
+        // piece move on board or idx switch
+        if (oldPiece.slot == 0 && change.slot == 0) {
+            if (oldPiece.idx == 0 || change.idx == 0) {
+                panic!("logic error, invalid move on board");
+            }
+            newPlayerPiece.gid = change.gid;
+            set!(world, (newPlayerPiece));
         } else if (oldPiece.slot != 0 && change.slot == 0) {
             // move from inv to board
 
@@ -1370,7 +1375,7 @@ mod home {
             let playerAddr = get_caller_address();
 
             let mut player = get!(world, playerAddr, Player);
-            player.coin += 10;
+            player.coin = 255;
 
             set!(world, (player));
         }
@@ -1390,23 +1395,29 @@ mod home {
 
                 let mut playerInvPiece = get!(world, (playerAddr, idx), PlayerInvPiece);
 
-                _removePiece(playerInvPiece.gid);
+                if (playerInvPiece.gid != 0) {
+                    _removePiece(world, playerInvPiece.gid);
+                }
 
                 idx += 1;
             };
 
-            // delete player piece
-            idx = 1;
+            // delete player board piece
+            // from larger idx to lower
+            idx = player.heroesCount;
             loop {
-                if (player.heroesCount < idx) {
+                if (idx == 0) {
                     break;
                 }
                 let mut playerPiece = get!(world, (playerAddr, idx), PlayerPiece);
-                let mut piece = get!(world, playerPiece.gid, Piece);
 
-                _removePiece(playerPiece.gid);
+                if (playerPiece.gid != 0) {
+                    _removePiece(world, playerPiece.gid);
+                } else {
+                    panic!("idx {} piece gid is 0", idx);
+                }
 
-                idx += 1;
+                idx -= 1;
             };
             // reset player attr
             set!(

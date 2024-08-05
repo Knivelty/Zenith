@@ -36,25 +36,29 @@ export const opCommitPrepare = async (
     logDebug("piecesTrack: ", piecesTrack);
 
     const changes: PieceChange[] =
-        (piecesTrack?.gids
-            .map((gid) => {
-                const entity = getEntityIdFromKeys([BigInt(gid)]);
-                const local = getComponentValueStrict(LocalPiece, entity);
-                const remote = getComponentValueStrict(Piece, entity);
+        (
+            piecesTrack?.gids
+                .map((gid) => {
+                    const entity = getEntityIdFromKeys([BigInt(gid)]);
+                    const local = getComponentValueStrict(LocalPiece, entity);
+                    const remote = getComponentValueStrict(Piece, entity);
 
-                if (isEqual(local, remote)) {
-                    return undefined;
-                } else {
-                    return {
-                        gid: gid,
-                        idx: local.idx,
-                        slot: local.slot,
-                        x: local.x,
-                        y: local.y,
-                    };
-                }
-            })
-            ?.filter(Boolean) as PieceChange[]) || [];
+                    if (isEqual(local, remote)) {
+                        return undefined;
+                    } else {
+                        return {
+                            gid: gid,
+                            idx: local.idx,
+                            slot: local.slot,
+                            x: local.x,
+                            y: local.y,
+                        };
+                    }
+                })
+                ?.filter(Boolean) as PieceChange[]
+        ).sort((a, b) => a.idx - b.idx) || [];
+    // sort to let idx=0 first because the contract side will clear
+    // board piece gid if a piece is moved from board to inv
 
     // validate piece change, it guarantees that the hero idx was not break
     const playerValue = getComponentValueStrict(Player, playerEntity);
