@@ -45,7 +45,7 @@ export function useMergeAble(creature_id: number) {
         mergedToWith
             .map((p) => p.idx)
             .filter(Boolean)
-            .sort((a, b) => a - b)?.[0] || 0;
+            .sort((a, b) => b - a)?.[0] || 0;
 
     const onBoardCoord = mergedToWith
         .map((p) => {
@@ -59,7 +59,7 @@ export function useMergeAble(creature_id: number) {
         : mergedToWith
               .map((p) => p.slot)
               .filter(Boolean)
-              .sort((a, b) => a - b)?.[0] || 0;
+              .sort((a, b) => b - a)?.[0] || 0;
 
     const gids = mergedToWith.map((p) => p.gid);
 
