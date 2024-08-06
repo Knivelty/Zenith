@@ -25,7 +25,7 @@ export function followIndexSystem(layer: PhaserLayer) {
 
     const { getFirstEmptyLocalInvSlot } = localPlayerInv(layer);
 
-    // local player piece and local player inv piece should follow local piece change
+    // resolve conflict between sync and local staged
     defineSystemST<typeof LocalPiece.schema>(
         world,
         [Has(LocalPiece)],
@@ -46,6 +46,33 @@ export function followIndexSystem(layer: PhaserLayer) {
                 return;
             }
 
+            function resolveLocalInvConflict() {
+                if (!v) {
+                    return;
+                }
+                // check whether is occupied on frontend
+                const entities = runQuery([
+                    HasValue(LocalPiece, { owner: v.owner, slot: v.slot }),
+                    NotValue(LocalPiece, { gid: v.gid }),
+                ]);
+
+                // if occupied, set
+                if (entities.size > 0) {
+                    const altSlot = getFirstEmptyLocalInvSlot();
+                    logDebug(
+                        `piece ${v.gid} at slot ${v.slot} occupied, try set to slot ${altSlot}`
+                    );
+
+                    if (altSlot !== 0) {
+                        updateComponent(LocalPiece, entity, {
+                            slot: altSlot,
+                        });
+                    } else {
+                        console.error("place logic error");
+                    }
+                }
+            }
+
             const player = getComponentValueStrict(LocalPlayer, playerEntity);
 
             // if no previous value, it could be buy/merge event or new sync
@@ -58,6 +85,7 @@ export function followIndexSystem(layer: PhaserLayer) {
 
                 if (v.slot !== 0) {
                     // it's a buy event
+                    resolveLocalInvConflict();
                 } else if (v.idx !== 0) {
                     // it could be a merge event
                     updateComponent(LocalPlayer, playerEntity, {
@@ -84,27 +112,7 @@ export function followIndexSystem(layer: PhaserLayer) {
                     `piece ${v.gid} move from slot ${preV.slot} to slot ${v.slot}`
                 );
 
-                // check whether is occupied on frontend
-                const entities = runQuery([
-                    HasValue(LocalPiece, { owner: v.owner, slot: v.slot }),
-                    NotValue(LocalPiece, { gid: v.gid }),
-                ]);
-
-                // if occupied, set
-                if (entities.size > 0) {
-                    const altSlot = getFirstEmptyLocalInvSlot();
-                    logDebug(
-                        `piece ${v.gid} at slot ${v.slot} occupied, try set to slot ${altSlot}`
-                    );
-
-                    if (altSlot !== 0) {
-                        updateComponent(LocalPiece, entity, {
-                            slot: altSlot,
-                        });
-                    } else {
-                        console.error("place logic error");
-                    }
-                }
+                resolveLocalInvConflict();
             } else if (
                 preV.slot !== 0 &&
                 v.slot === 0 &&
