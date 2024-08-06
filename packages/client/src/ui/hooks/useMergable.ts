@@ -3,7 +3,6 @@ import { getComponentValueStrict, HasValue } from "@dojoengine/recs";
 import { useDojo } from "./useDojo";
 import { logDebug } from "../lib/utils";
 
-// TODO: recursively merge
 export function useMergeAble(creature_id: number) {
     const {
         clientComponents: { Piece },
@@ -54,16 +53,17 @@ export function useMergeAble(creature_id: number) {
         .filter((c) => c.x !== 0 && c.y !== 0)?.[0] || { x: 0, y: 0 };
 
     // if have board idx, no inv slot
+    // smaller slot is preferred
     const invSlot = boardIdx
         ? 0
         : mergedToWith
               .map((p) => p.slot)
               .filter(Boolean)
-              .sort((a, b) => b - a)?.[0] || 0;
+              .sort((a, b) => a - b)?.[0] || 0;
 
     const gids = mergedToWith.map((p) => p.gid);
 
-    logDebug("mergedToWith: ", mergedToWith);
+    logDebug("mergedToWith: ", mergedToWith, boardIdx, invSlot);
 
     return { canMerge, gids, boardIdx, onBoardCoord, invSlot };
 }
