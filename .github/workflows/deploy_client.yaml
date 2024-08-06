@@ -1,0 +1,52 @@
+name: Deploy
+
+on:
+  push:
+    branches: main
+
+permissions:
+  pull-requests: write
+  deployments: write
+  contents: write
+
+jobs:
+  deploy:
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: curl -L https://install.dojoengine.org | bash
+      - run: /home/runner/.config/.dojo/bin/dojoup -v v0.6.0
+      - run: |
+          cd packages/contracts
+            /home/runner/.config/.dojo/bin/sozo build
+            /home/runner/.config/.dojo/bin/katana & sleep 5 && /home/runner/.config/.dojo/bin/sozo migrate apply
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 8
+          run_install: false
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: build
+        run: cd packages/client; pnpm build
+
+      - name: Vercel Action
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
+          vercel-org-id: ${{ secrets.ORG_ID}} #Required
+          vercel-project-id: ${{ secrets.PROJECT_ID}} #Required
+          working-directory: ./packages/client/dist
+          scope: ${{secrets.TEAM_SLUG}}
+          vercel-args: "--prod" #Optional
+          github-comment: false
