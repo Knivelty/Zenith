@@ -14,7 +14,7 @@ jobs:
       - run: |
           cd packages/contracts
             /home/runner/.config/.dojo/bin/sozo build
-            /home/runner/.config/.dojo/bin/katana katana & sleep 5 && /home/runner/.config/.dojo/bin/sozo migrate apply
+            /home/runner/.config/.dojo/bin/katana & sleep 5 && /home/runner/.config/.dojo/bin/sozo migrate apply
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         id: pnpm-install
