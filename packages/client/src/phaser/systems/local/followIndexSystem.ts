@@ -58,27 +58,6 @@ export function followIndexSystem(layer: PhaserLayer) {
 
                 if (v.slot !== 0) {
                     // it's a buy event
-                    // check whether is occupied on frontend
-                    const entities = runQuery([
-                        HasValue(LocalPiece, { owner: v.owner, slot: v.slot }),
-                        NotValue(LocalPiece, { gid: v.gid }),
-                    ]);
-
-                    // if occupied, set
-                    if (entities.size > 0) {
-                        const slot = getFirstEmptyLocalInvSlot();
-                        logDebug(
-                            `piece ${v.gid} at slot ${v.slot} occupied, try set to slot ${slot}`
-                        );
-
-                        if (slot !== 0) {
-                            updateComponent(LocalPiece, entity, {
-                                slot,
-                            });
-                        } else {
-                            console.error("place logic error");
-                        }
-                    }
                 } else if (v.idx !== 0) {
                     // it could be a merge event
                     updateComponent(LocalPlayer, playerEntity, {
@@ -104,6 +83,28 @@ export function followIndexSystem(layer: PhaserLayer) {
                 logPieceIdx(
                     `piece ${v.gid} move from slot ${preV.slot} to slot ${v.slot}`
                 );
+
+                // check whether is occupied on frontend
+                const entities = runQuery([
+                    HasValue(LocalPiece, { owner: v.owner, slot: v.slot }),
+                    NotValue(LocalPiece, { gid: v.gid }),
+                ]);
+
+                // if occupied, set
+                if (entities.size > 0) {
+                    const altSlot = getFirstEmptyLocalInvSlot();
+                    logDebug(
+                        `piece ${v.gid} at slot ${v.slot} occupied, try set to slot ${altSlot}`
+                    );
+
+                    if (altSlot !== 0) {
+                        updateComponent(LocalPiece, entity, {
+                            slot: altSlot,
+                        });
+                    } else {
+                        console.error("place logic error");
+                    }
+                }
             } else if (
                 preV.slot !== 0 &&
                 v.slot === 0 &&

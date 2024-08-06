@@ -71,65 +71,50 @@ export function useInv() {
         },
     } = useDojo();
 
-    const inv1 = useComponentValue(
-        PlayerInvPiece,
-        getEntityIdFromKeys([BigInt(playerAddr), 1n])
-    );
-    const inv2 = useComponentValue(
-        PlayerInvPiece,
-        getEntityIdFromKeys([BigInt(playerAddr), 2n])
-    );
-    const inv3 = useComponentValue(
-        PlayerInvPiece,
-        getEntityIdFromKeys([BigInt(playerAddr), 3n])
-    );
-    const inv4 = useComponentValue(
-        PlayerInvPiece,
-        getEntityIdFromKeys([BigInt(playerAddr), 4n])
-    );
-    const inv5 = useComponentValue(
-        PlayerInvPiece,
-        getEntityIdFromKeys([BigInt(playerAddr), 5n])
-    );
-    const inv6 = useComponentValue(
-        PlayerInvPiece,
-        getEntityIdFromKeys([BigInt(playerAddr), 6n])
-    );
-
-    const invGids = [
-        inv1?.gid,
-        inv2?.gid,
-        inv3?.gid,
-        inv4?.gid,
-        inv5?.gid,
-        inv6?.gid,
-    ];
-
-    logDebug(`inv gids: `, invGids);
+    const invPieceEntities = useEntityQuery([
+        HasValue(Piece, { owner: BigInt(playerAddr) }),
+        NotValue(Piece, { slot: 0 }),
+    ]);
 
     const invPieces = useMemo(() => {
-        return invGids.map((gid) => {
-            if (!gid) {
-                return undefined;
-            }
-            const piece = getComponentValue(
-                Piece,
-                getEntityIdFromKeys([BigInt(gid)])
-            );
+        const pieces = Array(6).fill(undefined);
+        invPieceEntities.forEach((pieceEntity) => {
+            const piece = getComponentValueStrict(Piece, pieceEntity);
 
-            if (!piece) {
-                return undefined;
-            }
-
-            return {
+            pieces[piece.slot - 1] = {
                 ...getHeroAttr(CreatureProfile, {
                     id: piece.creature_index,
                     level: piece.level,
                 }),
-                gid: gid,
+                gid: piece.gid,
+                isOverride: Piece.isEntityOverride(pieceEntity),
             } as PieceAttr;
         });
-    }, [CreatureProfile, Piece, Piece.update$.asObservable, invGids]);
+
+        return pieces;
+    }, [CreatureProfile, Piece, invPieceEntities]);
+
+    const emptyMap: Record<number, boolean> = {
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false,
+        6: false,
+    };
+
+    invPieceEntities.forEach((pieceEntity) => {
+        const piece = getComponentValueStrict(Piece, pieceEntity);
+        emptyMap[piece.slot] = true;
+    });
+
+    const invGids = Array(6).fill(undefined);
+
+    Array.from(invPieceEntities).forEach((pieceEntity) => {
+        const p = getComponentValueStrict(Piece, pieceEntity);
+
+        invGids[p.slot - 1] = p.gid;
+    });
 
     const firstEmptyInv = getFirstEmptySlot(invGids);
 
