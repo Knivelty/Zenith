@@ -7,7 +7,7 @@ import { logDebug } from "../lib/utils";
 
 export function useChoice() {
     const {
-        clientComponents: { ChoiceProfile, Player, CurseOption, GameStatus },
+        clientComponents: { ChoiceProfile, CurseOption },
         account: {
             account: { address },
         },

@@ -2,7 +2,8 @@ import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "../hooks/useDojo";
 import { zeroEntity } from "../../utils";
 import { ShowItem, UIStore, useUIStore } from "../../store";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { useCallback } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export function CommitButton() {
     const {
@@ -18,20 +19,22 @@ export function CommitButton() {
 
     const status = useComponentValue(GameStatus, zeroEntity);
 
-    const battleResult = useComponentValue(
-        BattleLogs,
-        getEntityIdFromKeys([
-            BigInt(status?.currentMatch || 0),
-            BigInt(status?.currentRound || 0),
-        ])
-    );
+    const commitPreparationFn = useCallback(() => {
+        commitPreparation(account);
+        setShopShow(ShowItem.Shop, false);
+    }, [account, commitPreparation, setShopShow]);
+
+    useHotkeys("enter", () => {
+        if (status?.status === 1) {
+            commitPreparationFn();
+        }
+    });
 
     if (status?.status === 1) {
         return (
             <CommitOperationButton
                 onClick={() => {
-                    commitPreparation(account);
-                    setShopShow(ShowItem.Shop, false);
+                    commitPreparationFn();
                 }}
                 text="Commit Preparation"
             />

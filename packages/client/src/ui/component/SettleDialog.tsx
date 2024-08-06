@@ -5,7 +5,7 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { cn } from "../lib/utils";
 import { ChoiceList } from "./ChoiceList";
 import { useMemo } from "react";
-import { ShowItem, useUIStore } from "../../store";
+import { ShowItem, UIStore, useUIStore } from "../../store";
 
 export function SettleDialog() {
     const {
@@ -19,6 +19,7 @@ export function SettleDialog() {
     } = useDojo();
 
     const setShow = useUIStore((state) => state.setShow);
+    const getShow = useUIStore((state: UIStore) => state.getShow);
 
     const status = useComponentValue(GameStatus, zeroEntity);
     const player = useComponentValue(Player, playerEntity);
@@ -31,21 +32,28 @@ export function SettleDialog() {
         ])
     );
 
-    const visible = status?.status === 3;
-
     useMemo(() => {
-        setShow(ShowItem.Shade, visible);
-    }, [visible, setShow]);
+        if (status?.status === 3) {
+            setShow(ShowItem.Shade, true);
+            setShow(ShowItem.SettleDialog, true);
+        } else {
+            setShow(ShowItem.SettleDialog, false);
+            setShow(ShowItem.Shade, false);
+        }
+    }, [status?.status, setShow]);
 
     const win = battleResult?.winner === BigInt(address);
 
     const text = win ? "VICTORY" : "LOSE";
 
+    if (!getShow(ShowItem.SettleDialog)) {
+        return <div></div>;
+    }
+
     return (
         <div
             className={cn(
-                "absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 border bg-black border-[#06FF00] flex flex-col items-center justify-start w-4/5 z-30 h-[42rem]",
-                { invisible: !visible }
+                "absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 border bg-black border-[#06FF00] flex flex-col items-center justify-start w-4/5 z-30 h-[42rem]"
             )}
         >
             <div className="text-[#FF3D00] text-xl mt-12">{text}</div>

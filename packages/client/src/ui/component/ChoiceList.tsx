@@ -1,6 +1,9 @@
+import { useHotkeys } from "react-hotkeys-hook";
 import { useChoice } from "../hooks/useChoice";
 import { useDojo } from "../hooks/useDojo";
 import { cn } from "../lib/utils";
+import { useCallback } from "react";
+import { ShowItem, UIStore, useUIStore } from "../../store";
 
 export interface IChoice extends React.HTMLAttributes<HTMLDivElement> {
     coinDec?: number;
@@ -10,27 +13,15 @@ export interface IChoice extends React.HTMLAttributes<HTMLDivElement> {
     deterDec?: number;
     deterInc?: number;
     healthDec?: number;
-    onClick: () => void;
+    order: number;
 }
 
 export function ChoiceList() {
-    const {
-        account: { account },
-        systemCalls: { nextRound },
-    } = useDojo();
     const choices = useChoice();
     return (
         <div className="flex w-full justify-center mt-12">
             {choices.map((c, i) => {
-                return (
-                    <Choice
-                        {...c}
-                        key={i}
-                        onClick={() => {
-                            nextRound(account, i + 1);
-                        }}
-                    />
-                );
+                return <Choice {...c} key={i} order={i + 1} />;
             })}
         </div>
     );
@@ -44,9 +35,27 @@ export function Choice({
     deterDec,
     deterInc,
     healthDec,
-    onClick,
+    order,
     ...props
 }: IChoice) {
+    const {
+        account: { account },
+        systemCalls: { nextRound },
+    } = useDojo();
+
+    const getShow = useUIStore((state: UIStore) => state.getShow);
+
+    const nextRoundFn = useCallback(() => {
+        if (!order) return;
+        nextRound(account, order);
+    }, [order, nextRound, account]);
+
+    useHotkeys(order.toString(), () => {
+        if (getShow(ShowItem.SettleDialog)) {
+            nextRoundFn();
+        }
+    });
+
     const coinChangeText = coinDec ? `- $${coinDec}` : `+ $${coinInc}`;
     let statusChangeText = "";
     let imgPath = "";
@@ -85,7 +94,7 @@ export function Choice({
             </div>
             <div
                 className="mt-4 cursor-pointer text-black bg-[#FF3D00] w-[50%] h-8 flex flex-col justify-center z-20"
-                onClick={onClick}
+                onClick={nextRoundFn}
             >
                 <div>{coinChangeText}</div>
             </div>

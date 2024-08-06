@@ -11,6 +11,7 @@ export enum ShowItem {
     Shop,
     Shade,
     CurseDetail,
+    SettleDialog,
 }
 
 export type UIStore = {

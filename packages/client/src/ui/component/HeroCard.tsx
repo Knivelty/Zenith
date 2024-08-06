@@ -7,6 +7,8 @@ import { useDojo } from "../hooks/useDojo";
 import { GameStatusEnum } from "../../dojo/types";
 import { useMergeAble } from "../hooks/useMergable";
 import { logDebug } from "../lib/utils";
+import { useHotkeys } from "react-hotkeys-hook";
+import { ShowItem, useUIStore } from "../../store";
 
 const rarityBgColor: Record<number, string> = {
     1: "#4F84AF",
@@ -21,54 +23,64 @@ interface IHeroCard {
 
 export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
     const {
-        clientComponents: { Player, Altar, CreatureProfile, GameStatus },
-        systemCalls: { refreshAltar, buyHero, buyAndMerge },
-        account: { playerEntity, account },
+        clientComponents: { GameStatus },
+        systemCalls: { buyHero, buyAndMerge },
+        account: { account },
     } = useDojo();
 
     const { firstEmptyInv } = useInv();
     const gameStatus = useComponentValue(GameStatus, zeroEntity);
-
-    const buyHeroFn = useCallback(
-        (index: number) => {
-            buyHero(account, index, firstEmptyInv);
-        },
-        [account, buyHero, firstEmptyInv]
-    );
+    const getShow = useUIStore((state) => state.getShow);
 
     const mergeAble = useMergeAble(creatureKey?.id || 0);
+
+    const buyHeroFn = useCallback(() => {
+        if (gameStatus?.status != GameStatusEnum.Prepare) {
+            alert("can only buy piece during prepare");
+            return;
+        }
+        if (mergeAble.canMerge) {
+            buyAndMerge({
+                account,
+                altarSlot,
+                gid2: mergeAble.gids[0],
+                gid3: mergeAble.gids[1],
+                gid4: mergeAble.gids?.[2] || 0,
+                gid5: mergeAble.gids?.[3] || 0,
+                x: mergeAble.onBoardCoord.x,
+                y: mergeAble.onBoardCoord.y,
+                invSlot: mergeAble.invSlot,
+                onBoardIdx: mergeAble.boardIdx,
+            });
+        } else {
+            buyHero(account, altarSlot, firstEmptyInv);
+        }
+    }, [
+        account,
+        buyHero,
+        firstEmptyInv,
+        altarSlot,
+        buyAndMerge,
+        gameStatus,
+        mergeAble,
+    ]);
 
     logDebug(`altar slot ${altarSlot} mergeAble:`, mergeAble);
 
     const heroAttr = useHeroesAttr(creatureKey);
+
+    useHotkeys(altarSlot.toString(), () => {
+        if (getShow(ShowItem.Shop) && !!creatureKey.id) {
+            buyHeroFn();
+        }
+    });
 
     const bgColor = rarityBgColor[heroAttr?.rarity || 1];
 
     return (
         <div
             className={`${!heroAttr?.creature ? "invisible" : ""}`}
-            onClick={() => {
-                if (gameStatus?.status != GameStatusEnum.Prepare) {
-                    alert("can only buy piece during prepare");
-                    return;
-                }
-                if (mergeAble.canMerge) {
-                    buyAndMerge({
-                        account,
-                        altarSlot,
-                        gid2: mergeAble.gids[0],
-                        gid3: mergeAble.gids[1],
-                        gid4: mergeAble.gids?.[2] || 0,
-                        gid5: mergeAble.gids?.[3] || 0,
-                        x: mergeAble.onBoardCoord.x,
-                        y: mergeAble.onBoardCoord.y,
-                        invSlot: mergeAble.invSlot,
-                        onBoardIdx: mergeAble.boardIdx,
-                    });
-                } else {
-                    buyHeroFn(altarSlot);
-                }
-            }}
+            onClick={buyHeroFn}
         >
             <div
                 className="flex flex-col border-1 items-start m-2"
