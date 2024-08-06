@@ -1,15 +1,8 @@
-import {
-    getComponentValue,
-    getComponentValueStrict,
-    HasValue,
-    NotValue,
-} from "@dojoengine/recs";
+import { getComponentValueStrict, HasValue, NotValue } from "@dojoengine/recs";
 import { useDojo } from "./useDojo";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useMemo } from "react";
-import { useComponentValue, useEntityQuery } from "@dojoengine/react";
+import { useEntityQuery } from "@dojoengine/react";
 import { PieceAttr, getHeroAttr } from "./useHeroAttr";
-import { logDebug } from "../lib/utils";
 
 export function useLocalInv() {
     const {
@@ -28,6 +21,11 @@ export function useLocalInv() {
         const pieces = Array(6).fill(undefined);
         localInvPieces.forEach((pieceEntity) => {
             const piece = getComponentValueStrict(LocalPiece, pieceEntity);
+
+            // ignore piece outside range
+            if (piece.slot > 6) {
+                return;
+            }
 
             pieces[piece.slot - 1] = {
                 ...getHeroAttr(CreatureProfile, {
