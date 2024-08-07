@@ -7,6 +7,14 @@ app = 'zenith-katana'
 primary_region = 'hkg'
 swap_size_mb = 512
 
+[mounts]
+source = "katana_db"
+destination = "/data"
+initial_size = "1GB"
+auto_extend_size_increment = "1GB"
+auto_extend_size_limit = "5GB"
+auto_extend_size_threshold = 80
+
 
 [build]
 dockerfile = "katana.Dockerfile"
