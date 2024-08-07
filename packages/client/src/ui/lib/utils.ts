@@ -94,6 +94,7 @@ export async function waitForPromiseOrTxRevert(
             logDebug(
                 `tx ${tx.transaction_hash} revert with reason ${v.revert_reason}`
             );
+            alert(`oops, an error occurred: ${v.revert_reason}`);
             resolve();
         }
     });
