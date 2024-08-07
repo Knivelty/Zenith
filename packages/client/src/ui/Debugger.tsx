@@ -59,7 +59,7 @@ export function Debugger() {
                 alert("network disconnect, please refresh the page");
                 clearInterval(t);
             }
-        }, 1000);
+        }, 5000);
 
         return () => {
             clearInterval(t);
