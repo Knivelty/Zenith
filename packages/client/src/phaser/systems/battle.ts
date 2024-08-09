@@ -74,7 +74,10 @@ export const battle = (layer: PhaserLayer) => {
                 dangerous: v.dangerous,
             });
 
-            if (Boolean(v.end) === false) {
+            if (
+                Boolean(v.end) === false &&
+                !InningBattle.isEntityOverride(entity)
+            ) {
                 updateComponent(GameStatus, zeroEntity, {
                     status: GameStatusEnum.Prepare,
                     played: false,
@@ -153,7 +156,7 @@ export const battle = (layer: PhaserLayer) => {
                 playBattle(events).then(() => {
                     console.log("play finish");
 
-                    // after play, set status back
+                    // after play, set status to wait for next round
                     setTimeout(() => {
                         updateComponent(GameStatus, entity, {
                             shouldPlay: false,

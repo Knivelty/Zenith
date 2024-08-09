@@ -122,7 +122,10 @@ export async function waitForComponentOriginValueCome<
                 for (const key of Object.keys(expectValue)) {
                     if (expectValue[key] !== newValue[key]) return;
                 }
-                resolve();
+                // sleep for 0.1s to ensure entity update effect are done
+                sleep(100).then(() => {
+                    resolve();
+                });
             }
         },
     });
