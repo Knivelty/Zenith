@@ -26,6 +26,7 @@ import { tween } from "@latticexyz/phaserx";
 import { logDebug } from "../../../ui/lib/utils";
 import { deferred } from "@latticexyz/utils";
 import { GameStatusEnum } from "../../../dojo/types";
+import { animationTime } from "./animationTime";
 
 export const health = (layer: PhaserLayer) => {
     const {
@@ -43,6 +44,8 @@ export const health = (layer: PhaserLayer) => {
             },
         },
     } = layer;
+
+    const { getAnimationTime } = animationTime(layer);
 
     defineSystemST<typeof Health.schema>(
         world,
@@ -222,7 +225,9 @@ export const health = (layer: PhaserLayer) => {
                     await tween(
                         {
                             targets: text,
-                            duration: 200,
+                            duration: getAnimationTime(
+                                "HEALTH_CHANGE_SHOW_TIME"
+                            ),
                             props: {
                                 alpha: 1,
                             },

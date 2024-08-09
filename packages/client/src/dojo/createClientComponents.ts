@@ -138,6 +138,7 @@ export function createClientComponents({
                 selected: Type.Boolean,
                 selectGid: Type.Number,
                 skipAnimation: Type.Boolean,
+                animationSpeed: Type.Number,
             },
             { metadata: { name: "UserOperation" } }
         ),

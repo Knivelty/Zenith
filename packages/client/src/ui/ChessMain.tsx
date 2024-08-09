@@ -17,6 +17,7 @@ import { HeroInfoDialog } from "./HeroInfoDialog";
 import { SynergyBar } from "./SynergyBar";
 import { CurseDetails } from "./component/CurseDetail";
 import { StatesPanel } from "./StatePanel";
+import { SpeedSlider } from "./component/SpeedSlider";
 
 export function ChessMain() {
     const {
@@ -42,6 +43,7 @@ export function ChessMain() {
             <PlayerList />
             <SynergyBar />
             <Shop />
+            <SpeedSlider />
             <SettleDialog />
             <PieceLimit />
             <CommitButton />

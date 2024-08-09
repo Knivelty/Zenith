@@ -16,5 +16,6 @@ export const initialize = (layer: PhaserLayer) => {
         selected: false,
         selectGid: 0,
         skipAnimation: false,
+        animationSpeed: 1,
     });
 };

@@ -1,7 +1,6 @@
 import {
     Entity,
     getComponentValueStrict,
-    setComponent,
     updateComponent,
 } from "@dojoengine/recs";
 import { tileCoordToPixelCoord, tween } from "@latticexyz/phaserx";
@@ -9,10 +8,10 @@ import {
     AbilityAnimations,
     AnimationIndex,
     GroundAnimations,
-    MOVE_TIME_PER_LENGTH,
     TILE_HEIGHT,
     TILE_WIDTH,
 } from "../../config/constants";
+
 import { Coord, deferred, sleep } from "@latticexyz/utils";
 import { PhaserLayer } from "../..";
 import { manhattanDistance } from "@zenith/simulator";
@@ -25,6 +24,7 @@ import { logDebug } from "../../../ui/lib/utils";
 import { encodeGroundEntity } from "./entityEncoder";
 import { pieceManage } from "./pieceManage";
 import { zeroEntity } from "../../../utils";
+import { animationTime } from "../animation/animationTime";
 
 export const battleAnimation = (layer: PhaserLayer) => {
     const {
@@ -37,6 +37,8 @@ export const battleAnimation = (layer: PhaserLayer) => {
     } = layer;
 
     const { phaserSpawnPiece } = pieceManage(layer);
+
+    const { getAnimationTime, getAnimationSpeed } = animationTime(layer);
 
     async function playBattle(events: EventWithName<keyof EventMap>[]) {
         console.log("logs: ", events);
@@ -72,7 +74,9 @@ export const battleAnimation = (layer: PhaserLayer) => {
                     await tween(
                         {
                             targets: sprite,
-                            duration: moveLength * MOVE_TIME_PER_LENGTH,
+                            duration:
+                                moveLength *
+                                getAnimationTime("MOVE_PER_LENGTH_TIME"),
                             props: {
                                 x: pixelPosition.x,
                                 y: pixelPosition.y,
@@ -114,29 +118,29 @@ export const battleAnimation = (layer: PhaserLayer) => {
         switch (v.name) {
             case "pieceMove":
                 await handlePieceMove(v as EventWithName<"pieceMove">);
-                await new Promise((resolve) => setTimeout(resolve, 100));
+                await sleep(getAnimationTime("STEP_INTERVAL_TIME"));
 
                 break;
             case "pieceAttack":
                 await handleAttack(v as EventWithName<"pieceAttack">);
-                await new Promise((resolve) => setTimeout(resolve, 100));
+                await sleep(getAnimationTime("STEP_INTERVAL_TIME"));
 
                 break;
             case "abilityCast":
                 await handleAbilityCast(v as EventWithName<"abilityCast">);
-                await new Promise((resolve) => setTimeout(resolve, 100));
+                await sleep(getAnimationTime("STEP_INTERVAL_TIME"));
 
                 break;
             case "healthDecrease":
                 await handleHealthDecrease(
                     v as EventWithName<"healthDecrease">
                 );
-                await new Promise((resolve) => setTimeout(resolve, 100));
+                await sleep(getAnimationTime("STEP_INTERVAL_TIME"));
 
                 break;
             case "pieceSpawn":
                 await handlePieceSpawn(v as EventWithName<"pieceSpawn">);
-                await new Promise((resolve) => setTimeout(resolve, 100));
+                await sleep(getAnimationTime("STEP_INTERVAL_TIME"));
 
                 break;
         }
@@ -163,7 +167,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 await tween(
                     {
                         targets: sprite,
-                        duration: 200,
+                        duration: getAnimationTime("ATTACK_SWING_TIME"),
                         props: {
                             x: "+=15",
                         },
@@ -210,7 +214,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 await tween(
                     {
                         targets: sprite,
-                        duration: 100,
+                        duration: getAnimationTime("ATTACKED_BLINK_TIME"),
                         props: {
                             alpha: 0,
                         },
@@ -267,6 +271,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 logDebug("cast animation: ", animation);
 
                 sprite.play(animation);
+                sprite.anims.timeScale = getAnimationSpeed();
                 sprite.stopAfterRepeat(0);
 
                 const onAnimationComplete = () => {
