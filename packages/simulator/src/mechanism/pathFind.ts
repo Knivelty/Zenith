@@ -88,6 +88,11 @@ export function getTargetPoint(
     return grid.getNodeAt(v.x, v.y).walkable;
   });
 
+  // cannot move
+  if (!walkablePoints.length) {
+    return { x: undefined, y: undefined, needMove: false };
+  }
+
   // get nearest point
   const nearestPoint = walkablePoints
     .map((v) => {
