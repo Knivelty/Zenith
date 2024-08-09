@@ -2,7 +2,7 @@ import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "../hooks/useDojo";
 import { zeroEntity } from "../../utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { cn } from "../lib/utils";
+import { cn, logDebug } from "../lib/utils";
 import { ChoiceList } from "./ChoiceList";
 import { useMemo } from "react";
 import { ShowItem, UIStore, useUIStore } from "../../store";
@@ -15,7 +15,7 @@ export function SettleDialog() {
             account: { address },
             playerEntity,
         },
-        clientComponents: { GameStatus, BattleLogs, Player },
+        clientComponents: { GameStatus, BattleLogs, Player, InningBattle },
     } = useDojo();
 
     const setShow = useUIStore((state) => state.setShow);
@@ -24,13 +24,14 @@ export function SettleDialog() {
     const status = useComponentValue(GameStatus, zeroEntity);
     const player = useComponentValue(Player, playerEntity);
 
-    const battleResult = useComponentValue(
-        BattleLogs,
-        getEntityIdFromKeys([
-            BigInt(status?.currentMatch || 0),
-            BigInt(status?.currentRound || 0),
-        ])
-    );
+    const inningBattleEntity = getEntityIdFromKeys([
+        BigInt(status?.currentMatch || 0),
+        BigInt(status?.currentRound || 0),
+    ]);
+
+    const battleResult = useComponentValue(BattleLogs, inningBattleEntity);
+
+    const inningBattle = useComponentValue(InningBattle, inningBattleEntity);
 
     useMemo(() => {
         if (status?.status === 3) {
@@ -43,6 +44,8 @@ export function SettleDialog() {
     }, [status?.status, setShow]);
 
     const win = battleResult?.winner === BigInt(address);
+
+    logDebug("inningBattle: ", inningBattle);
 
     const text = win ? "VICTORY" : "LOSE";
 
@@ -57,7 +60,15 @@ export function SettleDialog() {
             )}
         >
             <div className="text-[#FF3D00] text-xl mt-12">{text}</div>
-            {/* <ChoiceList /> */}
+            <div className="text-l mt-4 flex flex-row whitespace-pre">
+                <div>You </div>
+                <div className="">
+                    {inningBattle?.healthDecrease
+                        ? `lose ${inningBattle?.healthDecrease} health,`
+                        : ""}
+                </div>
+                <div> gain {inningBattle?.homePlayerCoinInc || 0} coin</div>
+            </div>
             {status?.currentRound && status?.currentRound > 3 ? (
                 <MakeChoice />
             ) : (

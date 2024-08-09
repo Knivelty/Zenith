@@ -142,7 +142,9 @@ struct InningBattle {
     end: bool,
     winner: ContractAddress,
     healthDecrease: u8,
-    dangerous: bool
+    dangerous: bool,
+    homePlayerCoinInc: u8,
+    awayPlayerCoinInc: u8,
 }
 
 #[derive(Model, Copy, Drop, Serde)]

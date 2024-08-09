@@ -440,6 +440,8 @@ export function defineContractComponents(world: World) {
                     winner: RecsType.BigInt,
                     healthDecrease: RecsType.Number,
                     dangerous: RecsType.Boolean,
+                    homePlayerCoinInc: RecsType.Number,
+                    awayPlayerCoinInc: RecsType.Number,
                 },
                 {
                     metadata: {
@@ -453,6 +455,8 @@ export function defineContractComponents(world: World) {
                             "ContractAddress",
                             "u8",
                             "bool",
+                            "u8",
+                            "u8",
                         ],
                         customTypes: [],
                     },

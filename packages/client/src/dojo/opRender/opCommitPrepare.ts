@@ -9,6 +9,7 @@ import { PieceChange } from "../types";
 import { isEqual } from "lodash";
 import { zeroEntity } from "../../utils";
 import {
+    logCall,
     logDebug,
     waitForComponentOriginValueCome,
     waitForPromiseOrTxRevert,
@@ -89,8 +90,6 @@ export const opCommitPrepare = async (
 
     const { result } = await processBattleLogs();
 
-    logDebug("commit changes: ", changes);
-
     const gStatus = getComponentValueStrict(GameStatus, zeroEntity);
     const inningBattleEntity = getEntityIdFromKeys([
         BigInt(gStatus.currentMatch),
@@ -114,13 +113,17 @@ export const opCommitPrepare = async (
     });
 
     try {
-        logDebug(`commit preparation: `, changes, result);
+        if (result?.win === undefined || result?.healthDecrease === undefined) {
+            alert("calculate result failed");
+            throw new Error("calculate result failed");
+        }
+        logCall(`commit preparation: `, changes, result);
         const txPromise = client.home.commitPreparation({
             account,
             changes,
             result: {
-                win: result.win!,
-                healthDecrease: result.healthDecrease!,
+                win: result.win,
+                healthDecrease: result.healthDecrease,
             },
         });
 

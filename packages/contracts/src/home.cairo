@@ -305,22 +305,49 @@ mod home {
         set!(world, (enemy, enemyProfile));
     }
 
-    fn _giveRoundCoinReward(world: IWorldDispatcher, dangerous: bool) {
+    fn _giveExp(world: IWorldDispatcher, dangerous: bool) {
+        let playerAddr = get_caller_address();
+        let mut player = get!(world, playerAddr, Player);
+        // update exp and try level up
+        let levelConfig = get!(world, player.level, LevelConfig);
+        if (levelConfig.expForNext != 0) {
+            if (dangerous) {
+                player.exp += 3;
+            } else {
+                player.exp += 2;
+            }
+            if (player.exp >= levelConfig.expForNext) {
+                player.level += 1;
+                player.exp -= levelConfig.expForNext;
+            }
+        } else { // skip add exp and level up
+        }
+
+        set!(world, (player));
+    }
+
+    fn _giveRoundCoinReward(world: IWorldDispatcher, dangerous: bool) -> u8 {
         let playerAddr = get_caller_address();
 
         let mut player = get!(world, playerAddr, Player);
 
-        // get interest
-        let interest = player.coin / 10;
+        // get interest, max 5
+        let mut interest = player.coin / 10;
+        if (interest > 5) {
+            interest = 5;
+        }
 
-        // get streak reward 
-        let streakReward = player.winStreak + player.loseStreak;
+        let baseReward = 1;
 
-        // get round base reward
-        let matchState = get!(world, player.inMatch, MatchState);
-        let roundBaseReward = matchState.round / 10;
+        // get streak reward
+        let mut streakReward = 0;
+        if (player.winStreak > 0) {
+            streakReward = (player.winStreak - 1) / 2 + 1;
+        } else {
+            streakReward = player.loseStreak / 2;
+        }
 
-        let mut totalIncome = interest + streakReward + roundBaseReward;
+        let mut totalIncome = interest + streakReward + baseReward;
 
         // dangerous round give 150% coin
         if (dangerous) {
@@ -330,6 +357,7 @@ mod home {
         // restrict the max coin
         if (255 - player.coin < totalIncome) {
             player.coin = 255;
+            totalIncome = 255 - player.coin;
         } else {
             player.coin += totalIncome;
         }
@@ -338,6 +366,8 @@ mod home {
         player.refreshed = false;
 
         set!(world, (player));
+
+        return totalIncome;
     }
 
     fn _registerPlayer(world: IWorldDispatcher, playerAddr: ContractAddress) {
@@ -918,7 +948,9 @@ mod home {
                         end: false,
                         winner: Zeroable::zero(),
                         healthDecrease: 0,
-                        dangerous: false
+                        dangerous: false,
+                        homePlayerCoinInc: 0,
+                        awayPlayerCoinInc: 0
                     },
                 ),
             );
@@ -1140,10 +1172,19 @@ mod home {
                     player.loseStreak += 1;
                 }
             }
+
+            set!(world, (player));
+
+            // add coin for round
+            let income = _giveRoundCoinReward(world, inningBattle.dangerous);
+
             inningBattle.healthDecrease = result.healthDecrease;
             inningBattle.end = true;
+            inningBattle.homePlayerCoinInc = income;
 
-            set!(world, (inningBattle, player));
+            set!(world, (inningBattle));
+
+            _giveExp(world, inningBattle.dangerous);
 
             _rollChoiceType(world);
 
@@ -1358,30 +1399,12 @@ mod home {
                         end: false,
                         winner: Zeroable::zero(),
                         healthDecrease: 0,
-                        dangerous: dangerous
+                        dangerous: dangerous,
+                        homePlayerCoinInc: 0,
+                        awayPlayerCoinInc: 0
                     }
                 ),
             );
-
-            // update exp and try level up
-            let levelConfig = get!(world, player.level, LevelConfig);
-            if (levelConfig.expForNext != 0) {
-                if (dangerous) {
-                    player.exp += 3;
-                } else {
-                    player.exp += 2;
-                }
-                if (player.exp >= levelConfig.expForNext) {
-                    player.level += 1;
-                    player.exp -= levelConfig.expForNext;
-                }
-            } else { // skip add exp and level up
-            }
-
-            set!(world, (player));
-
-            // add more coin
-            _giveRoundCoinReward(world, dangerous);
         }
 
 
