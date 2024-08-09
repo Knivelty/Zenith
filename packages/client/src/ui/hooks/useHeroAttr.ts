@@ -3,7 +3,7 @@ import { getComponentValueStrict } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { Monster } from "../../phaser/config/constants";
 import { ClientComponents } from "../../dojo/createClientComponents";
-import { logDebug } from "../lib/utils";
+import { getPieceEntity, logDebug } from "../lib/utils";
 import { getOrder, getOrigins } from "../../utils";
 
 export const SELL_PRICE: Record<number, Record<number, number>> = {
@@ -41,6 +41,7 @@ export interface HeroBaseAttr {
 
 export interface PieceAttr extends HeroBaseAttr {
     gid: number;
+    owner: bigint;
     isOverride: boolean;
 }
 
@@ -65,6 +66,18 @@ export function getSellPrice({
     level: number;
 }) {
     return SELL_PRICE[rarity][level];
+}
+
+export function getPieceAttr(Piece: ClientComponents["Piece"], gid?: number) {
+    if (!gid) {
+        return undefined;
+    }
+    const piece = getComponentValueStrict(Piece, getPieceEntity(gid));
+    return {
+        owner: piece.owner,
+        gid: piece.gid,
+        isOverride: Piece.isEntityOverride(getPieceEntity(gid)),
+    };
 }
 
 export function getHeroAttr(

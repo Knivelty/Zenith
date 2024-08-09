@@ -10,6 +10,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 
 interface HeroDetailProp {
     gid?: number;
+    owner?: bigint;
     attr?: HeroBaseAttr;
 }
 
@@ -44,14 +45,27 @@ export function HeroDetail(props: HeroDetailProp) {
             return;
         }
 
-        sellHero(account, props.gid);
+        if (props?.owner !== BigInt(account.address)) {
+            alert("not your piece");
+            return;
+        }
+
+        sellHero(account, props?.gid);
 
         updateComponent(UserOperation, zeroEntity, {
             selected: false,
             selectGid: 0,
         });
         setShow(ShowItem.Shade, false);
-    }, [account, props?.gid, UserOperation, sellHero, status?.status, setShow]);
+    }, [
+        account,
+        props?.gid,
+        props?.owner,
+        UserOperation,
+        sellHero,
+        status?.status,
+        setShow,
+    ]);
 
     useHotkeys("s", () => {
         sellHeroFn();
@@ -59,7 +73,7 @@ export function HeroDetail(props: HeroDetailProp) {
 
     return (
         <div
-            key={props.gid}
+            key={props?.gid}
             className="flex flex-col items-center justify-start w-96 h-[40rem] bg-black border border-[#06FF00] box-border"
         >
             <div className="flex flex-row pl-8 pt-8 w-full">
@@ -118,15 +132,17 @@ export function HeroDetail(props: HeroDetailProp) {
                     Initiative: {props.attr?.initiative}
                 </div>
             </div>
-            <button
-                className="bg-[#06FF00] w-40 h-10 flex flex-row items-center justify-center"
-                onClick={sellHeroFn}
-            >
-                <div>
-                    <img src="assets/ui/recycle_bin.png"></img>
-                </div>
-                <div className="text-black ml-6">{`$ ${props.attr?.sellPrice}`}</div>
-            </button>
+            {props?.owner === BigInt(account.address) && (
+                <button
+                    className="bg-[#06FF00] w-40 h-10 flex flex-row items-center justify-center"
+                    onClick={sellHeroFn}
+                >
+                    <div>
+                        <img src="assets/ui/recycle_bin.png"></img>
+                    </div>
+                    <div className="text-black ml-6">{`$ ${props.attr?.sellPrice}`}</div>
+                </button>
+            )}
         </div>
     );
 }

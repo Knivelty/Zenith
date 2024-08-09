@@ -1280,6 +1280,11 @@ mod home {
             let mut player = get!(world, playerAddr, Player);
             let mut piece = get!(world, gid, Piece);
 
+            // check owner
+            if (piece.owner != playerAddr) {
+                panic!("piece owner not player");
+            }
+
             let creatureProfile = get!(world, (piece.creature_index, piece.level), CreatureProfile);
             let sellPrice = get!(
                 world, (creatureProfile.level, creatureProfile.rarity), SellPriceConfig

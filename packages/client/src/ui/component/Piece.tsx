@@ -51,7 +51,7 @@ const DragItem = ({ data }: IDrap) => {
     );
 };
 
-export function Piece(props: PieceProps) {
+export function PieceComponent(props: PieceProps) {
     const {
         systemCalls: { sellHero },
         account: { account },

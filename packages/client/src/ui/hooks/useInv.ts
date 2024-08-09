@@ -33,6 +33,7 @@ export function useLocalInv() {
                     level: piece.level,
                 }),
                 gid: piece.gid,
+                owner: piece.owner,
                 isOverride: Piece.isEntityOverride(pieceEntity),
             } as PieceAttr;
         });
@@ -85,6 +86,7 @@ export function useInv() {
                     level: piece.level,
                 }),
                 gid: piece.gid,
+                owner: piece.owner,
                 isOverride: Piece.isEntityOverride(pieceEntity),
             } as PieceAttr;
         });

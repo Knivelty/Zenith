@@ -4,14 +4,14 @@ import { HeroDetail } from "./component/HeroDetail";
 import { useDojo } from "./hooks/useDojo";
 import { cn } from "./lib/utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { getHeroAttr } from "./hooks/useHeroAttr";
+import { getHeroAttr, getPieceAttr } from "./hooks/useHeroAttr";
 import { useCallback, useEffect, useRef } from "react";
 import { zeroEntity } from "../utils";
 import { updateComponent } from "@dojoengine/recs";
 
 export function HeroInfoDialog() {
     const {
-        clientComponents: { LocalPiece, CreatureProfile, UserOperation },
+        clientComponents: { LocalPiece, CreatureProfile, UserOperation, Piece },
     } = useDojo();
     const setShow = useUIStore((s) => s.setShow);
     const userOp = useComponentValue(UserOperation, zeroEntity);
@@ -26,6 +26,8 @@ export function HeroInfoDialog() {
         id: piece?.creature_index,
         level: piece?.level,
     });
+
+    const pieceAttr = getPieceAttr(Piece, pieceId);
 
     const dialogRef = useRef<HTMLDivElement>(null);
 
@@ -81,7 +83,11 @@ export function HeroInfoDialog() {
             })}
             ref={dialogRef}
         >
-            <HeroDetail gid={piece?.gid} attr={baseAttr}></HeroDetail>
+            <HeroDetail
+                gid={pieceAttr?.gid}
+                owner={pieceAttr?.owner}
+                attr={baseAttr}
+            ></HeroDetail>
         </div>
     );
 }
