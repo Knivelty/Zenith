@@ -40,6 +40,17 @@ export function createSystemCalls(
         );
     };
 
+    const cheatAndSkipRound = async (account: Account) => {
+        client.home.commitPreparation({
+            account,
+            changes: [],
+            result: {
+                win: false,
+                healthDecrease: 0,
+            },
+        });
+    };
+
     const nextRound = async (account: Account, choice: number) => {
         try {
             logDebug(`call next round, ${choice}`);
@@ -217,6 +228,7 @@ export function createSystemCalls(
         buyAndMerge,
         mergeHero,
         commitPreparation,
+        cheatAndSkipRound,
         exit,
     };
 }

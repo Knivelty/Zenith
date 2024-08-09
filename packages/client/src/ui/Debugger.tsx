@@ -27,7 +27,7 @@ export function Debugger() {
         systemCalls: {
             nextRound,
             commitPreparation,
-
+            cheatAndSkipRound,
             getCoin,
             exit,
         },
@@ -134,10 +134,19 @@ export function Debugger() {
             </Button>
             <Button
                 onClick={async () => {
-                    await commitPreparation(account);
+                    commitPreparation(account).then(() => {
+                        nextRound(account, 1);
+                    });
                 }}
             >
                 start battle
+            </Button>
+            <Button
+                onClick={async () => {
+                    nextRound(account, 1);
+                }}
+            >
+                Skip Make Choice
             </Button>
             <Button
                 onClick={async () => {
@@ -150,10 +159,10 @@ export function Debugger() {
             </Button>
             <Button
                 onClick={async () => {
-                    // await nextRound(account);
+                    await cheatAndSkipRound(account);
                 }}
             >
-                next round
+                Skip Round
             </Button>
             <Button
                 onClick={async () => {

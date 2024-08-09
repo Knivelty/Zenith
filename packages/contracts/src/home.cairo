@@ -1176,6 +1176,11 @@ mod home {
             player.coin -= 4;
             let levelConfig = get!(world, player.level, LevelConfig);
 
+            if (levelConfig.expForNext == 0) {
+                // max level and cannot upgrade anymore
+                panic!("max level reached");
+            }
+
             // loop twice
             if (player.exp >= levelConfig.expForNext) {
                 player.level += 1;
@@ -1359,16 +1364,20 @@ mod home {
             );
 
             // update exp and try level up
-            if (dangerous) {
-                player.exp += 3;
-            } else {
-                player.exp += 2;
-            }
             let levelConfig = get!(world, player.level, LevelConfig);
-            if (player.exp >= levelConfig.expForNext) {
-                player.level += 1;
-                player.exp -= levelConfig.expForNext;
+            if (levelConfig.expForNext != 0) {
+                if (dangerous) {
+                    player.exp += 3;
+                } else {
+                    player.exp += 2;
+                }
+                if (player.exp >= levelConfig.expForNext) {
+                    player.level += 1;
+                    player.exp -= levelConfig.expForNext;
+                }
+            } else { // skip add exp and level up
             }
+
             set!(world, (player));
 
             // add more coin
