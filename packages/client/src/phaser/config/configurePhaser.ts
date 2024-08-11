@@ -46,6 +46,12 @@ export const phaserConfig = {
                     key: Assets.Tileset,
                     path: "assets/tilesets/land.png",
                 },
+                [Assets.AudioSprite]: {
+                    type: AssetType.AudioSprite,
+                    key: Assets.AudioSprite,
+                    jsonPath: "assets/sounds/sounds.json",
+                    audioPath: "assets/sounds/sounds.mp3",
+                },
                 [Assets.MainAtlas]: {
                     type: AssetType.MultiAtlas,
                     key: Assets.MainAtlas,

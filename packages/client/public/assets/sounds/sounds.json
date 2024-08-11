@@ -1,0 +1,57 @@
+{
+  "resources": [
+    "sounds.mp3"
+  ],
+  "spritemap": {
+    "click": {
+      "start": 0,
+      "end": 0.08700680272108843,
+      "loop": false
+    },
+    "confirm": {
+      "start": 2,
+      "end": 2.230748299319728,
+      "loop": false
+    },
+    "brute": {
+      "start": 4,
+      "end": 4.385986394557823,
+      "loop": false
+    },
+    "cunning": {
+      "start": 6,
+      "end": 6.712063492063492,
+      "loop": false
+    },
+    "dark": {
+      "start": 8,
+      "end": 9.784263038548753,
+      "loop": false
+    },
+    "hunter": {
+      "start": 11,
+      "end": 12.127414965986395,
+      "loop": false
+    },
+    "imaginary": {
+      "start": 14,
+      "end": 14.598004535147393,
+      "loop": false
+    },
+    "light": {
+      "start": 16,
+      "end": 16.729591836734695,
+      "loop": false
+    },
+    "magical": {
+      "start": 18,
+      "end": 19.45231292517007,
+      "loop": false
+    },
+    "strength": {
+      "start": 21,
+      "end": 22.612925170068028,
+      "loop": false
+    }
+  }
+}

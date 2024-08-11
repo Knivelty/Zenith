@@ -20,9 +20,9 @@ import { getAllBoardPiecesWithAllTraits } from "../../../ui/hooks/usePieceCountW
 import { encodeGroundEntity } from "../utils/entityEncoder";
 import { getAnimation, playAnimationForOnce } from "../utils/animationHelper";
 import {
+    Assets,
     SynergyAnimations,
     TILE_HEIGHT,
-    TILE_WIDTH,
 } from "../../config/constants";
 import { logDebug } from "../../../ui/lib/utils";
 
@@ -41,6 +41,7 @@ export const synergy = (layer: PhaserLayer) => {
         },
         scenes: {
             Main: { config, objectPool },
+            Main,
         },
     } = layer;
 
@@ -133,15 +134,6 @@ export const synergy = (layer: PhaserLayer) => {
                 return;
             }
 
-            // console.log(
-            //     "currentUnlockLevel: ",
-            //     currentUnlockLevel,
-            //     "prevUnlockLevel: ",
-            //     prevUnlockLevel,
-            //     "unlockLevels: ",
-            //     v.unlockLevels
-            // );
-
             if (currentUnlockLevel - (prevUnlockLevel ?? 0) === 1) {
                 // console.log("synergy", v.name, "upgrade");
 
@@ -204,6 +196,13 @@ export const synergy = (layer: PhaserLayer) => {
                         },
                     });
                 });
+
+                // play synergy sound
+                const audio = Main.phaserScene.sound.addAudioSprite(
+                    Assets.AudioSprite
+                );
+
+                audio.play(v.name.toLowerCase());
             }
         }
     );

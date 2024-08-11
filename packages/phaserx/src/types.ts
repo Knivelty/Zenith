@@ -8,7 +8,9 @@ import { createCulling } from "./createCulling";
 import { AnimatedTilemap, TileAnimation } from "./tilemap";
 import { createInput } from "./createInput";
 
-export type GestureState<T extends keyof UserHandlers<EventTypes>> = Parameters<UserHandlers<EventTypes>[T]>[0];
+export type GestureState<T extends keyof UserHandlers<EventTypes>> = Parameters<
+  UserHandlers<EventTypes>[T]
+>[0];
 
 export type Camera = {
   phaserCamera: Phaser.Cameras.Scene2D.Camera;
@@ -16,14 +18,20 @@ export type Camera = {
   zoom$: Observable<number>;
   ignore: (objectPool: ObjectPool, ignore: boolean) => void;
   dispose: () => void;
-  centerOnCoord: (tileCoord: Coord, tileWidth: number, tileHeight: number) => void;
+  centerOnCoord: (
+    tileCoord: Coord,
+    tileWidth: number,
+    tileHeight: number
+  ) => void;
   centerOn: (x: number, y: number) => void;
   setScroll: (x: number, y: number) => void;
   setZoom: (zoom: number) => void;
 };
 
 export type GameObjectTypes = typeof GameObjectClasses;
-export type GameObject<Type extends keyof GameObjectTypes> = InstanceType<GameObjectTypes[Type]>;
+export type GameObject<Type extends keyof GameObjectTypes> = InstanceType<
+  GameObjectTypes[Type]
+>;
 
 export type GameObjectFunction<Type extends keyof GameObjectTypes> = (
   gameObject: GameObject<Type>
@@ -82,14 +90,22 @@ export type Assets = {
 };
 
 export type TilesetConfig<A extends Assets> = {
-  [key: string]: { assetKey: keyof A & string; tileWidth: number; tileHeight: number };
+  [key: string]: {
+    assetKey: keyof A & string;
+    tileWidth: number;
+    tileHeight: number;
+  };
 };
 
 export type LayerConfig<A extends Assets, T extends TilesetConfig<A>> = {
   [key: string]: { tilesets: (keyof T & string)[]; hasHueTintShader?: boolean };
 };
 
-export type MapConfig<A extends Assets, T extends TilesetConfig<A>, L extends LayerConfig<A, T>> = {
+export type MapConfig<
+  A extends Assets,
+  T extends TilesetConfig<A>,
+  L extends LayerConfig<A, T>,
+> = {
   chunkSize: number;
   tileWidth: number;
   tileHeight: number;
@@ -99,7 +115,11 @@ export type MapConfig<A extends Assets, T extends TilesetConfig<A>, L extends La
   tileAnimations?: { [key: string]: TileAnimation<number> };
 };
 
-type AnyMapConfig<A extends Assets, T extends TilesetConfig<A>> = MapConfig<A, T, LayerConfig<A, T>>;
+type AnyMapConfig<A extends Assets, T extends TilesetConfig<A>> = MapConfig<
+  A,
+  T,
+  LayerConfig<A, T>
+>;
 type AnyTilesetConfig = TilesetConfig<Assets>;
 type AnySceneConfig = SceneConfig<
   Assets,
@@ -135,7 +155,7 @@ export type SceneConfig<
   S extends { [key: string]: Sprite<Assets> },
   T extends TilesetConfig<A>,
   M extends MapsConfig<A, T>,
-  Ans extends Animation<A>[]
+  Ans extends Animation<A>[],
 > = {
   preload?: (scene: Phaser.Scene) => void;
   create?: (scene: Phaser.Scene) => void;
@@ -195,6 +215,12 @@ export type Asset =
       options: {
         imagePath: string;
       };
+    }
+  | {
+      type: AssetType.AudioSprite;
+      key: string;
+      jsonPath: string;
+      audioPath: string;
     };
 
 export type CameraConfig = {

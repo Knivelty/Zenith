@@ -2,6 +2,7 @@ export enum AssetType {
   Image,
   SpriteSheet,
   MultiAtlas,
+  AudioSprite,
 }
 
 export const GameObjectClasses = {

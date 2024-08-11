@@ -2,7 +2,13 @@ import { defineScene } from "./defineScene";
 import { definePhaserConfig } from "./definePhaserConfig";
 import { load } from "./utils";
 import { AssetType } from "./constants";
-import { Scenes, Maps, ScenesConfig, Tilesets, PhaserEngineConfig } from "./types";
+import {
+  Scenes,
+  Maps,
+  ScenesConfig,
+  Tilesets,
+  PhaserEngineConfig,
+} from "./types";
 import { createChunks } from "./createChunks";
 import { createCamera } from "./createCamera";
 import { createCulling } from "./createCulling";
@@ -12,7 +18,9 @@ import { generateFrames } from "./utils";
 import { createInput } from "./createInput";
 import { deferred } from "@latticexyz/utils";
 
-export async function createPhaserEngine<S extends ScenesConfig>(options: PhaserEngineConfig<S>) {
+export async function createPhaserEngine<S extends ScenesConfig>(
+  options: PhaserEngineConfig<S>
+) {
   const { scale, sceneConfig, cameraConfig, cullingChunkSize } = options;
 
   // Set up Phaser scenes
@@ -61,6 +69,8 @@ export async function createPhaserEngine<S extends ScenesConfig>(options: Phaser
           loader.spritesheet(assetKey, asset.path, asset.options);
         } else if (asset.type === AssetType.MultiAtlas) {
           loader.multiatlas(assetKey, asset.path, asset.options.imagePath);
+        } else if (asset.type === AssetType.AudioSprite) {
+          loader.audioSprite(assetKey, asset.jsonPath, asset.audioPath);
         }
       });
     }
@@ -88,23 +98,43 @@ export async function createPhaserEngine<S extends ScenesConfig>(options: Phaser
     }
 
     // Setup tilesets
-    const emptyMap = new Phaser.Tilemaps.Tilemap(phaserScene, new Phaser.Tilemaps.MapData());
+    const emptyMap = new Phaser.Tilemaps.Tilemap(
+      phaserScene,
+      new Phaser.Tilemaps.MapData()
+    );
     const partialTilesets: Tilesets<string> = {};
-    for (const [tilesetKey, { assetKey, tileWidth, tileHeight }] of Object.entries(sceneConfig[key]["tilesets"])) {
-      const tileset = emptyMap.addTilesetImage(tilesetKey, assetKey, tileWidth, tileHeight);
+    for (const [
+      tilesetKey,
+      { assetKey, tileWidth, tileHeight },
+    ] of Object.entries(sceneConfig[key]["tilesets"])) {
+      const tileset = emptyMap.addTilesetImage(
+        tilesetKey,
+        assetKey,
+        tileWidth,
+        tileHeight
+      );
       if (!tileset) {
         console.error(`Adding tileset ${tilesetKey} failed.`);
         continue;
       }
       partialTilesets[tilesetKey] = tileset;
     }
-    const tilesets = partialTilesets as Tilesets<keyof S[typeof key]["tilesets"]>;
+    const tilesets = partialTilesets as Tilesets<
+      keyof S[typeof key]["tilesets"]
+    >;
 
     // Setup maps
     const partialMaps: Partial<Maps<keyof S[typeof key]["maps"]>> = {};
     for (const mapKey of Object.keys(config.maps)) {
-      const { layers, backgroundTile, tileWidth, tileHeight, animationInterval, tileAnimations, chunkSize } =
-        config.maps[mapKey];
+      const {
+        layers,
+        backgroundTile,
+        tileWidth,
+        tileHeight,
+        animationInterval,
+        tileAnimations,
+        chunkSize,
+      } = config.maps[mapKey];
 
       // Setup chunks
       const chunks = createChunks(camera.worldView$, chunkSize);
@@ -127,13 +157,22 @@ export async function createPhaserEngine<S extends ScenesConfig>(options: Phaser
         }
       }
 
-      partialMaps[mapKey as keyof (typeof sceneConfig)[typeof key]["maps"]] = map;
+      partialMaps[mapKey as keyof (typeof sceneConfig)[typeof key]["maps"]] =
+        map;
     }
     const maps = partialMaps as Maps<keyof S[typeof key]["maps"]>;
 
     const input = createInput(phaserScene.input);
 
-    partialScenes[key] = { phaserScene, objectPool, camera, culling, maps, input, config: sceneConfig[key] };
+    partialScenes[key] = {
+      phaserScene,
+      objectPool,
+      camera,
+      culling,
+      maps,
+      input,
+      config: sceneConfig[key],
+    };
   }
   const scenes = partialScenes as Scenes<S>;
 

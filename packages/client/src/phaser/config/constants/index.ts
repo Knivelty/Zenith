@@ -144,6 +144,7 @@ export enum Assets {
     GroundAtlas = "GroundAtlas",
     SynergyAtlas = "SynergyAtlas",
     Tileset = "Tileset",
+    AudioSprite = "AudioSprite",
 }
 
 export const TILE_HEIGHT = 80;
