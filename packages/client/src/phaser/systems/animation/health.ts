@@ -223,6 +223,7 @@ export const health = (layer: PhaserLayer) => {
                             onComplete: async () => {
                                 // resolve to allow next tween
                                 resolve();
+                                objectPool.remove(entity);
                             },
                             onUpdate: () => {
                                 //

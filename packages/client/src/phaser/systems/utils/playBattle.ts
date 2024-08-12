@@ -315,15 +315,13 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 id: groundSpriteEntity,
                 once: async (sprite: Phaser.GameObjects.Sprite) => {
                     sprite.setPosition(ag.x * TILE_WIDTH, ag.y * TILE_HEIGHT);
-                    sprite.setVisible(true);
                     sprite.play(effectAnimation);
 
                     const scale = TILE_HEIGHT / sprite.height;
                     sprite.setScale(scale);
 
                     promise.then(() => {
-                        sprite.setVisible(false);
-                        sprite.stop();
+                        objectPool.remove(groundSpriteEntity);
                     });
                 },
             });
