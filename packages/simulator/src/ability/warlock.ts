@@ -69,6 +69,7 @@ async function hitAndFission({
         x,
         y,
         isHome: !pieceInBattle.isHome,
+        dead: false,
       },
     })
     .exec();
@@ -91,6 +92,7 @@ async function hitAndFission({
         x: { $gte: x - 1, $lte: x + 1 },
         y: { $gte: y - 1, $lte: y + 1 },
         isHome: !pieceInBattle.isHome,
+        dead: false,
       },
     })
     .exec();

@@ -69,7 +69,9 @@ export function getPieceSearchAttackTargetHandler() {
   return handlerMap.get(key)!;
 }
 
-export async function findTargetPiece(actionPieceId: string) {
+export async function findTargetPiece(
+  actionPieceId: string
+): Promise<string | undefined> {
   const actionPieceBattle = await getBattlePiece(actionPieceId);
 
   if (!actionPieceBattle) {

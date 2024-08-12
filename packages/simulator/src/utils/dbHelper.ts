@@ -21,6 +21,22 @@ export async function getBattlePiece(entity: string) {
   return piece;
 }
 
+export async function getAliveBattlePiece(entity: string) {
+  const db = globalThis.Simulator.db;
+
+  const piece = await db.battle_entity
+    .findOne({
+      selector: { entity: entity, dead: false },
+    })
+    .exec();
+
+  if (!piece) {
+    throw UNKNOWN_PIECE_ERROR;
+  }
+
+  return piece;
+}
+
 export async function getPieceCreature(entity: string) {
   const db = globalThis.Simulator.db;
 

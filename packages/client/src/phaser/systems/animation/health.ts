@@ -27,6 +27,7 @@ import { logDebug } from "../../../ui/lib/utils";
 import { deferred } from "@latticexyz/utils";
 import { GameStatusEnum } from "../../../dojo/types";
 import { animationTime } from "./animationTime";
+import { pieceManage } from "../utils/pieceManage";
 
 export const health = (layer: PhaserLayer) => {
     const {
@@ -46,6 +47,7 @@ export const health = (layer: PhaserLayer) => {
     } = layer;
 
     const { getAnimationTime } = animationTime(layer);
+    const { removePieceOnBoard } = pieceManage(layer);
 
     defineSystemST<typeof Health.schema>(
         world,
@@ -66,27 +68,12 @@ export const health = (layer: PhaserLayer) => {
                 currentHealth: v.current,
             });
 
-            // if health smaller than zero, despawn
-            if (v.current <= 0) {
-                const piece = objectPool.get(v.pieceEntity, "Sprite");
-
+            // if max health is 0, it mean piece is dead
+            // remove health bar object
+            if (v.max == 0) {
                 logDebug(`${v.pieceEntity} piece removed`);
 
-                // TODO: delete ecs component and let a system to despawn
-                // healthBar.despawn();
-                // piece.despawn();
-                healthBar.setComponent({
-                    id: healthBarEntity,
-                    once: async (rec: Phaser.GameObjects.Graphics) => {
-                        rec.setVisible(false);
-                    },
-                });
-                piece.setComponent({
-                    id: v.pieceEntity,
-                    now: (sprite: Phaser.GameObjects.Sprite) => {
-                        sprite.setVisible(false);
-                    },
-                });
+                objectPool.remove(healthBarEntity);
             }
         }
     );

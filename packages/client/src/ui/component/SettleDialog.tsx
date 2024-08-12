@@ -4,8 +4,9 @@ import { zeroEntity } from "../../utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { cn, logDebug } from "../lib/utils";
 import { ChoiceList } from "./ChoiceList";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { ShowItem, UIStore, useUIStore } from "../../store";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export function SettleDialog() {
     const {
@@ -101,15 +102,16 @@ function DirectNextRound() {
         systemCalls: { nextRound },
         account: { account },
     } = useDojo();
+
+    const nextRoundFn = useCallback(() => {
+        nextRound(account, 0);
+    }, [nextRound, account]);
+
+    useHotkeys("enter", nextRoundFn);
+
     return (
         <div className="mt-40 border">
-            <button
-                onClick={() => {
-                    nextRound(account, 0);
-                }}
-            >
-                Next Round
-            </button>
+            <button onClick={nextRoundFn}>Next Round</button>
         </div>
     );
 }

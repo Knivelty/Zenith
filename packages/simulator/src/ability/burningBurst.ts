@@ -3,6 +3,8 @@ import { addEffectToPiece } from "../effect/utils";
 import { asyncMap } from "../utils/asyncHelper";
 import { getBattlePiece } from "../utils/dbHelper";
 import { AffectedGround } from "../misc/groundEffect";
+import { findTargetPiece } from "../mechanism/enemySearch";
+import { logDebug } from "../debug";
 
 const COL_ATTACK: Record<number, number> = {
   1: 160,
@@ -30,10 +32,32 @@ const SIDE_COL_BURN: Record<number, number> = {
 
 export const burningBurst: AbilityFunction = async ({ actionPieceId }) => {
   const battlePiece = await getBattlePiece(actionPieceId);
-  const frontCol = battlePiece.x;
-  const sideCols = [battlePiece.x - 1, battlePiece.x + 1].filter(
+
+  // find target piece
+  const targetPieceId = await findTargetPiece(actionPieceId);
+
+  if (!targetPieceId) {
+    logDebug("burningBurst", "no target piece");
+    return;
+  }
+
+  const targetPiece = await getBattlePiece(targetPieceId);
+
+  const frontCol = targetPiece.x;
+  const sideCols = [targetPiece.x - 1, targetPiece.x + 1].filter(
     (x) => x >= 0 && x <= 7
   );
+
+  await globalThis.Simulator.eventSystem.emit("abilityCast", {
+    abilityName: "burningBurst",
+    data: { actionPieceId },
+    affectedGrounds: getAffectedGrounds({
+      isHome: battlePiece.isHome,
+      y: battlePiece.y,
+      sideCols,
+      frontCol,
+    }),
+  });
 
   const frontColAttack =
     COL_ATTACK[battlePiece.level] + 0.75 * battlePiece.attack;
@@ -61,17 +85,6 @@ export const burningBurst: AbilityFunction = async ({ actionPieceId }) => {
   const sideColBurnStack = Math.floor(
     SIDE_COL_BURN[battlePiece.level] + 0.1 * battlePiece.spell_amp
   );
-
-  await globalThis.Simulator.eventSystem.emit("abilityCast", {
-    abilityName: "burningBurst",
-    data: { actionPieceId },
-    affectedGrounds: getAffectedGrounds({
-      isHome: battlePiece.isHome,
-      y: battlePiece.y,
-      sideCols,
-      frontCol,
-    }),
-  });
 
   await asyncMap(sideCols, async (col) => {
     await makeColAttack({
@@ -191,6 +204,8 @@ function getAffectedGrounds({
       });
     }
   }
+
+  logDebug("burningBurst", "affectedGround", affectedGround);
 
   return affectedGround;
 }

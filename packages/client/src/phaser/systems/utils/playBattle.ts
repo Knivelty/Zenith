@@ -36,7 +36,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
         },
     } = layer;
 
-    const { phaserSpawnPiece } = pieceManage(layer);
+    const { phaserSpawnPiece, removePieceOnBoard } = pieceManage(layer);
 
     const { getAnimationTime, getAnimationSpeed } = animationTime(layer);
 
@@ -143,7 +143,18 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 await sleep(getAnimationTime("STEP_INTERVAL_TIME"));
 
                 break;
+
+            case "pieceDeath":
+                await handlePieceDeath(v as EventWithName<"pieceDeath">);
+                await sleep(getAnimationTime("STEP_INTERVAL_TIME"));
+                break;
         }
+    }
+
+    async function handlePieceDeath({ pieceId }: EventWithName<"pieceDeath">) {
+        const piece = getComponentValueStrict(LocalPiece, pieceId as Entity);
+
+        removePieceOnBoard(piece.gid);
     }
 
     async function handlePieceMove({
@@ -294,8 +305,6 @@ export const battleAnimation = (layer: PhaserLayer) => {
 
         // play ground effect amination
         affectedGrounds.forEach((ag) => {
-            // console.log("affectedGrounds: ", affectedGrounds);
-
             const effectAnimation = getAnimation(
                 ag.groundEffect as GroundAnimations
             );
@@ -305,7 +314,8 @@ export const battleAnimation = (layer: PhaserLayer) => {
             groundSprite.setComponent({
                 id: groundSpriteEntity,
                 once: async (sprite: Phaser.GameObjects.Sprite) => {
-                    sprite.setPosition(ag.x * TILE_HEIGHT, ag.y * TILE_HEIGHT);
+                    sprite.setPosition(ag.x * TILE_WIDTH, ag.y * TILE_HEIGHT);
+                    sprite.setVisible(true);
                     sprite.play(effectAnimation);
 
                     const scale = TILE_HEIGHT / sprite.height;
