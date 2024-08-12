@@ -4,7 +4,7 @@ import { useComponentValue } from "@dojoengine/react";
 import { zeroEntity } from "../../utils";
 import { setComponent, updateComponent } from "@dojoengine/recs";
 
-const allowedValues = [0.25, 0.5, 1, 2, 4, 8, 16];
+const allowedValues = [0.25, 0.5, 1, 2];
 
 export const SpeedSlider = () => {
     const {
