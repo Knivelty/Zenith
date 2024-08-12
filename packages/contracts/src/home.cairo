@@ -1390,6 +1390,8 @@ mod home {
                 (
                     // update match state
                     currentMatchState,
+                    // update player danger
+                    player,
                     // create inning battle
                     InningBattle {
                         currentMatch: currentMatchState.index,
