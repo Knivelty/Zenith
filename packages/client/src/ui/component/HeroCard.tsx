@@ -9,6 +9,7 @@ import { useMergeAble } from "../hooks/useMergable";
 import { logDebug } from "../lib/utils";
 import { useHotkeys } from "react-hotkeys-hook";
 import { ShowItem, useUIStore } from "../../store";
+import { usePlaySound } from "../hooks/usePlaySound";
 
 const rarityBgColor: Record<number, string> = {
     1: "#4F84AF",
@@ -32,6 +33,8 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
     const gameStatus = useComponentValue(GameStatus, zeroEntity);
     const getShow = useUIStore((state) => state.getShow);
 
+    const { play } = usePlaySound("click");
+
     const mergeAble = useMergeAble(creatureKey?.id || 0);
 
     const buyHeroFn = useCallback(() => {
@@ -39,6 +42,7 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
             alert("can only buy piece during prepare");
             return;
         }
+        play();
         if (mergeAble.canMerge) {
             buyAndMerge({
                 account,

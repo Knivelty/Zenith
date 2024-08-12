@@ -53,6 +53,9 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.0.2
         version: 1.0.2(@types/react@18.2.45)(react@18.2.0)
+      '@types/howler':
+        specifier: ^2.2.11
+        version: 2.2.11
       '@types/json-bigint':
         specifier: ^1.0.4
         version: 1.0.4
@@ -98,6 +101,9 @@ importers:
       graphql-ws:
         specifier: ^5.15.0
         version: 5.15.0(graphql@16.8.1)
+      howler:
+        specifier: ^2.2.4
+        version: 2.2.4
       json-bigint:
         specifier: ^1.0.0
         version: 1.0.0
@@ -4611,6 +4617,10 @@ packages:
     dependencies:
       '@types/node': 20.10.5
 
+  /@types/howler@2.2.11:
+    resolution: {integrity: sha512-7aBoUL6RbSIrqKnpEgfa1wSNUBK06mn08siP2QI0zYk7MXfEJAaORc4tohamQYqCqVESoDyRWSdQn2BOKWj2Qw==}
+    dev: false
+
   /@types/http-errors@2.0.4:
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
     dev: false
@@ -7094,6 +7104,10 @@ packages:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
     dependencies:
       react-is: 16.13.1
+    dev: false
+
+  /howler@2.2.4:
+    resolution: {integrity: sha512-iARIBPgcQrwtEr+tALF+rapJ8qSc+Set2GJQl7xT1MQzWaVkFebdJhR3alVlSiUf5U7nAANKuj3aWpwerocD5w==}
     dev: false
 
   /html-escaper@2.0.2:

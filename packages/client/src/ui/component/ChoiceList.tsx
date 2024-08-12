@@ -4,6 +4,7 @@ import { useDojo } from "../hooks/useDojo";
 import { cn } from "../lib/utils";
 import { useCallback } from "react";
 import { ShowItem, UIStore, useUIStore } from "../../store";
+import { usePlaySound } from "../hooks/usePlaySound";
 
 export interface IChoice extends React.HTMLAttributes<HTMLDivElement> {
     coinDec?: number;
@@ -45,10 +46,13 @@ export function Choice({
 
     const getShow = useUIStore((state: UIStore) => state.getShow);
 
+    const { play } = usePlaySound("click");
+
     const nextRoundFn = useCallback(() => {
         if (!order) return;
+        play();
         nextRound(account, order);
-    }, [order, nextRound, account]);
+    }, [order, nextRound, account, play]);
 
     useHotkeys(order.toString(), () => {
         if (getShow(ShowItem.SettleDialog)) {

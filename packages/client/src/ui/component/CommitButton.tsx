@@ -4,6 +4,7 @@ import { zeroEntity } from "../../utils";
 import { ShowItem, UIStore, useUIStore } from "../../store";
 import { useCallback } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import { usePlaySound } from "../hooks/usePlaySound";
 
 export function CommitButton() {
     const {
@@ -19,10 +20,13 @@ export function CommitButton() {
 
     const status = useComponentValue(GameStatus, zeroEntity);
 
+    const { play } = usePlaySound("confirm");
+
     const commitPreparationFn = useCallback(() => {
+        play();
         commitPreparation(account);
         setShopShow(ShowItem.Shop, false);
-    }, [account, commitPreparation, setShopShow]);
+    }, [account, commitPreparation, setShopShow, play]);
 
     useHotkeys("enter", () => {
         if (status?.status === 1) {

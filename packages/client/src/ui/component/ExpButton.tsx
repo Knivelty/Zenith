@@ -2,6 +2,8 @@ import { useDojo } from "../hooks/useDojo";
 import { useComponentValue } from "@dojoengine/react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { ProgressBar } from "./ProgressBar";
+import { useCallback } from "react";
+import { usePlaySound } from "../hooks/usePlaySound";
 
 export function ExpButton() {
     const {
@@ -15,6 +17,13 @@ export function ExpButton() {
         LevelConfig,
         getEntityIdFromKeys([BigInt(player?.level || 0)])
     );
+
+    const { play } = usePlaySound("click");
+
+    const handleClick = useCallback(() => {
+        play();
+        buyExp(account);
+    }, [buyExp, account, play]);
 
     const percent = ((player?.exp || 0) / (levelConfig?.expForNext || 1)) * 100;
 
@@ -34,10 +43,7 @@ export function ExpButton() {
                 </div>
             </div>
             <div
-                onClick={() => {
-                    buyExp(account);
-                    console.log(111);
-                }}
+                onClick={handleClick}
                 className="-mt-[8.75rem] -ml-[0.75rem] cursor-pointer"
             >
                 <ProgressBar size={152} strokeWidth={8} percentage={percent} />

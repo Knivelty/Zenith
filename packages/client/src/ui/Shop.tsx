@@ -6,11 +6,12 @@ import { ShowItem, UIStore, useUIStore } from "../store";
 import { logDebug } from "./lib/utils";
 import { ClipLoader } from "react-spinners";
 import { useHotkeys } from "react-hotkeys-hook";
+import { usePlaySound } from "./hooks/usePlaySound";
 
 const Shop = () => {
     const {
-        clientComponents: { Player, Altar, CreatureProfile, GameStatus },
-        systemCalls: { refreshAltar, buyHero },
+        clientComponents: { Player, Altar },
+        systemCalls: { refreshAltar },
         account: { playerEntity, account },
     } = useDojo();
 
@@ -26,8 +27,11 @@ const Shop = () => {
 
     const [loading, setLoading] = useState<boolean>(false);
 
+    const { play } = usePlaySound("click");
+
     const buyRefreshHeroFn = useCallback(async () => {
         setLoading(true);
+        play();
         refreshAltar(account)
             .catch((e) => {
                 console.error(e);
@@ -35,7 +39,7 @@ const Shop = () => {
             .finally(() => {
                 setLoading(false);
             });
-    }, [refreshAltar, account]);
+    }, [refreshAltar, account, play]);
 
     const playerValue = useComponentValue(Player, playerEntity);
     const heroAltar = useComponentValue(Altar, playerEntity);

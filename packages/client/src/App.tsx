@@ -4,9 +4,13 @@ import { PhaserLayer } from "./phaser/phaserLayer";
 import { store } from "./store";
 import { UI } from "./ui";
 import { SelectNetwork } from "./ui/SelectNetwork";
+import { useInitializeAudio } from "./ui/hooks/useInitializeAudio";
 
 function App() {
     const networkLayer = useNetworkLayer();
+
+    // preload audio files
+    useInitializeAudio();
 
     useEffect(() => {
         if (!networkLayer || !networkLayer.account) return;
