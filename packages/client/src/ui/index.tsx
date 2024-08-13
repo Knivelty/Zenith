@@ -1,4 +1,5 @@
 import { store } from "../store";
+import { Loading } from "./features/login/Loading";
 import { Main } from "./Main";
 
 export const UI = () => {
@@ -9,7 +10,7 @@ export const UI = () => {
         };
     });
 
-    if (!layers.networkLayer || !layers.phaserLayer) return <></>;
+    if (!layers.networkLayer || !layers.phaserLayer) return <Loading />;
 
     return <Main />;
 };

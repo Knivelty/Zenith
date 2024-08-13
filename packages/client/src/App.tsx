@@ -5,6 +5,7 @@ import { store } from "./store";
 import { UI } from "./ui";
 import { SelectNetwork } from "./ui/features/misc/SelectNetwork";
 import { useInitializeAudio } from "./ui/hooks/useInitializeAudio";
+import { Loading } from "./ui/features/login/Loading";
 
 function App() {
     const networkLayer = useNetworkLayer();
@@ -19,6 +20,10 @@ function App() {
 
         store.setState({ networkLayer });
     }, [networkLayer]);
+
+    if (!networkLayer) {
+        return <Loading />;
+    }
 
     return (
         <div>
