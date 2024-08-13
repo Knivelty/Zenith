@@ -1,6 +1,7 @@
+import { logSynergy } from "../debug";
 import { getAllPieceWithOrigin, getValidTraitCount } from "./utils";
 
-const ORIGIN_IMAGINARY_NAME = "imaginary";
+const ORIGIN_IMAGINARY_NAME = "Imaginary";
 
 export async function applyImaginarySynergy(isHome: boolean) {
   await giveExtraAction(isHome);
@@ -23,6 +24,9 @@ async function giveExtraAction(isHome: boolean) {
       async ({ pieceId, initiative }) => {
         if (p.entity === pieceId) {
           if (initiative >= 75) {
+            logSynergy("IMAGINARY")(
+              `add an extra action for ${pieceId} with initiative ${initiative - 75}`
+            );
             await globalThis.Simulator.db.action_order_stack.insert({
               piece_id: pieceId,
               initiative: initiative - 75,

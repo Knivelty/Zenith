@@ -4,7 +4,7 @@ import { asyncMap } from "../utils/asyncHelper";
 import { getBattlePiece, increaseArmor } from "../utils/dbHelper";
 import { getAllPieceWithOrder, getValidTraitCount } from "./utils";
 
-export const ORDER_BRUTE_NAME = "BRUTE";
+export const ORDER_BRUTE_NAME = "Brute";
 
 export const BASE_ARMOR_BONUS = 20;
 export const MIDDLE_ARMOR_BONUS = 40;

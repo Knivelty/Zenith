@@ -3,7 +3,7 @@ import { asyncMap } from "../utils/asyncHelper";
 import { getBattlePiece } from "../utils/dbHelper";
 import { getAllPieceWithOrder, getValidTraitCount } from "./utils";
 
-export const ORDER_HUNTER_NAME = "HUNTER";
+export const ORDER_HUNTER_NAME = "Hunter";
 
 export const INITIATIVE_BONUS: Record<number, number> = {
   0: 0,

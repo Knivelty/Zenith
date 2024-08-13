@@ -10,6 +10,7 @@ import { BattleEntityType } from "../schema";
 export interface EventMap {
   beforeBattleStart: { isHome: boolean };
 
+  turnStart: { turn: number };
   turnEnd: { turn: number };
 
   battleEnd: { doHomeWin: boolean };

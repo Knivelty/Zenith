@@ -1,9 +1,7 @@
 import { asyncMap } from "../utils/asyncHelper";
 import { getAllPieceWithOrder, getValidTraitCount } from "./utils";
 
-//note: wip
-
-export const ORDER_MAGICAL_NAME = "MAGICAL";
+export const ORDER_MAGICAL_NAME = "Magical";
 
 export const SP_POWER_BONUS_FOR_MAGICAL: Record<number, number> = {
   0: 0,

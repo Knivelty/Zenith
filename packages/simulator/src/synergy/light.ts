@@ -5,7 +5,7 @@ import { asyncMap } from "../utils/asyncHelper";
 import { getBattlePiece } from "../utils/dbHelper";
 import { getAllPieceWithOrigin, getValidTraitCount } from "./utils";
 
-export const ORIGIN_LIGHT_NAME = "LIGHT";
+export const ORIGIN_LIGHT_NAME = "Light";
 
 export const LIGHT_INITIATIVE_BONUS: Record<number, number> = {
   0: 0,

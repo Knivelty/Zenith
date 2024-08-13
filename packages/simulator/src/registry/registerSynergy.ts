@@ -5,6 +5,7 @@ import { applyDarkSynergy } from "../synergy/dark";
 import { applyLightSynergy } from "../synergy/light";
 import { applyStrengthSynergy } from "../synergy/strength";
 import { applyCunningSynergy } from "../synergy/cunning";
+import { applyImaginarySynergy } from "../synergy/imaginary";
 
 export function registerSynergy() {
   const eventSystem = globalThis.Simulator.eventSystem;
@@ -18,5 +19,6 @@ export function registerSynergy() {
     await applyHunterSynergy(isHome);
     await applyBruteSynergy(isHome);
     await applyCunningSynergy(isHome);
+    await applyImaginarySynergy(isHome);
   });
 }

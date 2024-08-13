@@ -25,7 +25,7 @@ export async function createSimulator({
   ability_profiles: AbilityProfileType[];
   allPlayerProfiles: PlayerProfileType[];
 }) {
-  logDebug("simulator input", initEntities);
+  logDebug("simulator input", initEntities, creatures);
   if (globalThis?.Simulator?.db) {
     await cleanDB();
   }

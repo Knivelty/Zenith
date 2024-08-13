@@ -24,6 +24,7 @@ export async function calculateBattleLogs(): Promise<BattleResult> {
 
   for (let i = 1; i <= 500; i++) {
     await generateActionOrderStack();
+    await globalThis.Simulator.eventSystem.emit("turnStart", { turn: i });
     await pieceActionOnceInATurn(i);
 
     if (await isBattleEnd()) {

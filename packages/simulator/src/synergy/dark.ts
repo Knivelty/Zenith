@@ -3,7 +3,7 @@ import { asyncMap } from "../utils/asyncHelper";
 import { getBattlePiece } from "../utils/dbHelper";
 import { getAllPieceWithOrigin, getValidTraitCount } from "./utils";
 
-export const ORIGIN_DARK_NAME = "DARK";
+export const ORIGIN_DARK_NAME = "Dark";
 
 export async function applyDarkSynergy(isHome: boolean) {
   const eventSystem = globalThis.Simulator.eventSystem;
