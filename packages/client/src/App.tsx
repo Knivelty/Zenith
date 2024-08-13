@@ -3,7 +3,7 @@ import { useNetworkLayer } from "./ui/hooks/useNetworkLayer";
 import { PhaserLayer } from "./phaser/phaserLayer";
 import { store } from "./store";
 import { UI } from "./ui";
-import { SelectNetwork } from "./ui/SelectNetwork";
+import { SelectNetwork } from "./ui/features/misc/SelectNetwork";
 import { useInitializeAudio } from "./ui/hooks/useInitializeAudio";
 
 function App() {

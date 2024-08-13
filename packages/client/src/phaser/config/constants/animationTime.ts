@@ -3,6 +3,5 @@ export const AnimationTime = {
     ATTACK_SWING_TIME: 50,
     ATTACKED_BLINK_TIME: 30,
     HEALTH_CHANGE_SHOW_TIME: 200,
-
     STEP_INTERVAL_TIME: 20,
 };

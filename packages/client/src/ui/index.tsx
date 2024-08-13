@@ -1,5 +1,5 @@
 import { store } from "../store";
-import { ChessMain } from "./ChessMain";
+import { Main } from "./Main";
 
 export const UI = () => {
     const layers = store((state) => {
@@ -11,5 +11,5 @@ export const UI = () => {
 
     if (!layers.networkLayer || !layers.phaserLayer) return <></>;
 
-    return <ChessMain />;
+    return <Main />;
 };
