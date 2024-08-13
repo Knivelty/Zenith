@@ -1,12 +1,12 @@
 export interface SynergyMap {
-  STRENGTH: {};
-  LIGHT: {};
-  DARK: {};
-  CUNNING: {};
-  MAGICAL: {};
-  HUNTER: {};
-  BRUTE: {};
-  IMAGINARY: {};
+  Strength: {};
+  Light: {};
+  Dark: {};
+  Cunning: {};
+  Magical: {};
+  Hunter: {};
+  Brute: {};
+  Imaginary: {};
 }
 
 export type SynergyName = keyof SynergyMap;

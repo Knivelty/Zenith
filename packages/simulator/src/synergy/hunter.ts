@@ -67,7 +67,9 @@ export async function addInitiativeBonus(isHome: boolean) {
         initiative: initiativeBonus,
       },
     });
-    logSynergy("HUNTER")(`add ${initiativeBonus} initiative to piece ${p.entity}`);
+    logSynergy("Hunter")(
+      `add ${initiativeBonus} initiative to piece ${p.entity}`
+    );
   });
 }
 
@@ -85,7 +87,7 @@ export async function addRangeBonus(isHome: boolean) {
         range: rangeBonus,
       },
     });
-    logSynergy("HUNTER")(`add ${rangeBonus} range to piece ${p.entity}`);
+    logSynergy("Hunter")(`add ${rangeBonus} range to piece ${p.entity}`);
   });
 }
 

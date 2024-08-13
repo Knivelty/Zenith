@@ -24,7 +24,7 @@ async function giveExtraAction(isHome: boolean) {
       async ({ pieceId, initiative }) => {
         if (p.entity === pieceId) {
           if (initiative >= 75) {
-            logSynergy("IMAGINARY")(
+            logSynergy("Imaginary")(
               `add an extra action for ${pieceId} with initiative ${initiative - 75}`
             );
             await globalThis.Simulator.db.action_order_stack.insert({

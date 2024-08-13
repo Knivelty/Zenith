@@ -44,7 +44,7 @@ export async function addArmorBonus(isHome: boolean) {
         armor: armerBonus,
       },
     });
-    logSynergy("BRUTE")(`add ${armerBonus} armor to piece ${p.entity}`);
+    logSynergy("Brute")(`add ${armerBonus} armor to piece ${p.entity}`);
   });
 }
 
@@ -64,7 +64,7 @@ async function addShield(isHome: boolean) {
       stack: shieldStack,
       duration: 999,
     });
-    logSynergy("BRUTE")(`add ${shieldStack} shield to piece ${p.entity}`);
+    logSynergy("Brute")(`add ${shieldStack} shield to piece ${p.entity}`);
   });
 }
 
