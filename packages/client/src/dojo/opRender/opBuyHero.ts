@@ -49,7 +49,7 @@ export const opBuyHero = async (
     player.inventoryCount += 1;
 
     // check
-    if (player.inventoryCount > 6) {
+    if (player.inventoryCount > 8) {
         alert("inventory full");
         return;
     }

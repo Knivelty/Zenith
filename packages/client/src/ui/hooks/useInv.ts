@@ -18,12 +18,12 @@ export function useLocalInv() {
     ]);
 
     const invPieces = useMemo(() => {
-        const pieces = Array(6).fill(undefined);
+        const pieces = Array(8).fill(undefined);
         localInvPieces.forEach((pieceEntity) => {
             const piece = getComponentValueStrict(LocalPiece, pieceEntity);
 
             // ignore piece outside range
-            if (piece.slot > 6) {
+            if (piece.slot > 8) {
                 return;
             }
 
@@ -76,7 +76,7 @@ export function useInv() {
     ]);
 
     const invPieces = useMemo(() => {
-        const pieces = Array(6).fill(undefined);
+        const pieces = Array(8).fill(undefined);
         invPieceEntities.forEach((pieceEntity) => {
             const piece = getComponentValueStrict(Piece, pieceEntity);
 
@@ -108,7 +108,7 @@ export function useInv() {
         emptyMap[piece.slot] = true;
     });
 
-    const invGids = Array(6).fill(undefined);
+    const invGids = Array(8).fill(undefined);
 
     Array.from(invPieceEntities).forEach((pieceEntity) => {
         const p = getComponentValueStrict(Piece, pieceEntity);

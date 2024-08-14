@@ -1095,7 +1095,7 @@ mod home {
             invSlot: u8
         ) {
             // note: always use the extra slot for merge
-            let gid = self.buyHero(altarSlot, 7);
+            let gid = self.buyHero(altarSlot, 9);
             let mergedGid = self.mergeHero(gid, gid2, gid3, x, y, invSlot);
             if (gid4 != 0 && gid5 != 0) {
                 self.mergeHero(mergedGid, gid4, gid5, x, y, invSlot);
@@ -1105,7 +1105,7 @@ mod home {
 
             // TODO: perf the extra slot
             // check wether the extra slot is occupied
-            let invPiece = get!(world, (playerAddr, 7), PlayerInvPiece);
+            let invPiece = get!(world, (playerAddr, 9), PlayerInvPiece);
 
             if (invPiece.gid != 0) {
                 panic!("extra slot occupied");
@@ -1428,7 +1428,7 @@ mod home {
 
             // delete player inv piece
             loop {
-                if (idx > 6) {
+                if (idx > 8) {
                     break;
                 }
 

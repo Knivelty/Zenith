@@ -113,7 +113,7 @@ export const opBuyAndMerge = async ({
     }
 
     // // check
-    if (player.inventoryCount > 6) {
+    if (player.inventoryCount > 8) {
         alert("inventory full");
         return;
     }
