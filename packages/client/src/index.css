@@ -67,6 +67,7 @@
         @apply bg-background text-foreground;
         @apply font-dogica;
         @apply text-[#06FF00];
+        @apply select-none
     }
 }
 

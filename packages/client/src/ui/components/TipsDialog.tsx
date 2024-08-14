@@ -1,0 +1,16 @@
+import { cn } from "../lib/utils";
+
+export function TipsDialog({
+    className,
+    ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+    return (
+        <div
+            className={cn(
+                "absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 border bg-black border-[#06FF00] flex items-center justify-start w-4/5 z-30 h-[42rem]",
+                className
+            )}
+            {...props}
+        ></div>
+    );
+}

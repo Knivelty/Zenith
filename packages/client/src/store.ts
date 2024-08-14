@@ -12,11 +12,15 @@ export enum ShowItem {
     Shade,
     CurseDetail,
     SettleDialog,
+    GuestTips,
+    AccountOption,
 }
 
 export type UIStore = {
     loggedIn: boolean;
     setLoggedIn: () => void;
+    agreeTerm: boolean;
+    setAgreeTerm: (agreeTerm: boolean) => void;
     phaserRect: DOMRect;
     setPhaserRect: (rect: DOMRect) => void;
     shows: Map<ShowItem, boolean>;
@@ -32,6 +36,8 @@ export const store = create<Store>(() => ({
 export const useUIStore = create<UIStore>((set, get) => ({
     loggedIn: false,
     setLoggedIn: () => set(() => ({ loggedIn: true })),
+    agreeTerm: false,
+    setAgreeTerm: (agreeTerm: boolean) => set(() => ({ agreeTerm })),
     phaserRect: new DOMRect(0, 0, 0, 0),
     setPhaserRect: (rect: DOMRect) => set(() => ({ phaserRect: rect })),
     shows: new Map(),

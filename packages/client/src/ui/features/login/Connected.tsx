@@ -1,11 +1,10 @@
-import { GreenButton } from "./components/GreenButton";
-import { useDojo } from "./hooks/useDojo";
-import { UIStore, useUIStore } from "../store";
-import { AgreeTerm } from "./features/login/AgreeTerm";
-import { UnConnected } from "./features/login/UnConnected";
-import { Connected } from "./features/login/Connected";
+import { GreenButton } from "../../components/GreenButton";
+import { useDojo } from "../../hooks/useDojo";
+import { GuestTips } from "./GuestTips";
+import { Shade } from "../effects/Shade";
+import { ConnectStatus } from "./ConnectStatus";
 
-export const Home = () => {
+export function Connected() {
     const {
         account: { account },
         systemCalls: { spawn },
@@ -14,32 +13,22 @@ export const Home = () => {
         },
     } = useDojo();
 
-    const agreeTerm = useUIStore((state) => state.agreeTerm);
-    const loggedIn = useUIStore((state) => state.loggedIn);
-
-    if (!agreeTerm) {
-        return <AgreeTerm />;
-    }
-
-    if (!loggedIn) return <UnConnected />;
-
-    return <Connected />;
-
     return (
         <div className="flex z-100 absolute h-screen w-screen bg-[url('/assets/ui/home_bg.png')] top-0 left-0 justify-center overflow-hidden z-20">
             <div className="w-1/2 p-4">
+                <ConnectStatus />
                 <div className="flex flex-col justify-center h-full">
                     <div className="text-[#06FF00] font-dogica font-bold text-5xl self-center -mt-32">
-                        Zenith
+                        <img src="/assets/ui/zenith.png" />
                     </div>
 
                     <GreenButton
-                        className="self-center w-44 h-16 mt-40 text-xl font-dogica"
-                        onClick={async () => {
-                            await spawn(account);
+                        className="self-center w-[60%] h-16 mt-20 text-xl"
+                        onClick={() => {
+                            spawn(account);
                         }}
                     >
-                        START
+                        Start
                     </GreenButton>
                 </div>
             </div>
@@ -50,6 +39,8 @@ export const Home = () => {
                     </div>
                 </div>
             </div>
+            <GuestTips />
+            <Shade />
         </div>
     );
-};
+}
