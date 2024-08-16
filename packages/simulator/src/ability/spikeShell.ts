@@ -33,7 +33,7 @@ export const spikeShellPassive = async () => {
       async ({ pieceId, targetPieceId }) => {
         if (targetPieceId === p.entity) {
           await globalThis.Simulator.eventSystem.emit("damage", {
-            pieceId: targetPieceId,
+            sourcePieceId: targetPieceId,
             targetPieceId: pieceId,
             type: "Magical",
             value: base_attack,

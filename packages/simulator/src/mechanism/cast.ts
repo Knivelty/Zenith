@@ -1,13 +1,18 @@
 import { AbilityNameType } from "../ability/interface";
 import { logDebug } from "../debug";
 import { EventMap } from "../event/createEventSystem";
-import { getBattlePiece, getPieceAbilityProfile } from "../utils/dbHelper";
+import { getAllUndeadPieceIds, getBattlePiece, getPieceAbilityProfile } from "../utils/dbHelper";
 
-export function getPieceTryCastHandler(actionPieceId: string) {
+export function getPieceTryCastHandler(pieceId: string) {
   const handlerMap = globalThis.Simulator.handlerMap;
-  const key = `pieceCast-${actionPieceId}`;
+  const key = `pieceCast-${pieceId}`;
   if (!handlerMap.has(key)) {
     const handler = async ({ actionPieceId }: EventMap["tryCast"]) => {
+      // filter here
+      if (actionPieceId !== pieceId) {
+        return;
+      }
+
       const actionPiece = await getBattlePiece(actionPieceId);
       const abilityProfile = await getPieceAbilityProfile(actionPieceId);
 
@@ -45,7 +50,8 @@ export function getPieceTryCastHandler(actionPieceId: string) {
 }
 
 export async function registerTryCast() {
-  globalThis.Simulator.eventSystem.on("tryCast", async ({ actionPieceId }) => {
-    await getPieceTryCastHandler(actionPieceId)({ actionPieceId });
+  const allPieceIds = await getAllUndeadPieceIds();
+  allPieceIds.map((pieceId) => {
+    globalThis.Simulator.eventSystem.on("tryCast", getPieceTryCastHandler(pieceId));
   });
 }

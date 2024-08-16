@@ -6,9 +6,12 @@ export function increaseManaOnEvent() {
   eventSystem.on("afterPieceAttack", async ({ pieceId }) => {
     const db = globalThis.Simulator.db;
 
-    await db.battle_entity.findOne({ selector: { entity: pieceId } }).update({
-      $inc: { mana: 20 },
-    });
+    await db.battle_entity
+      .findOne({ selector: { entity: pieceId } })
+      .incrementalModify((doc) => {
+        doc.mana += 20;
+        return doc;
+      });
   });
 }
 

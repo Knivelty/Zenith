@@ -42,7 +42,7 @@ export interface EventMap {
   afterPieceBasicAttack: { actionPieceId: string };
 
   damage: {
-    pieceId: string;
+    sourcePieceId: string;
     targetPieceId: string;
     type: "Physical" | "Magical" | "Pure" | "Life Drain";
     value: number;
@@ -145,6 +145,7 @@ export const createEventSystem = <T extends EventMap>(): EventSystem<T> => {
     if (index > -1) {
       eventsHandlers[event]!.splice(index, 1);
     } else {
+      console.trace(NON_EXIST_EVENT_HANDLER);
       throw NON_EXIST_EVENT_HANDLER;
     }
   };

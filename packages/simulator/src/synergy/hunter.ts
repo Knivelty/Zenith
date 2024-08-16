@@ -108,7 +108,7 @@ async function addExtraDamage(isHome: boolean) {
       if (allHunterPieceIds.includes(pieceId)) {
         const piece = await getBattlePiece(pieceId);
         await globalThis.Simulator.eventSystem.emit("damage", {
-          pieceId: piece.entity,
+          sourcePieceId: piece.entity,
           targetPieceId: targetPieceId,
           type: "Pure",
           value: piece.initiative / pureAttackDivisor,

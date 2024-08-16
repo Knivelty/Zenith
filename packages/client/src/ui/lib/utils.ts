@@ -78,6 +78,7 @@ export async function waitForPromiseOrTxRevert(
 
     // get transaction fail means tx is not found
     txDetail.catch((e) => {
+        logDebug(`get tx ${tx.transaction_hash} fail`, e);
         // resolve after 1s to avoid tx not found on dev net
         setTimeout(() => {
             resolve();
@@ -120,7 +121,8 @@ export async function waitForComponentOriginValueCome<
                 }
                 logDebug("compare value: ", newValue, expectValue);
                 for (const key of Object.keys(expectValue)) {
-                    if (expectValue[key] !== newValue[key]) return;
+                    // use != because of some type are not accurate for now
+                    if (expectValue[key] != newValue[key]) return;
                 }
                 // sleep for 0.5s to ensure entity update effect are done
                 sleep(500).then(() => {

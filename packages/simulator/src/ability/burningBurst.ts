@@ -133,7 +133,7 @@ async function makeColAttack({
 
   await asyncMap(affectedPiece, async (p) => {
     await globalThis.Simulator.eventSystem.emit("damage", {
-      pieceId: actionPieceId,
+      sourcePieceId: actionPieceId,
       targetPieceId: p.entity,
       value: damage,
       type: "Magical",

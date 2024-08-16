@@ -46,8 +46,6 @@ export function SettleDialog() {
 
     const win = battleResult?.winner === BigInt(address);
 
-    logDebug("inningBattle: ", inningBattle);
-
     const text = win ? "VICTORY" : "LOSE";
 
     if (!getShow(ShowItem.SettleDialog)) {

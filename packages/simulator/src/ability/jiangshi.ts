@@ -80,7 +80,7 @@ export const jiangshi_penetrationInfection: AbilityFunction = async ({
     });
     // TODO 75% armor penetration
     await globalThis.Simulator.eventSystem.emit("damage", {
-      pieceId: actionPieceId,
+      sourcePieceId: actionPieceId,
       targetPieceId: target.entity,
       value: Math.floor(
         ConstDmg[pieceInBattle.level] +

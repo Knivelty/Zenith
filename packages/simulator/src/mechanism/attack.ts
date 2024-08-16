@@ -57,7 +57,7 @@ export function registerExecuteAttack() {
         await emitAttack(actionPieceId, targetPieceId);
 
         await globalThis.Simulator.eventSystem.emit("damage", {
-          pieceId: actionPieceId,
+          sourcePieceId: actionPieceId,
           targetPieceId: targetPieceId,
           value: actionPiece.attack,
           type: "Physical",

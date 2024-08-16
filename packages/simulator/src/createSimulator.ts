@@ -48,10 +48,10 @@ export async function createSimulator({
   });
   await initializeBattle();
 
+  registerEventHandler();
   registerSynergy();
   registerEffect();
   registerAbilities();
-  registerEventHandler();
 
   return { calculateBattleLogs, cleanDB, getEmittedEvents };
 }

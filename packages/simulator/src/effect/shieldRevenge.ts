@@ -11,9 +11,17 @@ function getHandler(affectedPieceId: string) {
   // TODO: perf key design
   const key = `shieldRevenge-${affectedPieceId}`;
   if (!handlerMap.has(key)) {
-    const handler = async ({ pieceId, targetPieceId }: EventMap["damage"]) => {
+    const handler = async ({
+      sourcePieceId,
+      targetPieceId,
+    }: EventMap["damage"]) => {
       if (targetPieceId === affectedPieceId) {
         logEffect("ShieldRevenge")(`piece ${affectedPieceId} revenge`);
+
+        // skip for now because some damage has no source like burn effect
+        if (sourcePieceId === "0") {
+          return;
+        }
 
         const shieldEffect = await getPieceEffectProfile(
           targetPieceId,
@@ -25,8 +33,8 @@ function getHandler(affectedPieceId: string) {
         );
 
         await globalThis.Simulator.eventSystem.emit("damage", {
-          pieceId: targetPieceId,
-          targetPieceId: pieceId,
+          sourcePieceId: targetPieceId,
+          targetPieceId: sourcePieceId,
           value: damage,
           type: "Magical",
         });

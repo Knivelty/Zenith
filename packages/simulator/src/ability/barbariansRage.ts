@@ -39,7 +39,7 @@ export const barbariansRage: AbilityFunction = async ({ actionPieceId }) => {
 
   // decrease current 25% HP
   await globalThis.Simulator.eventSystem.emit("damage", {
-    pieceId: actionPieceId,
+    sourcePieceId: actionPieceId,
     targetPieceId: actionPieceId,
     value: Math.floor(pieceInBattle.health * 0.25),
     type: "Life Drain",

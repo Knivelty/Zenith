@@ -15,6 +15,7 @@ export async function getBattlePiece(entity: string) {
     .exec();
 
   if (!piece) {
+    console.trace(UNKNOWN_PIECE_ERROR);
     throw UNKNOWN_PIECE_ERROR;
   }
 
@@ -31,6 +32,7 @@ export async function getAliveBattlePiece(entity: string) {
     .exec();
 
   if (!piece) {
+    console.trace(UNKNOWN_PIECE_ERROR);
     throw UNKNOWN_PIECE_ERROR;
   }
 
@@ -47,6 +49,7 @@ export async function getPieceCreature(entity: string) {
     .exec();
 
   if (!pieceProfile) {
+    console.trace(UNKNOWN_PIECE_ERROR);
     throw UNKNOWN_PIECE_ERROR;
   }
 
@@ -148,7 +151,7 @@ export async function movePiece(pieceId: string, toX: number, toY: number) {
         entity: pieceId,
       },
     })
-    .patch({
+    .incrementalPatch({
       x: toX,
       y: toY,
     });

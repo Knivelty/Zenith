@@ -1,5 +1,5 @@
 import { AbilityNameType } from "../ability/interface";
-import { logSynergy } from "../debug";
+import { logDebug, logSynergy } from "../debug";
 import { getPieceTryCastHandler } from "../mechanism/cast";
 import { asyncMap } from "../utils/asyncHelper";
 import { getBattlePiece } from "../utils/dbHelper";
@@ -71,7 +71,9 @@ export async function addLightInitiativeBonus(isHome: boolean) {
         },
       })
       .update({ $inc: { initiative: bonus } });
-    logSynergy(ORIGIN_LIGHT_NAME)(`add ${bonus} initiative to piece ${p.entity}`);
+    logSynergy(ORIGIN_LIGHT_NAME)(
+      `add ${bonus} initiative to piece ${p.entity}`
+    );
   });
 }
 
@@ -136,15 +138,19 @@ export async function castUseLessMana(isHome: boolean) {
     return;
   }
 
-  allLightPiecesIds.map((actionPieceId) => {
+  allLightPiecesIds.map((lightPieceId) => {
     // off origin handler and register new handler
-    const originHandler = getPieceTryCastHandler(actionPieceId);
+    const originHandler = getPieceTryCastHandler(lightPieceId);
 
     globalThis.Simulator.eventSystem.off("tryCast", originHandler);
 
     globalThis.Simulator.eventSystem.on(
       "tryCast",
       async ({ actionPieceId }) => {
+        if (actionPieceId !== lightPieceId) {
+          return;
+        }
+
         const actionPiece = await getBattlePiece(actionPieceId);
 
         const requiredMana = Math.floor(actionPiece.maxMana * 0.3);

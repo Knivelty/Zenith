@@ -21,7 +21,7 @@ function getHandler(actionPieceId: string) {
         const stack = pieceBurnEffect?.stack ?? 0;
         await globalThis.Simulator.eventSystem.emit("damage", {
           // TODO: add damage source
-          pieceId: "0",
+          sourcePieceId: "0",
           targetPieceId: pieceId,
           value: stack,
           type: "Magical",
@@ -55,6 +55,10 @@ async function onBurnActive({ pieceId, stack }: EffectMap["Burn"]) {
 }
 
 async function onBurnDeActive({ pieceId, stack }: EffectMap["Burn"]) {
+  if (!stack) {
+    return;
+  }
+
   const eventSystem = globalThis.Simulator.eventSystem;
 
   eventSystem.off("beforePieceAction", getHandler(pieceId));

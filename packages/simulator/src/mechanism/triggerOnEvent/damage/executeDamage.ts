@@ -8,7 +8,7 @@ import {
 export function executeDamageOnEvent() {
   const eventSystem = globalThis.Simulator.eventSystem;
 
-  eventSystem.on("damage", async ({ pieceId, targetPieceId, type, value }) => {
+  eventSystem.on("damage", async ({ sourcePieceId, targetPieceId, type, value }) => {
     // const db = globalThis.Simulator.db;
 
     // calculate armor
@@ -41,7 +41,7 @@ export function executeDamageOnEvent() {
       value,
     });
 
-    decreaseHealth(pieceId, targetPieceId, type, value);
+    decreaseHealth(sourcePieceId, targetPieceId, type, value);
   });
 }
 

@@ -281,8 +281,8 @@ export const battleAnimation = (layer: PhaserLayer) => {
 
                 logDebug("cast animation: ", animation);
 
-                sprite.play(animation);
                 sprite.anims.timeScale = getAnimationSpeed();
+                sprite.play(animation);
                 sprite.stopAfterRepeat(0);
 
                 const onAnimationComplete = () => {
