@@ -175,6 +175,7 @@ export const health = (layer: PhaserLayer) => {
         world,
         [Has(HealthChange)],
         ({ entity, type, value: [v, preV] }) => {
+            logDebug("incoming health change", v);
             if (!v) {
                 return;
             }
@@ -199,7 +200,11 @@ export const health = (layer: PhaserLayer) => {
                 id: entity,
                 once: async (text: Phaser.GameObjects.Text) => {
                     logDebug(`spawn text`, v);
-                    text.setText(v.sign ? "+" : "-" + v.change.toFixed(0));
+                    text.setText(
+                        v.sign
+                            ? "+" + v.change.toFixed(0)
+                            : "-" + v.change.toFixed(0)
+                    );
                     text.setVisible(true);
                     text.setFont("Dogica Pixel");
                     text.setColor("#FF3D00");

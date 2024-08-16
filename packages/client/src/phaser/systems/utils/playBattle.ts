@@ -209,7 +209,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
             `${pieceId}-health` as Entity
         );
 
-        const modifiedHealth = attackedHealth.current - value;
+        const modifiedHealth = Math.max(attackedHealth.current - value, 0);
 
         updateComponent(Health, `${pieceId}-health` as Entity, {
             current: modifiedHealth,
