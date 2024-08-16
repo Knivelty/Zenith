@@ -349,6 +349,10 @@ mod home {
             streakReward = player.loseStreak / 2;
         }
 
+        if (streakReward > 3) {
+            streakReward = 3;
+        }
+
         let mut totalIncome = interest + streakReward + baseReward;
 
         // dangerous round give 150% coin
