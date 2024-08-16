@@ -550,11 +550,12 @@ export function defineContractComponents(world: World) {
                 {
                     player: RecsType.BigInt,
                     pieceCounter: RecsType.Number,
+                    name: RecsType.BigInt,
                 },
                 {
                     metadata: {
                         name: "PlayerProfile",
-                        types: ["ContractAddress", "u32"],
+                        types: ["ContractAddress", "u32", "felt252"],
                         customTypes: [],
                     },
                 }

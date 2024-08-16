@@ -62,12 +62,19 @@
 @layer base {
     * {
         @apply border-border;
+        @apply focus:outline-none
     }
     body {
         @apply bg-background text-foreground;
         @apply font-dogica;
         @apply text-[#06FF00];
-        @apply select-none
+        @apply select-none;
+    }
+}
+
+@layer utilities {
+    .custom-green-text-shadow {
+        text-shadow: -1px 1px 16px rgba(6, 255, 0, 0.61);
     }
 }
 

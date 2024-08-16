@@ -1,16 +1,16 @@
 import { cn } from "../lib/utils";
 
-export function TipsDialog({
+export function HomeBg({
     className,
     ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
     return (
         <div
             className={cn(
-                "absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 border bg-black border-[#06FF00] flex items-center justify-start w-2/3 z-30 h-[42rem]",
+                "flex z-20 absolute h-screen w-screen bg-[url('/assets/ui/home_bg.png')] top-0 left-0 justify-center overflow-hidden",
                 className
             )}
             {...props}
-        ></div>
+        />
     );
 }

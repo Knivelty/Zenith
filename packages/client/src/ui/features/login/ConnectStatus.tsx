@@ -1,6 +1,7 @@
 import { useDojo } from "../../hooks/useDojo";
 import { shortenAddress } from "../../lib/utils";
 import { ShowItem, useUIStore } from "../../../store";
+import { useAccount, useConnect, useDisconnect } from "@starknet-react/core";
 
 export function ConnectStatus() {
     const {
@@ -9,8 +10,13 @@ export function ConnectStatus() {
         },
     } = useDojo();
 
+    const { account: walletAccount } = useAccount();
+    const { isConnected } = useAccount();
+    const { disconnect } = useDisconnect();
+
     const show = useUIStore((state) => state.getShow(ShowItem.AccountOption));
     const setShow = useUIStore((state) => state.setShow);
+    const setLoggedIn = useUIStore((state) => state.setLoggedIn);
 
     return (
         <div className="fixed top-12 left-12 flex flex-col justify-center w-60">
@@ -20,7 +26,7 @@ export function ConnectStatus() {
                     setShow(ShowItem.AccountOption, !show);
                 }}
             >
-                {shortenAddress(address)}
+                {shortenAddress(walletAccount?.address ?? address)}
             </div>
             {show && (
                 <div className="mt-4 border-2 p-3 border-[#06FF00] bg-black w-60 flex flex-col gap-y-4">
@@ -29,7 +35,16 @@ export function ConnectStatus() {
                         <div className="ml-2">Profile</div>
                     </div>
                     <div className="border-b-2 border-[#06FF00] w-52 self-center"></div>
-                    <div className="flex flex-row items-center justify-start">
+                    <div
+                        className="flex flex-row items-center justify-start cursor-pointer"
+                        onClick={() => {
+                            if (isConnected) {
+                                disconnect();
+                            } else {
+                                setLoggedIn(false);
+                            }
+                        }}
+                    >
                         <img className="ml-4" src="/assets/ui/disconnect.png" />
                         <div className="ml-2">Disconnect</div>
                     </div>

@@ -1,55 +1,57 @@
-import { GreenButton } from "./components/GreenButton";
 import { useDojo } from "./hooks/useDojo";
-import { UIStore, useUIStore } from "../store";
+import { ShowItem, useUIStore } from "../store";
 import { AgreeTerm } from "./features/login/AgreeTerm";
 import { UnConnected } from "./features/login/UnConnected";
 import { Connected } from "./features/login/Connected";
 
+import { GuestTips } from "./features/login/GuestTips";
+import { ConnectWalletDialog } from "./features/login/ConnectWalletDialog";
+import { Shade } from "./features/effects/Shade";
+import { ConnectStatus } from "./features/login/ConnectStatus";
+import { useMemo } from "react";
+import { useAccount } from "@starknet-react/core";
+import { SessionWalletCreate } from "./features/login/SessionWalletCreate";
+import { HomeBg } from "./components/HomeBg";
+import { logDebug } from "./lib/utils";
+
 export const Home = () => {
     const {
-        account: { account },
-        systemCalls: { spawn },
-        account: {
-            account: { address },
-        },
+        account: { playerEntity },
+        clientComponents: { PlayerProfile },
     } = useDojo();
 
     const agreeTerm = useUIStore((state) => state.agreeTerm);
     const loggedIn = useUIStore((state) => state.loggedIn);
 
-    if (!agreeTerm) {
-        return <AgreeTerm />;
-    }
+    const sessionWalletShow = useUIStore((state) =>
+        state.getShow(ShowItem.SessionWalletCreate)
+    );
 
-    if (!loggedIn) return <UnConnected />;
+    const { isConnected } = useAccount();
+    const setLoggedIn = useUIStore((state) => state.setLoggedIn);
 
-    return <Connected />;
+    useMemo(() => {
+        if (isConnected) {
+            setLoggedIn(true);
+        } else {
+            setLoggedIn(false);
+        }
+    }, [isConnected, setLoggedIn]);
+
+    logDebug("sessionWalletShow: ", sessionWalletShow);
 
     return (
-        <div className="flex z-100 absolute h-screen w-screen bg-[url('/assets/ui/home_bg.png')] top-0 left-0 justify-center overflow-hidden z-20">
-            <div className="w-1/2 p-4">
-                <div className="flex flex-col justify-center h-full">
-                    <div className="text-[#06FF00] font-dogica font-bold text-5xl self-center -mt-32">
-                        Zenith
-                    </div>
+        <HomeBg>
+            {sessionWalletShow && <SessionWalletCreate />}
 
-                    <GreenButton
-                        className="self-center w-44 h-16 mt-40 text-xl font-dogica"
-                        onClick={async () => {
-                            await spawn(account);
-                        }}
-                    >
-                        START
-                    </GreenButton>
-                </div>
-            </div>
-            <div className="w-1/2 p-4">
-                <div className="fl ex flex-col justify-start h-full">
-                    <div className="text-[#06FF00] text-3xl font-bold self-center font-dogica mt-32">
-                        Rank
-                    </div>
-                </div>
-            </div>
-        </div>
+            {!agreeTerm && <AgreeTerm />}
+
+            {!loggedIn ? <UnConnected /> : <Connected />}
+
+            <ConnectStatus />
+            <GuestTips />
+            <ConnectWalletDialog />
+            <Shade />
+        </HomeBg>
     );
 };

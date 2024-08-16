@@ -13,12 +13,14 @@ export enum ShowItem {
     CurseDetail,
     SettleDialog,
     GuestTips,
+    ConnectWalletDialog,
+    SessionWalletCreate,
     AccountOption,
 }
 
 export type UIStore = {
     loggedIn: boolean;
-    setLoggedIn: () => void;
+    setLoggedIn: (loggedIn: boolean) => void;
     agreeTerm: boolean;
     setAgreeTerm: (agreeTerm: boolean) => void;
     phaserRect: DOMRect;
@@ -35,7 +37,7 @@ export const store = create<Store>(() => ({
 
 export const useUIStore = create<UIStore>((set, get) => ({
     loggedIn: false,
-    setLoggedIn: () => set(() => ({ loggedIn: true })),
+    setLoggedIn: (loggedIn: boolean) => set(() => ({ loggedIn })),
     agreeTerm: false,
     setAgreeTerm: (agreeTerm: boolean) => set(() => ({ agreeTerm })),
     phaserRect: new DOMRect(0, 0, 0, 0),

@@ -2,7 +2,7 @@ import { ClientComponents } from "./createClientComponents";
 import { IWorld } from "./generated/typescript/contracts.gen";
 import { Account, RpcProvider } from "starknet";
 import { updateComponent } from "@dojoengine/recs";
-import { zeroEntity } from "../utils";
+import { utf8StringToBigInt, zeroEntity } from "../utils";
 import { opBuyHero } from "./opRender/opBuyHero";
 import { opSellHero } from "./opRender/opSellHero";
 import { opCommitPrepare } from "./opRender/opCommitPrepare";
@@ -38,6 +38,13 @@ export function createSystemCalls(
             rpcProvider,
             account
         );
+    };
+
+    const setName = async (account: Account, name: string) => {
+        await client.home.setName({
+            account,
+            name: utf8StringToBigInt(name),
+        });
     };
 
     const cheatAndSkipRound = async (account: Account) => {
@@ -230,5 +237,6 @@ export function createSystemCalls(
         commitPreparation,
         cheatAndSkipRound,
         exit,
+        setName,
     };
 }

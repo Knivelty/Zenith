@@ -32,7 +32,9 @@ export function defineSystemST<S extends Schema = Schema, T = unknown>(
 export const zeroEntity: Entity =
     "0x0000000000000000000000000000000000000000000000000000000000000000" as Entity;
 
-export function hexStringToUtf8(hexStringBigInt: bigint) {
+export function hexStringToUtf8(hexStringBigInt: bigint | undefined) {
+    if (!hexStringBigInt) return "";
+
     const hex = hexStringBigInt.toString(16);
 
     const match = hex.match(/.{1,2}/g);

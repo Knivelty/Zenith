@@ -6,6 +6,7 @@ import { UI } from "./ui";
 import { SelectNetwork } from "./ui/features/misc/SelectNetwork";
 import { useInitializeAudio } from "./ui/hooks/useInitializeAudio";
 import { Loading } from "./ui/features/login/Loading";
+import { StarknetProvider } from "./ui/components/starknet-provider";
 
 function App() {
     const networkLayer = useNetworkLayer();
@@ -34,7 +35,9 @@ function App() {
             </div>
             <SelectNetwork networkLayer={networkLayer} />
             <PhaserLayer networkLayer={networkLayer} />
-            <UI />
+            <StarknetProvider>
+                <UI />
+            </StarknetProvider>
         </div>
     );
 }

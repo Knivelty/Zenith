@@ -53,6 +53,12 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.0.2
         version: 1.0.2(@types/react@18.2.45)(react@18.2.0)
+      '@starknet-react/chains':
+        specifier: ^0.1.7
+        version: 0.1.7
+      '@starknet-react/core':
+        specifier: ^2.9.0
+        version: 2.9.0(get-starknet-core@3.3.3)(react@18.2.0)(starknet@6.1.5)
       '@types/howler':
         specifier: ^2.2.11
         version: 2.2.11
@@ -92,6 +98,9 @@ importers:
       events:
         specifier: ^3.3.0
         version: 3.3.0
+      get-starknet-core:
+        specifier: ^3.3.3
+        version: 3.3.3(starknet@6.1.5)
       graphql:
         specifier: ^16.7.1
         version: 16.8.1
@@ -1444,9 +1453,9 @@ packages:
       starknet: ^6.1.5
     dependencies:
       '@dojoengine/core': 0.6.12(starknet@6.1.5)
-      '@starknet-react/core': 2.3.0(get-starknet-core@3.2.0)(react@18.2.0)(starknet@6.1.5)
+      '@starknet-react/core': 2.3.0(get-starknet-core@3.3.3)(react@18.2.0)(starknet@6.1.5)
       encoding: 0.1.13
-      get-starknet-core: 3.2.0(starknet@6.1.5)
+      get-starknet-core: 3.3.3(starknet@6.1.5)
       js-cookie: 3.0.5
       react: 18.2.0
       starknet: 6.1.5
@@ -1466,7 +1475,7 @@ packages:
       '@latticexyz/utils': 2.0.0-transaction-context-324984c5
       encoding: 0.1.13
       fast-deep-equal: 3.1.3
-      get-starknet-core: 3.2.0(starknet@6.1.5)
+      get-starknet-core: 3.3.3(starknet@6.1.5)
       js-cookie: 3.0.5
       react: 18.2.0
       rxjs: 7.5.5
@@ -3949,6 +3958,16 @@ packages:
       rxjs: 7.5.5
     dev: false
 
+  /@module-federation/runtime@0.1.21:
+    resolution: {integrity: sha512-/p4BhZ0SnjJuiL0wwu+FebFgIUJ9vM+oCY7CyprUHImyi/Y23ulI61WNWMVrKQGgdMoXQDQCL8RH4EnrVP2ZFw==}
+    dependencies:
+      '@module-federation/sdk': 0.1.21
+    dev: false
+
+  /@module-federation/sdk@0.1.21:
+    resolution: {integrity: sha512-r7xPiAm+O4e+8Zvw+8b4ToeD0D0VJD004nHmt+Y8r/l98J2eA6di72Vn1FeyjtQbCrFtiMw3ts/dlqtcmIBipw==}
+    dev: false
+
   /@mongodb-js/saslprep@1.1.7:
     resolution: {integrity: sha512-dCHW/oEX0KJ4NjDULBo3JiOaK5+6axtpBbS+ao2ZInoAL9/YRQLhXzSNAFz7hP4nzLkIqsfYAK/PDE3+XHny0Q==}
     dependencies:
@@ -4368,7 +4387,7 @@ packages:
     resolution: {integrity: sha512-UNh97I1SvuJKaAhKOmpEk8JcWuZWMlPG/ba2HcvFYL9x/47BKndJ+Da9V+iJFtkHUjreVnajT1snsaz1XMG+UQ==}
     dev: false
 
-  /@starknet-react/core@2.3.0(get-starknet-core@3.2.0)(react@18.2.0)(starknet@6.1.5):
+  /@starknet-react/core@2.3.0(get-starknet-core@3.3.3)(react@18.2.0)(starknet@6.1.5):
     resolution: {integrity: sha512-8g9d0Gs811gJnQJHVMxQoXYhv+y5/qug7NQ0lnJ51uytdBhr/Zz5wgeTHW4ZQ5Igljyvf+ks+yhp4P1iSvnSqA==}
     peerDependencies:
       get-starknet-core: ^3.2.0
@@ -4378,7 +4397,24 @@ packages:
       '@starknet-react/chains': 0.1.7
       '@tanstack/react-query': 5.29.0(react@18.2.0)
       eventemitter3: 5.0.1
-      get-starknet-core: 3.2.0(starknet@6.1.5)
+      get-starknet-core: 3.3.3(starknet@6.1.5)
+      immutable: 4.3.4
+      react: 18.2.0
+      starknet: 6.1.5
+      zod: 3.22.4
+    dev: false
+
+  /@starknet-react/core@2.9.0(get-starknet-core@3.3.3)(react@18.2.0)(starknet@6.1.5):
+    resolution: {integrity: sha512-UdRo454/g2lb0YsNAUJohJ2w21LlahcEXQlkWrddoKFubRY6Q0b39hec0eZOCqfU0Z1Sh7kF1XYvI5t9xL4yTQ==}
+    peerDependencies:
+      get-starknet-core: ^3.2.0
+      react: ^18.0
+      starknet: ^5.25.0
+    dependencies:
+      '@starknet-react/chains': 0.1.7
+      '@tanstack/react-query': 5.29.0(react@18.2.0)
+      eventemitter3: 5.0.1
+      get-starknet-core: 3.3.3(starknet@6.1.5)
       immutable: 4.3.4
       react: 18.2.0
       starknet: 6.1.5
@@ -6873,11 +6909,12 @@ packages:
     resolution: {integrity: sha512-pjzuKtY64GYfWizNAJ0fr9VqttZkNiK2iS430LtIHzjBEr6bX8Am2zm4sW4Ro5wjWW5cAlRL1qAMTcXbjNAO2Q==}
     engines: {node: '>=8.0.0'}
 
-  /get-starknet-core@3.2.0(starknet@6.1.5):
-    resolution: {integrity: sha512-SZhxtLlKoPKLZ2H3l9WIU7CiNmkL3qLWGksALmvZdAXa/9PykYfLtvIB5B8A2UZMpf2ojTZlWLfuo1KhgmVobA==}
+  /get-starknet-core@3.3.3(starknet@6.1.5):
+    resolution: {integrity: sha512-IscL4lAigJpc/9Idkg07sdyUOXkB+/goTDQm8EhMGn/nIAW4rn04d+D47ils75drNQIfZZKDIIZrWrbIKvjoWA==}
     peerDependencies:
       starknet: ^5.18.0
     dependencies:
+      '@module-federation/runtime': 0.1.21
       starknet: 6.1.5
     dev: false
 

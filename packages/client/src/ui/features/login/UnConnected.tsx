@@ -1,8 +1,7 @@
 import { GreenButton } from "../../components/GreenButton";
 import { useDojo } from "../../hooks/useDojo";
 import { ShowItem, useUIStore } from "../../../store";
-import { GuestTips } from "./GuestTips";
-import { Shade } from "../effects/Shade";
+import { HomeBg } from "../../components/HomeBg";
 
 export function UnConnected() {
     const {
@@ -14,11 +13,9 @@ export function UnConnected() {
     } = useDojo();
 
     const setShow = useUIStore((state) => state.setShow);
-    const loggedIn = useUIStore((state) => state.loggedIn);
-    const setLoggedIn = useUIStore((state) => state.setLoggedIn);
 
     return (
-        <div className="flex z-100 absolute h-screen w-screen bg-[url('/assets/ui/home_bg.png')] top-0 left-0 justify-center overflow-hidden z-20">
+        <HomeBg>
             <div className="w-1/2 p-4">
                 <div className="flex flex-col justify-center h-full">
                     <div className="text-[#06FF00] font-dogica font-bold text-5xl self-center -mt-32">
@@ -35,7 +32,13 @@ export function UnConnected() {
                         Login As Guest
                     </GreenButton>
 
-                    <GreenButton className="self-center w-[60%] h-16 mt-12 text-xl">
+                    <GreenButton
+                        className="self-center w-[60%] h-16 mt-12 text-xl"
+                        onClick={() => {
+                            setShow(ShowItem.ConnectWalletDialog, true);
+                            setShow(ShowItem.Shade, true);
+                        }}
+                    >
                         Connect Wallet
                     </GreenButton>
                 </div>
@@ -47,8 +50,6 @@ export function UnConnected() {
                     </div>
                 </div>
             </div>
-            <GuestTips />
-            <Shade />
-        </div>
+        </HomeBg>
     );
 }

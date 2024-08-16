@@ -35,7 +35,8 @@ export function GuestTips() {
                     onClick={() => {
                         setShow(ShowItem.GuestTips, false);
                         setShow(ShowItem.Shade, false);
-                        setLoggedIn();
+
+                        setShow(ShowItem.SessionWalletCreate, true);
                     }}
                 >
                     Confirm

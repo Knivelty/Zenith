@@ -13,6 +13,8 @@ trait IHome {
     fn setStageProfile(profiles: Array<StageProfile>, pieces: Array<StageProfilePiece>);
     fn setSynergyProfile(profiles: Array<SynergyProfile>);
 
+    fn setName(name: felt252);
+
     fn spawn();
     fn refreshAltar();
     fn buyHero(altarSlot: u8, invSlot: u8) -> u32;
@@ -372,10 +374,9 @@ mod home {
 
     fn _registerPlayer(world: IWorldDispatcher, playerAddr: ContractAddress) {
         let playerProfile = get!(world, playerAddr, PlayerProfile);
-
-        if (playerProfile.pieceCounter == 0) {
-            set!(world, PlayerProfile { player: playerAddr, pieceCounter: 0, })
-        }
+    // if (playerProfile.pieceCounter == 0) {
+    //     panic!("unregistered player");
+    // }
     }
 
     fn _removePiece(world: IWorldDispatcher, gid: u32) {
@@ -857,6 +858,15 @@ mod home {
                 set!(world, (*p));
                 idx += 1;
             };
+        }
+
+
+        fn setName(world: IWorldDispatcher, name: felt252) {
+            let playerAddr = get_caller_address();
+            let mut playerProfile = get!(world, playerAddr, PlayerProfile);
+            playerProfile.name = name;
+
+            set!(world, (playerProfile));
         }
 
 

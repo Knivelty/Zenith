@@ -36,7 +36,8 @@ struct CurseOption {
 struct PlayerProfile {
     #[key]
     player: ContractAddress,
-    pieceCounter: u32
+    pieceCounter: u32,
+    name: felt252
 }
 
 

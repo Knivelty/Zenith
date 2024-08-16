@@ -3,6 +3,7 @@ import { useDojo } from "../../hooks/useDojo";
 import { GuestTips } from "./GuestTips";
 import { Shade } from "../effects/Shade";
 import { ConnectStatus } from "./ConnectStatus";
+import { HomeBg } from "../../components/HomeBg";
 
 export function Connected() {
     const {
@@ -14,7 +15,7 @@ export function Connected() {
     } = useDojo();
 
     return (
-        <div className="flex z-100 absolute h-screen w-screen bg-[url('/assets/ui/home_bg.png')] top-0 left-0 justify-center overflow-hidden z-20">
+        <HomeBg>
             <div className="w-1/2 p-4">
                 <ConnectStatus />
                 <div className="flex flex-col justify-center h-full">
@@ -39,8 +40,6 @@ export function Connected() {
                     </div>
                 </div>
             </div>
-            <GuestTips />
-            <Shade />
-        </div>
+        </HomeBg>
     );
 }

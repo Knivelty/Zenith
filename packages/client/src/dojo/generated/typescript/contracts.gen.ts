@@ -103,6 +103,21 @@ export async function setupWorld(provider: DojoProvider) {
             }
         };
 
+        // Call the `setName` system with the specified Account and calldata
+        const setName = async (props: { account: Account; name: bigint }) => {
+            try {
+                return await provider.execute(
+                    props.account,
+                    contract_name,
+                    "setName",
+                    [props.name]
+                );
+            } catch (error) {
+                console.error("Error executing spawn:", error);
+                throw error;
+            }
+        };
+
         // Call the `buyHero` system with the specified Account and calldata
         const buyHero = async (props: {
             account: Account;
@@ -317,6 +332,7 @@ export async function setupWorld(provider: DojoProvider) {
             getCoin,
             exit,
             dojoResource,
+            setName,
         };
     }
 
