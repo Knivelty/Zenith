@@ -1,5 +1,9 @@
 import { useCallback } from "react";
-import { CreatureKey, HeroBaseAttr, useHeroesAttr } from "../../hooks/useHeroAttr";
+import {
+    CreatureKey,
+    HeroBaseAttr,
+    useHeroesAttr,
+} from "../../hooks/useHeroAttr";
 import { useInv } from "../../hooks/useInv";
 import { useComponentValue } from "@dojoengine/react";
 import { zeroEntity } from "../../../utils";
@@ -108,10 +112,7 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
                     <div className="ml-4"></div>
                     <div className="flex flex-row ">
                         <div className="text-[#06FF00]  ">
-                            {[
-                                heroAttr?.order,
-                                ...(heroAttr?.origins ?? []),
-                            ].join(" ")}
+                            {[...(heroAttr?.origins ?? [])].join(" ")}
                         </div>
                     </div>
                 </div>

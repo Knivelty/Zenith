@@ -10,6 +10,7 @@ export type Store = {
 export enum ShowItem {
     Shop,
     Shade,
+    HeroInfoDialog,
     CurseDetail,
     SettleDialog,
     GuestTips,

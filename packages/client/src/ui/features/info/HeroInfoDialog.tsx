@@ -5,7 +5,7 @@ import { useDojo } from "../../hooks/useDojo";
 import { cn } from "../../lib/utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { getHeroAttr, getPieceAttr } from "../../hooks/useHeroAttr";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { zeroEntity } from "../../../utils";
 import { updateComponent } from "@dojoengine/recs";
 
@@ -16,7 +16,7 @@ export function HeroInfoDialog() {
     const setShow = useUIStore((s) => s.setShow);
     const userOp = useComponentValue(UserOperation, zeroEntity);
     const pieceId = userOp?.selectGid;
-    const heroInfoShow = userOp?.selected;
+    const heroInfoShow = useUIStore((s) => s.getShow(ShowItem.HeroInfoDialog));
 
     const piece = useComponentValue(
         LocalPiece,
@@ -31,13 +31,15 @@ export function HeroInfoDialog() {
 
     const dialogRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        if (userOp?.selected) {
+    useMemo(() => {
+        if (userOp?.selected && userOp?.selectGid) {
             setShow(ShowItem.Shade, true);
+            setShow(ShowItem.HeroInfoDialog, true);
         } else {
+            setShow(ShowItem.HeroInfoDialog, false);
             setShow(ShowItem.Shade, false);
         }
-    }, [setShow, userOp?.selected]);
+    }, [setShow, userOp?.selected, userOp?.selectGid]);
 
     const handleClickOutside = useCallback(
         (event: MouseEvent) => {
@@ -53,13 +55,6 @@ export function HeroInfoDialog() {
         },
         [UserOperation]
     );
-
-    // TODO: this is shade is not the same as show
-    useEffect(() => {
-        if (heroInfoShow) {
-            setShow(ShowItem.Shade, true);
-        }
-    }, [heroInfoShow, setShow]);
 
     useEffect(() => {
         if (heroInfoShow) {

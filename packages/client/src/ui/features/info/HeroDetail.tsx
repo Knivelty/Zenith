@@ -107,7 +107,6 @@ export function HeroDetail(props: HeroDetailProp) {
             </div>
 
             <div className="flex flex-cow pl-8 pt-4 w-full">
-                <SynergyName name={props.attr?.order || ""} />
                 {props.attr?.origins.map((o) => {
                     return <SynergyName name={o || ""} />;
                 })}

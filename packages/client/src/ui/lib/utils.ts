@@ -74,15 +74,16 @@ export async function waitForPromiseOrTxRevert(
     });
 
     const tx = await txPromise;
+
     const txDetail = rpcProvider.getTransactionByHash(tx.transaction_hash);
 
     // get transaction fail means tx is not found
     txDetail.catch((e) => {
         logDebug(`get tx ${tx.transaction_hash} fail`, e);
-        // resolve after 1s to avoid tx not found on dev net
+        // resolve after 5s to avoid tx not found on dev net
         setTimeout(() => {
             resolve();
-        }, 1000);
+        }, 5000);
     });
 
     const res = rpcProvider.waitForTransaction(tx.transaction_hash, {
