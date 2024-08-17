@@ -10,28 +10,21 @@ function setTimeoutPromise(ms: number): Promise<never> {
   });
 }
 
-test("test case by case", async () => {
-  debug.enable("*");
-  const data = fs.readFileSync("test/data/endless_loop_battle_1.json", "utf8");
+async function runOneCase(path: string) {
+  const data = fs.readFileSync(path, "utf8");
 
   const input = JSON.parse(data) as Parameters<typeof createSimulator>[0];
 
   const { calculateBattleLogs, getEmittedEvents } =
     await createSimulator(input);
 
-  try {
-    await Promise.race([
-      (async () => {
-        const { result } = await calculateBattleLogs();
-        console.log("logs: ", result);
+  const { result } = await calculateBattleLogs();
 
-        const allEvents = getEmittedEvents();
-        console.log("allEvents: ", allEvents);
-      })(),
-      setTimeoutPromise(timeLimit),
-    ]);
-  } catch (e) {
-    console.log(e);
-    process.exit(1);
-  }
+  // const allEvents = getEmittedEvents();
+}
+
+test("test case by case", async () => {
+  debug.enable("*");
+  // await runOneCase("test/data/endless_loop_battle_1.json");
+  await runOneCase("test/data/endless_loop_battle_2.json");
 });

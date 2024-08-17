@@ -32,6 +32,7 @@ export async function createDB() {
   const db = await createRxDatabase<MyDatabase>({
     name: "db",
     storage: getRxStorageMemory(),
+    multiInstance: false,
   });
 
   await db.addCollections<DBCollections>({

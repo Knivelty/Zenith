@@ -65,7 +65,7 @@ async function pieceActionOnceInATurn(turn: number) {
       initiative: piece.initiative,
     });
     // remove the stack after exec
-    await query.remove();
+    await query.incrementalRemove();
 
     // recursive run
     await pieceActionOnceInATurn(turn);

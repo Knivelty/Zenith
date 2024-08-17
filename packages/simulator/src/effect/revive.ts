@@ -23,6 +23,12 @@ function getHandler(actionPieceId: string) {
       dmgSource,
     }: EventMap["pieceDeath"]) => {
       const db = globalThis.Simulator.db;
+
+      // delete the following code after damage source is implemented
+      if (killerPieceId === "0") {
+        return;
+      }
+
       const killerPiece = await db.battle_entity
         .findOne({
           selector: {
