@@ -108,7 +108,11 @@ export type EventWithName<T extends keyof EventMap> = EventMap[T] & {
 };
 
 interface EventSystem<T extends EventMap> {
-  on<K extends keyof T>(event: K, handler: (data: T[K]) => Promise<void>): void;
+  on<K extends keyof T>(
+    event: K,
+    handler: (data: T[K]) => Promise<void>,
+    priority?: number
+  ): void;
   off<K extends keyof T>(
     event: K,
     handler: (data: T[K]) => Promise<void>
@@ -121,19 +125,23 @@ interface EventSystem<T extends EventMap> {
 
 export const createEventSystem = <T extends EventMap>(): EventSystem<T> => {
   const eventsHandlers: {
-    [K in keyof T]?: Array<(data: T[K]) => Promise<void>>;
+    [K in keyof T]?: Array<{
+      func: (data: T[K]) => Promise<void>;
+      priority: number;
+    }>;
   } = {};
 
   const emittedEvents: ({ name: EventNameType } & T[keyof T])[] = [];
 
   const on = <K extends keyof T>(
     event: K,
-    handler: (data: T[K]) => Promise<void>
+    handler: (data: T[K]) => Promise<void>,
+    priority = 1
   ): void => {
     if (!eventsHandlers[event]) {
       eventsHandlers[event] = [];
     }
-    eventsHandlers[event]!.push(handler);
+    eventsHandlers[event]!.push({ func: handler, priority });
   };
 
   const off = <K extends keyof T>(
@@ -141,7 +149,7 @@ export const createEventSystem = <T extends EventMap>(): EventSystem<T> => {
     handler: (data: T[K]) => Promise<void>
   ): void => {
     if (!eventsHandlers[event]) return;
-    const index = eventsHandlers[event]!.indexOf(handler);
+    const index = eventsHandlers[event]!.map((e) => e.func).indexOf(handler);
     if (index > -1) {
       eventsHandlers[event]!.splice(index, 1);
     } else {
@@ -157,10 +165,13 @@ export const createEventSystem = <T extends EventMap>(): EventSystem<T> => {
     logEvent(event as EventNameType)(data);
     emittedEvents.push({ name: event as EventNameType, ...data });
     if (!eventsHandlers[event]) return;
-    await asyncMap(
-      eventsHandlers[event]!,
-      async (handler) => await handler(data)
-    );
+
+    // higher priority handler will be executed first
+    for (const handler of eventsHandlers[event]!.sort(
+      (a, b) => b.priority - a.priority
+    )) {
+      await handler.func(data);
+    }
   };
 
   const emitted = () => {
