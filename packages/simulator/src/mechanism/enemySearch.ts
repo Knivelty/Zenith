@@ -87,7 +87,10 @@ export async function findTargetPiece(
     tgtSet = await getHomeUndeadPieceIds();
   }
 
-  logDebug(`piece ${actionPieceId}'s target set: `, tgtSet);
+  logDebug(
+    `piece ${actionPieceId}'s target set: `,
+    tgtSet.map((t) => t._data)
+  );
 
   // get nearest piece
   const pieceWithDistance = await Promise.all(
@@ -106,5 +109,12 @@ export async function findTargetPiece(
     })
   );
 
-  return pieceWithDistance?.[0].id;
+  // sort by distance asc
+  const targetPieceId = pieceWithDistance.sort(
+    (a, b) => a.distance - b.distance
+  )?.[0].id;
+
+  logDebug(`piece ${actionPieceId} find target piece: `, targetPieceId);
+
+  return targetPieceId;
 }

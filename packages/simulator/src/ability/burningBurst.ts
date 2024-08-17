@@ -53,7 +53,7 @@ export const burningBurst: AbilityFunction = async ({ actionPieceId }) => {
     data: { actionPieceId },
     affectedGrounds: getAffectedGrounds({
       isHome: battlePiece.isHome,
-      y: battlePiece.y,
+      y: targetPiece.y,
       sideCols,
       frontCol,
     }),
@@ -69,14 +69,14 @@ export const burningBurst: AbilityFunction = async ({ actionPieceId }) => {
     actionPieceId,
     damage: frontColAttack,
     col: frontCol,
-    startRow: battlePiece.y,
+    startRow: targetPiece.y,
     isHome: battlePiece.isHome,
   });
 
   await makeColBurn({
     stack: frontColBurnStack,
     col: frontCol,
-    startRow: battlePiece.y,
+    startRow: targetPiece.y,
     isHome: battlePiece.isHome,
   });
 
@@ -124,7 +124,7 @@ async function makeColAttack({
     .find({
       selector: {
         x: col,
-        y: isHome ? { $lt: startRow } : { $gt: startRow },
+        y: isHome ? { $lte: startRow } : { $gte: startRow },
         isHome: !isHome,
         dead: false,
       },
@@ -159,7 +159,7 @@ async function makeColBurn({
     .find({
       selector: {
         x: col,
-        y: isHome ? { $lt: startRow } : { $gt: startRow },
+        y: isHome ? { $lte: startRow } : { $gte: startRow },
         isHome: !isHome,
         dead: false,
       },
@@ -189,7 +189,7 @@ function getAffectedGrounds({
 }) {
   let affectedGround: AffectedGround[] = [];
   if (isHome) {
-    for (let i = 0; i < y; i++) {
+    for (let i = 0; i <= y; i++) {
       affectedGround.push({ x: frontCol, y: i, groundEffect: "fire" });
 
       sideCols.map((col) => {
@@ -197,7 +197,7 @@ function getAffectedGrounds({
       });
     }
   } else {
-    for (let i = 7; i > y; i--) {
+    for (let i = 7; i >= y; i--) {
       affectedGround.push({ x: frontCol, y: i, groundEffect: "fire" });
       sideCols.map((col) => {
         affectedGround.push({ x: col, y: i, groundEffect: "slightFire" });
