@@ -32,6 +32,7 @@ function getHandler(actionPieceId: string) {
         .exec();
 
       if (!killerPiece) {
+        console.trace(UNKNOWN_ERROR);
         throw UNKNOWN_ERROR;
       }
 

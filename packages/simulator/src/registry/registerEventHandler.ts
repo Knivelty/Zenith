@@ -15,6 +15,7 @@ import {
   registerPieceSearchMoveTarget,
 } from "../mechanism/enemySearch";
 import { registerTryAttack, registerExecuteAttack } from "../mechanism/attack";
+import { removeFromActionStackOnDeath } from "../mechanism/triggerOnEvent/death/removeFromActionOnDeath";
 
 export function registerEventHandler() {
   registerPieceStartAction();
@@ -30,6 +31,8 @@ export function registerEventHandler() {
   registerTryAttack();
 
   registerExecuteAttack();
+
+  removeFromActionStackOnDeath();
 
   increaseManaOnEvent();
   executeDamageOnEvent();
