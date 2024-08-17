@@ -1,6 +1,6 @@
 "ID","Name","Order","Origins","Rarity","Level","Health","Mana","ATK","Armor","Speed","Range","Initiative","Ability"
 1,"Orc","-","-",1,1,225,100,15,10,2,2,100,"-"
-2,"Basilisk","-","-",1,1,6000,100,750,225,4,3,75,"-"
+2,"Basilisk","-","-",1,4,6000,100,750,225,4,3,75,"-"
 1001,"Berserker","Skill","Strength+Brute",1,1,500,100,55,45,3,2,95,"-"
 1001,"Berserker","Skill","Strength+Brute",1,2,900,100,99,45,3,2,95,"-"
 1001,"Berserker","Skill","Strength+Brute",1,3,1620,100,178,45,3,2,95,"-"
