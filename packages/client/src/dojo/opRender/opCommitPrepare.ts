@@ -57,7 +57,7 @@ export const opCommitPrepare = async (
                     }
                 })
                 ?.filter(Boolean) as PieceChange[]
-        ).sort((a, b) => a.idx - b.idx) || [];
+        )?.sort((a, b) => a.idx - b.idx) || [];
     // sort to let idx=0 first because the contract side will clear
     // board piece gid if a piece is moved from board to inv
 

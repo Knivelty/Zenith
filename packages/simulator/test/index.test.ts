@@ -12,6 +12,7 @@ export const MOCK_CREATURES: CreatureType[] = [
   {
     creature_idx: 1,
     level: 1,
+    rarity: 1,
     health: 2000,
     maxMana: 90,
     attack: 60,
@@ -26,6 +27,7 @@ export const MOCK_CREATURES: CreatureType[] = [
   {
     creature_idx: 2,
     level: 1,
+    rarity: 1,
     health: 2000,
     maxMana: 100,
     attack: 60,
@@ -40,6 +42,7 @@ export const MOCK_CREATURES: CreatureType[] = [
   {
     creature_idx: 3,
     level: 1,
+    rarity: 1,
     health: 2000,
     maxMana: 80,
     attack: 60,

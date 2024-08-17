@@ -108,6 +108,7 @@ export const processBattle = (component: ClientComponents) => {
             allCreatures.push({
                 creature_idx: creature.creature_index,
                 level: creature.level,
+                rarity: creature.rarity,
                 health: creature.health,
                 maxMana: creature.maxMana,
                 attack: creature.attack,
@@ -151,6 +152,7 @@ export const processBattle = (component: ClientComponents) => {
             allCreatures.push({
                 creature_idx: creature.creature_index,
                 level: creature.level,
+                rarity: creature.rarity,
                 health: creature.health,
                 maxMana: creature.maxMana,
                 attack: creature.attack,

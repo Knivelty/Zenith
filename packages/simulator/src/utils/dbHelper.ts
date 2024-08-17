@@ -1,4 +1,5 @@
 import { EffectNameType } from "../effect/interface";
+import { asyncMap } from "./asyncHelper";
 import {
   UNKNOWN_CREATURE_ERROR,
   UNKNOWN_PIECE_ERROR,
@@ -81,10 +82,10 @@ export async function getAllUndeadPieceIds() {
   return ids;
 }
 
-export async function getAwayUndeadPieceIds() {
+export async function getAwayUndeadPieces() {
   const db = globalThis.Simulator.db;
 
-  const awayUndeadPieceIds = await db.battle_entity
+  const awayUndeadPieces = await db.battle_entity
     .find({
       selector: {
         dead: false,
@@ -94,13 +95,13 @@ export async function getAwayUndeadPieceIds() {
 
     .exec();
 
-  return awayUndeadPieceIds;
+  return awayUndeadPieces;
 }
 
-export async function getHomeUndeadPieceIds() {
+export async function getHomeUndeadPieces() {
   const db = globalThis.Simulator.db;
 
-  const alliedUndeadPieceIds = await db.battle_entity
+  const alliedUndeadPieces = await db.battle_entity
     .find({
       selector: {
         isHome: true,
@@ -110,21 +111,33 @@ export async function getHomeUndeadPieceIds() {
 
     .exec();
 
-  return alliedUndeadPieceIds;
+  return alliedUndeadPieces;
 }
 
 export async function getBattleResult() {
-  const awayUndeadPieceIds = await getAwayUndeadPieceIds();
-  const homeUndeadPieceIds = await getHomeUndeadPieceIds();
+  const awayUndeadPieces = await getAwayUndeadPieces();
+  const homeUndeadPieces = await getHomeUndeadPieces();
 
-  const end =
-    homeUndeadPieceIds.length === 0 || awayUndeadPieceIds.length === 0;
+  const end = homeUndeadPieces.length === 0 || awayUndeadPieces.length === 0;
 
   let win: boolean | undefined = undefined;
   let healthDecrease: number | undefined = undefined;
   if (end) {
-    win = homeUndeadPieceIds.length ? true : false;
-    healthDecrease = awayUndeadPieceIds.length;
+    win = homeUndeadPieces.length ? true : false;
+
+    if (win) {
+      healthDecrease = 0;
+    } else {
+      const awayPieceWithCreatures = await asyncMap(
+        awayUndeadPieces,
+        async (p) => {
+          return getPieceCreature(p.entity);
+        }
+      );
+      healthDecrease = awayPieceWithCreatures.reduce((acc, p) => {
+        return acc + (2 * p.rarity - 1);
+      }, 0);
+    }
   } else {
     win = false;
     healthDecrease = 0;
@@ -134,8 +147,8 @@ export async function getBattleResult() {
 }
 
 export async function isBattleEnd() {
-  const awayUndeadPieceIds = await getAwayUndeadPieceIds();
-  const homePieceIds = await getHomeUndeadPieceIds();
+  const awayUndeadPieceIds = await getAwayUndeadPieces();
+  const homePieceIds = await getHomeUndeadPieces();
 
   const end = awayUndeadPieceIds.length === 0 || homePieceIds.length === 0;
 

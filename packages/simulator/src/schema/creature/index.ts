@@ -28,6 +28,9 @@ export const CreatureSchemaJson = {
     level: {
       type: "number",
     },
+    rarity: {
+      type: "number",
+    },
     health: {
       type: "number",
     },
@@ -65,6 +68,7 @@ export const CreatureSchemaJson = {
   required: [
     "creature_idx",
     "level",
+    "rarity",
     "health",
     "maxMana",
     "attack",

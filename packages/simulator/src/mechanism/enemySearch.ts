@@ -1,9 +1,9 @@
 import { logDebug } from "../debug";
 import { EventMap } from "../event/createEventSystem";
 import {
-  getHomeUndeadPieceIds,
   getBattlePiece,
-  getAwayUndeadPieceIds,
+  getAwayUndeadPieces,
+  getHomeUndeadPieces,
 } from "../utils/dbHelper";
 import { manhattanDistance } from "./distance";
 
@@ -79,12 +79,12 @@ export async function findTargetPiece(
   }
 
   // tgtSet = target set
-  let tgtSet: Awaited<ReturnType<typeof getHomeUndeadPieceIds>>;
+  let tgtSet: Awaited<ReturnType<typeof getHomeUndeadPieces>>;
 
   if (actionPieceBattle.isHome) {
-    tgtSet = await getAwayUndeadPieceIds();
+    tgtSet = await getAwayUndeadPieces();
   } else {
-    tgtSet = await getHomeUndeadPieceIds();
+    tgtSet = await getHomeUndeadPieces();
   }
 
   logDebug(
