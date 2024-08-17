@@ -1,0 +1,420 @@
+{
+    "creatures": [
+        {
+            "creature_idx": 3002,
+            "level": 2,
+            "health": 1260,
+            "maxMana": 100,
+            "attack": 63,
+            "armor": 150,
+            "range": 2,
+            "speed": 1,
+            "initiative": 60,
+            "origins": [
+                "Strength",
+                "Brute"
+            ],
+            "order": "Giant",
+            "ability": "mountainCollapse"
+        },
+        {
+            "creature_idx": 2005,
+            "level": 3,
+            "health": 972,
+            "maxMana": 100,
+            "attack": 405,
+            "armor": 40,
+            "range": 6,
+            "speed": 0,
+            "initiative": 150,
+            "origins": [
+                "Light",
+                "Brute",
+                "Imaginary"
+            ],
+            "order": "Brilliance",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 3001,
+            "level": 2,
+            "health": 1080,
+            "maxMana": 80,
+            "attack": 126,
+            "armor": 45,
+            "range": 2,
+            "speed": 2,
+            "initiative": 90,
+            "origins": [
+                "Strength",
+                "Hunter"
+            ],
+            "order": "Titan",
+            "ability": "barbariansRage"
+        },
+        {
+            "creature_idx": 3004,
+            "level": 2,
+            "health": 1080,
+            "maxMana": 100,
+            "attack": 144,
+            "armor": 35,
+            "range": 2,
+            "speed": 2,
+            "initiative": 105,
+            "origins": [
+                "Cunning",
+                "Magical"
+            ],
+            "order": "Fox",
+            "ability": "interlockedInferno"
+        },
+        {
+            "creature_idx": 3003,
+            "level": 2,
+            "health": 1260,
+            "maxMana": 90,
+            "attack": 99,
+            "armor": 50,
+            "range": 3,
+            "speed": 3,
+            "initiative": 80,
+            "origins": [
+                "Dark",
+                "Hunter"
+            ],
+            "order": "Anger",
+            "ability": "burningBurst"
+        },
+        {
+            "creature_idx": 3005,
+            "level": 2,
+            "health": 1800,
+            "maxMana": 80,
+            "attack": 108,
+            "armor": 0,
+            "range": 2,
+            "speed": 1,
+            "initiative": 80,
+            "origins": [
+                "Cunning",
+                "Magical"
+            ],
+            "order": "Reflection",
+            "ability": "penetrationInfection"
+        },
+        {
+            "creature_idx": 2002,
+            "level": 2,
+            "health": 810,
+            "maxMana": 100,
+            "attack": 180,
+            "armor": 30,
+            "range": 3,
+            "speed": 4,
+            "initiative": 125,
+            "origins": [
+                "Strength",
+                "Hunter"
+            ],
+            "order": "Skill",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 2003,
+            "level": 3,
+            "health": 2041,
+            "maxMana": 100,
+            "attack": 226,
+            "armor": 35,
+            "range": 2,
+            "speed": 3,
+            "initiative": 115,
+            "origins": [
+                "Light",
+                "Magical"
+            ],
+            "order": "Enlightenment",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 1001,
+            "level": 3,
+            "health": 1620,
+            "maxMana": 100,
+            "attack": 178,
+            "armor": 45,
+            "range": 2,
+            "speed": 3,
+            "initiative": 95,
+            "origins": [
+                "Strength",
+                "Brute"
+            ],
+            "order": "Skill",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 2008,
+            "level": 2,
+            "health": 1260,
+            "maxMana": 100,
+            "attack": 110,
+            "armor": 40,
+            "range": 3,
+            "speed": 3,
+            "initiative": 100,
+            "origins": [
+                "Dark",
+                "Magical"
+            ],
+            "order": "Fury",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 1007,
+            "level": 3,
+            "health": 1562,
+            "maxMana": 100,
+            "attack": 211,
+            "armor": 30,
+            "range": 2,
+            "speed": 4,
+            "initiative": 120,
+            "origins": [
+                "Dark",
+                "Hunter"
+            ],
+            "order": "Fury",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 2007,
+            "level": 2,
+            "health": 1080,
+            "maxMana": 100,
+            "attack": 144,
+            "armor": 25,
+            "range": 2,
+            "speed": 2,
+            "initiative": 115,
+            "origins": [
+                "Dark",
+                "Magical"
+            ],
+            "order": "Rage",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 2006,
+            "level": 2,
+            "health": 1188,
+            "maxMana": 100,
+            "attack": 117,
+            "armor": 40,
+            "range": 2,
+            "speed": 2,
+            "initiative": 95,
+            "origins": [
+                "Dark",
+                "Magical"
+            ],
+            "order": "Anger",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 1008,
+            "level": 2,
+            "health": 1440,
+            "maxMana": 100,
+            "attack": 63,
+            "armor": 40,
+            "range": 2,
+            "speed": 3,
+            "initiative": 115,
+            "origins": [
+                "Dark",
+                "Brute"
+            ],
+            "order": "Anger",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 3003,
+            "level": 2,
+            "health": 1260,
+            "maxMana": 90,
+            "attack": 99,
+            "armor": 50,
+            "range": 3,
+            "speed": 3,
+            "initiative": 80,
+            "origins": [
+                "Dark",
+                "Hunter"
+            ],
+            "order": "Anger",
+            "ability": "burningBurst"
+        }
+    ],
+    "initEntities": [
+        {
+            "entity": "0x619951429e4f68d1009c7bc7763367de735140cb2784b1466ec963148cd6f5c",
+            "initX": 4,
+            "initY": 4,
+            "isHome": true,
+            "creature_idx": 3002,
+            "level": 2
+        },
+        {
+            "entity": "0x7edafbe0e0793bada633eb37ab80bfb9175e367938b212ba755c7a48a5864be",
+            "initX": 1,
+            "initY": 4,
+            "isHome": true,
+            "creature_idx": 2005,
+            "level": 3
+        },
+        {
+            "entity": "0x6dbc42e9f6ceff0c330567ebcfeb1a38434698ca3f02e6e1bf6d4c92bc5caf5",
+            "initX": 3,
+            "initY": 4,
+            "isHome": true,
+            "creature_idx": 3001,
+            "level": 2
+        },
+        {
+            "entity": "0x42352faed6f742e6433547d24e9322f379b66a7a83922c64e54660e70f7ca19",
+            "initX": 2,
+            "initY": 6,
+            "isHome": true,
+            "creature_idx": 3004,
+            "level": 2
+        },
+        {
+            "entity": "0xa6e5561a8699dd4cba4fec1405bbc71459e05c954019b2db479cee53788f6a",
+            "initX": 3,
+            "initY": 6,
+            "isHome": true,
+            "creature_idx": 3003,
+            "level": 2
+        },
+        {
+            "entity": "0x275ac7d3b480f935b250ea2f8ee794944537abb7499583a42cada161d1c196c",
+            "initX": 4,
+            "initY": 5,
+            "isHome": true,
+            "creature_idx": 3005,
+            "level": 2
+        },
+        {
+            "entity": "0x2de822e64866b3947ae05605cda610146b2ea288262b3fd5f3cc3c92a6bf36e",
+            "initX": 2,
+            "initY": 5,
+            "isHome": true,
+            "creature_idx": 2002,
+            "level": 2
+        },
+        {
+            "entity": "0x50276d3b2d4f15bdbad905f85f11497618c892ee158caf4755cab11577db406",
+            "initX": 3,
+            "initY": 5,
+            "isHome": true,
+            "creature_idx": 2003,
+            "level": 3
+        },
+        {
+            "entity": "0x72ccad200cd464871368236ea88b55acab72c48acd34554f059288121acbcdd",
+            "initX": 1,
+            "initY": 6,
+            "isHome": true,
+            "creature_idx": 1001,
+            "level": 3
+        },
+        {
+            "entity": "0x4be6948f89d88f2247e73d5468376ba425b48f3d8f3d77e24a7ba63b12ac03a",
+            "initX": 7,
+            "initY": 2,
+            "isHome": false,
+            "creature_idx": 2008,
+            "level": 2
+        },
+        {
+            "entity": "0x7d0c6b334523eb36dacdf7f596655375104c50f6419ac3f7021cc4cd2f8712f",
+            "initX": 4,
+            "initY": 2,
+            "isHome": false,
+            "creature_idx": 1007,
+            "level": 3
+        },
+        {
+            "entity": "0x234c52ab99f1e41962e8c0cd3df0f722a45be652936e1667857b19c0c53fbee",
+            "initX": 1,
+            "initY": 2,
+            "isHome": false,
+            "creature_idx": 2007,
+            "level": 2
+        },
+        {
+            "entity": "0x6f8d42506acc3a7e98ad75cf3b2076024ede8e63bef2217df8fba8be3e0c5e0",
+            "initX": 4,
+            "initY": 1,
+            "isHome": false,
+            "creature_idx": 2006,
+            "level": 2
+        },
+        {
+            "entity": "0x20d57a01b10c7fd8fc865685431cbab86de3ae362664772d054998fb5c9b827",
+            "initX": 0,
+            "initY": 1,
+            "isHome": false,
+            "creature_idx": 1008,
+            "level": 2
+        },
+        {
+            "entity": "0x2e7c9205a27684194b321e123d87c4ef1baf574f7b7d28f2037a3583aaeec87",
+            "initX": 4,
+            "initY": 0,
+            "isHome": false,
+            "creature_idx": 3003,
+            "level": 2
+        }
+    ],
+    "ability_profiles": [
+        {
+            "ability_name": "burningBurst",
+            "requiredMana": 90
+        },
+        {
+            "ability_name": "barbariansRage",
+            "requiredMana": 90
+        },
+        {
+            "ability_name": "mountainCollapse",
+            "requiredMana": 100
+        },
+        {
+            "ability_name": "interlockedInferno",
+            "requiredMana": 100
+        },
+        {
+            "ability_name": "penetrationInfection",
+            "requiredMana": 80
+        },
+        {
+            "ability_name": "spikeShell",
+            "requiredMana": 150
+        }
+    ],
+    "allPlayerProfiles": [
+        {
+            "address": "0x6a57f7697158ac4b49728d74ec488c8ca927499f13674e9ed1768c8b239323a",
+            "coin": 155,
+            "isHome": true
+        },
+        {
+            "address": "0x539882ad1bf4a2507ad1c4c0d26caed2a0babc26ad66eea1082533683c524f6",
+            "coin": 0,
+            "isHome": false
+        }
+    ]
+}

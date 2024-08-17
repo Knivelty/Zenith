@@ -45,10 +45,14 @@ export const onEffectBurnChange: EffectHandler<"Burn"> = async ({
   value,
 }) => {
   await onBurnDeActive(preValue);
-  await onBurnActive(preValue);
+  await onBurnActive(value);
 };
 
 async function onBurnActive({ pieceId, stack }: EffectMap["Burn"]) {
+  if (!stack) {
+    return;
+  }
+
   const eventSystem = globalThis.Simulator.eventSystem;
 
   eventSystem.on("beforePieceAction", getHandler(pieceId), 10);

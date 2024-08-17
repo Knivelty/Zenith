@@ -16,6 +16,7 @@ import { stringify } from "json-bigint";
 import { useHotkeys } from "react-hotkeys-hook";
 import { getPlayerBoardPieceEntity, logDebug } from "../../lib/utils";
 import { Button } from "../../components/button";
+import { processBattle } from "../../../phaser/systems/utils/processBattleLogs";
 
 export function Debugger() {
     const {
@@ -31,21 +32,15 @@ export function Debugger() {
             getCoin,
             exit,
         },
-        clientComponents: {
-            MatchState,
-            Player,
-            GameStatus,
-            LocalPlayer,
-            UserOperation,
-            Piece,
-            PlayerPiece,
-        },
+        clientComponents: { Player, UserOperation, Piece, PlayerPiece },
         clientComponents,
         phaserLayer: { scenes },
         networkLayer: { toriiClient },
     } = useDojo();
 
     const [debugShow, setDebugShow] = useState(false);
+
+    const { fetchSimulatorInput } = processBattle(clientComponents);
 
     useHotkeys("d", () => {
         setDebugShow(!debugShow);
@@ -71,7 +66,6 @@ export function Debugger() {
         getEntityIdFromKeys([BigInt(account.address)])
     );
 
-    const gameStatus = useComponentValue(GameStatus, zeroEntity);
     const setLoggedIn = useUIStore((state: any) => state.setLoggedIn);
 
     useEffect(() => {
@@ -80,10 +74,6 @@ export function Debugger() {
         }
     }, [player?.inMatch, setLoggedIn]);
 
-    const matchState = useComponentValue(
-        MatchState,
-        getEntityIdFromKeys([BigInt(player?.inMatch || 0)])
-    );
     const userOp = useComponentValue(UserOperation, zeroEntity);
 
     const increaseFontSize = () => {
@@ -250,6 +240,27 @@ export function Debugger() {
                 }}
             >
                 Dump States
+            </Button>
+
+            <Button
+                onClick={async () => {
+                    const simulatorInput = await fetchSimulatorInput();
+                    const blob = new Blob([stringify(simulatorInput)], {
+                        type: "application/json;charset=utf-8",
+                    });
+
+                    const url = URL.createObjectURL(blob);
+
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "simulatorInput.json";
+
+                    a.click();
+
+                    URL.revokeObjectURL(url);
+                }}
+            >
+                Dump Simulator Input
             </Button>
             <Button
                 onClick={async () => {

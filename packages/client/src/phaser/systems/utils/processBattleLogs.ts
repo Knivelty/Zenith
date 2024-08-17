@@ -34,9 +34,7 @@ export const processBattle = (component: ClientComponents) => {
         BattleLogs,
     } = component;
 
-    async function processBattleLogs() {
-        logDebug("start process battle logs");
-
+    async function fetchSimulatorInput() {
         const status = getComponentValueStrict(GameStatus, zeroEntity);
         const v = getComponentValueStrict(
             InningBattle,
@@ -132,15 +130,6 @@ export const processBattle = (component: ClientComponents) => {
             });
         }
 
-        // TODO: reverse home and player on PvP
-        // get enemy piece
-        const enemy = getComponentValueStrict(
-            LocalPlayer,
-            getEntityIdFromKeys([v.awayPlayer])
-        );
-
-        const boost = status.dangerous ? 1.2 : 1;
-
         const enemyPieceEntities = getLocalPlayerBoardPieceEntities(
             LocalPiece,
             v.awayPlayer
@@ -196,13 +185,29 @@ export const processBattle = (component: ClientComponents) => {
             isHome: false,
         });
 
+        return {
+            creatures: allCreatures,
+            initEntities: allPieces,
+            ability_profiles: allAbilitiesProfiles,
+            allPlayerProfiles: allPlayerProfiles,
+        };
+    }
+
+    async function processBattleLogs() {
+        logDebug("start process battle logs");
+
+        const status = getComponentValueStrict(GameStatus, zeroEntity);
+
+        const v = getComponentValueStrict(
+            InningBattle,
+            getEntityIdFromKeys([
+                BigInt(status.currentMatch),
+                BigInt(status.currentRound),
+            ])
+        );
+
         const { calculateBattleLogs, getEmittedEvents } = await createSimulator(
-            {
-                creatures: allCreatures,
-                initEntities: allPieces,
-                ability_profiles: allAbilitiesProfiles,
-                allPlayerProfiles: allPlayerProfiles,
-            }
+            await fetchSimulatorInput()
         );
 
         const { result } = await calculateBattleLogs();
@@ -233,5 +238,5 @@ export const processBattle = (component: ClientComponents) => {
         return { allEvents, result };
     }
 
-    return { processBattleLogs };
+    return { processBattleLogs, fetchSimulatorInput };
 };

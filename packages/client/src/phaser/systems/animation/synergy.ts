@@ -19,11 +19,7 @@ import { getAllSynergies } from "../../../ui/hooks/useAllSynergies";
 import { getAllBoardPiecesWithAllTraits } from "../../../ui/hooks/usePieceCountWithTrait";
 import { encodeGroundEntity } from "../utils/entityEncoder";
 import { getAnimation, playAnimationForOnce } from "../utils/animationHelper";
-import {
-    Assets,
-    SynergyAnimations,
-    TILE_HEIGHT,
-} from "../../config/constants";
+import { Assets, SynergyAnimations, TILE_HEIGHT } from "../../config/constants";
 import { logDebug } from "../../../ui/lib/utils";
 
 export const synergy = (layer: PhaserLayer) => {
@@ -170,13 +166,6 @@ export const synergy = (layer: PhaserLayer) => {
                     groundSprite.setComponent({
                         id: `${groundEntity}-synergy-ground`,
                         now: async (sprite: Phaser.GameObjects.Sprite) => {
-                            console.log(
-                                "v.name: ",
-                                v.name,
-                                pieceEntity,
-                                piece.x
-                            );
-
                             const ani = getAnimation(
                                 v.name.toLowerCase() as SynergyAnimations
                             );
