@@ -443,7 +443,7 @@ mod home {
     fn _checkPlayerPieceValidity(world: IWorldDispatcher) {
         let playerAddr = get_caller_address();
         let playerValue = get!(world, (playerAddr), Player);
-        let mut index = 9;
+        let mut index = 10;
         loop {
             if (index == 0) {
                 break;
@@ -1130,7 +1130,7 @@ mod home {
 
 
         // commit preparation in one function
-        // include: refresh, move
+        // include: move
         // the contract side need to valid the validity
         fn commitPreparation(
             world: IWorldDispatcher, changes: Array<PieceChange>, result: RoundResult
