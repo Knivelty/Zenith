@@ -132,7 +132,7 @@ export const health = (layer: PhaserLayer) => {
                             x,
                             y,
                             segmentWidth - segmentInterval,
-                            HEALTH_BAR_HEIGHT - HEALTH_BAR_BORDER_WIDTH * 2
+                            HEALTH_BAR_HEIGHT
                         );
 
                         // Draw border
