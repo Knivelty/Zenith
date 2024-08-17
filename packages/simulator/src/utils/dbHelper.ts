@@ -181,12 +181,27 @@ export async function decreaseHealth(
 ) {
   const db = globalThis.Simulator.db;
 
+  const piece = await getBattlePiece(pieceId);
+
+  // health change cannot be greater than current health
+  const healthChange = Math.min(healthDiff, piece.health);
+
+  // it could happen when there is multi damage in a ability
+  if (healthChange === 0) {
+    return;
+  }
+
   await db.battle_entity
     .findOne({ selector: { entity: pieceId } })
     .incrementalModify((doc) => {
-      doc.health -= healthDiff;
+      doc.health -= healthChange;
       return doc;
     });
+
+  await globalThis.Simulator.eventSystem.emit("healthDecrease", {
+    pieceId: pieceId,
+    value: healthChange,
+  });
 
   // if health lower than zero, set to dead
   if ((await getBattlePiece(pieceId)).health <= 0) {

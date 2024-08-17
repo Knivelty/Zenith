@@ -8,41 +8,39 @@ import {
 export function executeDamageOnEvent() {
   const eventSystem = globalThis.Simulator.eventSystem;
 
-  eventSystem.on("damage", async ({ sourcePieceId, targetPieceId, type, value }) => {
-    // const db = globalThis.Simulator.db;
+  eventSystem.on(
+    "damage",
+    async ({ sourcePieceId, targetPieceId, type, value }) => {
+      // const db = globalThis.Simulator.db;
 
-    // calculate armor
-    if (type === "Physical") {
-      const targetPiece = await getBattlePiece(targetPieceId);
-      value = value * (1 - targetPiece.armor / (100 + targetPiece.armor));
-    }
-
-    // decrease by shield
-    const shield = await getPieceEffectProfile(targetPieceId, "Shield");
-
-    if (shield?.stack) {
-      if (type != "Life Drain" && type != "Pure") {
-        // update shield
-        await overrideEffectToPiece({
-          pieceId: targetPieceId,
-          effectName: "Shield",
-          stack: Math.floor(Math.max(shield.stack - value, 0)),
-          duration: 999,
-        });
-
-        value -= shield?.stack ?? 0;
+      // calculate armor
+      if (type === "Physical") {
+        const targetPiece = await getBattlePiece(targetPieceId);
+        value = value * (1 - targetPiece.armor / (100 + targetPiece.armor));
       }
+
+      // decrease by shield
+      const shield = await getPieceEffectProfile(targetPieceId, "Shield");
+
+      if (shield?.stack) {
+        if (type != "Life Drain" && type != "Pure") {
+          // update shield
+          await overrideEffectToPiece({
+            pieceId: targetPieceId,
+            effectName: "Shield",
+            stack: Math.floor(Math.max(shield.stack - value, 0)),
+            duration: 999,
+          });
+
+          value -= shield?.stack ?? 0;
+        }
+      }
+
+      value = normalizeDamage(value);
+
+      decreaseHealth(sourcePieceId, targetPieceId, type, value);
     }
-
-    value = normalizeDamage(value);
-
-    await eventSystem.emit("healthDecrease", {
-      pieceId: targetPieceId,
-      value,
-    });
-
-    decreaseHealth(sourcePieceId, targetPieceId, type, value);
-  });
+  );
 }
 
 function normalizeDamage(value: number) {
