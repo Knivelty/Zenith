@@ -1,0 +1,279 @@
+{
+    "creatures": [
+        {
+            "creature_idx": 3002,
+            "level": 1,
+            "rarity": 3,
+            "health": 700,
+            "maxMana": 100,
+            "attack": 35,
+            "armor": 150,
+            "range": 2,
+            "speed": 1,
+            "initiative": 60,
+            "origins": [
+                "Strength",
+                "Brute"
+            ],
+            "order": "Giant",
+            "ability": "mountainCollapse"
+        },
+        {
+            "creature_idx": 1003,
+            "level": 3,
+            "rarity": 1,
+            "health": 1944,
+            "maxMana": 100,
+            "attack": 162,
+            "armor": 35,
+            "range": 2,
+            "speed": 2,
+            "initiative": 80,
+            "origins": [
+                "Strength",
+                "Hunter"
+            ],
+            "order": "Power",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 2002,
+            "level": 2,
+            "rarity": 2,
+            "health": 810,
+            "maxMana": 100,
+            "attack": 180,
+            "armor": 30,
+            "range": 3,
+            "speed": 4,
+            "initiative": 125,
+            "origins": [
+                "Strength",
+                "Hunter"
+            ],
+            "order": "Skill",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 2001,
+            "level": 2,
+            "rarity": 2,
+            "health": 990,
+            "maxMana": 100,
+            "attack": 81,
+            "armor": 140,
+            "range": 2,
+            "speed": 2,
+            "initiative": 85,
+            "origins": [
+                "Strength",
+                "Brute"
+            ],
+            "order": "Giant",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 1002,
+            "level": 2,
+            "rarity": 1,
+            "health": 1080,
+            "maxMana": 100,
+            "attack": 81,
+            "armor": 50,
+            "range": 2,
+            "speed": 2,
+            "initiative": 110,
+            "origins": [
+                "Strength",
+                "Brute"
+            ],
+            "order": "Giant",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 1001,
+            "level": 2,
+            "rarity": 1,
+            "health": 900,
+            "maxMana": 100,
+            "attack": 99,
+            "armor": 45,
+            "range": 2,
+            "speed": 3,
+            "initiative": 95,
+            "origins": [
+                "Strength",
+                "Brute"
+            ],
+            "order": "Skill",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 2005,
+            "level": 3,
+            "rarity": 2,
+            "health": 972,
+            "maxMana": 100,
+            "attack": 405,
+            "armor": 40,
+            "range": 6,
+            "speed": 0,
+            "initiative": 150,
+            "origins": [
+                "Light",
+                "Brute",
+                "Imaginary"
+            ],
+            "order": "Brilliance",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 2001,
+            "level": 3,
+            "rarity": 2,
+            "health": 1782,
+            "maxMana": 100,
+            "attack": 146,
+            "armor": 140,
+            "range": 2,
+            "speed": 2,
+            "initiative": 85,
+            "origins": [
+                "Strength",
+                "Brute"
+            ],
+            "order": "Giant",
+            "ability": "-"
+        },
+        {
+            "creature_idx": 3002,
+            "level": 3,
+            "rarity": 3,
+            "health": 2268,
+            "maxMana": 100,
+            "attack": 113,
+            "armor": 150,
+            "range": 2,
+            "speed": 1,
+            "initiative": 60,
+            "origins": [
+                "Strength",
+                "Brute"
+            ],
+            "order": "Giant",
+            "ability": "mountainCollapse"
+        }
+    ],
+    "initEntities": [
+        {
+            "entity": "0x662ac5fb823121bc69b9e9f2519773a970cfb793c11b9a0664ea9feb259969",
+            "initX": 2,
+            "initY": 6,
+            "isHome": true,
+            "creature_idx": 3002,
+            "level": 1
+        },
+        {
+            "entity": "0x73626a0fa2dc693adca488f75b1c56b11ee8a187aec7d9e195a5ba5dd95accc",
+            "initX": 4,
+            "initY": 4,
+            "isHome": true,
+            "creature_idx": 1003,
+            "level": 3
+        },
+        {
+            "entity": "0x7443d972a425e47d026c25a4602538ade2b18dc5e1493c8f8e5881b5d9d261f",
+            "initX": 4,
+            "initY": 5,
+            "isHome": true,
+            "creature_idx": 2002,
+            "level": 2
+        },
+        {
+            "entity": "0x5ff82303833e36e02a7b78a70e2863965ec120b9e7af3683f2fcda7d353d05",
+            "initX": 3,
+            "initY": 6,
+            "isHome": true,
+            "creature_idx": 2001,
+            "level": 2
+        },
+        {
+            "entity": "0x187d43da9af26779ce3d9f3e0c81aa89a073ac5367699b2e2da0505781e88f5",
+            "initX": 3,
+            "initY": 5,
+            "isHome": true,
+            "creature_idx": 1002,
+            "level": 2
+        },
+        {
+            "entity": "0x3e7f3fa1b6c693384856141c141d2621943c10320f2a651288530c002978bf4",
+            "initX": 2,
+            "initY": 5,
+            "isHome": true,
+            "creature_idx": 1001,
+            "level": 2
+        },
+        {
+            "entity": "0x6126720e958f7df63f1cd1f29c9ec109e3592cecace1b1742d0eee95d12055e",
+            "initX": 3,
+            "initY": 3,
+            "isHome": false,
+            "creature_idx": 2005,
+            "level": 3
+        },
+        {
+            "entity": "0x4ceb1890876cb96bf55eaa1628878f0dc1901c1f9f64c796201b35358c5a0a1",
+            "initX": 3,
+            "initY": 1,
+            "isHome": false,
+            "creature_idx": 2001,
+            "level": 3
+        },
+        {
+            "entity": "0x6a26ac3609ef4ff3ea618027d0d49def8770c81d1cfb4ef8b84af8a457d2f6c",
+            "initX": 1,
+            "initY": 1,
+            "isHome": false,
+            "creature_idx": 3002,
+            "level": 3
+        }
+    ],
+    "ability_profiles": [
+        {
+            "ability_name": "burningBurst",
+            "requiredMana": 90
+        },
+        {
+            "ability_name": "barbariansRage",
+            "requiredMana": 90
+        },
+        {
+            "ability_name": "mountainCollapse",
+            "requiredMana": 100
+        },
+        {
+            "ability_name": "interlockedInferno",
+            "requiredMana": 100
+        },
+        {
+            "ability_name": "penetrationInfection",
+            "requiredMana": 80
+        },
+        {
+            "ability_name": "spikeShell",
+            "requiredMana": 150
+        }
+    ],
+    "allPlayerProfiles": [
+        {
+            "address": "0x1e43950c73f6cd35509ce05f233de0bdc30376004152faa00311e1f1bb9c1c0",
+            "coin": 49,
+            "isHome": true
+        },
+        {
+            "address": "0x4dd4ed930951b52cf5ae15354943b23b4eb005f09ef1f5d2fbfa7631b161570",
+            "coin": 0,
+            "isHome": false
+        }
+    ]
+}

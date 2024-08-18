@@ -32,6 +32,11 @@ function getHandler(affectedPieceId: string) {
           shieldEffect?.stack ? shieldEffect?.stack * 0.15 : 0
         );
 
+        // TODO: avoid double bounce
+        if (damage === 0) {
+          return;
+        }
+
         await globalThis.Simulator.eventSystem.emit("damage", {
           sourcePieceId: targetPieceId,
           targetPieceId: sourcePieceId,

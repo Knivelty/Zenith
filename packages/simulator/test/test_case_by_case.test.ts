@@ -26,5 +26,6 @@ async function runOneCase(path: string) {
 test("test case by case", async () => {
   debug.enable("*");
   // await runOneCase("test/data/endless_loop_battle_1.json");
-  await runOneCase("test/data/endless_loop_battle_2.json");
+  // await runOneCase("test/data/endless_loop_battle_2.json");
+  await runOneCase("test/data/endless_loop_battle_3.json");
 });
