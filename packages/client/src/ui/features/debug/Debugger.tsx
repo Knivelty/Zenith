@@ -224,6 +224,10 @@ export function Debugger() {
                         localStorage.getItem("burners_KATANA") || "{}"
                     );
 
+                    // export simulator input
+                    const simulatorInput = fetchSimulatorInput();
+                    allStates["simulatorInput"] = simulatorInput;
+
                     const blob = new Blob([stringify(allStates)], {
                         type: "application/json;charset=utf-8",
                     });
