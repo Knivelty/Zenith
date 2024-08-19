@@ -4,7 +4,7 @@ import { zeroEntity } from "../../utils";
 import { ShowItem, UIStore, useUIStore } from "../../store";
 import { useCallback } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
-import { usePlaySound } from "../hooks/usePlaySound";
+import { SoundType, usePlaySound } from "../hooks/usePlaySound";
 
 export function CommitButton() {
     const {
@@ -20,7 +20,7 @@ export function CommitButton() {
 
     const status = useComponentValue(GameStatus, zeroEntity);
 
-    const { play } = usePlaySound("confirm");
+    const { play } = usePlaySound(SoundType.Confirm);
 
     const commitPreparationFn = useCallback(() => {
         play();

@@ -2,7 +2,7 @@ import { ShowItem, UIStore, useUIStore } from "../../../store";
 import { useDojo } from "../../hooks/useDojo";
 import { useComponentValue } from "@dojoengine/react";
 import { useHotkeys } from "react-hotkeys-hook";
-import { usePlaySound } from "../../hooks/usePlaySound";
+import { SoundType, usePlaySound } from "../../hooks/usePlaySound";
 
 export function ShopButton() {
     const {
@@ -14,14 +14,14 @@ export function ShopButton() {
         return state.getShow;
     });
 
+    const { play } = usePlaySound(SoundType.Click);
+
     const handleClick = () => {
         setShow(ShowItem.Shop, !getShow(ShowItem.Shop));
         play();
     };
 
     useHotkeys("b", handleClick);
-
-    const { play } = usePlaySound("click");
 
     const player = useComponentValue(Player, playerEntity);
 

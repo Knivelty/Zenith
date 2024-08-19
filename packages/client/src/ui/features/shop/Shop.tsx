@@ -6,7 +6,7 @@ import { ShowItem, UIStore, useUIStore } from "../../../store";
 import { logDebug } from "../../lib/utils";
 import { ClipLoader } from "react-spinners";
 import { useHotkeys } from "react-hotkeys-hook";
-import { usePlaySound } from "../../hooks/usePlaySound";
+import { SoundType, usePlaySound } from "../../hooks/usePlaySound";
 
 const Shop = () => {
     const {
@@ -27,19 +27,19 @@ const Shop = () => {
 
     const [loading, setLoading] = useState<boolean>(false);
 
-    const { play } = usePlaySound("click");
+    const { play: playRefresh } = usePlaySound(SoundType.Refresh);
 
     const buyRefreshHeroFn = useCallback(async () => {
         setLoading(true);
-        play();
         refreshAltar(account)
             .catch((e) => {
                 console.error(e);
             })
             .finally(() => {
                 setLoading(false);
+                playRefresh();
             });
-    }, [refreshAltar, account, play]);
+    }, [refreshAltar, account, playRefresh]);
 
     const playerValue = useComponentValue(Player, playerEntity);
     const heroAltar = useComponentValue(Altar, playerEntity);

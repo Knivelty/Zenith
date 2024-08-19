@@ -1,9 +1,11 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import useAudioStore from "./useAudioStore";
 
 const audioFiles = {
-    click: "/assets/sounds/click.mp3",
-    confirm: "/assets/sounds/confirm.mp3",
+    main: {
+        src: "/assets/sounds/sounds.ogg",
+        jsonPath: "/assets/sounds/sounds.holwer2.json",
+    },
 };
 
 export const useInitializeAudio = () => {
@@ -12,11 +14,14 @@ export const useInitializeAudio = () => {
 
     useEffect(() => {
         if (!isLoaded) {
-            Object.entries(audioFiles).forEach(([id, src]) => {
-                load(id, src);
-            });
+            Object.entries(audioFiles).forEach(
+                async ([id, { src, jsonPath }]) => {
+                    const json = await (await fetch(jsonPath)).json();
+                    load(id, src, json["sprite"]);
+                }
+            );
 
             setIsLoaded(true);
         }
-    }, [load, setIsLoaded, isLoaded]);
+    }, [isLoaded, setIsLoaded, load]);
 };

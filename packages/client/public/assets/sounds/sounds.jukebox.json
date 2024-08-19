@@ -1,0 +1,82 @@
+{
+  "resources": [
+    "/assets/sounds/sounds.jukebox.ogg"
+  ],
+  "spritemap": {
+    "click": {
+      "start": 0,
+      "end": 0.08700680272108843,
+      "loop": false
+    },
+    "confirm": {
+      "start": 2,
+      "end": 2.230748299319728,
+      "loop": false
+    },
+    "gameover": {
+      "start": 4,
+      "end": 5.623310657596372,
+      "loop": false
+    },
+    "hit": {
+      "start": 7,
+      "end": 7.32,
+      "loop": false
+    },
+    "refresh": {
+      "start": 9,
+      "end": 9.420090702947846,
+      "loop": false
+    },
+    "sell": {
+      "start": 11,
+      "end": 12.14938775510204,
+      "loop": false
+    },
+    "upgrade": {
+      "start": 14,
+      "end": 16.797233560090703,
+      "loop": false
+    },
+    "brute": {
+      "start": 18,
+      "end": 18.385986394557822,
+      "loop": false
+    },
+    "cunning": {
+      "start": 20,
+      "end": 20.712063492063493,
+      "loop": false
+    },
+    "dark": {
+      "start": 22,
+      "end": 23.78426303854875,
+      "loop": false
+    },
+    "hunter": {
+      "start": 25,
+      "end": 26.127414965986393,
+      "loop": false
+    },
+    "imaginary": {
+      "start": 28,
+      "end": 28.598004535147393,
+      "loop": false
+    },
+    "light": {
+      "start": 30,
+      "end": 30.729591836734695,
+      "loop": false
+    },
+    "magical": {
+      "start": 32,
+      "end": 33.45231292517007,
+      "loop": false
+    },
+    "strength": {
+      "start": 35,
+      "end": 36.612925170068024,
+      "loop": false
+    }
+  }
+}

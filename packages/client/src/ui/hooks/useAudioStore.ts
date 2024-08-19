@@ -1,11 +1,13 @@
 import { create } from "zustand";
-import { Howl } from "howler";
+import { Howl, SoundSpriteDefinitions } from "howler";
+import { SoundFile } from "./usePlaySound";
+import { logDebug } from "../lib/utils";
 
 interface AudioStore {
     sounds: Record<string, Howl>;
     isLoaded: boolean;
-    load: (id: string, src: string) => void;
-    play: (id: string) => void;
+    load: (id: string, src: string, spriteMap: SoundSpriteDefinitions) => void;
+    play: (id: SoundFile, segment: string) => void;
     stop: (id: string) => void;
     setIsLoaded: (loaded: boolean) => void;
 }
@@ -13,18 +15,24 @@ interface AudioStore {
 const useAudioStore = create<AudioStore>()((set, get) => ({
     sounds: {},
     isLoaded: false,
-    load: (id: string, src: string) => {
+    load: (id: string, src: string, spriteMap: SoundSpriteDefinitions) => {
         set((state: any) => ({
             sounds: {
                 ...state.sounds,
-                [id]: new Howl({ src: [src], preload: true }),
+                [id]: new Howl({
+                    src: [src],
+                    preload: true,
+                    sprite: spriteMap,
+                    
+                }),
             },
         }));
     },
-    play: (id: string) => {
+    play: (id: SoundFile, segment: string) => {
         const { sounds } = get();
         if (sounds[id]) {
-            sounds[id].play();
+            logDebug(`playing ${id} with segment ${segment}`);
+            sounds[id].play(segment);
         } else {
             console.warn(`Sound with id "${id}" not found.`);
         }

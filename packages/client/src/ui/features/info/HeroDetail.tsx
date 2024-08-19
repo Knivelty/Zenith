@@ -7,6 +7,7 @@ import { useComponentValue } from "@dojoengine/react";
 import { GameStatusEnum } from "../../../dojo/types";
 import { useCallback } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import { SoundType, usePlaySound } from "../../hooks/usePlaySound";
 
 interface HeroDetailProp {
     gid?: number;
@@ -34,6 +35,7 @@ export function HeroDetail(props: HeroDetailProp) {
 
     const setShow = useUIStore((s) => s.setShow);
     const status = useComponentValue(GameStatus, zeroEntity);
+    const { play } = usePlaySound(SoundType.Sell);
 
     const sellHeroFn = useCallback(async () => {
         if (!props?.gid) {
@@ -50,7 +52,9 @@ export function HeroDetail(props: HeroDetailProp) {
             return;
         }
 
-        sellHero(account, props?.gid);
+        sellHero(account, props?.gid).then(() => {
+            play();
+        });
 
         updateComponent(UserOperation, zeroEntity, {
             selected: false,
@@ -65,6 +69,7 @@ export function HeroDetail(props: HeroDetailProp) {
         sellHero,
         status?.status,
         setShow,
+        play,
     ]);
 
     useHotkeys("s", () => {

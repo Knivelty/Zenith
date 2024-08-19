@@ -1,12 +1,26 @@
 import useAudioStore from "../hooks/useAudioStore";
 
-export function usePlaySound(soundId: "confirm" | "click") {
+export enum SoundFile {
+    Main = "main",
+}
+
+export enum SoundType {
+    Confirm = "confirm",
+    Click = "click",
+    Gameover = "gameover",
+    Hit = "hit",
+    Refresh = "refresh",
+    Sell = "sell",
+    Upgrade = "upgrade",
+}
+
+export function usePlaySound(soundType: SoundType) {
     const play = useAudioStore((state) => state.play);
     const isLoaded = useAudioStore((state) => state.isLoaded);
 
     return {
         play: () => {
-            play(soundId);
+            play(SoundFile.Main, soundType);
         },
         isLoaded,
     };

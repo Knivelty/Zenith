@@ -7,6 +7,7 @@ import { tileCoordToPixelCoord, tween } from "@latticexyz/phaserx";
 import {
     AbilityAnimations,
     AnimationIndex,
+    Assets,
     GroundAnimations,
     TILE_HEIGHT,
     TILE_WIDTH,
@@ -29,7 +30,7 @@ import { animationTime } from "../animation/animationTime";
 export const battleAnimation = (layer: PhaserLayer) => {
     const {
         scenes: {
-            Main: { config, objectPool },
+            Main: { config, objectPool, phaserScene },
         },
         networkLayer: {
             clientComponents: { HealthBar, LocalPiece, Health, UserOperation },
@@ -196,6 +197,14 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 );
             },
         });
+
+        // play synergy sound
+        const audio = phaserScene.sound.addAudioSprite(Assets.AudioSprite);
+
+        const rate =
+            (audio.markers["hit"].duration! * 1000) /
+            getAnimationTime("ATTACK_SWING_TIME");
+        audio.play("hit", { rate: rate });
 
         // return await sleep(200);
     }

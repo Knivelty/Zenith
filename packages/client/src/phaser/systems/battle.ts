@@ -65,7 +65,7 @@ export const battle = (layer: PhaserLayer) => {
                 v.round < status?.currentRound &&
                 v.currentMatch === status.currentMatch
             ) {
-                console.warn("stale inning battle update");
+                logDebug("stale inning battle update");
                 return;
             }
 

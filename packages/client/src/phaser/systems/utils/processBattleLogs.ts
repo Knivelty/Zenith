@@ -34,7 +34,7 @@ export const processBattle = (component: ClientComponents) => {
         BattleLogs,
     } = component;
 
-    async function fetchSimulatorInput() {
+    function fetchSimulatorInput() {
         const status = getComponentValueStrict(GameStatus, zeroEntity);
         const v = getComponentValueStrict(
             InningBattle,
@@ -209,7 +209,7 @@ export const processBattle = (component: ClientComponents) => {
         );
 
         const { calculateBattleLogs, getEmittedEvents } = await createSimulator(
-            await fetchSimulatorInput()
+            fetchSimulatorInput()
         );
 
         const { result } = await calculateBattleLogs();

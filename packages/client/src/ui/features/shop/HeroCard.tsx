@@ -13,7 +13,7 @@ import { useMergeAble } from "../../hooks/useMergable";
 import { logDebug } from "../../lib/utils";
 import { useHotkeys } from "react-hotkeys-hook";
 import { ShowItem, useUIStore } from "../../../store";
-import { usePlaySound } from "../../hooks/usePlaySound";
+import { SoundType, usePlaySound } from "../../hooks/usePlaySound";
 
 const rarityBgColor: Record<number, string> = {
     1: "#4F84AF",
@@ -37,7 +37,8 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
     const gameStatus = useComponentValue(GameStatus, zeroEntity);
     const getShow = useUIStore((state) => state.getShow);
 
-    const { play } = usePlaySound("click");
+    const { play: playClick } = usePlaySound(SoundType.Click);
+    const { play: playUpgrade } = usePlaySound(SoundType.Upgrade);
 
     const mergeAble = useMergeAble(creatureKey?.id || 0);
 
@@ -46,7 +47,8 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
             alert("can only buy piece during prepare");
             return;
         }
-        play();
+        playClick();
+
         if (mergeAble.canMerge) {
             buyAndMerge({
                 account,
@@ -59,6 +61,8 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
                 y: mergeAble.onBoardCoord.y,
                 invSlot: mergeAble.invSlot,
                 onBoardIdx: mergeAble.boardIdx,
+            }).then(() => {
+                playUpgrade();
             });
         } else {
             buyHero(account, altarSlot, firstEmptyInv);
@@ -71,6 +75,8 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
         buyAndMerge,
         gameStatus,
         mergeAble,
+        playClick,
+        playUpgrade,
     ]);
 
     logDebug(`altar slot ${altarSlot} mergeAble:`, mergeAble);

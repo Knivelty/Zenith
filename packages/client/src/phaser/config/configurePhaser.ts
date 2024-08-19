@@ -49,8 +49,8 @@ export const phaserConfig = {
                 [Assets.AudioSprite]: {
                     type: AssetType.AudioSprite,
                     key: Assets.AudioSprite,
-                    jsonPath: "assets/sounds/sounds.json",
-                    audioPath: "assets/sounds/sounds.mp3",
+                    jsonPath: "assets/sounds/sounds.jukebox.json",
+                    audioPath: "assets/sounds/sounds.ogg",
                 },
                 [Assets.MainAtlas]: {
                     type: AssetType.MultiAtlas,
