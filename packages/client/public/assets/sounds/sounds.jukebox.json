@@ -18,24 +18,24 @@
       "end": 5.623310657596372,
       "loop": false
     },
-    "hit": {
-      "start": 7,
-      "end": 7.32,
-      "loop": false
-    },
     "refresh": {
-      "start": 9,
-      "end": 9.420090702947846,
+      "start": 7,
+      "end": 7.420090702947846,
       "loop": false
     },
     "sell": {
-      "start": 11,
-      "end": 12.14938775510204,
+      "start": 9,
+      "end": 10.14938775510204,
       "loop": false
     },
     "upgrade": {
-      "start": 14,
-      "end": 16.797233560090703,
+      "start": 12,
+      "end": 14.797233560090703,
+      "loop": false
+    },
+    "hit": {
+      "start": 16,
+      "end": 16.095986394557823,
       "loop": false
     },
     "brute": {

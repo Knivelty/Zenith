@@ -7,6 +7,7 @@ import { SelectNetwork } from "./ui/features/misc/SelectNetwork";
 import { useInitializeAudio } from "./ui/hooks/useInitializeAudio";
 import { Loading } from "./ui/features/login/Loading";
 import { StarknetProvider } from "./ui/components/starknet-provider";
+import { usePlayBattleBgMusic } from "./ui/hooks/usePlayBattleBgMusic";
 
 function App() {
     const networkLayer = useNetworkLayer();

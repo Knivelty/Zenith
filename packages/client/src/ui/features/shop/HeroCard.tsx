@@ -13,7 +13,7 @@ import { useMergeAble } from "../../hooks/useMergable";
 import { logDebug } from "../../lib/utils";
 import { useHotkeys } from "react-hotkeys-hook";
 import { ShowItem, useUIStore } from "../../../store";
-import { SoundType, usePlaySound } from "../../hooks/usePlaySound";
+import { SoundType, usePlaySoundSegment } from "../../hooks/usePlaySoundSegment";
 
 const rarityBgColor: Record<number, string> = {
     1: "#4F84AF",
@@ -37,8 +37,8 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
     const gameStatus = useComponentValue(GameStatus, zeroEntity);
     const getShow = useUIStore((state) => state.getShow);
 
-    const { play: playClick } = usePlaySound(SoundType.Click);
-    const { play: playUpgrade } = usePlaySound(SoundType.Upgrade);
+    const { play: playClick } = usePlaySoundSegment(SoundType.Click);
+    const { play: playUpgrade } = usePlaySoundSegment(SoundType.Upgrade);
 
     const mergeAble = useMergeAble(creatureKey?.id || 0);
 

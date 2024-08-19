@@ -18,6 +18,7 @@ import { SpeedSlider } from "./features/misc/SpeedSlider";
 import { Debugger } from "./features/debug/Debugger";
 import Shop from "./features/shop/Shop";
 import { Inventory } from "./features/inventory/Inventory";
+import { usePlayBattleBgMusic } from "./hooks/usePlayBattleBgMusic";
 
 export function Main() {
     const {
@@ -26,6 +27,8 @@ export function Main() {
     } = useDojo();
 
     const inGame = useComponentValue(Player, playerEntity)?.inMatch;
+
+    usePlayBattleBgMusic();
 
     if (!inGame) {
         return <Home />;

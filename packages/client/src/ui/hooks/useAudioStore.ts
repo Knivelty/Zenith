@@ -1,13 +1,22 @@
 import { create } from "zustand";
 import { Howl, SoundSpriteDefinitions } from "howler";
-import { SoundFile } from "./usePlaySound";
 import { logDebug } from "../lib/utils";
+import { SoundFile } from "./usePlaySoundSegment";
 
 interface AudioStore {
     sounds: Record<string, Howl>;
     isLoaded: boolean;
-    load: (id: string, src: string, spriteMap: SoundSpriteDefinitions) => void;
-    play: (id: SoundFile, segment: string) => void;
+    load: (id: string, src: string) => void;
+    loadSprite: (
+        id: string,
+        src: string,
+        spriteMap: SoundSpriteDefinitions
+    ) => void;
+    play: (id: SoundFile) => void;
+    playSprite: (id: SoundFile, segment: string) => void;
+    playInit: (id: SoundFile) => void;
+    fadeIn: (id: SoundFile, duration?: number) => void;
+    fadeOut: (id: SoundFile, duration?: number) => void;
     stop: (id: string) => void;
     setIsLoaded: (loaded: boolean) => void;
 }
@@ -15,7 +24,11 @@ interface AudioStore {
 const useAudioStore = create<AudioStore>()((set, get) => ({
     sounds: {},
     isLoaded: false,
-    load: (id: string, src: string, spriteMap: SoundSpriteDefinitions) => {
+    loadSprite: (
+        id: string,
+        src: string,
+        spriteMap: SoundSpriteDefinitions
+    ) => {
         set((state: any) => ({
             sounds: {
                 ...state.sounds,
@@ -23,12 +36,30 @@ const useAudioStore = create<AudioStore>()((set, get) => ({
                     src: [src],
                     preload: true,
                     sprite: spriteMap,
-                    
                 }),
             },
         }));
     },
-    play: (id: SoundFile, segment: string) => {
+    load: (id: string, src: string) => {
+        set((state: any) => ({
+            sounds: {
+                ...state.sounds,
+                [id]: new Howl({
+                    src: [src],
+                    preload: true,
+                }),
+            },
+        }));
+    },
+    play: (id: SoundFile) => {
+        const { sounds } = get();
+        if (sounds[id]) {
+            sounds[id].play();
+        } else {
+            console.warn(`Sound with id "${id}" not found.`);
+        }
+    },
+    playSprite: (id: SoundFile, segment: string) => {
         const { sounds } = get();
         if (sounds[id]) {
             logDebug(`playing ${id} with segment ${segment}`);
@@ -37,12 +68,35 @@ const useAudioStore = create<AudioStore>()((set, get) => ({
             console.warn(`Sound with id "${id}" not found.`);
         }
     },
+    playInit: (id: SoundFile) => {
+        const { sounds } = get();
+        if (sounds[id]) {
+            sounds[id].loop(true);
+            sounds[id].volume(0);
+            sounds[id].play();
+        }
+    },
     stop: (id: string) => {
         const { sounds } = get();
         if (sounds[id]) {
             sounds[id].stop();
         }
     },
+    fadeIn: (id: SoundFile, duration = 1000) => {
+        const { sounds } = get();
+
+        if (sounds[id]) {
+            sounds[id].fade(0, 1, duration);
+        }
+    },
+    fadeOut: (id: SoundFile, duration = 1000) => {
+        const { sounds } = get();
+
+        if (sounds[id]) {
+            sounds[id].fade(1, 0, duration);
+        }
+    },
+
     setIsLoaded: (loaded: boolean) => set({ isLoaded: loaded }),
 }));
 

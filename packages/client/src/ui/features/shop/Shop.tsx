@@ -6,7 +6,7 @@ import { ShowItem, UIStore, useUIStore } from "../../../store";
 import { logDebug } from "../../lib/utils";
 import { ClipLoader } from "react-spinners";
 import { useHotkeys } from "react-hotkeys-hook";
-import { SoundType, usePlaySound } from "../../hooks/usePlaySound";
+import { SoundType, usePlaySoundSegment } from "../../hooks/usePlaySoundSegment";
 
 const Shop = () => {
     const {
@@ -27,7 +27,7 @@ const Shop = () => {
 
     const [loading, setLoading] = useState<boolean>(false);
 
-    const { play: playRefresh } = usePlaySound(SoundType.Refresh);
+    const { play: playRefresh } = usePlaySoundSegment(SoundType.Refresh);
 
     const buyRefreshHeroFn = useCallback(async () => {
         setLoading(true);

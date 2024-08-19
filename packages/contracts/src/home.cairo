@@ -261,8 +261,10 @@ mod home {
 
             // TODO: fix the bug
             // NOTE: comment the next line because there's a migration error and idk why
-            // Difference in FunctionId { id: 68, debug_name: None }: Some(OrderedHashMap({Const: 173730})) != Some(OrderedHashMap({Const: 2260})).
-            // Difference in FunctionId { id: 68, debug_name: None }: Some(OrderedHashMap({Const: 173730})) != Some(OrderedHashMap({Const: 2260})).
+            // Difference in FunctionId { id: 68, debug_name: None }: Some(OrderedHashMap({Const:
+            // 173730})) != Some(OrderedHashMap({Const: 2260})).
+            // Difference in FunctionId { id: 68, debug_name: None }: Some(OrderedHashMap({Const:
+            // 173730})) != Some(OrderedHashMap({Const: 2260})).
             set!(world, (stalePlayerPiece));
             set!(world, (stalePiece));
 
@@ -378,9 +380,6 @@ mod home {
 
     fn _registerPlayer(world: IWorldDispatcher, playerAddr: ContractAddress) {
         let playerProfile = get!(world, playerAddr, PlayerProfile);
-    // if (playerProfile.pieceCounter == 0) {
-    //     panic!("unregistered player");
-    // }
     }
 
     fn _removePiece(world: IWorldDispatcher, gid: u32) {
@@ -476,7 +475,7 @@ mod home {
         hash = generate_pseudo_random(hash.into()).try_into().unwrap();
         let challenge: u8 = ((hash % 5 + 1) & MASK_8).try_into().unwrap();
 
-        // 
+        //
         set!(
             world,
             (
@@ -1006,7 +1005,8 @@ mod home {
 
             // calculate on board idx, should be smallest idx among three
 
-            // on board idx should minus 1 if it's not last one because it will be swapped and removed
+            // on board idx should minus 1 if it's not last one because it will be swapped and
+            // removed
             let mut onBoardCount = 0;
             if (piece1.idx != 0) {
                 onBoardCount += 1;
@@ -1035,7 +1035,7 @@ mod home {
             _removePiece(world, gid2);
             _removePiece(world, gid3);
 
-            // gen new piece 
+            // gen new piece
             let mut playerProfile = get!(world, playerAddr, PlayerProfile);
             playerProfile.pieceCounter += 1;
             set!(world, (playerProfile));
@@ -1157,10 +1157,14 @@ mod home {
             let matchState = get!(world, player.inMatch, MatchState);
             let mut inningBattle = get!(world, (matchState.index, matchState.round), InningBattle);
 
+            if (inningBattle.dangerous) {
+                player.danger -= 100;
+            }
+
             if (result.win) {
                 inningBattle.winner = inningBattle.homePlayer;
 
-                // update streak 
+                // update streak
                 if (player.winStreak != 0) {
                     player.winStreak += 1;
                     player.loseStreak = 0;
@@ -1177,7 +1181,7 @@ mod home {
                     player.health = 0;
                 }
 
-                // update streak 
+                // update streak
                 if (player.winStreak != 0) {
                     player.winStreak = 1;
                     player.loseStreak = 0;
@@ -1330,7 +1334,7 @@ mod home {
             );
 
             return gid;
-        // 
+            //
         }
 
         fn sellHero(world: IWorldDispatcher, gid: u32) {
@@ -1395,7 +1399,6 @@ mod home {
             let mut dangerous = false;
             // judge whether next round is a dangerous round
             if (player.danger >= 100) {
-                player.danger -= 100;
                 dangerous = true;
             }
 

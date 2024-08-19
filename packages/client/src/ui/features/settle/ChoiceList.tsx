@@ -4,7 +4,7 @@ import { useDojo } from "../../hooks/useDojo";
 import { cn } from "../../lib/utils";
 import { useCallback } from "react";
 import { ShowItem, UIStore, useUIStore } from "../../../store";
-import { SoundType, usePlaySound } from "../../hooks/usePlaySound";
+import { SoundType, usePlaySoundSegment } from "../../hooks/usePlaySoundSegment";
 
 export interface IChoice extends React.HTMLAttributes<HTMLDivElement> {
     coinDec?: number;
@@ -46,7 +46,7 @@ export function Choice({
 
     const getShow = useUIStore((state: UIStore) => state.getShow);
 
-    const { play } = usePlaySound(SoundType.Click);
+    const { play } = usePlaySoundSegment(SoundType.Click);
 
     const nextRoundFn = useCallback(() => {
         if (!order) return;

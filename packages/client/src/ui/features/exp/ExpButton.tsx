@@ -3,7 +3,7 @@ import { useComponentValue } from "@dojoengine/react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { ProgressBar } from "../../components/ProgressBar";
 import { useCallback } from "react";
-import { SoundType, usePlaySound } from "../../hooks/usePlaySound";
+import { SoundType, usePlaySoundSegment } from "../../hooks/usePlaySoundSegment";
 
 export function ExpButton() {
     const {
@@ -18,7 +18,7 @@ export function ExpButton() {
         getEntityIdFromKeys([BigInt(player?.level || 0)])
     );
 
-    const { play } = usePlaySound(SoundType.Click);
+    const { play } = usePlaySoundSegment(SoundType.Click);
 
     const handleClick = useCallback(() => {
         play();
