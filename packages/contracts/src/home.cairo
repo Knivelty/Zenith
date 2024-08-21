@@ -490,6 +490,18 @@ mod home {
         );
     }
 
+    fn _settleLastInningBattleDanger(world: IWorldDispatcher) {
+        let playerAddr = get_caller_address();
+
+        let mut player = get!(world, playerAddr, Player);
+        let mut currentMatchState = get!(world, player.inMatch, MatchState);
+        let lastInningBattle = get!(world, (player.inMatch, currentMatchState.round), InningBattle);
+        if (lastInningBattle.dangerous) {
+            player.danger -= 100;
+        }
+        set!(world, (player));
+    }
+
     fn _settleChoice(world: IWorldDispatcher, choice: CurseOptionType) {
         let playerAddr = get_caller_address();
 
@@ -1157,10 +1169,6 @@ mod home {
             let matchState = get!(world, player.inMatch, MatchState);
             let mut inningBattle = get!(world, (matchState.index, matchState.round), InningBattle);
 
-            if (inningBattle.dangerous) {
-                player.danger -= 100;
-            }
-
             if (result.win) {
                 inningBattle.winner = inningBattle.homePlayer;
 
@@ -1370,12 +1378,13 @@ mod home {
         fn nextRound(world: IWorldDispatcher, choice: CurseOptionType) {
             let playerAddr = get_caller_address();
 
+            _settleLastInningBattleDanger(world);
+
             // settle player's choice
             _settleChoice(world, choice);
 
             let mut player = get!(world, playerAddr, Player);
             let mut currentMatchState = get!(world, player.inMatch, MatchState);
-
             let lastInningBattle = get!(
                 world, (player.inMatch, currentMatchState.round), InningBattle
             );
