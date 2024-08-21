@@ -3,7 +3,6 @@ import { useDojo } from "./useDojo";
 import { useEffect, useState } from "react";
 import { SoundFile } from "./usePlaySoundSegment";
 import useAudioStore from "./useAudioStore";
-import { logDebug } from "../lib/utils";
 
 export const dangerRangeRangeMap: Record<number, SoundFile> = {
     0: SoundFile.Melody,
@@ -12,12 +11,18 @@ export const dangerRangeRangeMap: Record<number, SoundFile> = {
     100: SoundFile.Clock,
 };
 
-const dangerRanges = Object.keys(dangerRangeRangeMap)
-    .map(Number)
-    .sort((a, b) => b - a);
+const dangerRanges = Object.keys(dangerRangeRangeMap).map(Number);
 
-function getDangerRange(danger: number) {
-    return dangerRanges.find((range) => danger >= range) ?? 0;
+function getDangerLevel(danger: number) {
+    let idx = 1;
+    for (const d of dangerRanges) {
+        if (danger <= d) {
+            return idx;
+        } else {
+            idx += 1;
+        }
+    }
+    return idx;
 }
 
 export function usePlayBattleBgMusic() {
@@ -27,7 +32,7 @@ export function usePlayBattleBgMusic() {
     } = useDojo();
 
     const playerValue = useComponentValue(Player, playerEntity);
-    const [prevDangerRange, setPrevDangerRange] = useState<number | undefined>(
+    const [prevDangerLevel, setPrevDangerLevel] = useState<number | undefined>(
         undefined
     );
 
@@ -36,24 +41,20 @@ export function usePlayBattleBgMusic() {
     useEffect(() => {
         if (!isLoaded) return;
 
-        const dangerRange = getDangerRange(playerValue?.danger ?? 0);
+        const dangerLevel = getDangerLevel(playerValue?.danger ?? 0);
 
-        if (dangerRange === prevDangerRange) return;
+        if (dangerLevel === prevDangerLevel) return;
 
-        logDebug(
-            "danger: ",
-            playerValue?.danger,
-            "dangerRange",
-            dangerRange,
-            prevDangerRange,
-            dangerRangeRangeMap[prevDangerRange ?? 0]
-        );
-
-        if (prevDangerRange !== undefined) {
-            fadeOut(dangerRangeRangeMap[prevDangerRange]);
+        if (dangerLevel > (prevDangerLevel ?? 0)) {
+            dangerRanges.slice(prevDangerLevel, dangerLevel).map((v) => {
+                fadeIn(dangerRangeRangeMap[v]);
+            });
+        } else {
+            dangerRanges.slice(dangerLevel, prevDangerLevel).map((v) => {
+                fadeOut(dangerRangeRangeMap[v]);
+            });
         }
-        fadeIn(dangerRangeRangeMap[dangerRange]);
 
-        setPrevDangerRange(dangerRange);
-    }, [playerValue?.danger, play, prevDangerRange, isLoaded, fadeIn, fadeOut]);
+        setPrevDangerLevel(dangerLevel);
+    }, [playerValue?.danger, play, prevDangerLevel, isLoaded, fadeIn, fadeOut]);
 }

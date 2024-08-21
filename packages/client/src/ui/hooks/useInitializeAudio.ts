@@ -62,5 +62,5 @@ export const useInitializeAudio = () => {
                 });
             });
         }
-    }, [isLoaded, setIsLoaded, loadSprite, load]);
+    }, [isLoaded, setIsLoaded, loadSprite, load, playInit]);
 };
