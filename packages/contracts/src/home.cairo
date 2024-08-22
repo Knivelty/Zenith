@@ -1,5 +1,5 @@
 use autochessia::models::{
-    CreatureProfile, StageProfile, StageProfilePiece, Piece, Player, SynergyProfile
+    CreatureProfile, StageProfile, StageProfilePiece, Piece, Player, SynergyProfile, ChoiceProfile
 };
 use autochessia::customType::{PieceChange, RoundResult, CurseOptionType};
 
@@ -12,6 +12,7 @@ trait IHome {
     fn setCreatureProfile(profiles: Array<CreatureProfile>);
     fn setStageProfile(profiles: Array<StageProfile>, pieces: Array<StageProfilePiece>);
     fn setSynergyProfile(profiles: Array<SynergyProfile>);
+    fn setChoiceProfile(profiles: Array<ChoiceProfile>);
 
     fn setName(name: felt252);
 
@@ -544,12 +545,12 @@ mod home {
             player.curse = 10;
         }
 
-        if (player.danger > choiceP.deterDec) {
-            player.danger -= choiceP.deterDec;
+        if (player.danger > choiceP.dangerDec) {
+            player.danger -= choiceP.dangerDec;
         } else {
             player.danger = 0;
         }
-        player.danger += choiceP.deterInc;
+        player.danger += choiceP.dangerInc;
         player.health -= choiceP.healthDec;
 
         // reset to zero
@@ -596,193 +597,6 @@ mod home {
             set!(world, (LevelConfig { current: 8, expForNext: 90 }));
             set!(world, (LevelConfig { current: 9, expForNext: 144 }));
 
-            // set choice profile
-            set!(
-                world,
-                (
-                    // pay 3 coin to decrease 40 deter
-                    ChoiceProfile {
-                        t: CurseOptionType::Safe,
-                        idx: 1,
-                        coinDec: 3,
-                        coinInc: 0,
-                        curseDec: 0,
-                        curseInc: 0,
-                        deterDec: 40,
-                        deterInc: 0,
-                        healthDec: 0,
-                    },
-                    // pay 3 coin to decrease 8 curse
-                    ChoiceProfile {
-                        t: CurseOptionType::Safe,
-                        idx: 2,
-                        coinDec: 3,
-                        coinInc: 0,
-                        curseDec: 8,
-                        curseInc: 0,
-                        deterDec: 0,
-                        deterInc: 0,
-                        healthDec: 0,
-                    },
-                    // pay 2 coin to decrease 6 curse
-                    ChoiceProfile {
-                        t: CurseOptionType::Safe,
-                        idx: 3,
-                        coinDec: 2,
-                        coinInc: 0,
-                        curseDec: 6,
-                        curseInc: 0,
-                        deterDec: 0,
-                        deterInc: 0,
-                        healthDec: 0,
-                    },
-                    // pay 1 coin to decrease 4 curse
-                    ChoiceProfile {
-                        t: CurseOptionType::Safe,
-                        idx: 4,
-                        coinDec: 1,
-                        coinInc: 0,
-                        curseDec: 4,
-                        curseInc: 0,
-                        deterDec: 0,
-                        deterInc: 0,
-                        healthDec: 0,
-                    },
-                    // decrease 2 curse
-                    ChoiceProfile {
-                        t: CurseOptionType::Safe,
-                        idx: 5,
-                        coinDec: 0,
-                        coinInc: 0,
-                        curseDec: 2,
-                        curseInc: 0,
-                        deterDec: 0,
-                        deterInc: 0,
-                        healthDec: 0,
-                    },
-                    // get 1 coin and 30 deter
-                    ChoiceProfile {
-                        t: CurseOptionType::Balanced,
-                        idx: 1,
-                        coinDec: 0,
-                        coinInc: 1,
-                        curseDec: 0,
-                        curseInc: 30,
-                        deterDec: 0,
-                        deterInc: 0,
-                        healthDec: 0,
-                    },
-                    // decrease 2 curse
-                    ChoiceProfile {
-                        t: CurseOptionType::Balanced,
-                        idx: 2,
-                        coinDec: 0,
-                        coinInc: 0,
-                        curseDec: 2,
-                        curseInc: 0,
-                        deterDec: 0,
-                        deterInc: 0,
-                        healthDec: 0,
-                    },
-                    // get 2 curse
-                    ChoiceProfile {
-                        t: CurseOptionType::Balanced,
-                        idx: 3,
-                        coinDec: 0,
-                        coinInc: 0,
-                        curseDec: 0,
-                        curseInc: 2,
-                        deterDec: 0,
-                        deterInc: 0,
-                        healthDec: 0,
-                    },
-                    // get 1 coin and 3 curse
-                    ChoiceProfile {
-                        t: CurseOptionType::Balanced,
-                        idx: 4,
-                        coinDec: 0,
-                        coinInc: 1,
-                        curseDec: 0,
-                        curseInc: 3,
-                        deterDec: 0,
-                        deterInc: 0,
-                        healthDec: 0,
-                    },
-                    // pay 2 coin
-                    ChoiceProfile {
-                        t: CurseOptionType::Balanced,
-                        idx: 5,
-                        coinDec: 0,
-                        coinInc: 2,
-                        curseDec: 0,
-                        curseInc: 0,
-                        deterDec: 0,
-                        deterInc: 0,
-                        healthDec: 0,
-                    },
-                    // get 15 deter
-                    ChoiceProfile {
-                        t: CurseOptionType::Challenge,
-                        idx: 1,
-                        coinDec: 0,
-                        coinInc: 0,
-                        curseDec: 0,
-                        curseInc: 0,
-                        deterDec: 0,
-                        deterInc: 15,
-                        healthDec: 0,
-                    },
-                    // pay 1 to increase 6 curse
-                    ChoiceProfile {
-                        t: CurseOptionType::Challenge,
-                        idx: 2,
-                        coinDec: 1,
-                        coinInc: 0,
-                        curseDec: 0,
-                        curseInc: 6,
-                        deterDec: 0,
-                        deterInc: 0,
-                        healthDec: 0,
-                    },
-                    // get 3 coin and increase 100 deter
-                    ChoiceProfile {
-                        t: CurseOptionType::Challenge,
-                        idx: 3,
-                        coinDec: 0,
-                        coinInc: 3,
-                        curseDec: 0,
-                        curseInc: 0,
-                        deterDec: 0,
-                        deterInc: 100,
-                        healthDec: 0,
-                    },
-                    // pay 5 coin to get 15 curse
-                    ChoiceProfile {
-                        t: CurseOptionType::Challenge,
-                        idx: 4,
-                        coinDec: 5,
-                        coinInc: 0,
-                        curseDec: 0,
-                        curseInc: 15,
-                        deterDec: 0,
-                        deterInc: 0,
-                        healthDec: 0,
-                    },
-                    // pay 6 health to get 10 curse and 100 deter
-                    ChoiceProfile {
-                        t: CurseOptionType::Challenge,
-                        idx: 5,
-                        coinDec: 0,
-                        coinInc: 0,
-                        curseDec: 0,
-                        curseInc: 10,
-                        deterDec: 0,
-                        deterInc: 100,
-                        healthDec: 6,
-                    }
-                )
-            );
-
             // set refresh LevelRarityProb
             set!(
                 world,
@@ -818,6 +632,20 @@ mod home {
         }
 
         fn setCreatureProfile(world: IWorldDispatcher, profiles: Array<CreatureProfile>) {
+            let mut idx = 0;
+            let length = profiles.len();
+
+            loop {
+                if (idx >= length) {
+                    break;
+                }
+                let p = profiles.at(idx);
+                set!(world, (*p));
+                idx += 1;
+            };
+        }
+
+        fn setChoiceProfile(world: IWorldDispatcher, profiles: Array<ChoiceProfile>) {
             let mut idx = 0;
             let length = profiles.len();
 

@@ -97,6 +97,53 @@ function initializeSynergyProfile() {
     });
 }
 
+function initializeChoiceProfile() {
+  let callData: string[] = [];
+  fs.createReadStream("../data/choice.csv")
+    .pipe(csv())
+    .on("data", (row) => {
+      const type = numberToHexString(Number(row["type"]), 2);
+      const vars = numberToHexString(Number(row["var"]), 2);
+      const coinDec = numberToHexString(Number(row["coinDec"]), 2);
+      const coinInc = numberToHexString(Number(row["coinInc"]), 2);
+      const healthDec = numberToHexString(Number(row["healthDec"]), 2);
+      const healthInc = numberToHexString(Number(row["healthInc"]), 2);
+      const curseDec = numberToHexString(Number(row["curseDec"]), 2);
+      const curseInc = numberToHexString(Number(row["curseInc"]), 2);
+      const dangerDec = numberToHexString(Number(row["dangerDec"]), 2);
+      const dangerInc = numberToHexString(Number(row["dangerInc"]), 2);
+
+      const callDataStr = [
+        type,
+        vars,
+        coinDec,
+        coinInc,
+        healthDec,
+        healthInc,
+        curseDec,
+        curseInc,
+        dangerDec,
+        dangerInc,
+      ].join(",");
+
+      callData.push(callDataStr);
+    })
+    .on("end", () => {
+      // execute in batch to avoid gas limit
+      const chunks = _.chunk(callData, 60);
+
+      for (const c of chunks) {
+        const count = c.length;
+        const subCallData = c.join(",");
+        const cmd = `sozo --profile ${profile} execute ${address} "setChoiceProfile" --calldata ${numberToHexString(count, 2)},${subCallData}`;
+        execSync("sleep 1");
+        execSync(cmd);
+      }
+
+      console.log("Initialize choice profile successfully");
+    });
+}
+
 function initializeStage() {
   let stageCallData: string[] = [];
   let stagePieceCallData: string[] = [];
@@ -212,6 +259,7 @@ function main() {
   initializeCreatureProfile();
   initializeStage();
   initializeSynergyProfile();
+  initializeChoiceProfile();
 }
 
 main();

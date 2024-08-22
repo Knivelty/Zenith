@@ -15,7 +15,7 @@ struct Player {
     locked: u8,
     // dojo does not support array for now, so it's used to traversal all pieces belong to player
     heroesCount: u8,
-    // hero count in inventory 
+    // hero count in inventory
     inventoryCount: u8,
     // a free refresh opportunity for each round
     refreshed: bool,
@@ -205,11 +205,12 @@ struct ChoiceProfile {
     idx: u8,
     coinDec: u8,
     coinInc: u8,
+    healthDec: u8,
+    healthInc: u8,
     curseDec: u8,
     curseInc: u8,
-    deterDec: u8,
-    deterInc: u8,
-    healthDec: u8,
+    dangerDec: u8,
+    dangerInc: u8,
 }
 
 
