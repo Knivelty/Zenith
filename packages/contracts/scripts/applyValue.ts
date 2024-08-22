@@ -144,6 +144,93 @@ function initializeChoiceProfile() {
     });
 }
 
+function initializeLevelConfig() {
+  let callData: string[] = [];
+  fs.createReadStream("../data/levelConfig.csv")
+    .pipe(csv())
+    .on("data", (row) => {
+      const current = numberToHexString(Number(row["current"]), 2);
+      const expForNext = numberToHexString(Number(row["expForNext"]), 2);
+
+      const callDataStr = [current, expForNext].join(",");
+
+      callData.push(callDataStr);
+    })
+    .on("end", () => {
+      // execute in batch to avoid gas limit
+      const chunks = _.chunk(callData, 60);
+
+      for (const c of chunks) {
+        const count = c.length;
+        const subCallData = c.join(",");
+        const cmd = `sozo --profile ${profile} execute ${address} "setLevelConfig" --calldata ${numberToHexString(count, 2)},${subCallData}`;
+        execSync("sleep 1");
+        execSync(cmd);
+      }
+
+      console.log("Initialize level config successfully");
+    });
+}
+
+function initializeSetLevelRarityProb() {
+  let callData: string[] = [];
+  fs.createReadStream("../data/levelRarityProb.csv")
+    .pipe(csv())
+    .on("data", (row) => {
+      const level = numberToHexString(Number(row["level"]), 2);
+      const r1 = numberToHexString(Number(row["r1"]), 2);
+      const r2 = numberToHexString(Number(row["r2"]), 2);
+      const r3 = numberToHexString(Number(row["r3"]), 2);
+
+      const callDataStr = [level, r1, r2, r3].join(",");
+
+      callData.push(callDataStr);
+    })
+    .on("end", () => {
+      // execute in batch to avoid gas limit
+      const chunks = _.chunk(callData, 60);
+
+      for (const c of chunks) {
+        const count = c.length;
+        const subCallData = c.join(",");
+        const cmd = `sozo --profile ${profile} execute ${address} "setLevelRarityProb" --calldata ${numberToHexString(count, 2)},${subCallData}`;
+        execSync("sleep 1");
+        execSync(cmd);
+      }
+
+      console.log("Initialize set level rarity prob successfully");
+    });
+}
+
+function initializeSellPriceConfig() {
+  let callData: string[] = [];
+  fs.createReadStream("../data/sellPriceConfig.csv")
+    .pipe(csv())
+    .on("data", (row) => {
+      const rarity = numberToHexString(Number(row["rarity"]), 2);
+      const level = numberToHexString(Number(row["level"]), 2);
+      const price = numberToHexString(Number(row["price"]), 2);
+
+      const callDataStr = [rarity, level, price].join(",");
+
+      callData.push(callDataStr);
+    })
+    .on("end", () => {
+      // execute in batch to avoid gas limit
+      const chunks = _.chunk(callData, 60);
+
+      for (const c of chunks) {
+        const count = c.length;
+        const subCallData = c.join(",");
+        const cmd = `sozo --profile ${profile} execute ${address} "setSellPriceConfig" --calldata ${numberToHexString(count, 2)},${subCallData}`;
+        execSync("sleep 1");
+        execSync(cmd);
+      }
+
+      console.log("Initialize set sell price successfully");
+    });
+}
+
 function initializeStage() {
   let stageCallData: string[] = [];
   let stagePieceCallData: string[] = [];
@@ -260,6 +347,9 @@ function main() {
   initializeStage();
   initializeSynergyProfile();
   initializeChoiceProfile();
+  initializeLevelConfig();
+  initializeSetLevelRarityProb();
+  initializeSellPriceConfig();
 }
 
 main();

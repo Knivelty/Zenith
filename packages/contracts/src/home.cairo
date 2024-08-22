@@ -1,5 +1,6 @@
 use autochessia::models::{
-    CreatureProfile, StageProfile, StageProfilePiece, Piece, Player, SynergyProfile, ChoiceProfile
+    CreatureProfile, StageProfile, StageProfilePiece, Piece, Player, SynergyProfile, ChoiceProfile,
+    LevelConfig, LevelRarityProb, SellPriceConfig
 };
 use autochessia::customType::{PieceChange, RoundResult, CurseOptionType};
 
@@ -13,6 +14,9 @@ trait IHome {
     fn setStageProfile(profiles: Array<StageProfile>, pieces: Array<StageProfilePiece>);
     fn setSynergyProfile(profiles: Array<SynergyProfile>);
     fn setChoiceProfile(profiles: Array<ChoiceProfile>);
+    fn setLevelConfig(profiles: Array<LevelConfig>);
+    fn setLevelRarityProb(profiles: Array<LevelRarityProb>);
+    fn setSellPriceConfig(profiles: Array<SellPriceConfig>);
 
     fn setName(name: felt252);
 
@@ -585,50 +589,6 @@ mod home {
                     totalR3Creature: 6
                 }
             );
-
-            // set level up config
-            set!(world, (LevelConfig { current: 1, expForNext: 2 }));
-            set!(world, (LevelConfig { current: 2, expForNext: 2 }));
-            set!(world, (LevelConfig { current: 3, expForNext: 6 }));
-            set!(world, (LevelConfig { current: 4, expForNext: 10 }));
-            set!(world, (LevelConfig { current: 5, expForNext: 24 }));
-            set!(world, (LevelConfig { current: 6, expForNext: 42 }));
-            set!(world, (LevelConfig { current: 7, expForNext: 64 }));
-            set!(world, (LevelConfig { current: 8, expForNext: 90 }));
-            set!(world, (LevelConfig { current: 9, expForNext: 144 }));
-
-            // set refresh LevelRarityProb
-            set!(
-                world,
-                (
-                    LevelRarityProb { level: 1, r1: 100, r2: 0, r3: 0 },
-                    LevelRarityProb { level: 2, r1: 100, r2: 0, r3: 0 },
-                    LevelRarityProb { level: 3, r1: 80, r2: 20, r3: 0 },
-                    LevelRarityProb { level: 4, r1: 65, r2: 35, r3: 0 },
-                    LevelRarityProb { level: 5, r1: 60, r2: 40, r3: 0 },
-                    LevelRarityProb { level: 6, r1: 50, r2: 45, r3: 5 },
-                    LevelRarityProb { level: 7, r1: 45, r2: 45, r3: 10 },
-                    LevelRarityProb { level: 8, r1: 40, r2: 45, r3: 15 },
-                    LevelRarityProb { level: 9, r1: 35, r2: 45, r3: 20 },
-                    LevelRarityProb { level: 10, r1: 35, r2: 35, r3: 30 },
-                )
-            );
-
-            // set sell piece price LevelConfig
-            set!(
-                world,
-                (
-                    SellPriceConfig { rarity: 1, level: 1, price: 1 },
-                    SellPriceConfig { rarity: 1, level: 2, price: 3 },
-                    SellPriceConfig { rarity: 1, level: 3, price: 8 },
-                    SellPriceConfig { rarity: 2, level: 1, price: 3 },
-                    SellPriceConfig { rarity: 2, level: 2, price: 7 },
-                    SellPriceConfig { rarity: 2, level: 3, price: 20 },
-                    SellPriceConfig { rarity: 3, level: 1, price: 5 },
-                    SellPriceConfig { rarity: 3, level: 2, price: 11 },
-                    SellPriceConfig { rarity: 3, level: 3, price: 32 }
-                )
-            );
         }
 
         fn setCreatureProfile(world: IWorldDispatcher, profiles: Array<CreatureProfile>) {
@@ -646,6 +606,48 @@ mod home {
         }
 
         fn setChoiceProfile(world: IWorldDispatcher, profiles: Array<ChoiceProfile>) {
+            let mut idx = 0;
+            let length = profiles.len();
+
+            loop {
+                if (idx >= length) {
+                    break;
+                }
+                let p = profiles.at(idx);
+                set!(world, (*p));
+                idx += 1;
+            };
+        }
+
+        fn setLevelConfig(world: IWorldDispatcher, profiles: Array<LevelConfig>) {
+            let mut idx = 0;
+            let length = profiles.len();
+
+            loop {
+                if (idx >= length) {
+                    break;
+                }
+                let p = profiles.at(idx);
+                set!(world, (*p));
+                idx += 1;
+            };
+        }
+
+        fn setLevelRarityProb(world: IWorldDispatcher, profiles: Array<LevelRarityProb>) {
+            let mut idx = 0;
+            let length = profiles.len();
+
+            loop {
+                if (idx >= length) {
+                    break;
+                }
+                let p = profiles.at(idx);
+                set!(world, (*p));
+                idx += 1;
+            };
+        }
+
+        fn setSellPriceConfig(world: IWorldDispatcher, profiles: Array<SellPriceConfig>) {
             let mut idx = 0;
             let length = profiles.len();
 
