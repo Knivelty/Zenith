@@ -2,7 +2,7 @@ import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "../../hooks/useDojo";
 import { useEffect, useState } from "react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { useUIStore } from "../../../store";
+import { ShowItem, useUIStore } from "../../../store";
 import { zeroEntity } from "../../../utils";
 import {
     Component,
@@ -67,6 +67,7 @@ export function Debugger() {
     );
 
     const setLoggedIn = useUIStore((state: any) => state.setLoggedIn);
+    const setShow = useUIStore((state) => state.setShow);
 
     useEffect(() => {
         if (player?.inMatch && player?.inMatch > 0) {
@@ -284,7 +285,7 @@ export function Debugger() {
 
             <Button
                 onClick={async () => {
-                    await exit(account);
+                    setShow(ShowItem.QuitConfirmation, true);
                 }}
             >
                 Exit Game

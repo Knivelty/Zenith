@@ -2,12 +2,15 @@ import { updateComponent } from "@dojoengine/recs";
 import { useDojo } from "../../hooks/useDojo";
 import { HeroBaseAttr } from "../../hooks/useHeroAttr";
 import { zeroEntity } from "../../../utils";
-import { ShowItem, useUIStore } from "../../../store";
+import { useUIStore } from "../../../store";
 import { useComponentValue } from "@dojoengine/react";
 import { GameStatusEnum } from "../../../dojo/types";
 import { useCallback } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
-import { SoundType, usePlaySoundSegment } from "../../hooks/usePlaySoundSegment";
+import {
+    SoundType,
+    usePlaySoundSegment,
+} from "../../hooks/usePlaySoundSegment";
 
 interface HeroDetailProp {
     gid?: number;
@@ -33,7 +36,6 @@ export function HeroDetail(props: HeroDetailProp) {
         account: { account },
     } = useDojo();
 
-    const setShow = useUIStore((s) => s.setShow);
     const status = useComponentValue(GameStatus, zeroEntity);
     const { play } = usePlaySoundSegment(SoundType.Sell);
 
@@ -60,7 +62,6 @@ export function HeroDetail(props: HeroDetailProp) {
             selected: false,
             selectGid: 0,
         });
-        setShow(ShowItem.Shade, false);
     }, [
         account,
         props?.gid,
@@ -68,7 +69,6 @@ export function HeroDetail(props: HeroDetailProp) {
         UserOperation,
         sellHero,
         status?.status,
-        setShow,
         play,
     ]);
 

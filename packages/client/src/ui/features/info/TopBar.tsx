@@ -38,10 +38,6 @@ export function TopBar() {
                         className=" text-black text-xs"
                         onClick={() => {
                             setShow(
-                                ShowItem.Shade,
-                                !getShow(ShowItem.CurseDetail)
-                            );
-                            setShow(
                                 ShowItem.CurseDetail,
                                 !getShow(ShowItem.CurseDetail)
                             );

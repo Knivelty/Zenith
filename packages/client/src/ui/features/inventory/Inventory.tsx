@@ -29,9 +29,9 @@ export function Inventory() {
     logDebug("invPieces: ", invPieces);
 
     return (
-        <div className="fixed bottom-0 text-center w-screen  mx-auto flex justify-center mt-2 z-10">
+        <div className="fixed bottom-0 text-center w-screen  mx-auto flex justify-center z-10">
             {/* <Synergy /> */}
-            <div className="p-3 m-3 flex items-center rounded-xl justify-center">
+            <div className="m-3 flex items-center rounded-xl justify-center">
                 {invPieces?.map(
                     (hero: PieceAttr | undefined, index: number) => (
                         <div key={index}>

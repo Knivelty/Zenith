@@ -8,15 +8,19 @@ export type Store = {
 };
 
 export enum ShowItem {
-    Shop,
     Shade,
+    Shop,
     HeroInfoDialog,
     CurseDetail,
+    CurseNotice,
     SettleDialog,
+    MakeChoice,
+    DangerStage,
     GuestTips,
     ConnectWalletDialog,
     SessionWalletCreate,
     AccountOption,
+    QuitConfirmation,
 }
 
 export type UIStore = {

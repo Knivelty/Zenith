@@ -19,6 +19,10 @@ import { Debugger } from "./features/debug/Debugger";
 import Shop from "./features/shop/Shop";
 import { Inventory } from "./features/inventory/Inventory";
 import { usePlayBattleBgMusic } from "./hooks/usePlayBattleBgMusic";
+import { CurseNotice } from "./features/info/CurseNotice";
+import { ChoiceDialog } from "./features/settle/ChoiceDialog";
+import { DangerStage } from "./features/info/DangerStage";
+import { QuitConfirmation } from "./features/info/QuitConfirmation";
 
 export function Main() {
     const {
@@ -48,6 +52,8 @@ export function Main() {
             <Shop />
             <SpeedSlider />
             <SettleDialog />
+            <ChoiceDialog />
+            <QuitConfirmation />
             <PieceLimit />
             <CommitButton />
             <Inventory />
@@ -57,7 +63,9 @@ export function Main() {
             <DangerBorder />
             <HeroInfoDialog />
             <CurseDetails />
+            <CurseNotice />
             <StatesPanel />
+            <DangerStage />
         </div>
     );
 }
