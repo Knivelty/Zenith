@@ -1,6 +1,6 @@
 import { ShowItem, useUIStore } from "../../../store";
 import { GreenButton } from "../../components/GreenButton";
-import { TipsDialog } from "../../components/TipsDialog";
+import { Dialog } from "../../components/Dialog";
 import { useDojo } from "../../hooks/useDojo";
 
 export function QuitConfirmation() {
@@ -19,7 +19,7 @@ export function QuitConfirmation() {
     }
 
     return (
-        <TipsDialog className="flex flex-col items-center justify-center">
+        <Dialog className="flex flex-col items-center justify-center">
             <div className="text-4xl font-bold">Quit the game?</div>
             <div className="flex mt-20">
                 <GreenButton
@@ -39,6 +39,6 @@ export function QuitConfirmation() {
                     Confirm
                 </GreenButton>
             </div>
-        </TipsDialog>
+        </Dialog>
     );
 }

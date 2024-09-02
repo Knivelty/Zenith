@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { GreenButton } from "../../components/GreenButton";
 import { HomeBg } from "../../components/HomeBg";
-import { TipsDialog } from "../../components/TipsDialog";
+import { Dialog } from "../../components/Dialog";
 import { useDojo } from "../../hooks/useDojo";
 import { ShowItem, useUIStore } from "../../../store";
 import { usePlayerProfile } from "../../hooks/usePlayerProfile";
@@ -35,7 +35,7 @@ export function SessionWalletCreate() {
             <div className="text-xs custom-green-text-shadow mt-[1%]">
                 Follow the steps below to set up for a smooth start to the game.
             </div>
-            <TipsDialog className="w-1/2 h-1/2 flex flex-col items-center justify-start">
+            <Dialog className="w-1/2 h-1/2 flex flex-col items-center justify-start">
                 <div className="text-3xl font-bold mt-[5%]">SESSION WALLET</div>
                 <div className="text-xs w-[40rem] mt-8 text-opacity-50">
                     The session wallet is a private key stored in your browser's
@@ -59,7 +59,7 @@ export function SessionWalletCreate() {
                 >
                     Confirm
                 </GreenButton>
-            </TipsDialog>
+            </Dialog>
         </HomeBg>
     );
 }

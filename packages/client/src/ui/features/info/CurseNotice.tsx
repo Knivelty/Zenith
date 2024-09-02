@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { ShowItem, useUIStore } from "../../../store";
 import { GreenButton } from "../../components/GreenButton";
-import { TipsDialog } from "../../components/TipsDialog";
+import { Dialog } from "../../components/Dialog";
 import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "../../hooks/useDojo";
 import { zeroEntity } from "../../../utils";
@@ -31,7 +31,7 @@ export function CurseNotice() {
     }
 
     return (
-        <TipsDialog className="flex flex-col justify-center w-1/2 h-2/3">
+        <Dialog className="flex flex-col justify-center w-1/2 h-2/3">
             <img className="w-16 h-16" src="/assets/ui/curse.png"></img>
             <div className="w-4/5 text-[#FF3D00] mt-20">
                 Adventurer, the forest's curse is now yours. Every creature here
@@ -47,6 +47,6 @@ export function CurseNotice() {
             >
                 Continue Battle
             </GreenButton>
-        </TipsDialog>
+        </Dialog>
     );
 }

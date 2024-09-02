@@ -13,12 +13,15 @@ import { useMergeAble } from "../../hooks/useMergable";
 import { logDebug } from "../../lib/utils";
 import { useHotkeys } from "react-hotkeys-hook";
 import { ShowItem, useUIStore } from "../../../store";
-import { SoundType, usePlaySoundSegment } from "../../hooks/usePlaySoundSegment";
+import {
+    SoundType,
+    usePlaySoundSegment,
+} from "../../hooks/usePlaySoundSegment";
 
 const rarityBgColor: Record<number, string> = {
-    1: "#4F84AF",
-    2: "#8B6FBF",
-    3: "#B97C34",
+    1: "#7C7C7C",
+    2: "#769A00",
+    3: "#00569E",
 };
 
 interface IHeroCard {
@@ -100,27 +103,33 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
                 className="flex flex-col border-1 items-start m-2"
                 style={{ backgroundColor: bgColor }}
             >
-                <div className="flex justify-center items-center w-[13.75rem] h-[13.75rem]  opacity-100 bg-contain bg-no-repeat bg-center bg-[url('/assets/ui/hero_bg.png')] mx-0.5">
+                <div className="relative flex justify-center items-center w-[13.75rem] h-[16rem]  opacity-100 bg-contain bg-no-repeat bg-center bg-black mx-2 mt-2">
                     <img
-                        className="h-[90%] object-contain w-[90%]"
+                        className="h-[80%] object-contain w-[90%] mt-2"
                         src={heroAttr?.thumb}
                         alt={heroAttr?.thumb}
                     />
+                    <div className="absolute left-2 bottom-2 flex flex-col text-white text-xs space-y-2">
+                        {heroAttr?.origins.map((o) => {
+                            return (
+                                <div className="flex flex-row items-center justify-start pixelated space-x-2">
+                                    <img
+                                        src={`/assets/ui/synergy/${o.toLowerCase()}_white.png`}
+                                        className="w-6 h-6"
+                                    ></img>
+                                    <div>{o}</div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
-                <div className="flex flex-col items-start ml-2 mt-3 text-xs text-white">
+                <div className="flex w-full flex-row items-center justify-between ml-2 mt-3 text-xs text-white">
                     <div className="text-xs">{heroAttr?.name}</div>
-                    <div className="flex items-center justify-center my-2">
-                        <div className="-mt-1 w-4 h-4 bg-cover bg-[url('/assets/ui/gold.png')]" />
-                        <div className="text-xs ml-2">
-                            Cost {heroAttr?.cost}
-                        </div>
+                    <div className="w-full flex items-center justify-end my-2">
+                        <div className=" w-4 h-4 bg-cover bg-[url('/assets/ui/gold.png')]" />
+                        <div className="text-xs ml-2">{heroAttr?.cost}</div>
                     </div>
                     <div className="ml-4"></div>
-                    <div className="flex flex-row ">
-                        <div className="text-[#06FF00]  ">
-                            {[...(heroAttr?.origins ?? [])].join(" ")}
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

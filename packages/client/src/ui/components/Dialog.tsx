@@ -1,6 +1,6 @@
 import { cn } from "../lib/utils";
 
-export function TipsDialog({
+export function Dialog({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {

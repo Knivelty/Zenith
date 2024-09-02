@@ -1,7 +1,7 @@
 import { useComponentValue } from "@dojoengine/react";
 import { ShowItem, useUIStore } from "../../../store";
 import { GreenButton } from "../../components/GreenButton";
-import { TipsDialog } from "../../components/TipsDialog";
+import { Dialog } from "../../components/Dialog";
 import { useDojo } from "../../hooks/useDojo";
 import { useMemo } from "react";
 
@@ -27,7 +27,7 @@ export function DangerStage() {
   }
 
   return (
-    <TipsDialog className="border-[#FF3D00] text-[#FF3D00] overflow-hidden">
+    <Dialog className="border-[#FF3D00] text-[#FF3D00] overflow-hidden">
       <img className="h-6 object-cover" src="/assets/ui/red_stripe.png" />
       <div className="w-full mt-6 flex flex-row justify-center items-center">
         <img src="/assets/ui/red_right_angle.svg" />
@@ -64,6 +64,6 @@ export function DangerStage() {
         className="absolute bottom-0 h-6 object-cover self-end"
         src="/assets/ui/red_stripe.png"
       />
-    </TipsDialog>
+    </Dialog>
   );
 }

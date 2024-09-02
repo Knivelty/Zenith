@@ -1,7 +1,7 @@
 import { braavos, useAccount, useConnect } from "@starknet-react/core";
 import { ShowItem, useUIStore } from "../../../store";
 import { GreenButton } from "../../components/GreenButton";
-import { TipsDialog } from "../../components/TipsDialog";
+import { Dialog } from "../../components/Dialog";
 import { useMemo } from "react";
 import { usePlayerProfile } from "../../hooks/usePlayerProfile";
 import { logDebug } from "../../lib/utils";
@@ -42,7 +42,7 @@ export function ConnectWalletDialog() {
   if (!show) return null;
 
   return (
-    <TipsDialog className="flex flex-col items-center justify-center">
+    <Dialog className="flex flex-col items-center justify-center">
       <div className="text-2xl ml-4">Connect Wallet</div>
       <img className="w-32 mt-12" src="/assets/ui/braavos.png" />
 
@@ -56,6 +56,6 @@ export function ConnectWalletDialog() {
           Connect to your braavos Wallet
         </GreenButton>
       </div>
-    </TipsDialog>
+    </Dialog>
   );
 }

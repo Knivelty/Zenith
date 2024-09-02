@@ -12,6 +12,7 @@ const withShadeItems = [
     ShowItem.GuestTips,
     ShowItem.ConnectWalletDialog,
     ShowItem.QuitConfirmation,
+    ShowItem.Shop,
 ];
 
 export function useControlShadeShow() {

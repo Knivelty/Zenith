@@ -6,11 +6,16 @@ import { ShowItem, UIStore, useUIStore } from "../../../store";
 import { logDebug } from "../../lib/utils";
 import { ClipLoader } from "react-spinners";
 import { useHotkeys } from "react-hotkeys-hook";
-import { SoundType, usePlaySoundSegment } from "../../hooks/usePlaySoundSegment";
+import {
+    SoundType,
+    usePlaySoundSegment,
+} from "../../hooks/usePlaySoundSegment";
+import { Dialog } from "../../components/Dialog";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 const Shop = () => {
     const {
-        clientComponents: { Player, Altar },
+        clientComponents: { Player, Altar, LevelRarityProb },
         systemCalls: { refreshAltar },
         account: { playerEntity, account },
     } = useDojo();
@@ -24,6 +29,7 @@ const Shop = () => {
     const shopShow = useUIStore((state: UIStore) =>
         state.getShow(ShowItem.Shop)
     );
+    const setShow = useUIStore((state) => state.setShow);
 
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -44,15 +50,27 @@ const Shop = () => {
     const playerValue = useComponentValue(Player, playerEntity);
     const heroAltar = useComponentValue(Altar, playerEntity);
 
+    const rarityProb = useComponentValue(
+        LevelRarityProb,
+        getEntityIdFromKeys([BigInt(playerValue?.level || 0n)])
+    );
+
     logDebug("heroAltar: ", heroAltar);
 
     return (
-        <div
-            className={`relative flex justify-center mt-16 select-none transform duration-700 z-10 ${
+        <Dialog
+            className={`relative flex justify-center select-none transform duration-700 z-10 w-4/5 h-[60%] top-1/4 ${
                 shopShow ? "scale-100" : "scale-0"
-            } z-20`}
+            } z-30`}
         >
-            {/* {contextHolder} */}
+            <div
+                className="absolute top-8 right-8 hover:cursor-pointer"
+                onClick={() => {
+                    setShow(ShowItem.Shop, false);
+                }}
+            >
+                <img className="w-6 h-6" src="/assets/ui/close_cross.png"></img>
+            </div>
             <div className="flex flex-col justify-center items-start">
                 <div className="flex items-center justify-around ml-4 mt-4">
                     <HeroCard
@@ -92,7 +110,19 @@ const Shop = () => {
                     />
                 </div>
 
-                <div className="flex flex-row justify-end items-center mt-4 ml-6 w-[100%]">
+                <div className="relative flex flex-row justify-end items-center mt-4 ml-6 w-[100%]">
+                    <div className="absolute flex text-xs left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 space-x-8">
+                        <div className="text-white"> Probability:</div>
+                        <div className="text-white">
+                            Common: {rarityProb?.r1 ?? 0 * 100}%
+                        </div>
+                        <div className="text-[#779B02]">
+                            Elite: {rarityProb?.r2 ?? 0 * 100}%
+                        </div>
+                        <div className="text-[#005599]">
+                            Rare: {rarityProb?.r3 ?? 0 * 100}%
+                        </div>
+                    </div>{" "}
                     <button
                         onClick={() => {
                             buyRefreshHeroFn();
@@ -119,7 +149,7 @@ const Shop = () => {
                     </button>
                 </div>
             </div>
-        </div>
+        </Dialog>
     );
 };
 

@@ -1,6 +1,6 @@
 import { ShowItem, useUIStore } from "../../../store";
 import { GreenButton } from "../../components/GreenButton";
-import { TipsDialog } from "../../components/TipsDialog";
+import { Dialog } from "../../components/Dialog";
 
 export function GuestTips() {
   const show = useUIStore((state) => state.getShow(ShowItem.GuestTips));
@@ -11,7 +11,7 @@ export function GuestTips() {
   if (!show) return null;
 
   return (
-    <TipsDialog className="flex flex-col items-center justify-center">
+    <Dialog className="flex flex-col items-center justify-center">
       <div className="flex flex-row justify-center items-center">
         <img className="w-16 h-16" src="/assets/ui/warning.png" />
         <div className="text-2xl ml-4">TIP</div>
@@ -40,6 +40,6 @@ export function GuestTips() {
           Confirm
         </GreenButton>
       </div>
-    </TipsDialog>
+    </Dialog>
   );
 }

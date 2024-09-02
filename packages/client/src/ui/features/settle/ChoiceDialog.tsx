@@ -1,5 +1,5 @@
 import { ShowItem, useUIStore } from "../../../store";
-import { TipsDialog } from "../../components/TipsDialog";
+import { Dialog } from "../../components/Dialog";
 import { ChoiceList } from "./ChoiceList";
 
 export function ChoiceDialog() {
@@ -10,7 +10,7 @@ export function ChoiceDialog() {
     }
 
     return (
-        <TipsDialog className="flex flex-col items-center">
+        <Dialog className="flex flex-col items-center">
             <ChoiceList />
 
             <div className="mt-12 text-[#06FF00] ">
@@ -22,6 +22,6 @@ export function ChoiceDialog() {
                     You must choose one before entering the next round
                 </div>
             </div>
-        </TipsDialog>
+        </Dialog>
     );
 }
