@@ -148,13 +148,12 @@ const Shop = () => {
 
                         <div className="flex item-center justify-center h-auto text-black font-bold">
                             <div className="flex flex-col">
-                                <div>Refresh</div>
                                 <div className="flex items-center justify-center mt-2">
                                     <div className="text-xs">
-                                        {playerValue?.refreshed ? 2 : 0}
+                                        {playerValue?.refreshed ? 2 : "Free"}
                                     </div>
-                                    <div className="ml-2 -mt-1 w-4 h-4 bg-cover bg-[url('/assets/ui/gold.png')]" />
                                 </div>
+                                <div className="mt-2">Refresh</div>
                             </div>
                         </div>
                     </div>

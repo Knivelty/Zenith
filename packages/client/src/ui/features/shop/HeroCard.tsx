@@ -28,17 +28,20 @@ interface IHeroCard {
 
 export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
     const {
-        clientComponents: { GameStatus },
+        clientComponents: { GameStatus, Player },
         systemCalls: { buyHero, buyAndMerge },
-        account: { account },
+        account: { account, playerEntity },
     } = useDojo();
 
+    const heroAttr = useHeroesAttr(creatureKey);
     const { firstEmptyInv } = useInv();
     const gameStatus = useComponentValue(GameStatus, zeroEntity);
     const getShow = useUIStore((state) => state.getShow);
 
     const { play: playClick } = usePlaySoundSegment(SoundType.Click);
     const { play: playUpgrade } = usePlaySoundSegment(SoundType.Upgrade);
+
+    const playerV = useComponentValue(Player, playerEntity);
 
     const mergeAble = useMergeAble(creatureKey?.id || 0);
 
@@ -81,9 +84,9 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
 
     const shouldBorderBlink = mergeAble.haveSameCid;
 
-    logDebug(`altar slot ${altarSlot} mergeAble:`, mergeAble);
+    const canBuy = playerV?.coin || 0 >= (heroAttr?.cost || 0);
 
-    const heroAttr = useHeroesAttr(creatureKey);
+    logDebug(`altar slot ${altarSlot} mergeAble:`, mergeAble);
 
     useHotkeys(altarSlot.toString(), () => {
         if (getShow(ShowItem.Shop) && !!creatureKey.id) {
@@ -111,14 +114,16 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
             <div
                 className="absolute h-full w-full inset-0 z-10"
                 style={{ backgroundColor: bgColor }}
-            ></div>
+            ></div>{" "}
             <img
                 src={heroAttr?.thumb}
                 className="absolute h-[120%] w-[120%] z-10 opacity-25"
             ></img>
             <div className="relative flex justify-center items-center w-[95%] h-[80rem]  opacity-100 bg-contain bg-no-repeat bg-center bg-black mt-2 z-20">
                 <img
-                    className="h-[80%] object-contain w-[90%] mt-2"
+                    className={cn("h-[80%] object-contain w-[90%] filter ", {
+                        grayscale: !canBuy,
+                    })}
                     src={heroAttr?.thumb}
                     alt={heroAttr?.thumb}
                 />
@@ -140,7 +145,13 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
                 <div className="text-xs">{heroAttr?.name}</div>
                 <div className="w-full flex items-center justify-end my-2">
                     <div className=" w-4 h-4 bg-cover bg-[url('/assets/ui/gold.png')]" />
-                    <div className="text-xs mr-4 ml-2">{heroAttr?.cost}</div>
+                    <div
+                        className={cn("text-xs mr-4 ml-2", {
+                            "text-[#FF3D00]": !canBuy,
+                        })}
+                    >
+                        {heroAttr?.cost}
+                    </div>
                 </div>
             </div>
         </div>
