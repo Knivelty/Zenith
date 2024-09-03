@@ -286,10 +286,10 @@ export const InvHero = ({
 
     return (
         <div>
-            <div className="relative flex flex-col border-1 items-start group">
+            <div className="relative flex flex-col border-1 items-center justify-center group">
                 <div
                     ref={dropRef}
-                    className="flex justify-center w-[5.9375rem] h-[8.125rem] rounded-lg opacity-100 bg-contain bg-no-repeat bg-center bg-black border-[#05FF00] border-2 mx-2"
+                    className="flex justify-center items-center w-[5rem] h-[5rem] opacity-100 bg-contain bg-no-repeat bg-center bg-black border-[#05FF00] border border-opacity-20"
                     onClick={() => {
                         // ignore invalid gid
                         if (!pieceAttr?.gid) {
@@ -304,7 +304,7 @@ export const InvHero = ({
                     <img
                         ref={dragRef}
                         className={cn(
-                            `w-auto h-auto object-contain ${!pieceAttr?.creature ? "invisible" : ""} `,
+                            ` w-[80%] h-[80%] object-contain ${!pieceAttr?.creature ? "invisible" : ""} `,
                             { "opacity-25": pieceAttr?.isOverride }
                         )}
                         src={pieceAttr?.thumb}

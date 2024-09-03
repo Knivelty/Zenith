@@ -9,7 +9,7 @@ export function Shade() {
     return (
         <div
             className={cn(
-                "fixed w-screen h-screen top-0 left-0 bg-[#151515] z-20 transition-opacity duration-1000",
+                "fixed w-screen h-screen top-0 left-0 bg-[#151515] z-20 transition-opacity duration-300",
                 shadeShow ? "opacity-90" : "opacity-0 pointer-events-none"
             )}
         ></div>

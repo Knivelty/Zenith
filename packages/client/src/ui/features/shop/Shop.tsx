@@ -3,8 +3,7 @@ import { useDojo } from "../../hooks/useDojo";
 import { useComponentValue } from "@dojoengine/react";
 import { HeroCard } from "./HeroCard";
 import { ShowItem, UIStore, useUIStore } from "../../../store";
-import { logDebug } from "../../lib/utils";
-import { ClipLoader } from "react-spinners";
+import { cn, logDebug } from "../../lib/utils";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
     SoundType,
@@ -36,6 +35,9 @@ const Shop = () => {
     const { play: playRefresh } = usePlaySoundSegment(SoundType.Refresh);
 
     const buyRefreshHeroFn = useCallback(async () => {
+        if (loading) {
+            return;
+        }
         setLoading(true);
         refreshAltar(account)
             .catch((e) => {
@@ -45,7 +47,7 @@ const Shop = () => {
                 setLoading(false);
                 playRefresh();
             });
-    }, [refreshAltar, account, playRefresh]);
+    }, [refreshAltar, account, playRefresh, loading]);
 
     const playerValue = useComponentValue(Player, playerEntity);
     const heroAltar = useComponentValue(Altar, playerEntity);
@@ -64,7 +66,7 @@ const Shop = () => {
             } z-30`}
         >
             <div
-                className="absolute top-8 right-8 hover:cursor-pointer"
+                className={cn("absolute top-6 right-8 cursor-pointer", {})}
                 onClick={() => {
                     setShow(ShowItem.Shop, false);
                 }}
@@ -72,7 +74,7 @@ const Shop = () => {
                 <img className="w-6 h-6" src="/assets/ui/close_cross.png"></img>
             </div>
             <div className="flex flex-col justify-center items-start">
-                <div className="flex items-center justify-around ml-4 mt-4">
+                <div className="flex items-center justify-around ml-4 mt-4 space-x-2">
                     <HeroCard
                         creatureKey={{
                             id: heroAltar?.slot1,
@@ -123,30 +125,39 @@ const Shop = () => {
                             Rare: {rarityProb?.r3 ?? 0 * 100}%
                         </div>
                     </div>{" "}
-                    <button
+                    <div
                         onClick={() => {
                             buyRefreshHeroFn();
                         }}
-                        className="flex items-center justify-center refresh h-20 w-[150px] bg-contain bg-no-repeat bg-[#06FF00] mr-8"
+                        className={cn(
+                            "relative flex items-center justify-center refresh h-20 w-[150px] bg-contain bg-no-repeat bg-[#06FF00] mr-8",
+                            { "hover:cursor-pointer": !loading }
+                        )}
                     >
-                        <div className="flex item-center justify-center w-4/5 h-auto text-black font-bold">
-                            {!loading ? (
-                                <div className="flex flex-col">
-                                    <div>Refresh</div>
-                                    <div className="flex items-center justify-center mt-2">
-                                        <div className="text-xs">
-                                            {playerValue?.refreshed ? 2 : 0}
-                                        </div>
-                                        <div className="ml-2 -mt-1 w-4 h-4 bg-cover bg-[url('/assets/ui/gold.png')]" />
-                                    </div>
-                                </div>
-                            ) : (
-                                <div>
-                                    <ClipLoader />
-                                </div>
+                        <div
+                            className={cn(
+                                "absolute w-full h-full flex justify-center items-center bg-black opacity-60 z-40",
+                                { invisible: !loading }
                             )}
+                        >
+                            <img
+                                src="assets/ui/loading.gif"
+                                className="h-[80%]"
+                            ></img>
                         </div>
-                    </button>
+
+                        <div className="flex item-center justify-center h-auto text-black font-bold">
+                            <div className="flex flex-col">
+                                <div>Refresh</div>
+                                <div className="flex items-center justify-center mt-2">
+                                    <div className="text-xs">
+                                        {playerValue?.refreshed ? 2 : 0}
+                                    </div>
+                                    <div className="ml-2 -mt-1 w-4 h-4 bg-cover bg-[url('/assets/ui/gold.png')]" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </Dialog>
