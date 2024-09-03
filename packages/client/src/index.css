@@ -62,7 +62,7 @@
 @layer base {
     * {
         @apply border-border;
-        @apply focus:outline-none
+        @apply focus:outline-none;
     }
     body {
         @apply bg-background text-foreground;
@@ -90,4 +90,14 @@
     src: url("/assets/fonts/DogicaPixel/dogicapixelbold.ttf") format("truetype");
     font-weight: bold;
     font-style: normal;
+}
+
+@keyframes border-flash {
+    0%,
+    100% {
+        border-color: transparent;
+    }
+    50% {
+        border-color: white;
+    }
 }

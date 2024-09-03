@@ -1,16 +1,12 @@
 import { useCallback } from "react";
-import {
-    CreatureKey,
-    HeroBaseAttr,
-    useHeroesAttr,
-} from "../../hooks/useHeroAttr";
+import { CreatureKey, useHeroesAttr } from "../../hooks/useHeroAttr";
 import { useInv } from "../../hooks/useInv";
 import { useComponentValue } from "@dojoengine/react";
 import { zeroEntity } from "../../../utils";
 import { useDojo } from "../../hooks/useDojo";
 import { GameStatusEnum } from "../../../dojo/types";
-import { useMergeAble } from "../../hooks/useMergable";
-import { logDebug } from "../../lib/utils";
+import { useMergeAble } from "../../hooks/useMergeable";
+import { cn, logDebug } from "../../lib/utils";
 import { useHotkeys } from "react-hotkeys-hook";
 import { ShowItem, useUIStore } from "../../../store";
 import {
@@ -82,6 +78,8 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
         playUpgrade,
     ]);
 
+    const shouldBorderBlink = mergeAble.haveSameCid;
+
     logDebug(`altar slot ${altarSlot} mergeAble:`, mergeAble);
 
     const heroAttr = useHeroesAttr(creatureKey);
@@ -100,10 +98,24 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
             onClick={buyHeroFn}
         >
             <div
-                className="flex flex-col border-1 items-start m-2"
-                style={{ backgroundColor: bgColor }}
+                className={cn(
+                    "relative flex flex-col border-1 items-start m-2",
+                    `overflow-hidden border-4 hover:border-white border-transparent box-content hover:cursor-pointer`,
+                    {
+                        "animate-[border-flash_1s_linear_infinite]":
+                            shouldBorderBlink,
+                    }
+                )}
             >
-                <div className="relative flex justify-center items-center w-[13.75rem] h-[16rem]  opacity-100 bg-contain bg-no-repeat bg-center bg-black mx-2 mt-2">
+                <div
+                    className="absolute h-full w-full inset-0 z-10"
+                    style={{ backgroundColor: bgColor }}
+                ></div>
+                <img
+                    src={heroAttr?.thumb}
+                    className="absolute h-[120%] w-[120%] z-10 opacity-25"
+                ></img>
+                <div className="relative flex justify-center items-center w-[13.75rem] h-[16rem]  opacity-100 bg-contain bg-no-repeat bg-center bg-black mx-2 mt-2 z-20">
                     <img
                         className="h-[80%] object-contain w-[90%] mt-2"
                         src={heroAttr?.thumb}
@@ -123,7 +135,7 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
                         })}
                     </div>
                 </div>
-                <div className="flex w-full flex-row items-center justify-between ml-2 mt-3 text-xs text-white">
+                <div className="flex w-full flex-row items-center justify-between ml-2 mt-3 text-xs text-white z-20">
                     <div className="text-xs">{heroAttr?.name}</div>
                     <div className="w-full flex items-center justify-end my-2">
                         <div className=" w-4 h-4 bg-cover bg-[url('/assets/ui/gold.png')]" />

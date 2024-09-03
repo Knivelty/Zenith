@@ -21,7 +21,7 @@ export const SpeedSlider = () => {
     };
 
     return (
-        <div className="fixed top-4 z-40 left-4 w-64">
+        <div className="fixed top-4 z-20 left-4 w-64">
             <input
                 type="range"
                 min={0}

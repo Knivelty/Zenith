@@ -59,7 +59,7 @@ const Shop = () => {
 
     return (
         <Dialog
-            className={`relative flex justify-center select-none transform duration-700 z-10 w-4/5 h-[60%] top-1/4 ${
+            className={`relative flex justify-center select-none transform duration-700 z-10 w-4/5 h-[58%] top-1/4 ${
                 shopShow ? "scale-100" : "scale-0"
             } z-30`}
         >
@@ -111,7 +111,7 @@ const Shop = () => {
                 </div>
 
                 <div className="relative flex flex-row justify-end items-center mt-4 ml-6 w-[100%]">
-                    <div className="absolute flex text-xs left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 space-x-8">
+                    <div className="absolute flex text-sm left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 space-x-8">
                         <div className="text-white"> Probability:</div>
                         <div className="text-white">
                             Common: {rarityProb?.r1 ?? 0 * 100}%

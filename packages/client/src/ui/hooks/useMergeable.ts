@@ -27,6 +27,7 @@ export function useMergeAble(creature_id: number) {
     const levelOnePieces = allMetPieces.filter((p) => p.level === 1);
     const levelTwoPieces = allMetPieces.filter((p) => p.level === 2);
 
+    const haveSameCid = allMetPieces.length > 0;
     const canMerge = levelOnePieces.length >= 2;
 
     // merge level one
@@ -65,5 +66,5 @@ export function useMergeAble(creature_id: number) {
 
     logDebug("mergedToWith: ", mergedToWith, boardIdx, invSlot);
 
-    return { canMerge, gids, boardIdx, onBoardCoord, invSlot };
+    return { canMerge, haveSameCid, gids, boardIdx, onBoardCoord, invSlot };
 }
