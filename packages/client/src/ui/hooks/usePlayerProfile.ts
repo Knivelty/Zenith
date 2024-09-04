@@ -1,6 +1,6 @@
 import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "./useDojo";
-import { hexStringToUtf8 } from "../../utils";
+import { bigIntToUtf8 } from "../../utils";
 
 export function usePlayerProfile() {
     const {
@@ -10,7 +10,7 @@ export function usePlayerProfile() {
 
     const playerProfile = useComponentValue(PlayerProfile, playerEntity);
 
-    const playerName = hexStringToUtf8(playerProfile?.name);
+    const playerName = bigIntToUtf8(playerProfile?.name);
 
     return { playerName };
 }

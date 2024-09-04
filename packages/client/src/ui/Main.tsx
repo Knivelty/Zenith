@@ -23,6 +23,9 @@ import { CurseNotice } from "./features/info/CurseNotice";
 import { ChoiceDialog } from "./features/settle/ChoiceDialog";
 import { DangerStage } from "./features/info/DangerStage";
 import { QuitConfirmation } from "./features/info/QuitConfirmation";
+import { OptionMenu } from "./features/misc/OptionMenu";
+import { SynergyDetail } from "./features/info/SynergyDetail";
+import { useShowFollowValue } from "./hooks/useShowFollowValue";
 
 export function Main() {
     const {
@@ -33,6 +36,7 @@ export function Main() {
     const inGame = useComponentValue(Player, playerEntity)?.inMatch;
 
     usePlayBattleBgMusic();
+    useShowFollowValue();
 
     if (!inGame) {
         return <Home />;
@@ -49,6 +53,7 @@ export function Main() {
             <Debugger />
             <PlayerList />
             <SynergyBar />
+            <SynergyDetail />
             <Shop />
             <SpeedSlider />
             <SettleDialog />
@@ -66,6 +71,7 @@ export function Main() {
             <CurseNotice />
             <StatesPanel />
             <DangerStage />
+            <OptionMenu />
         </div>
     );
 }

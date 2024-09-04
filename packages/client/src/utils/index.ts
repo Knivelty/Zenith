@@ -32,7 +32,7 @@ export function defineSystemST<S extends Schema = Schema, T = unknown>(
 export const zeroEntity: Entity =
     "0x0000000000000000000000000000000000000000000000000000000000000000" as Entity;
 
-export function hexStringToUtf8(hexStringBigInt: bigint | undefined) {
+export function bigIntToUtf8(hexStringBigInt: bigint | undefined) {
     if (!hexStringBigInt) return "";
 
     const hex = hexStringBigInt.toString(16);
@@ -61,15 +61,15 @@ export function utf8StringToBigInt(utf8String: string) {
 }
 
 export function getOrder(hexStringBigInt: bigint): string {
-    return hexStringToUtf8(hexStringBigInt);
+    return bigIntToUtf8(hexStringBigInt);
 }
 
 export function getOrigins(hexStringBigInt: bigint): string[] {
-    return hexStringToUtf8(hexStringBigInt).split("+");
+    return bigIntToUtf8(hexStringBigInt).split("+");
 }
 
 export function getAbility(hexStringBigInt: bigint): string {
-    return hexStringToUtf8(hexStringBigInt);
+    return bigIntToUtf8(hexStringBigInt);
 }
 
 export function getLocalPlayerBoardPieceEntities(

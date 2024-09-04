@@ -137,6 +137,7 @@ export function createClientComponents({
                 draggingGid: Type.Number,
                 selected: Type.Boolean,
                 selectGid: Type.Number,
+                selectedTrait: Type.String,
                 skipAnimation: Type.Boolean,
                 animationSpeed: Type.Number,
             },

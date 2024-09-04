@@ -2,7 +2,10 @@ import { ShowItem, UIStore, useUIStore } from "../../../store";
 import { useDojo } from "../../hooks/useDojo";
 import { useComponentValue } from "@dojoengine/react";
 import { useHotkeys } from "react-hotkeys-hook";
-import { SoundType, usePlaySoundSegment } from "../../hooks/usePlaySoundSegment";
+import {
+    SoundType,
+    usePlaySoundSegment,
+} from "../../hooks/usePlaySoundSegment";
 
 export function ShopButton() {
     const {
@@ -26,7 +29,7 @@ export function ShopButton() {
     const player = useComponentValue(Player, playerEntity);
 
     return (
-        <div className="absolute right-[10%] bottom-[10%] z-20">
+        <div className="absolute right-[10%] bottom-[5%] z-20">
             <button
                 className="w-32 h-32 bg-black border-[#06FF00] border rounded-full
                  transition duration-300 text-lg"

@@ -6,9 +6,15 @@ import { utf8StringToBigInt, zeroEntity } from "../utils";
 import { opBuyHero } from "./opRender/opBuyHero";
 import { opSellHero } from "./opRender/opSellHero";
 import { opCommitPrepare } from "./opRender/opCommitPrepare";
-import { logCall, logDebug } from "../ui/lib/utils";
+import {
+    logCall,
+    logDebug,
+    waitForComponentOriginValueCome,
+    waitForPromiseOrTxRevert,
+} from "../ui/lib/utils";
 import { opRefreshAltar } from "./opRender/opRefreshAltar";
 import { opBuyAndMerge } from "./opRender/opBuyAndMerge";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -118,9 +124,21 @@ export function createSystemCalls(
 
     const buyExp = async (account: Account) => {
         try {
-            return await client.home.buyExp({
-                account,
-            });
+            const playerEntity = getEntityIdFromKeys([BigInt(account.address)]);
+            await waitForPromiseOrTxRevert(
+                rpcProvider,
+                client.home.buyExp({
+                    account,
+                }),
+                [
+                    // any update should work
+                    waitForComponentOriginValueCome(
+                        clientComponents.Player,
+                        playerEntity,
+                        {}
+                    ),
+                ]
+            );
         } catch (e) {
             console.error(e);
             throw e;

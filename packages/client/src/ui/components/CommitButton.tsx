@@ -80,7 +80,7 @@ export function CommitOperationButton({
 }) {
     return (
         <button
-            className={`absolute  left-1/2 transform -translate-x-1/2 top-[calc(10%+40rem)] bg-[url(/assets/ui/commit_btn.png)] pixelated bg-contain bg-no-repeat flex justify-center mt-0.5 ${visible} select-none w-60 h-10 font-dogica text-xs z-10`}
+            className={`absolute  left-1/2 transform -translate-x-1/2 top-[calc(13%+40rem)] bg-[url(/assets/ui/commit_btn.png)] pixelated bg-contain bg-no-repeat flex justify-center mt-0.5 ${visible} select-none w-60 h-10 font-dogica text-xs z-10`}
             onClick={onClick}
         >
             <div className="self-center text-black">{text}</div>

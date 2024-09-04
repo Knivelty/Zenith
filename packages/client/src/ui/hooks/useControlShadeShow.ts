@@ -13,6 +13,8 @@ const withShadeItems = [
     ShowItem.ConnectWalletDialog,
     ShowItem.QuitConfirmation,
     ShowItem.Shop,
+    ShowItem.OptionMenuUnfold,
+    ShowItem.SynergyDetail,
 ];
 
 export function useControlShadeShow() {

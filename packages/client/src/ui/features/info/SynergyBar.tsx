@@ -1,11 +1,25 @@
 import { useAllSynergiesCounts } from "../../hooks/useAllSynergies";
+import { useDojo } from "../../hooks/useDojo";
 import { cn } from "../../lib/utils";
+import { zeroEntity } from "../../../utils";
+import { useCallback } from "react";
+import { updateComponent } from "@dojoengine/recs";
+import { ShowItem, useUIStore } from "../../../store";
 
 export function SynergyBar() {
     const all = useAllSynergiesCounts();
 
+    const synergyDetailShow = useUIStore((state) =>
+        state.getShow(ShowItem.SynergyDetail)
+    );
+
     return (
-        <div className="fixed left-4 top-[5rem] h-[38rem] border border-[#06FF00] bg-black bg-contain bg-no-repeat w-60 ">
+        <div
+            className={cn(
+                "fixed left-4 top-[5rem] h-[38rem] border border-[#06FF00] bg-black bg-contain bg-no-repeat w-60 ",
+                { "z-30": synergyDetailShow }
+            )}
+        >
             <div className="mt-2">
                 {Object.values(all).map((t) => {
                     return <SynergyActiveStatus {...t} key={t.traitName} />;
@@ -45,13 +59,28 @@ function SynergyActiveStatus({
     requiredPieceCounts,
     unlockLevel,
 }: ISynergyActiveStatus) {
+    const {
+        clientComponents: { UserOperation },
+    } = useDojo();
+
+    const setSelectedTraitFn = useCallback(() => {
+        updateComponent(UserOperation, zeroEntity, {
+            selectedTrait: traitName,
+        });
+    }, []);
+
     // if no unlock level, do not show
     if (onBoardPieceCount === 0 && inventoryPieceCount === 0) {
         return <div></div>;
     }
 
     return (
-        <div className="flex flex-row ml-4 my-1 h-[4.25rem]">
+        <div
+            className="flex flex-row ml-4 my-1 h-[4.25rem] hover:cursor-pointer"
+            onClick={() => {
+                setSelectedTraitFn();
+            }}
+        >
             <img
                 className="w-16 h-16 pixelated"
                 src={`/assets/ui/synergy/${traitName?.toLocaleLowerCase()}.png`}
@@ -81,8 +110,14 @@ function SynergyActiveStatus({
                         );
                     })}
                 </div>
-                <div className="text-sm -mt-2 -ml-6  w-auto text-[#D6A541]">
-                    {onBoardPieceCount}
+                <div className="relative -mt-2 -ml-7 w-4 h-4">
+                    <img
+                        className="absolute w-full h-full inset-0 z-0"
+                        src="/assets/ui/hexagon.png"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center z-10 text-[0.5rem]">
+                        {onBoardPieceCount}
+                    </div>
                 </div>
             </div>
         </div>

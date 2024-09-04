@@ -21,6 +21,8 @@ export enum ShowItem {
     SessionWalletCreate,
     AccountOption,
     QuitConfirmation,
+    OptionMenuUnfold,
+    SynergyDetail,
 }
 
 export type UIStore = {

@@ -25,7 +25,7 @@ export const PhaserLayer = ({ networkLayer }: Props) => {
             }}
             style={{
                 position: "absolute",
-                top: "10%",
+                top: "13%",
                 left: "50%",
                 width: "40rem",
                 height: "40rem",

@@ -2,8 +2,12 @@ import { useDojo } from "../../hooks/useDojo";
 import { useComponentValue } from "@dojoengine/react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { ProgressBar } from "../../components/ProgressBar";
-import { useCallback } from "react";
-import { SoundType, usePlaySoundSegment } from "../../hooks/usePlaySoundSegment";
+import { useCallback, useState } from "react";
+import {
+    SoundType,
+    usePlaySoundSegment,
+} from "../../hooks/usePlaySoundSegment";
+import { cn } from "../../lib/utils";
 
 export function ExpButton() {
     const {
@@ -11,6 +15,8 @@ export function ExpButton() {
         clientComponents: { Player, LevelConfig },
         systemCalls: { buyExp },
     } = useDojo();
+
+    const [loading, setLoading] = useState(false);
 
     const player = useComponentValue(Player, playerEntity);
     const levelConfig = useComponentValue(
@@ -21,18 +27,43 @@ export function ExpButton() {
     const { play } = usePlaySoundSegment(SoundType.Click);
 
     const handleClick = useCallback(() => {
+        if (loading) {
+            return;
+        }
         play();
-        buyExp(account);
-    }, [buyExp, account, play]);
+        setLoading(true);
+        buyExp(account).finally(() => {
+            setLoading(false);
+        });
+    }, [buyExp, account, play, loading]);
 
     const percent = ((player?.exp || 0) / (levelConfig?.expForNext || 1)) * 100;
 
     return (
-        <div className="absolute flex  flex-col left-[10%] bottom-[10%] select-none z-20">
-            <div className="mb-2 self-center">
+        <div className="absolute flex  flex-col left-[10%] bottom-[5%] select-none z-20">
+            <div className="mb-2 self-center text-sm font-bold">
                 EXP : {player?.exp} / {levelConfig?.expForNext}
             </div>
-            <div className="flex justify-center w-32 h-32  bg-black border border-[#06FF00]  transition duration-300 rounded-full ">
+            <div
+                onClick={handleClick}
+                className="relative flex justify-center w-32 h-32  bg-black border border-[#06FF00]  transition duration-300 rounded-full cursor-pointer"
+            >
+                <div
+                    className={cn(
+                        "absolute w-full h-full pointer-events-none",
+                        {
+                            invisible: !loading,
+                        }
+                    )}
+                >
+                    <img
+                        className={cn(
+                            "absolute w-1/2 h-1/2 translate-y-1/2 translate-x-1/2"
+                        )}
+                        src="/assets/ui/loading.gif"
+                    ></img>
+                    <div className="absolute h-full w-full bg-black opacity-80 rounded-full"></div>
+                </div>
                 <div className="flex flex-col justify-center">
                     <div className="flex self-center text-lg mb-1 -mt-2">
                         <div className="bg-[url('/assets/ui/gold.png')] bg-contain bg-no-repeat w-6 h-6"></div>
@@ -42,10 +73,7 @@ export function ExpButton() {
                     <div className="self-center text-sm ">Buy 4 exp</div>
                 </div>
             </div>
-            <div
-                onClick={handleClick}
-                className="-mt-[8.75rem] -ml-[0.75rem] cursor-pointer"
-            >
+            <div className="-mt-[8.75rem] -ml-[0.75rem] ">
                 <ProgressBar size={152} strokeWidth={8} percentage={percent} />
             </div>
             <div className="absolute flex justify-center -right-2 -bottom-6 rounded-full h-12 w-12 border border-[#06FF00] ">
