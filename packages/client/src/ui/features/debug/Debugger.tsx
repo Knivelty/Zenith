@@ -61,19 +61,19 @@ export function Debugger() {
         };
     }, [toriiClient]);
 
-    const player = useComponentValue(
-        Player,
-        getEntityIdFromKeys([BigInt(account.address)])
-    );
-
-    const setLoggedIn = usePersistUIStore((state) => state.setLoggedIn);
+    // const player = useComponentValue(
+    //     Player,
+    //     getEntityIdFromKeys([BigInt(account.address)])
+    // );
+    //
+    // const setLoggedIn = usePersistUIStore((state) => state.setLoggedIn);
     const setShow = useUIStore((state) => state.setShow);
 
-    useEffect(() => {
-        if (player?.inMatch && player?.inMatch > 0) {
-            setLoggedIn();
-        }
-    }, [player?.inMatch, setLoggedIn]);
+    // useEffect(() => {
+    //     if (player?.inMatch && player?.inMatch > 0) {
+    //         setLoggedIn();
+    //     }
+    // }, [player?.inMatch, setLoggedIn]);
 
     const userOp = useComponentValue(UserOperation, zeroEntity);
 
