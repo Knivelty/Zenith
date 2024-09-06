@@ -2,7 +2,7 @@ import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "../../hooks/useDojo";
 import { useEffect, useState } from "react";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
-import { ShowItem, useUIStore } from "../../../store";
+import { ShowItem, usePersistUIStore, useUIStore } from "../../../store";
 import { zeroEntity } from "../../../utils";
 import {
     Component,
@@ -66,7 +66,7 @@ export function Debugger() {
         getEntityIdFromKeys([BigInt(account.address)])
     );
 
-    const setLoggedIn = useUIStore((state: any) => state.setLoggedIn);
+    const setLoggedIn = usePersistUIStore((state) => state.setLoggedIn);
     const setShow = useUIStore((state) => state.setShow);
 
     useEffect(() => {

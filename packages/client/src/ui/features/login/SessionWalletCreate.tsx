@@ -1,10 +1,12 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { GreenButton } from "../../components/GreenButton";
 import { HomeBg } from "../../components/HomeBg";
 import { Dialog } from "../../components/Dialog";
 import { useDojo } from "../../hooks/useDojo";
-import { ShowItem, useUIStore } from "../../../store";
+import { ShowItem, usePersistUIStore, useUIStore } from "../../../store";
 import { usePlayerProfile } from "../../hooks/usePlayerProfile";
+import { cn } from "../../lib/utils";
+import { LoadingShade } from "../../components/LoadingShade";
 
 export function SessionWalletCreate() {
     const {
@@ -15,7 +17,7 @@ export function SessionWalletCreate() {
 
     const [inputName, setInputName] = useState("");
     const setShow = useUIStore((state) => state.setShow);
-    const setLoggedIn = useUIStore((state) => state.setLoggedIn);
+    const setLoggedIn = usePersistUIStore((state) => state.setLoggedIn);
     const { playerName } = usePlayerProfile();
 
     useMemo(() => {
@@ -25,7 +27,19 @@ export function SessionWalletCreate() {
         }
     }, [playerName, setShow, setLoggedIn]);
 
-    const loggedIn = useUIStore((state) => state.loggedIn);
+    const loggedIn = usePersistUIStore((state) => state.loggedIn);
+
+    const [loading, setLoading] = useState(false);
+
+    const setNameFn = useCallback(() => {
+        if (loading) {
+            return;
+        }
+        setLoading(true);
+        setName(account, inputName).finally(() => {
+            setLoading(false);
+        });
+    }, [account, inputName, setName, loading]);
 
     return (
         <HomeBg className="z-40 flex-col items-center justify-start">
@@ -52,12 +66,15 @@ export function SessionWalletCreate() {
                     onChange={(e) => setInputName(e.target.value)}
                 />
                 <GreenButton
-                    className="mt-8 w-[28rem] h-[4rem]"
-                    onClick={() => {
-                        setName(account, inputName);
-                    }}
+                    className="mt-8 w-[28rem] h-[4rem] relative"
+                    onClick={setNameFn}
                 >
-                    Confirm
+                    <div>Confirm</div>
+                    <LoadingShade
+                        className=""
+                        gifClassName="h-2/3"
+                        loading={loading}
+                    />
                 </GreenButton>
             </Dialog>
         </HomeBg>

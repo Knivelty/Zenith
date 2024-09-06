@@ -1,5 +1,5 @@
 import { useDojo } from "./hooks/useDojo";
-import { ShowItem, useUIStore } from "../store";
+import { ShowItem, UIStore, usePersistUIStore, useUIStore } from "../store";
 import { AgreeTerm } from "./features/login/AgreeTerm";
 import { UnConnected } from "./features/login/UnConnected";
 import { Connected } from "./features/login/Connected";
@@ -20,15 +20,15 @@ export const Home = () => {
         clientComponents: { PlayerProfile },
     } = useDojo();
 
-    const agreeTerm = useUIStore((state) => state.agreeTerm);
-    const loggedIn = useUIStore((state) => state.loggedIn);
+    const agreeTerm = usePersistUIStore((state) => state.agreeTerm);
+    const loggedIn = usePersistUIStore((state) => state.loggedIn);
 
-    const sessionWalletShow = useUIStore((state) =>
+    const sessionWalletShow = useUIStore((state: UIStore) =>
         state.getShow(ShowItem.SessionWalletCreate)
     );
 
     const { isConnected } = useAccount();
-    const setLoggedIn = useUIStore((state) => state.setLoggedIn);
+    const setLoggedIn = usePersistUIStore((state) => state.setLoggedIn);
 
     useMemo(() => {
         if (isConnected) {

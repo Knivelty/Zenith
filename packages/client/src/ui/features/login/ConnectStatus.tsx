@@ -1,6 +1,6 @@
 import { useDojo } from "../../hooks/useDojo";
 import { shortenAddress } from "../../lib/utils";
-import { ShowItem, useUIStore } from "../../../store";
+import { ShowItem, usePersistUIStore, useUIStore } from "../../../store";
 import { useAccount, useConnect, useDisconnect } from "@starknet-react/core";
 
 export function ConnectStatus() {
@@ -16,7 +16,7 @@ export function ConnectStatus() {
 
     const show = useUIStore((state) => state.getShow(ShowItem.AccountOption));
     const setShow = useUIStore((state) => state.setShow);
-    const setLoggedIn = useUIStore((state) => state.setLoggedIn);
+    const setLoggedIn = usePersistUIStore((state) => state.setLoggedIn);
 
     return (
         <div className="fixed top-12 left-12 flex flex-col justify-center w-60">

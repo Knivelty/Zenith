@@ -1,12 +1,12 @@
-import { useUIStore } from "../../../store";
+import { usePersistUIStore, useUIStore } from "../../../store";
 import { CircleShadow } from "../../components/CircleShadow";
 import { GreenButton } from "../../components/GreenButton";
 
 export const AgreeTerm = () => {
-    const setAgreeTerm = useUIStore((state) => state.setAgreeTerm);
+    const setAgreeTerm = usePersistUIStore((state) => state.setAgreeTerm);
     return (
-        <div className="absolute flex flex-col z-100 h-screen w-screen bg-[url('/assets/ui/chess_bg.png')] top-0 left-0 items-center justify-center overflow-hidden z-20">
-            <CircleShadow className="-z-10" />
+        <div className="absolute flex flex-col  z-100 h-screen w-screen bg-[url('/assets/ui/chess_bg.png')] top-0 left-0 items-center justify-center overflow-hidden z-30">
+            <CircleShadow className="-z-10 pointer-events-none" />
             <div className="w-1/2 h-auto flex flex-col items-center justify-center">
                 <img src="/assets/ui/zenith.png" />
             </div>

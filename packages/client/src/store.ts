@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { NetworkLayer } from "./dojo/createNetworkLayer";
 import { PhaserLayer } from "./phaser";
 
@@ -26,10 +27,6 @@ export enum ShowItem {
 }
 
 export type UIStore = {
-    loggedIn: boolean;
-    setLoggedIn: (loggedIn: boolean) => void;
-    agreeTerm: boolean;
-    setAgreeTerm: (agreeTerm: boolean) => void;
     phaserRect: DOMRect;
     setPhaserRect: (rect: DOMRect) => void;
     shows: Map<ShowItem, boolean>;
@@ -37,25 +34,41 @@ export type UIStore = {
     setShow: (i: ShowItem, shouldShow: boolean) => void;
 };
 
+export type PersistUIStore = {
+    loggedIn: boolean;
+    setLoggedIn: (loggedIn: boolean) => void;
+    agreeTerm: boolean;
+    setAgreeTerm: (agreeTerm: boolean) => void;
+};
+
 export const store = create<Store>(() => ({
     networkLayer: null,
     phaserLayer: null,
 }));
 
-export const useUIStore = create<UIStore>((set, get) => ({
-    loggedIn: false,
-    setLoggedIn: (loggedIn: boolean) => set(() => ({ loggedIn })),
-    agreeTerm: false,
-    setAgreeTerm: (agreeTerm: boolean) => set(() => ({ agreeTerm })),
+export const usePersistUIStore = create(
+    persist<PersistUIStore>(
+        (set) => ({
+            loggedIn: false,
+            setLoggedIn: (loggedIn: boolean) => set(() => ({ loggedIn })),
+            agreeTerm: false,
+            setAgreeTerm: (agreeTerm: boolean) => set(() => ({ agreeTerm })),
+        }),
+        {
+            name: "ui-persist-storage",
+            storage: createJSONStorage(() => localStorage),
+        }
+    )
+);
+
+export const useUIStore = create<UIStore>()((set, get) => ({
     phaserRect: new DOMRect(0, 0, 0, 0),
     setPhaserRect: (rect: DOMRect) => set(() => ({ phaserRect: rect })),
-    shows: new Map(),
-    getShow: (i: ShowItem) => {
-        return get().shows.get(i) || false;
-    },
+    shows: new Map<ShowItem, boolean>(),
+    getShow: (i: ShowItem) => get().shows.get(i) ?? false,
     setShow(i: ShowItem, shouldShow: boolean) {
-        set((state) => {
-            const newMap = new Map(state.shows);
+        set(() => {
+            const newMap = get().shows;
             newMap.set(i, shouldShow);
             return { shows: newMap };
         });

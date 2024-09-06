@@ -1,5 +1,5 @@
 import { braavos, useAccount, useConnect } from "@starknet-react/core";
-import { ShowItem, useUIStore } from "../../../store";
+import { ShowItem, usePersistUIStore, useUIStore } from "../../../store";
 import { GreenButton } from "../../components/GreenButton";
 import { Dialog } from "../../components/Dialog";
 import { useMemo } from "react";
@@ -12,7 +12,7 @@ export function ConnectWalletDialog() {
   );
   const setShow = useUIStore((state) => state.setShow);
 
-  const setLoggedIn = useUIStore((state) => state.setLoggedIn);
+  const setLoggedIn = usePersistUIStore((state) => state.setLoggedIn);
 
   const { connect } = useConnect();
   const { isConnected } = useAccount();

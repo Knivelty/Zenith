@@ -4,7 +4,10 @@ import { zeroEntity } from "../../../utils";
 import { useEffect, useRef } from "react";
 import { updateComponent } from "@dojoengine/recs";
 import { ShowItem, useUIStore } from "../../../store";
-import { Trait_Buff_Description } from "../../constants/synergyDescription";
+import {
+    Trait_Base_Description,
+    Trait_Buff_Description,
+} from "../../constants/synergyDescription";
 import { useOneSynergyDetail } from "../../hooks/useOneSynergyDetail";
 
 export interface ISynergyDetail {
@@ -66,6 +69,9 @@ export function SynergyDetail() {
             <div className="w-full h-px bg-[#06FF00] my-4"></div>
             <div>
                 <div>Synergy Description</div>
+                <div className="text-xs mt-2 ml-8">
+                    {Trait_Base_Description[traitName]}
+                </div>
                 <div className="flex flex-col space-y-2 mt-4">
                     {Object.entries(synergyDescriptions).map(([k, d]) => {
                         return (

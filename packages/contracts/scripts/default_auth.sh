@@ -20,7 +20,7 @@ MODELS=("Player" "Piece" "InningBattle" "GlobalState" "MatchState" "Altar" "Play
 AUTH_MODELS=""
 # Give permission to the action system to write on all the models.
 for component in ${MODELS[@]}; do
-    AUTH_MODELS+="$component,$HOME_ADDRESS "
+  AUTH_MODELS+="$component,$HOME_ADDRESS "
 done
 
 sozo --profile $PROFILE auth grant writer $AUTH_MODELS

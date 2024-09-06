@@ -4,12 +4,6 @@ export const Strength_Trait_Buff_Description: Record<number, string> = {
     7: "All Strength pieces gain +70%AD. Each Strength piece on battlefield would provide +5%AD more.",
 };
 
-export const Brute_Trait_Buff_Description: Record<number, string> = {
-    3: "At the beginning of Battle Phase, Brute pieces gain Shield equal to 30% Max. HP.",
-    6: "At the beginning of Battle Phase, Brute pieces gain Shield equal to 60% Max. HP. After 4 turns, Brute pieces gain +40 Armor.",
-    8: "At the beginning of Battle Phase, Brute pieces gain Shield equal to 100% Max. HP. At the end of turn, Brute pieces gain +10 Armor and Recover HP equal to 100% Shield.",
-};
-
 export const Light_Trait_Buff_Description: Record<number, string> = {
     2: "All Light pieces gain +10 Init., -10 Max. Mana.",
     4: "All Light pieces gain +20 Init., -20 Max. Mana, +1 Range.",
@@ -40,6 +34,12 @@ export const Hunter_Trait_Buff_Description: Record<number, string> = {
     9: "Hunter pieces gain +40 Init. and +2 Range. They can attack Twice per turn. They deal extra True Damage after Auto Attack equal to Init.",
 };
 
+export const Brute_Trait_Buff_Description: Record<number, string> = {
+    3: "At the beginning of Battle Phase, Brute pieces gain Shield equal to 30% Max. HP.",
+    6: "At the beginning of Battle Phase, Brute pieces gain Shield equal to 60% Max. HP. After 4 turns, Brute pieces gain +40 Armor.",
+    8: "At the beginning of Battle Phase, Brute pieces gain Shield equal to 100% Max. HP. At the end of turn, Brute pieces gain +10 Armor and Recover HP equal to 100% Shield.",
+};
+
 export const Imaginary_Trait_Buff_Description: Record<number, string> = {
     3: "At the end of action of Imaginary pieces, they gain an extra action with -75 Init. this turn, until the Init. is below 0.",
 };
@@ -53,4 +53,15 @@ export const Trait_Buff_Description: Record<string, Record<number, string>> = {
     Magical: Magical_Trait_Buff_Description,
     Hunter: Hunter_Trait_Buff_Description,
     Imaginary: Imaginary_Trait_Buff_Description,
+};
+
+export const Trait_Base_Description: Record<string, string> = {
+    Strength: "Strength pieces’ Auto Attack deals 120%AD Physical Damage.",
+    Light: "Light pieces gain extra +5 Mana when Auto Attack.",
+    Dark: "When friendly piece dies, Dark pieces gain stackable +5%AD and +5%HP, last for 3 turns.",
+    Cunning: "Cunning pieces gain +1%AD for each remaining Gold.",
+    Magical: "Magical pieces gain +20AP.",
+    Hunter: "Hunter pieces gain +10 Init. and +1 Range.",
+    Brute: "Brute pieces gain +20 Armor.",
+    Imaginary: "",
 };
