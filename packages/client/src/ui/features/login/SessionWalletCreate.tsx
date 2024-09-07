@@ -5,7 +5,6 @@ import { Dialog } from "../../components/Dialog";
 import { useDojo } from "../../hooks/useDojo";
 import { ShowItem, usePersistUIStore, useUIStore } from "../../../store";
 import { usePlayerProfile } from "../../hooks/usePlayerProfile";
-import { cn } from "../../lib/utils";
 import { LoadingShade } from "../../components/LoadingShade";
 
 export function SessionWalletCreate() {
@@ -33,6 +32,10 @@ export function SessionWalletCreate() {
 
     const setNameFn = useCallback(() => {
         if (loading) {
+            return;
+        }
+        if (inputName.length === 0) {
+            alert("empty name");
             return;
         }
         setLoading(true);

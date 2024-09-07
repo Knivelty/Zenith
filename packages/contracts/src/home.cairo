@@ -570,11 +570,46 @@ mod home {
         set!(world, (player));
     }
 
+    fn _settleDeath(world: IWorldDispatcher) {
+        let playerAddr = get_caller_address();
+        let player = get!(world, playerAddr, Player);
+        if (player.health > 0) {
+            return;
+        }
+
+        let mut matchState = get!(world, (player.inMatch), MatchState);
+        matchState.end = true;
+
+        set!(world, (matchState));
+    }
+
+    fn _settleComplete(world: IWorldDispatcher) {
+        let playerAddr = get_caller_address();
+        let player = get!(world, playerAddr, Player);
+        let mut matchState = get!(world, (player.inMatch), MatchState);
+
+        if (matchState.round < 50) {
+            return;
+        }
+
+        matchState.end = true;
+        set!(world, (matchState));
+    }
+
+    fn _settleExit(world: IWorldDispatcher) {
+        let playerAddr = get_caller_address();
+        let player = get!(world, playerAddr, Player);
+        let mut matchState = get!(world, (player.inMatch), MatchState);
+
+        matchState.end = true;
+        set!(world, (matchState));
+    }
+
 
     // impl: implement functions specified in trait
     #[abi(embed_v0)]
     impl HomeImpl of IHome<ContractState> {
-        // intialize all args
+        // initialize all args
         // TODO: set as real args
 
         fn initialize(world: IWorldDispatcher) {
@@ -732,7 +767,12 @@ mod home {
                 world,
                 (
                     MatchState {
-                        index: currentMatch, round: 1, player1: playerAddr, player2: enemyAddr
+                        index: currentMatch,
+                        round: 1,
+                        player1: playerAddr,
+                        player2: enemyAddr,
+                        end: false,
+                        cheated: false
                     },
                     globalState
                 )
@@ -1044,6 +1084,10 @@ mod home {
 
             _rollChoiceType(world);
 
+            _settleDeath(world);
+
+            _settleComplete(world);
+
             _checkPlayerPieceValidity(world);
         }
 
@@ -1334,6 +1378,9 @@ mod home {
                     danger: 0,
                 }
             );
+
+            // settle exit
+            _settleExit(world);
         }
     }
 }

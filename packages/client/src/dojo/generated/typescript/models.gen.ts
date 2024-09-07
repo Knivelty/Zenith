@@ -422,6 +422,8 @@ export function defineContractComponents(world: World) {
                     round: RecsType.Number,
                     player1: RecsType.BigInt,
                     player2: RecsType.BigInt,
+                    end: RecsType.Boolean,
+                    cheated: RecsType.Boolean,
                 },
                 {
                     metadata: {
@@ -431,6 +433,8 @@ export function defineContractComponents(world: World) {
                             "u8",
                             "ContractAddress",
                             "ContractAddress",
+                            "bool",
+                            "bool",
                         ],
                         customTypes: [],
                     },

@@ -166,6 +166,8 @@ struct MatchState {
     round: u8,
     player1: ContractAddress,
     player2: ContractAddress,
+    end: bool,
+    cheated: bool,
 }
 
 #[derive(Model, Copy, Clone, Drop, Serde)]
