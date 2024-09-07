@@ -7,10 +7,11 @@ import { registerAbilities } from "./registry/registerAbility";
 import { registerEffect } from "./registry/registerEffect";
 import { registerEventHandler } from "./registry/registerEventHandler";
 import { registerSynergy } from "./registry/registerSynergy";
-import { BaseStateType } from "./schema";
+import { BaseStateType, BattleEntityType } from "./schema";
 import { AbilityProfileType } from "./schema/ability_profile";
 import { CreatureType } from "./schema/creature";
 import { PlayerProfileType } from "./schema/player_profile";
+import { applyEntityOverride } from "./utils/applyEntityOverride";
 import { getPieceCreature } from "./utils/dbHelper";
 import { cleanDB } from "./utils/destroy";
 
@@ -19,11 +20,13 @@ export async function createSimulator({
   initEntities,
   ability_profiles,
   allPlayerProfiles,
+  overrides,
 }: {
   creatures: CreatureType[];
   initEntities: BaseStateType[];
   ability_profiles: AbilityProfileType[];
   allPlayerProfiles: PlayerProfileType[];
+  overrides?: { battleEntity?: Partial<BattleEntityType>[] };
 }) {
   logDebug("simulator input", initEntities, creatures);
   if (globalThis?.Simulator?.db) {
@@ -52,6 +55,8 @@ export async function createSimulator({
   registerSynergy();
   registerEffect();
   registerAbilities();
+
+  await applyEntityOverride(overrides);
 
   return { calculateBattleLogs, cleanDB, getEmittedEvents };
 }

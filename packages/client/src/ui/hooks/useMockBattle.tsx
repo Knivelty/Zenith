@@ -107,7 +107,36 @@ export function useMockBattle() {
             slot: 0,
         });
 
-        processBattleLogs();
+        processBattleLogs({
+            battleEntity: [
+                {
+                    entity: getPieceEntity(1),
+                    mana: 100,
+                    spell_amp: 200,
+                    initiative: 999,
+                },
+                {
+                    entity: getPieceEntity(2),
+                    health: 800,
+                },
+                {
+                    entity: getPieceEntity(3),
+                    health: 500,
+                },
+                {
+                    entity: getPieceEntity(4),
+                    health: 400,
+                },
+                {
+                    entity: getPieceEntity(5),
+                    health: 200,
+                },
+                {
+                    entity: getPieceEntity(6),
+                    health: 50,
+                },
+            ],
+        });
 
         updateComponent(GameStatus, zeroEntity, {
             status: GameStatusEnum.InBattle,

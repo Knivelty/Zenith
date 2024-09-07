@@ -19,7 +19,11 @@ import {
     getPlayerBoardPieceEntity,
     logDebug,
 } from "../../../ui/lib/utils";
-import { BaseStateType, createSimulator } from "@zenith/simulator";
+import {
+    BaseStateType,
+    BattleEntityType,
+    createSimulator,
+} from "@zenith/simulator";
 import { CreatureType } from "@zenith/simulator/src/schema/creature";
 import { AbilityProfileType } from "@zenith/simulator/src/schema/ability_profile";
 import { PlayerProfileType } from "@zenith/simulator/src/schema/player_profile";
@@ -195,7 +199,9 @@ export const processBattle = (component: ClientComponents) => {
         };
     }
 
-    async function processBattleLogs() {
+    async function processBattleLogs(overrides?: {
+        battleEntity?: Partial<BattleEntityType>[];
+    }) {
         logDebug("start process battle logs");
 
         const status = getComponentValueStrict(GameStatus, zeroEntity);
@@ -209,7 +215,7 @@ export const processBattle = (component: ClientComponents) => {
         );
 
         const { calculateBattleLogs, getEmittedEvents } = await createSimulator(
-            fetchSimulatorInput()
+            { ...fetchSimulatorInput(), overrides }
         );
 
         const { result } = await calculateBattleLogs();
