@@ -30,6 +30,7 @@ export const prepare = (layer: PhaserLayer) => {
         },
         networkLayer: {
             clientComponents: { Player, InningBattle, GameStatus, LocalPiece },
+            account: { address },
             account,
             playerEntity,
         },
@@ -55,6 +56,11 @@ export const prepare = (layer: PhaserLayer) => {
                         playerEntity
                     );
 
+                    const inningBattle = getComponentValueStrict(
+                        InningBattle,
+                        getEntityIdFromKeys([BigInt(v.inMatch), 1n])
+                    );
+
                     setComponent(GameStatus, zeroEntity, {
                         played: false,
                         shouldPlay: false,
@@ -62,6 +68,8 @@ export const prepare = (layer: PhaserLayer) => {
                         currentRound: 1,
                         currentMatch: v.inMatch,
                         dangerous: false,
+                        homePlayer: BigInt(address),
+                        awayPlayer: inningBattle.awayPlayer,
                     });
                 } else {
                     const playerValue = getComponentValueStrict(
@@ -97,7 +105,10 @@ export const prepare = (layer: PhaserLayer) => {
                 v?.status === GameStatusEnum.Prepare
             ) {
                 //
-
+                //
+                //
+                //
+                logDebug("trigger init");
                 // clear all existing sprite
                 clearAllObject();
 
@@ -107,6 +118,7 @@ export const prepare = (layer: PhaserLayer) => {
                         LocalPiece,
                         BigInt(account.address)
                     );
+
                 for (const entity of playerOnBoardPieceEntities) {
                     spawnPiece(entity, true);
                 }
@@ -130,7 +142,7 @@ export const prepare = (layer: PhaserLayer) => {
                     getEntityIdFromKeys([inningBattle.awayPlayer])
                 );
 
-                console.log("enemy: ", enemy.heroesCount, enemy.player);
+                logDebug("enemy: ", enemy.heroesCount, enemy.player);
 
                 const enemyOnBoardPieceEntities =
                     getLocalPlayerBoardPieceEntities(

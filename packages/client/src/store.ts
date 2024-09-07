@@ -68,7 +68,8 @@ export const useUIStore = create<UIStore>()((set, get) => ({
     getShow: (i: ShowItem) => get().shows.get(i) ?? false,
     setShow(i: ShowItem, shouldShow: boolean) {
         set(() => {
-            const newMap = get().shows;
+            // create a new map to trigger react re-render
+            const newMap = new Map(get().shows);
             newMap.set(i, shouldShow);
             return { shows: newMap };
         });

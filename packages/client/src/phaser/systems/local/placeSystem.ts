@@ -26,6 +26,20 @@ export function placeSystem(layer: PhaserLayer) {
         [Has(LocalPiece)],
         ({ entity, type, value: [v, preV] }) => {
             logDebug("incoming LocalPiece change: ", v, preV);
+
+            function _checkPieceOwnerShipAndRemove(owner: bigint) {
+                if (!v) {
+                    return;
+                }
+                if (
+                    v.idx === 0 &&
+                    preV?.idx !== 0 &&
+                    (v.owner === owner || preV?.owner === owner)
+                ) {
+                    removePieceOnBoard(v.gid);
+                }
+            }
+
             if (v) {
                 // only dynamic sync player's piece
                 const status = getComponentValue(GameStatus, zeroEntity);
@@ -34,6 +48,7 @@ export function placeSystem(layer: PhaserLayer) {
                     return;
                 }
 
+                // spawn player piece
                 if (v.owner === BigInt(address) && v.idx !== 0) {
                     // only allow override on prepare
                     if (status.status == GameStatusEnum.Prepare) {
@@ -42,17 +57,21 @@ export function placeSystem(layer: PhaserLayer) {
                         spawnPiece(getPieceEntity(v.gid), false);
                     }
                 }
-                // if (v.owner === 0n && BigInt(preV?.idx || 0) !== 0n) {
-                //     removePieceOnBoard(v.gid);
-                // }
-                if (
-                    v.idx === 0 &&
-                    preV?.idx !== 0 &&
-                    (v.owner === BigInt(address) ||
-                        preV?.owner === BigInt(address))
-                ) {
-                    removePieceOnBoard(v.gid);
+                logDebug("awayPlayer", status.awayPlayer);
+                // spawn enemy piece
+                if (v.owner === status.awayPlayer && v.idx !== 0) {
+                    // only allow override on prepare
+                    if (status.status == GameStatusEnum.Prepare) {
+                        spawnPiece(getPieceEntity(v.gid), true);
+                    } else {
+                        spawnPiece(getPieceEntity(v.gid), false);
+                    }
                 }
+
+                // check player's piece
+                _checkPieceOwnerShipAndRemove(BigInt(address));
+                // check enemy's piece
+                _checkPieceOwnerShipAndRemove(status.awayPlayer);
             }
         }
     );

@@ -17,6 +17,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { getPlayerBoardPieceEntity, logDebug } from "../../lib/utils";
 import { Button } from "../../components/button";
 import { processBattle } from "../../../phaser/systems/utils/processBattleLogs";
+import { useMockBattle } from "../../hooks/useMockBattle";
 
 export function Debugger() {
     const {
@@ -103,6 +104,8 @@ export function Debugger() {
         }px`;
     };
 
+    const { mockBattle } = useMockBattle();
+
     if (!debugShow) {
         return <div></div>;
     }
@@ -161,6 +164,13 @@ export function Debugger() {
                 }}
             >
                 Get Coin
+            </Button>
+            <Button
+                onClick={() => {
+                    mockBattle();
+                }}
+            >
+                Mock Battle
             </Button>
             <Button
                 onClick={() => {

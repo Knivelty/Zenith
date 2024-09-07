@@ -17,6 +17,7 @@ import {
     EventMap,
     EventWithName,
 } from "@zenith/simulator/src/event/createEventSystem";
+import { Game } from "phaser";
 
 export const battle = (layer: PhaserLayer) => {
     const {
@@ -69,9 +70,13 @@ export const battle = (layer: PhaserLayer) => {
                 return;
             }
 
+            // update home player and away player to game status
+
             updateComponent(GameStatus, zeroEntity, {
                 currentRound: v.round,
                 dangerous: v.dangerous,
+                homePlayer: v.homePlayer,
+                awayPlayer: v.awayPlayer,
             });
 
             if (

@@ -84,6 +84,8 @@ export function createClientComponents({
                 played: Type.Boolean,
                 currentMatch: Type.Number,
                 currentRound: Type.Number,
+                homePlayer: Type.BigInt,
+                awayPlayer: Type.BigInt,
                 dangerous: Type.Boolean,
             },
             { metadata: { name: "GameStatus" } }

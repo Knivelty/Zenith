@@ -18,10 +18,10 @@ import {
     worldToChainCoord,
 } from "./coorConvert";
 import { zeroEntity } from "../../../utils";
-import { isEqual } from "lodash";
 import { logDebug } from "../../../ui/lib/utils";
 import { BattleEntityType } from "@zenith/simulator";
 import { getCreatureProfile } from "../../../utils/componentHelpers";
+import { isEqual } from "lodash";
 
 export const pieceManage = (layer: PhaserLayer) => {
     const {
@@ -48,12 +48,12 @@ export const pieceManage = (layer: PhaserLayer) => {
 
         objectPool.remove(entity);
 
+        // remove health-bar
         const pieceHealthEntity = `${entity}-health` as Entity;
 
         if (getComponentValue(Health, pieceHealthEntity)) {
             // remove health bar
             updateComponent(Health, pieceHealthEntity, {
-                pieceEntity: entity,
                 max: 0,
                 current: 0,
             });
@@ -117,6 +117,11 @@ export const pieceManage = (layer: PhaserLayer) => {
     }: BattleEntityType & { gid: number }) {
         const pieceSprite = objectPool.get(entity, "Sprite");
 
+        if (!isEqual(pieceSprite.position, { x: 0, y: 0 })) {
+            logDebug(`piece ${gid} already spawned, skip`);
+            return;
+        }
+
         logDebug(`spawn piece ${gid} ${entity} on ${x} ${y}`);
 
         const { worldX, worldY } = simulatorToWorldCoord({
@@ -126,7 +131,7 @@ export const pieceManage = (layer: PhaserLayer) => {
 
         pieceSprite.setComponent({
             id: entity,
-            once: (sprite: Phaser.GameObjects.Sprite) => {
+            now: (sprite: Phaser.GameObjects.Sprite) => {
                 sprite.setVisible(true);
                 sprite.setPosition(worldX, worldY);
                 sprite.play(config.animations[AnimationIndex[creature_idx]]);
