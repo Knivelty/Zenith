@@ -20,10 +20,28 @@ export function SynergyBar() {
                 { "z-30": synergyDetailShow }
             )}
         >
-            <div className="mt-2">
-                {Object.values(all).map((t) => {
-                    return <SynergyActiveStatus {...t} key={t.traitName} />;
-                })}
+            <div className=" flex w-full h-full justify-start items-start">
+                <div className=" flex flex-col items-center justify-center space-y-1">
+                    <div className="relative h-20 w-12 flex justify-center items-center">
+                        <div className="bg-[#06FF00] opacity-10 w-full h-full absolute inset-0"></div>
+                        <img
+                            className="h-10 z-20"
+                            src="/assets/ui/synergy_icon.png"
+                        ></img>
+                    </div>
+                    <div className="relative h-20 w-12 flex justify-center items-center">
+                        <div className="bg-[#06FF00] opacity-10 w-full h-full absolute inset-0"></div>
+                        <img
+                            className="h-8 z-20 pixelated"
+                            src="/assets/ui/equipment_icon.png"
+                        ></img>
+                    </div>
+                </div>
+                <div className="mt-2">
+                    {Object.values(all).map((t) => {
+                        return <SynergyActiveStatus {...t} key={t.traitName} />;
+                    })}
+                </div>
             </div>
         </div>
     );
