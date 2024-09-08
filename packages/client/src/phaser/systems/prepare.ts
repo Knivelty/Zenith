@@ -56,11 +56,6 @@ export const prepare = (layer: PhaserLayer) => {
                         playerEntity
                     );
 
-                    const inningBattle = getComponentValueStrict(
-                        InningBattle,
-                        getEntityIdFromKeys([BigInt(v.inMatch), 1n])
-                    );
-
                     setComponent(GameStatus, zeroEntity, {
                         played: false,
                         shouldPlay: false,
@@ -69,7 +64,7 @@ export const prepare = (layer: PhaserLayer) => {
                         currentMatch: v.inMatch,
                         dangerous: false,
                         homePlayer: BigInt(address),
-                        awayPlayer: inningBattle.awayPlayer,
+                        awayPlayer: 1n,
                     });
                 } else {
                     const playerValue = getComponentValueStrict(
