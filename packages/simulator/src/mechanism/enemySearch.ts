@@ -6,18 +6,19 @@ import {
   getHomeUndeadPieces,
 } from "../utils/dbHelper";
 import { manhattanDistance } from "./distance";
+import * as R from "ramda";
 
 export async function registerPieceSearchMoveTarget() {
   globalThis.Simulator.eventSystem.on(
     "beforePieceSearchMoveTarget",
-    getPieceSearchMoveTargetHandler()
+    getPieceSearchMoveTargetHandler(),
   );
 }
 
 export async function registerPieceSearchAttackTarget() {
   globalThis.Simulator.eventSystem.on(
     "beforePieceSearchAttackTarget",
-    getPieceSearchAttackTargetHandler()
+    getPieceSearchAttackTargetHandler(),
   );
 }
 
@@ -34,7 +35,7 @@ function getPieceSearchMoveTargetHandler() {
       if (targetPieceId) {
         await globalThis.Simulator.eventSystem.emit(
           "afterPieceSearchMoveTarget",
-          { actionPieceId, targetPieceId }
+          { actionPieceId, targetPieceId },
         );
       }
     };
@@ -58,7 +59,7 @@ export function getPieceSearchAttackTargetHandler() {
       if (targetPieceId) {
         await globalThis.Simulator.eventSystem.emit(
           "afterPieceSearchAttackTarget",
-          { actionPieceId, targetPieceId }
+          { actionPieceId, targetPieceId },
         );
       }
     };
@@ -70,7 +71,7 @@ export function getPieceSearchAttackTargetHandler() {
 }
 
 export async function findTargetPiece(
-  actionPieceId: string
+  actionPieceId: string,
 ): Promise<string | undefined> {
   const actionPieceBattle = await getBattlePiece(actionPieceId);
 
@@ -89,7 +90,7 @@ export async function findTargetPiece(
 
   logDebug(
     `piece ${actionPieceId}'s target set: `,
-    tgtSet.map((t) => t._data)
+    tgtSet.map((t) => t._data),
   );
 
   // get nearest piece
@@ -103,16 +104,25 @@ export async function findTargetPiece(
           actionPieceBattle?.x,
           actionPieceBattle?.y,
           p.x,
-          p.y
+          p.y,
         ),
+        x: p.x,
+        y: p.y,
       };
-    })
+    }),
   );
 
-  // sort by distance asc
-  const targetPieceId = pieceWithDistance.sort(
-    (a, b) => a.distance - b.distance
-  )?.[0].id;
+  // sort order
+  // 1. minimal manhattan distance
+  // 2. minimal y
+  // 3. minimal x
+  const sortedPieces = R.sortWith<(typeof pieceWithDistance)[0]>([
+    R.ascend(R.prop("distance")),
+    R.ascend(R.prop("y")),
+    R.ascend(R.prop("x")),
+  ])(pieceWithDistance);
+
+  const targetPieceId = sortedPieces?.[0].id;
 
   logDebug(`piece ${actionPieceId} find target piece: `, targetPieceId);
 
