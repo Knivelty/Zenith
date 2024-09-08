@@ -114,11 +114,11 @@ export async function findTargetPiece(
 
   // sort order
   // 1. minimal manhattan distance
-  // 2. minimal y
+  // 2. max y
   // 3. minimal x
   const sortedPieces = R.sortWith<(typeof pieceWithDistance)[0]>([
     R.ascend(R.prop("distance")),
-    R.ascend(R.prop("y")),
+    R.descend(R.prop("y")),
     R.ascend(R.prop("x")),
   ])(pieceWithDistance);
 

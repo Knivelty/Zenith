@@ -19,6 +19,12 @@ export function executeDamageOnEvent() {
         value = value * (1 - targetPiece.armor / (100 + targetPiece.armor));
       }
 
+      // calculate spell amp
+      if (type === "Magical") {
+        const piece = await getBattlePiece(sourcePieceId);
+        value = value * (1 + piece.spell_amp / 100);
+      }
+
       // decrease by shield
       const shield = await getPieceEffectProfile(targetPieceId, "Shield");
 
@@ -39,7 +45,7 @@ export function executeDamageOnEvent() {
       value = normalizeDamage(value);
 
       decreaseHealth(sourcePieceId, targetPieceId, type, value);
-    }
+    },
   );
 }
 

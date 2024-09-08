@@ -43,10 +43,10 @@ export function useMockBattle() {
             });
         });
 
-        // add player piece
+        // add away piece
         setComponent(LocalPiece, getPieceEntity(1), {
             gid: 1,
-            owner: status.homePlayer,
+            owner: status.awayPlayer,
             x: 4,
             y: 5,
             level: 3,
@@ -55,10 +55,10 @@ export function useMockBattle() {
             slot: 0,
         });
 
-        // add enemy piece
+        // add home piece
         setComponent(LocalPiece, getPieceEntity(2), {
             gid: 2,
-            owner: status.awayPlayer,
+            owner: status.homePlayer,
             x: 3,
             y: 3,
             level: 1,
@@ -68,7 +68,7 @@ export function useMockBattle() {
         });
         setComponent(LocalPiece, getPieceEntity(3), {
             gid: 3,
-            owner: status.awayPlayer,
+            owner: status.homePlayer,
             x: 4,
             y: 3,
             level: 1,
@@ -78,7 +78,7 @@ export function useMockBattle() {
         });
         setComponent(LocalPiece, getPieceEntity(4), {
             gid: 4,
-            owner: status.awayPlayer,
+            owner: status.homePlayer,
             x: 3,
             y: 4,
             level: 1,
@@ -88,8 +88,8 @@ export function useMockBattle() {
         });
         setComponent(LocalPiece, getPieceEntity(5), {
             gid: 5,
-            owner: status.awayPlayer,
-            x: 5,
+            owner: status.homePlayer,
+            x: 2,
             y: 3,
             level: 1,
             creature_index: 3001,
@@ -98,8 +98,8 @@ export function useMockBattle() {
         });
         setComponent(LocalPiece, getPieceEntity(6), {
             gid: 6,
-            owner: status.awayPlayer,
-            x: 5,
+            owner: status.homePlayer,
+            x: 2,
             y: 4,
             level: 1,
             creature_index: 2001,
@@ -114,10 +114,11 @@ export function useMockBattle() {
                     mana: 100,
                     spell_amp: 200,
                     initiative: 999,
+                    health: 100,
                 },
                 {
                     entity: getPieceEntity(2),
-                    health: 800,
+                    health: 300,
                 },
                 {
                     entity: getPieceEntity(3),

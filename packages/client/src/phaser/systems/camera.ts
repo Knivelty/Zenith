@@ -8,6 +8,4 @@ export const camera = (layer: PhaserLayer) => {
             },
         },
     } = layer;
-
-
 };
