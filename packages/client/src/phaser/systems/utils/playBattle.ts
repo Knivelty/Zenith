@@ -312,7 +312,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
             },
         });
 
-        // play ground effect amination
+        // play ground effect animation
         affectedGrounds.forEach((ag) => {
             const effectAnimation = getAnimation(
                 ag.groundEffect as GroundAnimations
@@ -322,9 +322,13 @@ export const battleAnimation = (layer: PhaserLayer) => {
 
             groundSprite.setComponent({
                 id: groundSpriteEntity,
-                once: async (sprite: Phaser.GameObjects.Sprite) => {
+                now: async (sprite: Phaser.GameObjects.Sprite) => {
                     sprite.setPosition(ag.x * TILE_WIDTH, ag.y * TILE_HEIGHT);
+                    sprite.setDepth(1);
                     sprite.play(effectAnimation);
+                    logDebug(
+                        `player ground effect on ${ag.x} ${ag.y} with ${effectAnimation.key}`
+                    );
 
                     const scale = TILE_HEIGHT / sprite.height;
                     sprite.setScale(scale);

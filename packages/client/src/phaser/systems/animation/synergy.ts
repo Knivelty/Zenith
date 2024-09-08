@@ -175,13 +175,13 @@ export const synergy = (layer: PhaserLayer) => {
                                 groundY * TILE_HEIGHT
                             );
 
-                            sprite.setVisible(true);
-
                             await playAnimationForOnce({
                                 sprite,
                                 animation: ani,
                             });
-                            sprite.setVisible(false);
+
+                            // remove the object after play
+                            objectPool.remove(groundEntity);
                         },
                     });
                 });

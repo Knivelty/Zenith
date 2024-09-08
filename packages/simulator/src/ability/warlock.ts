@@ -107,7 +107,7 @@ async function hitAndFission({
           Math.floor(pieceInBattle.spell_amp * 0.15),
         type: "Magical",
       });
-    })
+    }),
   );
 }
 
@@ -135,7 +135,7 @@ function getAffectedGround(x: number, y: number) {
     { x: x - 1, y: y - 1 },
     { x: x - 1, y: y + 1 },
     { x: x + 1, y: y - 1 },
-    { x: x + 1, y: y - 1 },
+    { x: x + 1, y: y + 1 },
   ]
     .filter((v) => {
       return v.x >= 0 && v.x <= 7 && v.y >= 0 && v.y <= 7;
