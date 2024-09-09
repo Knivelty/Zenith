@@ -114,7 +114,7 @@ export function useMockBattle() {
                     mana: 100,
                     spell_amp: 200,
                     initiative: 999,
-                    health: 100,
+                    health: 1700,
                 },
                 {
                     entity: getPieceEntity(2),
