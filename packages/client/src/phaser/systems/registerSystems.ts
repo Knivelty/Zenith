@@ -12,6 +12,7 @@ import { merge } from "./merge";
 import { initialize } from "./initialize";
 import { synergy } from "./animation/synergy";
 import { followIndexSystem } from "./local/followIndexSystem";
+import { entityStatusBar } from "./animation/entityStatusBar";
 
 export const registerSystems = (layer: PhaserLayer) => {
     initialize(layer);
@@ -23,6 +24,7 @@ export const registerSystems = (layer: PhaserLayer) => {
     // battleLog(layer);
     health(layer);
     synergy(layer);
+    entityStatusBar(layer);
 
     merge(layer);
 

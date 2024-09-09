@@ -5,13 +5,34 @@ const baseSprites = {
         assetKey: Assets.MainAtlas,
         frame: "/",
     },
-    [Sprites.PlayerHealthBar]: {
+    [Sprites.LevelOneGreen]: {
         assetKey: Assets.MainAtlas,
-        frame: "healthbar/green.png",
+        frame: "statusBar/levelOneGreen.png",
     },
-    [Sprites.EnemyHealthBar]: {
+    [Sprites.LevelTwoGreen]: {
         assetKey: Assets.MainAtlas,
-        frame: "healthbar/red.png",
+        frame: "statusBar/levelTwoGreen.png",
+    },
+    [Sprites.LevelThreeGreen]: {
+        assetKey: Assets.MainAtlas,
+        frame: "statusBar/levelThreeGreen.png",
+    },
+    [Sprites.LevelOneRed]: {
+        assetKey: Assets.MainAtlas,
+        frame: "statusBar/levelOneRed.png",
+    },
+    [Sprites.LevelTwoRed]: {
+        assetKey: Assets.MainAtlas,
+        frame: "statusBar/levelTwoRed.png",
+    },
+    [Sprites.LevelThreeRed]: {
+        assetKey: Assets.MainAtlas,
+        frame: "statusBar/levelThreeRed.png",
+    },
+
+    [Sprites.LevelStar]: {
+        assetKey: Assets.MainAtlas,
+        frame: "statusBar/star.png",
     },
 } as Record<number | string, { assetKey: Assets; frame: string }>;
 

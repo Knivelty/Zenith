@@ -101,7 +101,7 @@ export function createClientComponents({
             },
             { metadata: { name: "BattleLogs" } }
         ),
-        HealthBar: defineComponent(
+        EntityStatusBar: defineComponent(
             world,
             {
                 x: Type.Number,
@@ -110,6 +110,9 @@ export function createClientComponents({
                 segments: Type.Number,
                 filledSegments: Type.Number,
                 isPlayer: Type.Boolean,
+                level: Type.Number,
+                mana: Type.Number,
+                maxMana: Type.Number,
             },
             { metadata: { name: "HealthBar" } }
         ),

@@ -28,6 +28,7 @@ import { deferred } from "@latticexyz/utils";
 import { GameStatusEnum } from "../../../dojo/types";
 import { animationTime } from "./animationTime";
 import { pieceManage } from "../utils/pieceManage";
+import { encodeEntityStatusBarEntity } from "../utils/entityEncoder";
 
 export const health = (layer: PhaserLayer) => {
     const {
@@ -37,9 +38,9 @@ export const health = (layer: PhaserLayer) => {
         },
         networkLayer: {
             clientComponents: {
-                HealthBar,
                 Health,
                 HealthChange,
+                EntityStatusBar,
                 LocalPiece,
                 GameStatus,
             },
@@ -56,14 +57,15 @@ export const health = (layer: PhaserLayer) => {
             if (!v) {
                 return;
             }
-            logDebug("incomming health change", preV, v);
+            logDebug("incoming health change", entity, preV, v);
 
             // update health bar
-            const healthBarEntity = `${entity}-bar`;
-            const healthBar = objectPool.get(healthBarEntity, "Graphics");
+            const statusBarEntity = encodeEntityStatusBarEntity(
+                entity.split("-")[0]
+            );
 
             const filledSegments = Math.ceil(v.current / HEALTH_PER_SEGMENT);
-            updateComponent(HealthBar, healthBarEntity as Entity, {
+            updateComponent(EntityStatusBar, statusBarEntity, {
                 filledSegments: filledSegments,
                 currentHealth: v.current,
             });
@@ -73,100 +75,9 @@ export const health = (layer: PhaserLayer) => {
             if (v.max == 0) {
                 logDebug(`${v.pieceEntity} piece removed`);
 
-                objectPool.remove(healthBarEntity);
+                objectPool.remove(`${statusBarEntity}-point`);
+                objectPool.remove(`${statusBarEntity}-level`);
             }
-        }
-    );
-
-    // health bar
-    defineSystemST<typeof HealthBar.schema>(
-        world,
-        [Has(HealthBar)],
-        ({ entity, type, value: [v, preV] }) => {
-            if (!v) {
-                return;
-            }
-
-            const healthBar = objectPool.get(entity, "Graphics");
-            const pieceEntity = entity.split("-")[0];
-
-            const localPiece = getComponentValue(
-                LocalPiece,
-                pieceEntity as Entity
-            );
-
-            if (localPiece?.idx === 0 || !localPiece) {
-                // it mean piece is not on board
-                return;
-            }
-
-            // spawn health bar
-            healthBar.setComponent({
-                id: entity,
-                once: async (graphics: Phaser.GameObjects.Graphics) => {
-                    graphics.setVisible(true);
-
-                    graphics.clear();
-
-                    const fillColor = v.isPlayer
-                        ? HEALTH_BAR_PLAYER_COLOR
-                        : HEALTH_BAR_ENEMY_COLOR;
-
-                    const segmentWidth = HEALTH_BAR_WIDTH / v.segments;
-
-                    const segmentInterval = 0.5;
-
-                    for (let i = 0; i < v.segments; i++) {
-                        const x = i * segmentWidth;
-                        const y = 0;
-
-                        // Draw filled or empty segment
-                        graphics.fillStyle(
-                            i < v.filledSegments
-                                ? fillColor
-                                : HEALTH_BAR_EMPTY_COLOR,
-                            1
-                        );
-
-                        graphics.fillRect(
-                            x,
-                            y,
-                            segmentWidth - segmentInterval,
-                            HEALTH_BAR_HEIGHT
-                        );
-
-                        // Draw border
-                        graphics.lineStyle(
-                            HEALTH_BAR_BORDER_WIDTH,
-                            HEALTH_BAR_BORDER_COLOR,
-                            1
-                        );
-                        graphics.strokeRect(
-                            x,
-                            y,
-                            segmentWidth,
-                            HEALTH_BAR_HEIGHT
-                        );
-                    }
-
-                    graphics.setPosition(v.x, v.y - HealthBarOffSetY);
-
-                    logDebug(`spawn health bar on ${v.x} ${v.y}`);
-                },
-            });
-
-            // update health change
-            const healthChangeEntity = `${entity.split("-")[0]}-health-change`;
-            const change = !preV?.currentHealth
-                ? 0
-                : v.currentHealth - preV.currentHealth;
-            const sign = change > 0 ? true : false;
-            setComponent(HealthChange, healthChangeEntity as Entity, {
-                x: v.x,
-                y: v.y - HealthBarOffSetY,
-                change: Math.abs(change),
-                sign,
-            });
         }
     );
 

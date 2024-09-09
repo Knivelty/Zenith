@@ -46,21 +46,28 @@ export function defineCameraConfig(config: CameraConfig) {
 
 export function isSprite(
   gameObject: Phaser.GameObjects.GameObject,
-  type: keyof GameObjectTypes
+  type: keyof GameObjectTypes,
 ): gameObject is GameObject<"Sprite"> {
   return type === "Sprite";
 }
 
 export function isRectangle(
   gameObject: Phaser.GameObjects.GameObject,
-  type: keyof GameObjectTypes
+  type: keyof GameObjectTypes,
 ): gameObject is GameObject<"Rectangle"> {
   return type === "Rectangle";
 }
 
 export function isGraphics(
   gameObject: Phaser.GameObjects.GameObject,
-  type: keyof GameObjectTypes
+  type: keyof GameObjectTypes,
 ): gameObject is GameObject<"Graphics"> {
   return type === "Graphics";
+}
+
+export function isContainer(
+  gameObject: Phaser.GameObjects.GameObject,
+  type: keyof GameObjectTypes,
+): gameObject is GameObject<"Container"> {
+  return type === "Container";
 }

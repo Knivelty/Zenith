@@ -11,6 +11,7 @@ import {
     DRAG_DISTANCE_THRESHOLD,
     HEALTH_PER_SEGMENT,
     TILE_HEIGHT,
+    TILE_WIDTH,
 } from "../../config/constants";
 import {
     chainToSimulatorCoord,
@@ -22,6 +23,7 @@ import { logDebug } from "../../../ui/lib/utils";
 import { BattleEntityType } from "@zenith/simulator";
 import { getCreatureProfile } from "../../../utils/componentHelpers";
 import { isEqual } from "lodash";
+import { encodeEntityStatusBarEntity } from "./entityEncoder";
 
 export const pieceManage = (layer: PhaserLayer) => {
     const {
@@ -31,7 +33,7 @@ export const pieceManage = (layer: PhaserLayer) => {
         },
         networkLayer: {
             clientComponents: {
-                HealthBar,
+                EntityStatusBar,
                 Health,
                 CreatureProfile,
                 LocalPiece,
@@ -99,6 +101,8 @@ export const pieceManage = (layer: PhaserLayer) => {
             maxHealth: creatureProfile.health,
             mana: 0,
             dead: false,
+            level: piece.level,
+            maxMana: creatureProfile.maxMana,
         });
     }
 
@@ -114,6 +118,9 @@ export const pieceManage = (layer: PhaserLayer) => {
         isHome,
         health,
         maxHealth,
+        level,
+        maxMana,
+        mana,
     }: BattleEntityType & { gid: number }) {
         const pieceSprite = objectPool.get(entity, "Sprite");
 
@@ -137,7 +144,11 @@ export const pieceManage = (layer: PhaserLayer) => {
                 sprite.play(config.animations[AnimationIndex[creature_idx]]);
                 sprite.setInteractive();
 
-                const scale = TILE_HEIGHT / sprite.height;
+                const scale = Math.min(
+                    TILE_HEIGHT / sprite.height,
+                    TILE_WIDTH / sprite.width
+                );
+
                 sprite.setScale(scale);
 
                 sprite.on("pointerup", (p: Phaser.Input.Pointer) => {
@@ -228,14 +239,17 @@ export const pieceManage = (layer: PhaserLayer) => {
 
         const segment = Math.ceil(health / HEALTH_PER_SEGMENT);
 
-        // initialize health bar
-        setComponent(HealthBar, `${entity}-health-bar` as Entity, {
+        // initialize status bar
+        setComponent(EntityStatusBar, encodeEntityStatusBarEntity(entity), {
             x: worldX,
             y: worldY,
             currentHealth: health,
             segments: segment,
             filledSegments: segment,
             isPlayer: isHome,
+            mana,
+            maxMana,
+            level: level,
         });
 
         // initialize health

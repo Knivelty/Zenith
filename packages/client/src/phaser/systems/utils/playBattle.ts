@@ -21,11 +21,15 @@ import {
     EventWithName,
 } from "@zenith/simulator/src/event/createEventSystem";
 import { getAnimation, getAnimationIndex } from "./animationHelper";
-import { logDebug } from "../../../ui/lib/utils";
-import { encodeGroundEntity } from "./entityEncoder";
+import { getPieceEntity, logDebug } from "../../../ui/lib/utils";
+import {
+    encodeEntityStatusBarEntity,
+    encodeGroundEntity,
+} from "./entityEncoder";
 import { pieceManage } from "./pieceManage";
 import { zeroEntity } from "../../../utils";
 import { animationTime } from "../animation/animationTime";
+import { entityStatusBar } from "../animation/entityStatusBar";
 
 export const battleAnimation = (layer: PhaserLayer) => {
     const {
@@ -33,7 +37,12 @@ export const battleAnimation = (layer: PhaserLayer) => {
             Main: { config, objectPool, phaserScene },
         },
         networkLayer: {
-            clientComponents: { HealthBar, LocalPiece, Health, UserOperation },
+            clientComponents: {
+                EntityStatusBar,
+                LocalPiece,
+                Health,
+                UserOperation,
+            },
         },
     } = layer;
 
@@ -92,8 +101,8 @@ export const battleAnimation = (layer: PhaserLayer) => {
                                 // set health bar follow on tween
 
                                 updateComponent(
-                                    HealthBar,
-                                    `${pieceEntity}-health-bar` as Entity,
+                                    EntityStatusBar,
+                                    encodeEntityStatusBarEntity(pieceEntity),
                                     {
                                         x: sprite.x,
                                         y: sprite.y,
@@ -147,6 +156,16 @@ export const battleAnimation = (layer: PhaserLayer) => {
 
             case "pieceDeath":
                 await handlePieceDeath(v as EventWithName<"pieceDeath">);
+                await sleep(getAnimationTime("STEP_INTERVAL_TIME"));
+                break;
+
+            case "pieceGainMana":
+                await handlePieceGainMana(v as EventWithName<"pieceGainMana">);
+                await sleep(getAnimationTime("STEP_INTERVAL_TIME"));
+                break;
+
+            case "pieceUseMana":
+                await handlePieceUseMana(v as EventWithName<"pieceUseMana">);
                 await sleep(getAnimationTime("STEP_INTERVAL_TIME"));
                 break;
         }
@@ -207,6 +226,38 @@ export const battleAnimation = (layer: PhaserLayer) => {
         audio.play("hit", { rate: rate });
 
         // return await sleep(200);
+    }
+
+    async function handlePieceGainMana({
+        pieceId,
+        manaAmount,
+    }: EventWithName<"pieceGainMana">) {
+        logDebug("handle piece gain mana");
+        const statusBarEntity = encodeEntityStatusBarEntity(pieceId);
+
+        const currentStatus = getComponentValueStrict(
+            EntityStatusBar,
+            statusBarEntity
+        );
+        updateComponent(EntityStatusBar, statusBarEntity, {
+            mana: currentStatus.mana + manaAmount,
+        });
+    }
+
+    async function handlePieceUseMana({
+        pieceId,
+        manaAmount,
+    }: EventWithName<"pieceGainMana">) {
+        logDebug("handle piece gain mana");
+        const statusBarEntity = encodeEntityStatusBarEntity(pieceId);
+
+        const currentStatus = getComponentValueStrict(
+            EntityStatusBar,
+            statusBarEntity
+        );
+        updateComponent(EntityStatusBar, statusBarEntity, {
+            mana: currentStatus.mana - manaAmount,
+        });
     }
 
     async function handleHealthDecrease({

@@ -72,8 +72,14 @@ export enum GroundAnimations {
 
 export enum Sprites {
     Invalid,
-    PlayerHealthBar,
-    EnemyHealthBar,
+    LevelArrow,
+    LevelStar,
+    LevelOneGreen,
+    LevelTwoGreen,
+    LevelThreeGreen,
+    LevelOneRed,
+    LevelTwoRed,
+    LevelThreeRed,
 }
 
 export const AnimationIndex: Record<number, number> = {
@@ -161,17 +167,29 @@ export const MAP_AMPLITUDE = 16;
 export const HealthBarOffSetX = 0;
 export const HealthBarOffSetY = 5;
 
+export const LevelOffSetX: Record<number, number> = {
+    1: 12,
+    2: 16,
+    3: 20,
+};
+
 export const Health_CHANGE_OFFSET_X = TILE_WIDTH;
 export const Health_CHANGE_OFFSET_Y = -6;
 
 export const HEALTH_PER_SEGMENT = 200;
 
 export const HEALTH_BAR_WIDTH = TILE_HEIGHT - 5;
-export const HEALTH_BAR_HEIGHT = 6;
+export const HEALTH_BAR_HEIGHT = 7;
 export const HEALTH_BAR_BORDER_WIDTH = 2;
+
+export const MANA_BAR_HEIGHT = 2;
+export const MANA_BAR_WIDTH = TILE_WIDTH - 20;
+export const MANA_BAR_OFFSET_X = 1;
+export const MANA_BAR_OFFSET_Y = 9;
 
 export const HEALTH_BAR_PLAYER_COLOR = 0x06ff00;
 export const HEALTH_BAR_ENEMY_COLOR = 0xff3d00;
+export const MANA_FILL_COLOR = 0x4f84af;
 
 export const HEALTH_BAR_BORDER_COLOR = 0x000000;
 export const HEALTH_BAR_EMPTY_COLOR = 0x2b432b;

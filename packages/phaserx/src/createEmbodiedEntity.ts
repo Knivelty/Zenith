@@ -1,5 +1,5 @@
 import { observable, runInAction } from "mobx";
-import { isGraphics, isRectangle, isSprite } from "./guards";
+import { isContainer, isGraphics, isRectangle, isSprite } from "./guards";
 import {
   EmbodiedEntity,
   GameObject,
@@ -14,7 +14,7 @@ export function createEmbodiedEntity<Type extends keyof GameObjectTypes>(
   id: string,
   group: Phaser.GameObjects.Group,
   type: Type,
-  currentCameraFilter = 0
+  currentCameraFilter = 0,
 ): EmbodiedEntity<Type> {
   const position: PixelCoord = observable({ x: 0, y: 0 });
   const onOnce = new Map<string, GameObjectFunction<Type>>();
@@ -26,7 +26,7 @@ export function createEmbodiedEntity<Type extends keyof GameObjectTypes>(
    * Syncronizes updates to game object positions to the EmbodiedEntity's position
    */
   function trackPositionUpdates(
-    func: GameObjectFunction<Type>
+    func: GameObjectFunction<Type>,
   ): GameObjectFunction<Type> {
     if (!modifiesPosition(func)) return func;
 
@@ -109,6 +109,8 @@ export function createEmbodiedEntity<Type extends keyof GameObjectTypes>(
     }
     if (isGraphics(gameObject, type)) {
       gameObject.clear();
+    } else if (isContainer(gameObject, type)) {
+      // do nothing
     } else {
       gameObject?.setOrigin(0, 0);
     }
@@ -158,7 +160,7 @@ export function createEmbodiedEntity<Type extends keyof GameObjectTypes>(
 
 function executeGameObjectFunctions<Type extends keyof GameObjectTypes>(
   gameObject: GameObject<Type>,
-  functions: Iterable<GameObjectFunction<Type>>
+  functions: Iterable<GameObjectFunction<Type>>,
 ) {
   if (!gameObject) return;
   for (const func of functions) {
@@ -167,7 +169,7 @@ function executeGameObjectFunctions<Type extends keyof GameObjectTypes>(
 }
 
 function modifiesPosition<Type extends keyof GameObjectTypes>(
-  func: GameObjectFunction<Type>
+  func: GameObjectFunction<Type>,
 ): Partial<PixelCoord> | undefined {
   let newPosition: Partial<PixelCoord> | undefined = undefined;
   const gameObjectProxy = new Proxy(
@@ -191,7 +193,7 @@ function modifiesPosition<Type extends keyof GameObjectTypes>(
             : { y: value };
         return true;
       },
-    }
+    },
   );
   func(gameObjectProxy as GameObject<Type>);
   return newPosition;

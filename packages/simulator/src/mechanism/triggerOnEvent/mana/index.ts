@@ -12,6 +12,11 @@ export function increaseManaOnEvent() {
         doc.mana += 20;
         return doc;
       });
+
+    await globalThis.Simulator.eventSystem.emit("pieceGainMana", {
+      pieceId,
+      manaAmount: 20,
+    });
   });
 }
 

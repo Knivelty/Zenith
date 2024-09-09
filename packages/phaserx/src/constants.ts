@@ -11,4 +11,6 @@ export const GameObjectClasses = {
   Line: Phaser.GameObjects.Line,
   Text: Phaser.GameObjects.Text,
   Graphics: Phaser.GameObjects.Graphics,
+  Container: Phaser.GameObjects.Container,
+  Image: Phaser.GameObjects.Image,
 };
