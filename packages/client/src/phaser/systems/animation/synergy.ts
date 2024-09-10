@@ -178,18 +178,15 @@ export const synergy = (layer: PhaserLayer) => {
                                 groundX * TILE_WIDTH,
                                 groundY * TILE_HEIGHT
                             );
-                            console.log("2222222222");
 
                             playAnimationForOnce({
                                 sprite,
                                 animation: ani,
                             }).then((v) => {
-                                // ignore the undefined return
-                                if (v === undefined) {
-                                    return;
+                                if (v) {
+                                    // remove the object after play
+                                    objectPool.remove(groundEntity);
                                 }
-                                // remove the object after play
-                                objectPool.remove(groundEntity);
                             });
                         },
                     });

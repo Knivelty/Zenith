@@ -50,7 +50,7 @@ export async function playAnimationForOnce({
 }: {
     sprite: Phaser.GameObjects.Sprite;
     animation: Animation<Assets>;
-}): Promise<void | undefined> {
+}): Promise<boolean | undefined> {
     // ignore invalid sprite
     if (typeof sprite.x !== "number" || typeof sprite.y !== "number") {
         return undefined;
@@ -60,10 +60,10 @@ export async function playAnimationForOnce({
         throw INVALID_LIMITED_ANIMATION;
     }
 
-    const [resolve, , promise] = deferred<void>();
+    const [resolve, , promise] = deferred<boolean>();
 
     const onAnimationComplete = () => {
-        resolve();
+        resolve(true);
         logDebug(
             `sprite at ${sprite.x}, ${sprite.y} finish play animation ${JSON.stringify(animation)}`
         );
