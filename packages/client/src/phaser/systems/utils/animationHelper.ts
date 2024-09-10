@@ -50,13 +50,13 @@ export async function playAnimationForOnce({
 }: {
     sprite: Phaser.GameObjects.Sprite;
     animation: Animation<Assets>;
-}) {
+}): Promise<void | undefined> {
     // ignore invalid sprite
     if (typeof sprite.x !== "number" || typeof sprite.y !== "number") {
-        return;
+        return undefined;
     }
 
-    if (animation.repeat === -1) {
+    if (animation.repeat === -1 || animation.repeat > 0) {
         throw INVALID_LIMITED_ANIMATION;
     }
 
@@ -74,7 +74,9 @@ export async function playAnimationForOnce({
     sprite.setScale(scale);
     sprite.once("animationcomplete", onAnimationComplete);
 
-    logDebug(`sprite at ${sprite.x}, ${sprite.y} play animation ${animation}`);
+    logDebug(
+        `sprite ${sprite} at ${sprite.x}, ${sprite.y} play animation ${JSON.stringify(animation)}`
+    );
 
     return promise;
 }

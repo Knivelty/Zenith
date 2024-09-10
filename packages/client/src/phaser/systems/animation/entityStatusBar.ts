@@ -120,7 +120,6 @@ export const entityStatusBar = (layer: PhaserLayer) => {
                 once: async (sprite: Phaser.GameObjects.Sprite) => {
                     sprite.setTexture(levelSprite.assetKey, levelSprite.frame);
                     sprite.setPosition(v.x, v.y - HealthBarOffSetY);
-                    console.log("level sprite: ", sprite);
                 },
             });
 

@@ -1,3 +1,4 @@
+import { usePersistUIStore, useUIStore } from "../../store";
 import useAudioStore from "./useAudioStore";
 
 export enum SoundFile {
@@ -21,9 +22,13 @@ export enum SoundType {
 export function usePlaySoundSegment(soundType: SoundType) {
     const play = useAudioStore((state) => state.playSprite);
 
+    const effectVolume = usePersistUIStore(
+        (state) => state.soundVolumes.effect
+    );
+
     return {
-        play: () => {
-            play(SoundFile.Main, soundType);
+        play: (volume = effectVolume / 100) => {
+            play(SoundFile.Main, soundType, volume);
         },
     };
 }

@@ -391,7 +391,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
             });
         });
 
-        // play  ability sound
+        // play ability sound
         const audio = phaserScene.sound.addAudioSprite(Assets.AudioSprite);
         logDebug("play sound", abilityName);
         audio.play(abilityName);

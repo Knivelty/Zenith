@@ -124,22 +124,42 @@ export const pieceManage = (layer: PhaserLayer) => {
     }: BattleEntityType & { gid: number }) {
         const pieceSprite = objectPool.get(entity, "Sprite");
 
-        if (!isEqual(pieceSprite.position, { x: 0, y: 0 })) {
-            logDebug(`piece ${gid} already spawned, skip`);
-            return;
-        }
-
-        logDebug(`spawn piece ${gid} ${entity} on ${x} ${y}`);
-
         const { worldX, worldY } = simulatorToWorldCoord({
             posX: x,
             posY: y,
         });
 
+        if (!isEqual(pieceSprite.position, { x: 0, y: 0 })) {
+            if (isEqual({ x, y }, pieceSprite.position)) {
+                logDebug(`piece ${gid} already spawned, skip`);
+            } else {
+                // adjust location
+                pieceSprite.setComponent({
+                    id: entity,
+                    now: (sprite: Phaser.GameObjects.Sprite) => {
+                        sprite.setPosition(worldX, worldY);
+                    },
+                });
+
+                // update status bar
+                updateComponent(
+                    EntityStatusBar,
+                    encodeEntityStatusBarEntity(entity),
+                    {
+                        x: worldX,
+                        y: worldY,
+                    }
+                );
+            }
+
+            return;
+        }
+
+        logDebug(`spawn piece ${gid} ${entity} on ${x} ${y}, isHome ${isHome}`);
+
         pieceSprite.setComponent({
             id: entity,
             now: (sprite: Phaser.GameObjects.Sprite) => {
-                sprite.setVisible(true);
                 sprite.setPosition(worldX, worldY);
                 sprite.play(config.animations[AnimationIndex[creature_idx]]);
                 sprite.setInteractive();
@@ -166,7 +186,7 @@ export const pieceManage = (layer: PhaserLayer) => {
 
                     sprite.removeAllListeners("dragstart");
                     sprite.on("dragstart", (p: Phaser.Input.Pointer) => {
-                        //
+                        logDebug("drag start");
                     });
 
                     sprite.removeAllListeners("drag");

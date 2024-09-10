@@ -67,7 +67,7 @@
       38000,
       2478.503401360541
     ],
-    "burningBusrt": [
+    "burningBurst": [
       42000,
       2898.5034013605427
     ],
@@ -79,11 +79,11 @@
       50000,
       893.5147392290262
     ],
-    "pernetrationInfection": [
+    "penetrationInfection": [
       52000,
       3568.5034013605446
     ],
-    "spkilShell": [
+    "spikeShell": [
       57000,
       653.5147392290241
     ]

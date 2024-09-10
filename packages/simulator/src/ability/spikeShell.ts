@@ -16,6 +16,12 @@ export const spikeShell: AbilityFunction = async ({ actionPieceId }) => {
   });
 
   base_attack += Math.floor(40 + 0.3 * piece.armor + 0.01 * piece.maxHealth);
+
+  await globalThis.Simulator.eventSystem.emit("abilityCast", {
+    abilityName: "spikeShell",
+    data: { actionPieceId: actionPieceId },
+    affectedGrounds: [],
+  });
 };
 
 export const spikeShellPassive = async () => {
@@ -45,7 +51,7 @@ export const spikeShellPassive = async () => {
               $inc: { mana: 10 },
             });
         }
-      }
+      },
     );
   });
 };

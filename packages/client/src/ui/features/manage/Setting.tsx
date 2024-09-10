@@ -7,6 +7,10 @@ import {
 } from "../../../store";
 import { Dialog } from "../../components/Dialog";
 import { useClickOutside } from "../../hooks/useClickOutside";
+import {
+    SoundType,
+    usePlaySoundSegment,
+} from "../../hooks/usePlaySoundSegment";
 
 export function Setting() {
     const show = useUIStore((state) => state.getShow(ShowItem.Setting));
@@ -16,6 +20,8 @@ export function Setting() {
         setShow(ShowItem.Setting, false);
     });
 
+    const { play } = usePlaySoundSegment(SoundType.Click);
+
     const volumes = usePersistUIStore((state) => state.soundVolumes);
 
     const setVolume = usePersistUIStore((state) => state.setVolume);
@@ -23,8 +29,9 @@ export function Setting() {
     const setVolumeFn = useCallback(
         (volumeName: keyof typeof volumes, value: number) => {
             setVolume({ [volumeName]: value });
+            play(value / 100);
         },
-        [setVolume]
+        [setVolume, play]
     );
 
     if (!show) {
@@ -40,7 +47,8 @@ export function Setting() {
                     return (
                         <div className="w-64 mb-4">
                             <label htmlFor={volumeName} className="block mb-2">
-                                {volumeName}
+                                {volumeName}{" "}
+                                {volumes[volumeName as keyof Volume]}
                             </label>
                             <input
                                 type="range"

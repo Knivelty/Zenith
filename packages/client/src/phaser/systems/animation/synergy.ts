@@ -19,8 +19,14 @@ import { getAllSynergies } from "../../../ui/hooks/useAllSynergies";
 import { getAllBoardPiecesWithAllTraits } from "../../../ui/hooks/usePieceCountWithTrait";
 import { encodeGroundEntity } from "../utils/entityEncoder";
 import { getAnimation, playAnimationForOnce } from "../utils/animationHelper";
-import { Assets, SynergyAnimations, TILE_HEIGHT } from "../../config/constants";
+import {
+    Assets,
+    SynergyAnimations,
+    TILE_HEIGHT,
+    TILE_WIDTH,
+} from "../../config/constants";
 import { logDebug } from "../../../ui/lib/utils";
+import { persistUIStore, usePersistUIStore } from "../../../store";
 
 export const synergy = (layer: PhaserLayer) => {
     const {
@@ -161,37 +167,42 @@ export const synergy = (layer: PhaserLayer) => {
                     const groundEntity = encodeGroundEntity(groundX, groundY);
 
                     const groundSprite = objectPool.get(groundEntity, "Sprite");
-                    groundSprite.spawn();
-
                     groundSprite.setComponent({
                         id: `${groundEntity}-synergy-ground`,
-                        now: async (sprite: Phaser.GameObjects.Sprite) => {
+                        now: (sprite: Phaser.GameObjects.Sprite) => {
                             const ani = getAnimation(
                                 v.name.toLowerCase() as SynergyAnimations
                             );
 
                             sprite.setPosition(
-                                groundX * TILE_HEIGHT,
+                                groundX * TILE_WIDTH,
                                 groundY * TILE_HEIGHT
                             );
+                            console.log("2222222222");
 
-                            await playAnimationForOnce({
+                            playAnimationForOnce({
                                 sprite,
                                 animation: ani,
+                            }).then((v) => {
+                                // ignore the undefined return
+                                if (v === undefined) {
+                                    return;
+                                }
+                                // remove the object after play
+                                objectPool.remove(groundEntity);
                             });
-
-                            // remove the object after play
-                            objectPool.remove(groundEntity);
                         },
                     });
                 });
+
+                const volume = persistUIStore.getState().soundVolumes.effect;
 
                 // play synergy sound
                 const audio = Main.phaserScene.sound.addAudioSprite(
                     Assets.AudioSprite
                 );
 
-                audio.play(v.name.toLowerCase());
+                audio.play(v.name.toLowerCase(), { volume: volume / 100 });
             }
         }
     );

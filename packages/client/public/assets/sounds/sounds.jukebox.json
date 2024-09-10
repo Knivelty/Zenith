@@ -83,7 +83,7 @@
       "end": 40.47850340136054,
       "loop": false
     },
-    "burningBusrt": {
+    "burningBurst": {
       "start": 42,
       "end": 44.89850340136054,
       "loop": false
@@ -98,12 +98,12 @@
       "end": 50.893514739229026,
       "loop": false
     },
-    "pernetrationInfection": {
+    "penetrationInfection": {
       "start": 52,
       "end": 55.568503401360545,
       "loop": false
     },
-    "spkilShell": {
+    "spikeShell": {
       "start": 57,
       "end": 57.653514739229024,
       "loop": false

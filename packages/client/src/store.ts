@@ -1,5 +1,6 @@
-import { create } from "zustand";
+import { create, useStore } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { createStore } from "zustand/vanilla";
 import { NetworkLayer } from "./dojo/createNetworkLayer";
 import { PhaserLayer } from "./phaser";
 import { num } from "starknet";
@@ -56,7 +57,7 @@ export const store = create<Store>(() => ({
     phaserLayer: null,
 }));
 
-export const usePersistUIStore = create(
+export const persistUIStore = createStore(
     persist<PersistUIStore>(
         (set) => ({
             loggedIn: false,
@@ -76,6 +77,9 @@ export const usePersistUIStore = create(
         }
     )
 );
+
+export const usePersistUIStore = <T>(selector: (state: PersistUIStore) => T) =>
+    useStore(persistUIStore, selector);
 
 export const useUIStore = create<UIStore>()((set, get) => ({
     phaserRect: new DOMRect(0, 0, 0, 0),

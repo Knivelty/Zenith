@@ -11,6 +11,7 @@ import {
 } from "../../hooks/usePlaySoundSegment";
 import { Dialog } from "../../components/Dialog";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
+import { useClickOutside } from "../../hooks/useClickOutside";
 
 const Shop = () => {
     const {
@@ -59,10 +60,15 @@ const Shop = () => {
 
     logDebug("heroAltar: ", heroAltar);
 
+    const { ref } = useClickOutside(() => {
+        setShow(ShowItem.Shop, false);
+    });
+
     return (
         <Dialog
+            ref={ref}
             className={`relative flex justify-center select-none transform duration-700 z-10 w-4/5 h-[58%] top-1/4 ${
-                shopShow ? "scale-100" : "scale-0"
+                shopShow ? "scale-100" : "scale-0 pointer-events-none"
             } z-30`}
         >
             <div

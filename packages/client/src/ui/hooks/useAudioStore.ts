@@ -13,7 +13,7 @@ interface AudioStore {
         spriteMap: SoundSpriteDefinitions
     ) => void;
     play: (id: SoundFile) => void;
-    playSprite: (id: SoundFile, segment: string) => void;
+    playSprite: (id: SoundFile, segment: string, volume?: number) => void;
     playInit: (id: SoundFile) => void;
     fadeIn: (id: SoundFile, maxVolume?: number, duration?: number) => void;
     fadeOut: (id: SoundFile, duration?: number) => void;
@@ -59,11 +59,12 @@ const useAudioStore = create<AudioStore>()((set, get) => ({
             console.warn(`Sound with id "${id}" not found.`);
         }
     },
-    playSprite: (id: SoundFile, segment: string) => {
+    playSprite: (id: SoundFile, segment: string, volume = 1) => {
         const { sounds } = get();
         if (sounds[id]) {
             logDebug(`playing ${id} with segment ${segment}`);
             sounds[id].play(segment);
+            sounds[id].volume(volume);
         } else {
             console.warn(`Sound with id "${id}" not found.`);
         }

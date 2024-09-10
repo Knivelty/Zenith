@@ -207,6 +207,30 @@
             <key type="filename">assets/ability/interlockedInferno/9.png</key>
             <key type="filename">assets/ability/mountainCollapse/3.png</key>
             <key type="filename">assets/ability/mountainCollapse/6.png</key>
+            <key type="filename">assets/ability/penetrationInfection/1.png</key>
+            <key type="filename">assets/ability/penetrationInfection/10.png</key>
+            <key type="filename">assets/ability/penetrationInfection/11.png</key>
+            <key type="filename">assets/ability/penetrationInfection/12.png</key>
+            <key type="filename">assets/ability/penetrationInfection/13.png</key>
+            <key type="filename">assets/ability/penetrationInfection/2.png</key>
+            <key type="filename">assets/ability/penetrationInfection/3.png</key>
+            <key type="filename">assets/ability/penetrationInfection/4.png</key>
+            <key type="filename">assets/ability/penetrationInfection/5.png</key>
+            <key type="filename">assets/ability/penetrationInfection/6.png</key>
+            <key type="filename">assets/ability/penetrationInfection/7.png</key>
+            <key type="filename">assets/ability/penetrationInfection/8.png</key>
+            <key type="filename">assets/ability/penetrationInfection/9.png</key>
+            <key type="filename">assets/ability/spikeShell/1.png</key>
+            <key type="filename">assets/ability/spikeShell/10.png</key>
+            <key type="filename">assets/ability/spikeShell/11.png</key>
+            <key type="filename">assets/ability/spikeShell/2.png</key>
+            <key type="filename">assets/ability/spikeShell/3.png</key>
+            <key type="filename">assets/ability/spikeShell/4.png</key>
+            <key type="filename">assets/ability/spikeShell/5.png</key>
+            <key type="filename">assets/ability/spikeShell/6.png</key>
+            <key type="filename">assets/ability/spikeShell/7.png</key>
+            <key type="filename">assets/ability/spikeShell/8.png</key>
+            <key type="filename">assets/ability/spikeShell/9.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>

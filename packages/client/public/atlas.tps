@@ -173,22 +173,6 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">assets/sprites/healthbar/green.png</key>
-            <key type="filename">assets/sprites/healthbar/red.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>6,1,13,1</rect>
-                <key>scale9Paddings</key>
-                <rect>6,1,13,1</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">assets/sprites/monsters/basilisk/0.png</key>
             <key type="filename">assets/sprites/monsters/bear/0.png</key>
             <key type="filename">assets/sprites/monsters/behemoth/0.png</key>
@@ -258,6 +242,68 @@
                 <rect>20,18,40,36</rect>
                 <key>scale9Paddings</key>
                 <rect>20,18,40,36</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/sprites/statusBar/levelOneGreen.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>3,3,5,5</rect>
+                <key>scale9Paddings</key>
+                <rect>3,3,5,5</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/sprites/statusBar/levelOneRed.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>0,0,1,1</rect>
+                <key>scale9Paddings</key>
+                <rect>0,0,1,1</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/sprites/statusBar/levelThreeGreen.png</key>
+            <key type="filename">assets/sprites/statusBar/levelThreeRed.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>5,3,10,5</rect>
+                <key>scale9Paddings</key>
+                <rect>5,3,10,5</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">assets/sprites/statusBar/levelTwoGreen.png</key>
+            <key type="filename">assets/sprites/statusBar/levelTwoRed.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>4,3,8,5</rect>
+                <key>scale9Paddings</key>
+                <rect>4,3,8,5</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>

@@ -359,6 +359,16 @@ const baseAnimations: AnimationsConfig = [
         suffix: ".png",
     },
     {
+        key: AbilityAnimations.spikeShell,
+        assetKey: Assets.AbilityAtlas,
+        startFrame: 1,
+        endFrame: 10,
+        frameRate: 10,
+        repeat: 0,
+        prefix: "spikeShell/",
+        suffix: ".png",
+    },
+    {
         key: GroundAnimations.fire,
         assetKey: Assets.GroundAtlas,
         startFrame: 0,

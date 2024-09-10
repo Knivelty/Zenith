@@ -1,6 +1,6 @@
 import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "./useDojo";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { SoundFile } from "./usePlaySoundSegment";
 import useAudioStore from "./useAudioStore";
 import { usePersistUIStore } from "../../store";
@@ -13,18 +13,6 @@ export const dangerRangeRangeMap: Record<number, SoundFile> = {
 };
 
 const dangerRanges = Object.keys(dangerRangeRangeMap).map(Number);
-
-function getDangerLevel(danger: number) {
-    let idx = 1;
-    for (const d of dangerRanges) {
-        if (danger <= d) {
-            return idx;
-        } else {
-            idx += 1;
-        }
-    }
-    return idx;
-}
 
 export function usePlayBattleBgMusic() {
     const {
@@ -40,12 +28,10 @@ export function usePlayBattleBgMusic() {
     useEffect(() => {
         if (!isLoaded) return;
 
-        const dangerLevel = getDangerLevel(playerValue?.danger ?? 0);
-
         for (let i = 0; i < dangerRanges.length; i++) {
             const dangerThreshold = dangerRanges[i];
 
-            if (i + 1 <= dangerLevel) {
+            if (dangerThreshold <= (playerValue?.danger ?? 0)) {
                 fadeIn(
                     dangerRangeRangeMap[dangerThreshold],
                     soundVolumes.battleBgm / 100
