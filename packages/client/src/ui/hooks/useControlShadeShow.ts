@@ -15,6 +15,7 @@ const withShadeItems = [
     ShowItem.Shop,
     ShowItem.OptionMenuUnfold,
     ShowItem.SynergyDetail,
+    ShowItem.Setting,
 ];
 
 export function useControlShadeShow() {

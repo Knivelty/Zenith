@@ -15,7 +15,7 @@ interface AudioStore {
     play: (id: SoundFile) => void;
     playSprite: (id: SoundFile, segment: string) => void;
     playInit: (id: SoundFile) => void;
-    fadeIn: (id: SoundFile, duration?: number) => void;
+    fadeIn: (id: SoundFile, maxVolume?: number, duration?: number) => void;
     fadeOut: (id: SoundFile, duration?: number) => void;
     stop: (id: string) => void;
     setIsLoaded: (loaded: boolean) => void;
@@ -82,18 +82,18 @@ const useAudioStore = create<AudioStore>()((set, get) => ({
             sounds[id].stop();
         }
     },
-    fadeIn: (id: SoundFile, duration = 1000) => {
+    fadeIn: (id: SoundFile, expectedVolume = 1, duration = 1000) => {
         const { sounds } = get();
 
         if (sounds[id]) {
-            sounds[id].fade(0, 1, duration);
+            sounds[id].fade(sounds[id].volume(), expectedVolume, duration);
         }
     },
     fadeOut: (id: SoundFile, duration = 1000) => {
         const { sounds } = get();
 
         if (sounds[id]) {
-            sounds[id].fade(1, 0, duration);
+            sounds[id].fade(sounds[id].volume(), 0, duration);
         }
     },
 

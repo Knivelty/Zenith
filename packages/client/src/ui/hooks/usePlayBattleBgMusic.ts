@@ -3,6 +3,7 @@ import { useDojo } from "./useDojo";
 import { useEffect, useState } from "react";
 import { SoundFile } from "./usePlaySoundSegment";
 import useAudioStore from "./useAudioStore";
+import { usePersistUIStore } from "../../store";
 
 export const dangerRangeRangeMap: Record<number, SoundFile> = {
     0: SoundFile.Melody,
@@ -32,9 +33,7 @@ export function usePlayBattleBgMusic() {
     } = useDojo();
 
     const playerValue = useComponentValue(Player, playerEntity);
-    const [prevDangerLevel, setPrevDangerLevel] = useState<number | undefined>(
-        undefined
-    );
+    const soundVolumes = usePersistUIStore((state) => state.soundVolumes);
 
     const { play, fadeIn, fadeOut, isLoaded } = useAudioStore();
 
@@ -43,18 +42,24 @@ export function usePlayBattleBgMusic() {
 
         const dangerLevel = getDangerLevel(playerValue?.danger ?? 0);
 
-        if (dangerLevel === prevDangerLevel) return;
+        for (let i = 0; i < dangerRanges.length; i++) {
+            const dangerThreshold = dangerRanges[i];
 
-        if (dangerLevel > (prevDangerLevel ?? 0)) {
-            dangerRanges.slice(prevDangerLevel, dangerLevel).map((v) => {
-                fadeIn(dangerRangeRangeMap[v]);
-            });
-        } else {
-            dangerRanges.slice(dangerLevel, prevDangerLevel).map((v) => {
-                fadeOut(dangerRangeRangeMap[v]);
-            });
+            if (i + 1 <= dangerLevel) {
+                fadeIn(
+                    dangerRangeRangeMap[dangerThreshold],
+                    soundVolumes.battleBgm / 100
+                );
+            } else {
+                fadeOut(dangerRangeRangeMap[dangerThreshold]);
+            }
         }
-
-        setPrevDangerLevel(dangerLevel);
-    }, [playerValue?.danger, play, prevDangerLevel, isLoaded, fadeIn, fadeOut]);
+    }, [
+        playerValue?.danger,
+        play,
+        isLoaded,
+        fadeIn,
+        fadeOut,
+        soundVolumes.battleBgm,
+    ]);
 }

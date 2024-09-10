@@ -2,6 +2,8 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { NetworkLayer } from "./dojo/createNetworkLayer";
 import { PhaserLayer } from "./phaser";
+import { num } from "starknet";
+import { battle } from "./phaser/systems/battle";
 
 export type Store = {
     networkLayer: NetworkLayer | null;
@@ -24,7 +26,13 @@ export enum ShowItem {
     QuitConfirmation,
     OptionMenuUnfold,
     SynergyDetail,
+    Setting,
 }
+
+export type Volume = {
+    battleBgm: number;
+    effect: number;
+};
 
 export type UIStore = {
     phaserRect: DOMRect;
@@ -39,6 +47,8 @@ export type PersistUIStore = {
     setLoggedIn: (loggedIn: boolean) => void;
     agreeTerm: boolean;
     setAgreeTerm: (agreeTerm: boolean) => void;
+    soundVolumes: Volume;
+    setVolume: (v: Partial<Volume>) => void;
 };
 
 export const store = create<Store>(() => ({
@@ -53,7 +63,13 @@ export const usePersistUIStore = create(
             setLoggedIn: (loggedIn: boolean) => set(() => ({ loggedIn })),
             agreeTerm: false,
             setAgreeTerm: (agreeTerm: boolean) => set(() => ({ agreeTerm })),
+            soundVolumes: { battleBgm: 100, effect: 100 },
+            setVolume: (v: Partial<Volume>) =>
+                set(({ soundVolumes }) => ({
+                    soundVolumes: { ...soundVolumes, ...v },
+                })),
         }),
+
         {
             name: "ui-persist-storage",
             storage: createJSONStorage(() => localStorage),

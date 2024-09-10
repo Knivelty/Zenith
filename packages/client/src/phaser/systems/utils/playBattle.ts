@@ -247,7 +247,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
     async function handlePieceUseMana({
         pieceId,
         manaAmount,
-    }: EventWithName<"pieceGainMana">) {
+    }: EventWithName<"pieceUseMana">) {
         logDebug("handle piece gain mana");
         const statusBarEntity = encodeEntityStatusBarEntity(pieceId);
 
@@ -256,7 +256,7 @@ export const battleAnimation = (layer: PhaserLayer) => {
             statusBarEntity
         );
         updateComponent(EntityStatusBar, statusBarEntity, {
-            mana: currentStatus.mana - manaAmount,
+            mana: Math.max(currentStatus.mana - manaAmount, 0),
         });
     }
 
@@ -390,6 +390,11 @@ export const battleAnimation = (layer: PhaserLayer) => {
                 },
             });
         });
+
+        // play  ability sound
+        const audio = phaserScene.sound.addAudioSprite(Assets.AudioSprite);
+        logDebug("play sound", abilityName);
+        audio.play(abilityName);
 
         await promise;
     }

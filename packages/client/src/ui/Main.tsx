@@ -26,6 +26,7 @@ import { QuitConfirmation } from "./features/info/QuitConfirmation";
 import { OptionMenu } from "./features/misc/OptionMenu";
 import { SynergyDetail } from "./features/info/SynergyDetail";
 import { useShowFollowValue } from "./hooks/useShowFollowValue";
+import { Setting } from "./features/manage/Setting";
 
 export function Main() {
     const {
@@ -72,6 +73,7 @@ export function Main() {
             <StatesPanel />
             <DangerStage />
             <OptionMenu />
+            <Setting />
         </div>
     );
 }

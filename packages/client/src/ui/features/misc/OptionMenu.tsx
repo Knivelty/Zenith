@@ -45,7 +45,14 @@ export function OptionMenu() {
                     ></img>
                 </div>
             </div>
-            <OptionMenuItem>Setting</OptionMenuItem>
+            <OptionMenuItem
+                onClick={() => {
+                    setShow(ShowItem.Setting, true);
+                    setShow(ShowItem.OptionMenuUnfold, false);
+                }}
+            >
+                Setting
+            </OptionMenuItem>
             <OptionMenuItem>Picture</OptionMenuItem>
             <OptionMenuItem>Game Help</OptionMenuItem>
             <OptionMenuItem
