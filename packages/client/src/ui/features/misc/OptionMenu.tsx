@@ -1,4 +1,5 @@
 import { ShowItem, useUIStore } from "../../../store";
+import { useClickOutside } from "../../hooks/useClickOutside";
 import { OptionMenuItem } from "./OptionMenuItem";
 
 export function OptionMenu() {
@@ -6,6 +7,10 @@ export function OptionMenu() {
         state.getShow(ShowItem.OptionMenuUnfold)
     );
     const setShow = useUIStore((state) => state.setShow);
+
+    const { ref } = useClickOutside(() => {
+        setShow(ShowItem.OptionMenuUnfold, false);
+    });
 
     if (!show) {
         return (
@@ -26,8 +31,12 @@ export function OptionMenu() {
             </div>
         );
     }
+
     return (
-        <div className="absolute top-0 right-4 w-32  z-20 flex flex-col items-center justify-center">
+        <div
+            ref={ref}
+            className="absolute top-0 right-4 w-32  z-20 flex flex-col items-center justify-center"
+        >
             <div
                 className="w-full h-16 border border-[#06FF00] bg-black flex space-x-4 hover:cursor-pointer"
                 onClick={() => {

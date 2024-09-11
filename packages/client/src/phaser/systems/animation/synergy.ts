@@ -26,7 +26,7 @@ import {
     TILE_WIDTH,
 } from "../../config/constants";
 import { logDebug } from "../../../ui/lib/utils";
-import { persistUIStore, usePersistUIStore } from "../../../store";
+import { persistUIStore } from "../../../store";
 
 export const synergy = (layer: PhaserLayer) => {
     const {

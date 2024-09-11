@@ -17,12 +17,14 @@ export function DangerBorder() {
     return (
         <div
             className={cn(
-                "fixed w-screen h-screen top-0 left-0 pointer-events-none",
+                "fixed w-screen h-screen top-0 left-0 pointer-events-none z-50",
                 {
                     invisible: !visible,
                 }
             )}
-            style={{ boxShadow: "inset 0 0 30rem rgba(255, 61, 0, 1)" }}
+            style={{
+                animation: "danger-glow 1s steps(5,start)  infinite",
+            }}
         ></div>
     );
 }
