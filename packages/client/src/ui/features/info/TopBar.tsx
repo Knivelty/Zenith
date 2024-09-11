@@ -28,7 +28,12 @@ export function TopBar() {
 
     return (
         <div className="flex flex-col justify-center items-center">
-            <div className="flex justify-between items-center align-middle px-2 py-1 w-[40rem] h-12 bg-black border-x-2 border-t-2 border-[#06FF00] font-bold text-[#06FF00]">
+            <div
+                className={cn(
+                    "flex justify-between items-center align-middle px-2 py-1 w-[40rem] h-12 bg-black border-x-2 border-t-2 border-[#06FF00] font-bold ",
+                    { "text-[#FF3D00] border-[#FF3D00]": gameStatus?.dangerous }
+                )}
+            >
                 <div className="">Round {gameStatus?.currentRound}</div>
                 <div className="">{numToStatus(gameStatus?.status)}</div>
             </div>
@@ -50,19 +55,28 @@ export function TopBar() {
                         Curse {player?.curse}
                     </div>
                 </div>
-                <div className="flex flex-row justify-start items-center w-full h-full ml-2">
-                    <img className="h-4" src="/assets/ui/skull.png"></img>
-                    <div className=" text-[#FF3D00] text-[0.6rem] ml-2">
-                        Danger value: {player?.danger}/100
+                {gameStatus?.dangerous ? (
+                    <div className="flex flex-row justify-center items-center w-full h-full ml-2">
+                        <img className="h-4" src="/assets/ui/skull.png"></img>
+                        <div className="text-[#FF3D00] text-xs ml-2">
+                            Dangerous Stage
+                        </div>
                     </div>
-                    <img
-                        className="ml-4 -mt-0.5 h-6 object-cover object-right"
-                        src="/assets/ui/danger_progress.png"
-                        style={{
-                            width: `${18 * Math.min(1, (player?.danger ?? 0) / 100)}rem`,
-                        }}
-                    ></img>
-                </div>
+                ) : (
+                    <div className="flex flex-row justify-start items-center w-full h-full ml-2">
+                        <img className="h-4" src="/assets/ui/skull.png"></img>
+                        <div className=" text-[#FF3D00] text-[0.6rem] ml-2">
+                            Danger value: {player?.danger}/100
+                        </div>
+                        <img
+                            className="ml-4 -mt-0.5 h-6 object-cover object-right"
+                            src="/assets/ui/danger_progress.png"
+                            style={{
+                                width: `${18 * Math.min(1, (player?.danger ?? 0) / 100)}rem`,
+                            }}
+                        ></img>
+                    </div>
+                )}
             </div>
         </div>
     );
