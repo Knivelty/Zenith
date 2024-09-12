@@ -104,13 +104,12 @@
 
 @keyframes danger-glow {
     0% {
-        box-shadow: inset 0rem 0 20rem rgba(255, 61, 0, 0.7);
+        box-shadow: inset 0rem 0 20rem rgba(255, 61, 0, 0.2);
     }
     100% {
         box-shadow:
-            inset 1rem 0 20rem rgba(255, 61, 0, 0.9),
-            inset -1rem 0 20rem rgba(255, 61, 0, 0.9),
-            inset 0 1rem 20rem rgba(255, 61, 0, 0.9),
-            inset 0 -1rem 20rem rgba(255, 61, 0, 0.9);
+            inset 0 0 5rem rgba(255, 61, 0, 0.2),
+            inset 0 0 5rem rgba(255, 61, 0, 0.2),
+            inset 0 0 5rem rgba(255, 61, 0, 0.2);
     }
 }

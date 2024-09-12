@@ -2,7 +2,7 @@ import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "../../hooks/useDojo";
 import { zeroEntity } from "../../../utils";
 import { numToStatus } from "../../../dojo/types";
-import { cn, logDebug } from "../../lib/utils";
+import { cn } from "../../lib/utils";
 import { ShowItem, UIStore, useUIStore } from "../../../store";
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -24,13 +24,11 @@ export function TopBar() {
         });
     });
 
-    logDebug("player value: ", player);
-
     return (
         <div className="flex flex-col justify-center items-center">
             <div
                 className={cn(
-                    "flex justify-between items-center align-middle px-2 py-1 w-[40rem] h-12 bg-black border-x-2 border-t-2 border-[#06FF00] font-bold ",
+                    "flex justify-between items-center align-middle px-2 py-1 w-[40rem] h-12 bg-black border-x-2 border-t-2 border-[#06FF00] font-bold",
                     { "text-[#FF3D00] border-[#FF3D00]": gameStatus?.dangerous }
                 )}
             >
@@ -69,7 +67,7 @@ export function TopBar() {
                             Danger value: {player?.danger}/100
                         </div>
                         <img
-                            className="ml-4 -mt-0.5 h-6 object-cover object-right"
+                            className="ml-4 -mt-0.5 h-6 object-cover object-right  transition-all duration-2000 ease-in-out delay-500"
                             src="/assets/ui/danger_progress.png"
                             style={{
                                 width: `${18 * Math.min(1, (player?.danger ?? 0) / 100)}rem`,
