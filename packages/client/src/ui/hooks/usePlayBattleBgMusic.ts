@@ -1,7 +1,7 @@
 import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "./useDojo";
 import { useEffect } from "react";
-import { SoundFile } from "./usePlaySoundSegment";
+import { SoundFile, SoundType } from "./usePlaySoundSegment";
 import useAudioStore from "./useAudioStore";
 import { usePersistUIStore } from "../../store";
 
@@ -23,7 +23,7 @@ export function usePlayBattleBgMusic() {
     const playerValue = useComponentValue(Player, playerEntity);
     const soundVolumes = usePersistUIStore((state) => state.soundVolumes);
 
-    const { play, fadeIn, fadeOut, isLoaded } = useAudioStore();
+    const { play, playSprite, fadeIn, fadeOut, isLoaded } = useAudioStore();
 
     useEffect(() => {
         if (!isLoaded) return;
@@ -48,4 +48,14 @@ export function usePlayBattleBgMusic() {
         fadeOut,
         soundVolumes.battleBgm,
     ]);
+
+    useEffect(() => {
+        if ((playerValue?.danger ?? 0) >= 100) {
+            playSprite(
+                SoundFile.Main,
+                SoundType.DangerHint,
+                soundVolumes.battleBgm / 100
+            );
+        }
+    }, [playerValue?.danger, playSprite, soundVolumes.battleBgm]);
 }

@@ -17,6 +17,7 @@ export enum SoundType {
     Refresh = "refresh",
     Sell = "sell",
     Upgrade = "upgrade",
+    DangerHint = "dangerHint",
 }
 
 export function usePlaySoundSegment(soundType: SoundType) {

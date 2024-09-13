@@ -33,79 +33,84 @@
       "end": 14.797233560090703,
       "loop": false
     },
-    "hit": {
+    "dangerHint": {
       "start": 16,
-      "end": 16.095986394557823,
+      "end": 26.16764172335601,
+      "loop": false
+    },
+    "hit": {
+      "start": 28,
+      "end": 28.095986394557823,
       "loop": false
     },
     "brute": {
-      "start": 18,
-      "end": 18.385986394557822,
+      "start": 30,
+      "end": 30.385986394557822,
       "loop": false
     },
     "cunning": {
-      "start": 20,
-      "end": 20.712063492063493,
+      "start": 32,
+      "end": 32.71206349206349,
       "loop": false
     },
     "dark": {
-      "start": 22,
-      "end": 23.78426303854875,
+      "start": 34,
+      "end": 35.78426303854875,
       "loop": false
     },
     "hunter": {
-      "start": 25,
-      "end": 26.127414965986393,
+      "start": 37,
+      "end": 38.1274149659864,
       "loop": false
     },
     "imaginary": {
-      "start": 28,
-      "end": 28.598004535147393,
+      "start": 40,
+      "end": 40.59800453514739,
       "loop": false
     },
     "light": {
-      "start": 30,
-      "end": 30.729591836734695,
+      "start": 42,
+      "end": 42.72959183673469,
       "loop": false
     },
     "magical": {
-      "start": 32,
-      "end": 33.45231292517007,
+      "start": 44,
+      "end": 45.45231292517007,
       "loop": false
     },
     "strength": {
-      "start": 35,
-      "end": 36.612925170068024,
+      "start": 47,
+      "end": 48.612925170068024,
       "loop": false
     },
     "barbariansRage": {
-      "start": 38,
-      "end": 40.47850340136054,
+      "start": 50,
+      "end": 52.47850340136054,
       "loop": false
     },
     "burningBurst": {
-      "start": 42,
-      "end": 44.89850340136054,
+      "start": 54,
+      "end": 56.89850340136054,
       "loop": false
     },
     "interlockedInferno": {
-      "start": 46,
-      "end": 48.24351473922903,
+      "start": 58,
+      "end": 60.24351473922903,
       "loop": false
     },
     "mountainCollapse": {
-      "start": 50,
-      "end": 50.893514739229026,
+      "start": 62,
+      "end": 62.893514739229026,
       "loop": false
     },
     "penetrationInfection": {
-      "start": 52,
-      "end": 55.568503401360545,
+      "start": 64,
+      "end": 67.56850340136054,
       "loop": false
     },
     "spikeShell": {
-      "start": 57,
-      "end": 57.653514739229024,
+      "start": 69,
+      "end": 69.65351473922902,
       "loop": false
     }
   }
