@@ -166,7 +166,16 @@ struct MatchState {
     round: u8,
     player1: ContractAddress,
     player2: ContractAddress,
-    end: bool,
+    cheated: bool,
+}
+
+#[derive(Model, Copy, Drop, Serde)]
+struct MatchResult {
+    #[key]
+    index: u32,
+    time: u32,
+    score: u16,
+    player: ContractAddress,
     cheated: bool,
 }
 

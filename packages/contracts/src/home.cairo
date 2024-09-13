@@ -53,9 +53,10 @@ mod home {
         get_block_timestamp
     };
     use autochessia::models::{
-        CreatureProfile, Position, Piece, Player, InningBattle, GlobalState, MatchState, Altar,
-        PlayerPiece, PlayerInvPiece, StageProfile, StageProfilePiece, LevelConfig, PlayerProfile,
-        ChoiceProfile, CurseOption, LevelRarityProb, SynergyProfile, SellPriceConfig
+        CreatureProfile, Position, Piece, Player, InningBattle, GlobalState, MatchState,
+        MatchResult, Altar, PlayerPiece, PlayerInvPiece, StageProfile, StageProfilePiece,
+        LevelConfig, PlayerProfile, ChoiceProfile, CurseOption, LevelRarityProb, SynergyProfile,
+        SellPriceConfig
     };
 
     use autochessia::utils::{
@@ -572,37 +573,145 @@ mod home {
 
     fn _settleDeath(world: IWorldDispatcher) {
         let playerAddr = get_caller_address();
-        let player = get!(world, playerAddr, Player);
+        let mut player = get!(world, playerAddr, Player);
         if (player.health > 0) {
             return;
         }
 
-        let mut matchState = get!(world, (player.inMatch), MatchState);
-        matchState.end = true;
+        let matchState = get!(world, (player.inMatch), MatchState);
 
-        set!(world, (matchState));
+        set!(
+            world,
+            (
+                MatchResult {
+                    index: player.inMatch,
+                    player: playerAddr,
+                    score: matchState.round.into(),
+                    time: get_block_info().unbox().block_timestamp.try_into().unwrap(),
+                    cheated: false
+                },
+            )
+        );
+
+        player.inMatch = 0;
+
+        set!(world, (player));
+
+        _exit(world);
     }
 
     fn _settleComplete(world: IWorldDispatcher) {
         let playerAddr = get_caller_address();
-        let player = get!(world, playerAddr, Player);
-        let mut matchState = get!(world, (player.inMatch), MatchState);
+        let mut player = get!(world, playerAddr, Player);
+        let matchState = get!(world, (player.inMatch), MatchState);
 
         if (matchState.round < 50) {
             return;
         }
 
-        matchState.end = true;
-        set!(world, (matchState));
+        set!(
+            world,
+            (
+                MatchResult {
+                    index: player.inMatch,
+                    player: playerAddr,
+                    score: matchState.round.into(),
+                    time: get_block_info().unbox().block_timestamp.try_into().unwrap(),
+                    cheated: false
+                },
+            )
+        );
+
+        player.inMatch = 0;
+
+        set!(world, (player));
+
+        _exit(world);
     }
 
     fn _settleExit(world: IWorldDispatcher) {
         let playerAddr = get_caller_address();
-        let player = get!(world, playerAddr, Player);
-        let mut matchState = get!(world, (player.inMatch), MatchState);
+        let mut player = get!(world, playerAddr, Player);
+        let matchState = get!(world, (player.inMatch), MatchState);
 
-        matchState.end = true;
-        set!(world, (matchState));
+        set!(
+            world,
+            (
+                MatchResult {
+                    index: player.inMatch,
+                    player: playerAddr,
+                    score: matchState.round.into(),
+                    time: get_block_info().unbox().block_timestamp.try_into().unwrap(),
+                    cheated: false
+                },
+            )
+        );
+
+        player.inMatch = 0;
+
+        set!(world, (player));
+    }
+
+
+    fn _exit(world: IWorldDispatcher) {
+        let playerAddr = get_caller_address();
+
+        let mut player = get!(world, playerAddr, Player);
+        let mut idx = 1;
+
+        // delete player inv piece
+        loop {
+            if (idx > 8) {
+                break;
+            }
+
+            let mut playerInvPiece = get!(world, (playerAddr, idx), PlayerInvPiece);
+
+            if (playerInvPiece.gid != 0) {
+                _removePiece(world, playerInvPiece.gid);
+            }
+
+            idx += 1;
+        };
+
+        // delete player board piece
+        // from larger idx to lower
+        idx = player.heroesCount;
+        loop {
+            if (idx == 0) {
+                break;
+            }
+            let mut playerPiece = get!(world, (playerAddr, idx), PlayerPiece);
+
+            if (playerPiece.gid != 0) {
+                _removePiece(world, playerPiece.gid);
+            } else {
+                panic!("idx {} piece gid is 0", idx);
+            }
+
+            idx -= 1;
+        };
+
+        // reset player attr
+        set!(
+            world,
+            Player {
+                player: playerAddr,
+                health: 0,
+                heroesCount: 0,
+                inventoryCount: 0,
+                level: 0,
+                coin: 0,
+                exp: 0,
+                winStreak: 0,
+                loseStreak: 0,
+                locked: 0,
+                inMatch: 0,
+                refreshed: false,
+                curse: 0,
+                danger: 0,
+            }
+        );
     }
 
 
@@ -771,7 +880,6 @@ mod home {
                         round: 1,
                         player1: playerAddr,
                         player2: enemyAddr,
-                        end: false,
                         cheated: false
                     },
                     globalState
@@ -927,8 +1035,8 @@ mod home {
 
             if (onBoardIdx != 0) {
                 playerV.heroesCount += 1;
-                let oldPlyaerPiece = get!(world, (playerAddr, onBoardIdx), PlayerPiece);
-                if (oldPlyaerPiece.gid != 0) {
+                let oldPlayerPiece = get!(world, (playerAddr, onBoardIdx), PlayerPiece);
+                if (oldPlayerPiece.gid != 0) {
                     panic!("on board idx {} piece id not empty", onBoardIdx);
                 }
                 set!(
@@ -1194,7 +1302,7 @@ mod home {
 
             let gid = gen_piece_gid(playerAddr, playerProfile.pieceCounter);
 
-            // spwan piece
+            // spawn piece
             set!(
                 world,
                 (
@@ -1321,66 +1429,10 @@ mod home {
 
         // exit current game
         fn exit(world: IWorldDispatcher) {
-            let playerAddr = get_caller_address();
-
-            let mut player = get!(world, playerAddr, Player);
-            let mut idx = 1;
-
-            // delete player inv piece
-            loop {
-                if (idx > 8) {
-                    break;
-                }
-
-                let mut playerInvPiece = get!(world, (playerAddr, idx), PlayerInvPiece);
-
-                if (playerInvPiece.gid != 0) {
-                    _removePiece(world, playerInvPiece.gid);
-                }
-
-                idx += 1;
-            };
-
-            // delete player board piece
-            // from larger idx to lower
-            idx = player.heroesCount;
-            loop {
-                if (idx == 0) {
-                    break;
-                }
-                let mut playerPiece = get!(world, (playerAddr, idx), PlayerPiece);
-
-                if (playerPiece.gid != 0) {
-                    _removePiece(world, playerPiece.gid);
-                } else {
-                    panic!("idx {} piece gid is 0", idx);
-                }
-
-                idx -= 1;
-            };
-            // reset player attr
-            set!(
-                world,
-                Player {
-                    player: playerAddr,
-                    health: 0,
-                    heroesCount: 0,
-                    inventoryCount: 0,
-                    level: 0,
-                    coin: 0,
-                    exp: 0,
-                    winStreak: 0,
-                    loseStreak: 0,
-                    locked: 0,
-                    inMatch: 0,
-                    refreshed: false,
-                    curse: 0,
-                    danger: 0,
-                }
-            );
-
-            // settle exit
+            // settle exit result
             _settleExit(world);
+
+            _exit(world);
         }
     }
 }

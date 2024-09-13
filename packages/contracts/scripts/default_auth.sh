@@ -15,7 +15,7 @@ echo home : $HOME_ADDRESS
 echo "---------------------------------------------------------------------------"
 
 # enable system -> component authorizations
-MODELS=("Player" "Piece" "InningBattle" "GlobalState" "MatchState" "Altar" "PlayerPiece" "PlayerInvPiece" "CreatureProfile" "StageProfile" "StageProfilePiece" "LevelConfig" "PlayerProfile" "ChoiceProfile" "CurseOption")
+MODELS=("Player" "Piece" "InningBattle" "GlobalState" "MatchState" "MatchResult" "Altar" "PlayerPiece" "PlayerInvPiece" "CreatureProfile" "StageProfile" "StageProfilePiece" "LevelConfig" "PlayerProfile" "ChoiceProfile" "CurseOption")
 
 AUTH_MODELS=""
 # Give permission to the action system to write on all the models.

@@ -13,6 +13,7 @@ import { useAccount } from "@starknet-react/core";
 import { SessionWalletCreate } from "./features/login/SessionWalletCreate";
 import { HomeBg } from "./components/HomeBg";
 import { logDebug } from "./lib/utils";
+import { Rank } from "./features/info/Rank";
 
 export const Home = () => {
     const {
@@ -46,9 +47,16 @@ export const Home = () => {
 
             {!agreeTerm && <AgreeTerm />}
 
-            {!loggedIn ? <UnConnected /> : <Connected />}
+            <div className="w-1/2 p-4">
+                {!loggedIn ? <UnConnected /> : <Connected />}
+            </div>
+            <div className="w-1/2 p-4">
+                <div className="flex flex-col justify-start items-center h-full">
+                    <Rank />
+                </div>
+            </div>
 
-            <ConnectStatus />
+            {loggedIn && <ConnectStatus />}
             <GuestTips />
             <ConnectWalletDialog />
             <Shade />

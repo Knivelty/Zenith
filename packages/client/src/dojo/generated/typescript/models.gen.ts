@@ -422,7 +422,6 @@ export function defineContractComponents(world: World) {
                     round: RecsType.Number,
                     player1: RecsType.BigInt,
                     player2: RecsType.BigInt,
-                    end: RecsType.Boolean,
                     cheated: RecsType.Boolean,
                 },
                 {
@@ -434,8 +433,28 @@ export function defineContractComponents(world: World) {
                             "ContractAddress",
                             "ContractAddress",
                             "bool",
-                            "bool",
                         ],
+                        customTypes: [],
+                    },
+                }
+            );
+        })(),
+
+        // Model definition for `autochessia::models::MatchResult` model
+        MatchResult: (() => {
+            return defineComponent(
+                world,
+                {
+                    index: RecsType.Number,
+                    time: RecsType.Number,
+                    score: RecsType.Number,
+                    player: RecsType.BigInt,
+                    cheated: RecsType.Boolean,
+                },
+                {
+                    metadata: {
+                        name: "MatchResult",
+                        types: ["u32", "u32", "u16", "ContractAddress", "bool"],
                         customTypes: [],
                     },
                 }
