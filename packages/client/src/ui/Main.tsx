@@ -18,7 +18,6 @@ import { SpeedSlider } from "./features/misc/SpeedSlider";
 import { Debugger } from "./features/debug/Debugger";
 import Shop from "./features/shop/Shop";
 import { Inventory } from "./features/inventory/Inventory";
-import { usePlayBattleBgMusic } from "./hooks/usePlayBattleBgMusic";
 import { CurseNotice } from "./features/info/CurseNotice";
 import { ChoiceDialog } from "./features/settle/ChoiceDialog";
 import { DangerStage } from "./features/info/DangerStage";
@@ -27,6 +26,7 @@ import { OptionMenu } from "./features/misc/OptionMenu";
 import { SynergyDetail } from "./features/info/SynergyDetail";
 import { useShowFollowValue } from "./hooks/useShowFollowValue";
 import { Setting } from "./features/manage/Setting";
+import { usePlayBackGroundMusic } from "./hooks/usePlayBackGroundMusic";
 
 export function Main() {
     const {
@@ -36,8 +36,8 @@ export function Main() {
 
     const inGame = useComponentValue(Player, playerEntity)?.inMatch;
 
-    usePlayBattleBgMusic();
     useShowFollowValue();
+    usePlayBackGroundMusic();
 
     if (!inGame) {
         return <Home />;

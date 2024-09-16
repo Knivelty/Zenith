@@ -31,7 +31,7 @@ export enum ShowItem {
 }
 
 export type Volume = {
-    battleBgm: number;
+    music: number;
     effect: number;
 };
 
@@ -64,7 +64,7 @@ export const persistUIStore = createStore(
             setLoggedIn: (loggedIn: boolean) => set(() => ({ loggedIn })),
             agreeTerm: false,
             setAgreeTerm: (agreeTerm: boolean) => set(() => ({ agreeTerm })),
-            soundVolumes: { battleBgm: 100, effect: 100 },
+            soundVolumes: { music: 100, effect: 100 },
             setVolume: (v: Partial<Volume>) =>
                 set(({ soundVolumes }) => ({
                     soundVolumes: { ...soundVolumes, ...v },

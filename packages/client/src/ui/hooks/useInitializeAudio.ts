@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import useAudioStore from "./useAudioStore";
-import { dangerRangeRangeMap } from "./usePlayBattleBgMusic";
+import { dangerRangeRangeMap } from "./usePlayBackGroundMusic";
+import { SoundFile } from "./usePlaySoundSegment";
 
 export enum SoundFileType {
     File = "File",
@@ -13,7 +14,7 @@ type AudioFile = {
     jsonPath?: string;
 };
 
-const audioFiles: Record<string, AudioFile> = {
+const audioFiles: Record<SoundFile, AudioFile> = {
     main: {
         type: SoundFileType.Sprite,
         src: "/assets/sounds/sounds.ogg",
@@ -21,19 +22,23 @@ const audioFiles: Record<string, AudioFile> = {
     },
     bass: {
         type: SoundFileType.File,
-        src: "/assets/sounds/battleBgm/bass.opus",
+        src: "/assets/sounds/music/bass.opus",
     },
     clock: {
         type: SoundFileType.File,
-        src: "/assets/sounds/battleBgm/clock.opus",
+        src: "/assets/sounds/music/clock.opus",
     },
     drum: {
         type: SoundFileType.File,
-        src: "/assets/sounds/battleBgm/drum.opus",
+        src: "/assets/sounds/music/drum.opus",
     },
     melody: {
         type: SoundFileType.File,
-        src: "/assets/sounds/battleBgm/melody.opus",
+        src: "/assets/sounds/music/melody.opus",
+    },
+    [SoundFile.Forest]: {
+        type: SoundFileType.File,
+        src: "/assets/sounds/music/forest.mp3",
     },
 };
 
@@ -60,6 +65,8 @@ export const useInitializeAudio = () => {
                 Object.values(dangerRangeRangeMap).forEach((v) => {
                     playInit(v);
                 });
+
+                playInit(SoundFile.Forest);
             });
         }
     }, [isLoaded, setIsLoaded, loadSprite, load, playInit]);

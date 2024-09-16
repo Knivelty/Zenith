@@ -7,6 +7,7 @@ export enum SoundFile {
     Clock = "clock",
     Drum = "drum",
     Melody = "melody",
+    Forest = "forest",
 }
 
 export enum SoundType {

@@ -61,7 +61,7 @@ export function Rank() {
                     <tbody className="text-xs font-light">
                         {rankData.map((data, index) => (
                             <tr
-                                key={data.player}
+                                key={data.time}
                                 className="border border-[#06FF00]"
                             >
                                 <td className="py-3 px-6 text-center whitespace-nowrap border border-[#06FF00]">
