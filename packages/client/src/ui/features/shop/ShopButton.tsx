@@ -6,6 +6,7 @@ import {
     SoundType,
     usePlaySoundSegment,
 } from "../../hooks/usePlaySoundSegment";
+import CountUp from "react-countup";
 
 export function ShopButton() {
     const {
@@ -35,7 +36,7 @@ export function ShopButton() {
                  transition duration-300 text-lg"
                 onClick={handleClick}
             >
-                $ {player?.coin}
+                $ <CountUp end={player?.coin || 0} preserveValue={true} />
             </button>
         </div>
     );

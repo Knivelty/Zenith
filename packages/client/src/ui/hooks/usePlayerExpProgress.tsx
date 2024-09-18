@@ -31,7 +31,6 @@ export function usePlayerExpProgress() {
                 return;
             }
 
-            console.log("value", value, "entity", entity);
             const [v, preV] = value;
 
             const level = v?.level;

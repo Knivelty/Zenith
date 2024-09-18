@@ -9,6 +9,7 @@ import {
 } from "../../hooks/usePlaySoundSegment";
 import { cn } from "../../lib/utils";
 import { usePlayerExpProgress } from "../../hooks/usePlayerExpProgress";
+import CountUp from "react-countup";
 
 export function ExpButton() {
     const {
@@ -36,7 +37,8 @@ export function ExpButton() {
     return (
         <div className="absolute flex  flex-col left-[10%] bottom-[5%] select-none z-20">
             <div className="mb-2 self-center text-sm font-bold transition-all">
-                EXP : {exp} / {expForNext}
+                EXP : <CountUp end={exp || 0} preserveValue={true} /> /
+                {expForNext}
             </div>
             <div
                 onClick={handleClick}
@@ -75,7 +77,9 @@ export function ExpButton() {
                 />
             </div>
             <div className="absolute flex justify-center -right-2 -bottom-6 rounded-full h-12 w-12 border border-[#06FF00] transition-all">
-                <div className="self-center text-xs">Lv. {level}</div>
+                <div className="self-center text-xs">
+                    Lv. <CountUp end={level || 0} preserveValue={true} />{" "}
+                </div>
             </div>
         </div>
     );

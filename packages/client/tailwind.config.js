@@ -79,6 +79,11 @@ module.exports = {
                 3000: "3000ms",
                 4000: "4000ms",
             },
+            transitionDelay: {
+                2000: "2000ms",
+                3000: "3000ms",
+                4000: "4000ms",
+            },
         },
     },
     plugins: [

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDojo } from "../../hooks/useDojo";
 import { shortenAddress } from "../../lib/utils";
 import { useComponentValue } from "@dojoengine/react";
+import CountUp from "react-countup";
 
 interface IPlayerStatus {
     id: string;
@@ -38,7 +39,9 @@ function PlayerStatus({
                 </div>
                 <div className="flex items-center w-20">
                     <img className="w-8 h-8" src="/assets/ui/gold.png"></img>
-                    <div className="ml-2"> {coin}</div>
+                    <div className="ml-2">
+                        <CountUp end={coin} preserveValue={true} />
+                    </div>
                 </div>
             </div>
             <div className="flex-1 grid w-full h-11 content-around ml-2 mt-2 items-center">

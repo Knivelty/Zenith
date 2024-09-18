@@ -20,7 +20,7 @@ export function executeDamageOnEvent() {
       }
 
       // calculate spell amp
-      if (type === "Magical") {
+      if (type === "Magical" && sourcePieceId != "0") {
         const piece = await getBattlePiece(sourcePieceId);
         value = value * (1 + piece.spell_amp / 100);
       }

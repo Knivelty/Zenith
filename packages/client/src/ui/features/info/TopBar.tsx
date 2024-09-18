@@ -2,9 +2,10 @@ import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "../../hooks/useDojo";
 import { zeroEntity } from "../../../utils";
 import { numToStatus } from "../../../dojo/types";
-import { cn } from "../../lib/utils";
+import { cn, logDebug } from "../../lib/utils";
 import { ShowItem, UIStore, useUIStore } from "../../../store";
 import { useHotkeys } from "react-hotkeys-hook";
+import CountUp from "react-countup";
 
 export function TopBar() {
     const {
@@ -18,6 +19,8 @@ export function TopBar() {
     const gameStatus = useComponentValue(GameStatus, zeroEntity);
     const player = useComponentValue(Player, playerEntity);
 
+    logDebug("game status:", gameStatus);
+
     const hasCurse = (gameStatus?.currentRound ?? 0) >= 4;
 
     useHotkeys("esc", () => {
@@ -27,7 +30,7 @@ export function TopBar() {
     });
 
     return (
-        <div className="flex flex-col justify-center items-center">
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex flex-col justify-center items-center w-[40rem]">
             <div
                 className={cn(
                     "flex justify-between items-center align-middle px-2 py-1 w-[40rem] h-12 bg-black border-x-2 border-t-2 border-[#06FF00] font-bold",
@@ -43,7 +46,7 @@ export function TopBar() {
             </div>
             <div
                 className={cn(
-                    "flex justify-between items-center align-middle top-1 w-[40rem] h-8 bg-black border-x-2 border-b-2 border-[#FF3D00] border-2",
+                    "flex justify-start items-center align-middle top-1 w-[40rem] h-8 bg-black border-x-2 border-b-2 border-[#FF3D00] border-2",
                     { invisible: !hasCurse }
                 )}
             >
@@ -64,28 +67,44 @@ export function TopBar() {
                         Curse {player?.curse}
                     </div>
                 </div>
-                {gameStatus?.dangerous ? (
-                    <div className="flex flex-row justify-center items-center w-full h-full ml-2">
-                        <img className="h-4" src="/assets/ui/skull.png"></img>
-                        <div className="text-[#FF3D00] text-xs ml-2">
-                            Dangerous Stage
-                        </div>
+
+                <div
+                    className={cn(
+                        "absolute flex flex-row justify-center items-center transform left-1/2  h-full ml-2 transition-all opacity-100 duration-2000 delay-2000",
+                        { "opacity-0": !gameStatus?.dangerous }
+                    )}
+                >
+                    <img className="h-4" src="/assets/ui/skull.png"></img>
+                    <div className="text-[#FF3D00] text-xs ml-2">
+                        Dangerous Stage
                     </div>
-                ) : (
-                    <div className="flex flex-row justify-start items-center w-full h-full ml-2">
-                        <img className="h-4" src="/assets/ui/skull.png"></img>
-                        <div className=" text-[#FF3D00] text-[0.6rem] ml-2">
-                            Danger value: {player?.danger}/100
-                        </div>
-                        <img
-                            className="ml-4 -mt-0.5 h-6 object-cover object-right  transition-all duration-2000 ease-in-out delay-500"
-                            src="/assets/ui/danger_progress.png"
-                            style={{
-                                width: `${18 * Math.min(1, (player?.danger ?? 0) / 100)}rem`,
-                            }}
-                        ></img>
+                </div>
+
+                <div
+                    className={cn(
+                        "absolute flex flex-row justify-start items-center transform left-40 h-full ml-2 transition-all opacity-100 scale-100 duration-2000 delay-2000",
+                        { "opacity-0 ": !!gameStatus?.dangerous }
+                    )}
+                >
+                    <img className="h-4" src="/assets/ui/skull.png"></img>
+                    <div className=" text-[#FF3D00] text-[0.6rem] ml-2">
+                        Danger value:
+                        <CountUp
+                            preserveValue={true}
+                            end={player?.danger || 0}
+                            delay={0.5}
+                            duration={2}
+                        ></CountUp>
+                        /100
                     </div>
-                )}
+                    <img
+                        className="ml-4 -mt-0.5 h-6 object-cover object-right  transition-all duration-2000 ease-in-out delay-500"
+                        src="/assets/ui/danger_progress.png"
+                        style={{
+                            width: `${16 * Math.min(1, (player?.danger ?? 0) / 100)}rem`,
+                        }}
+                    ></img>
+                </div>
             </div>
         </div>
     );
