@@ -40,7 +40,13 @@ export function Rank() {
                 LeaderBoard
             </div>
 
-            <div className="container mx-auto p-4 mt-4">
+            <div
+                className="container mx-auto p-4 mt-4 overflow-y-auto h-[30rem]"
+                style={{
+                    scrollbarWidth: "thin",
+                    scrollbarColor: "#06FF00 black",
+                }}
+            >
                 <table className="min-w-full">
                     <thead>
                         <tr className="border border-[#06FF00] uppercase text-sm leading-normal">

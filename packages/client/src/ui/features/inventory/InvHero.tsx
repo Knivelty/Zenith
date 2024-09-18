@@ -17,6 +17,12 @@ import { zeroEntity } from "../../../utils";
 import { cn, logDebug, logPlayerAction } from "../../lib/utils";
 import _ from "lodash";
 
+const Level_Image_Map: Record<number, string> = {
+    1: "level_one_green.png",
+    2: "level_two_green.png",
+    3: "level_three_green.png",
+};
+
 export const InvHero = ({
     id,
     pieceAttr,
@@ -289,7 +295,9 @@ export const InvHero = ({
             <div className="relative flex flex-col border-1 items-center justify-center group">
                 <div
                     ref={dropRef}
-                    className="flex justify-center items-center w-[5rem] h-[5rem] opacity-100 bg-contain bg-no-repeat bg-center bg-black border-[#05FF00] border border-opacity-20"
+                    className={cn(
+                        "flex flex-col justify-center items-center w-[5rem] h-[5rem] opacity-100 bg-contain bg-no-repeat bg-center bg-black border-[#05FF00] border border-opacity-20"
+                    )}
                     onClick={() => {
                         // ignore invalid gid
                         if (!pieceAttr?.gid) {
@@ -301,15 +309,28 @@ export const InvHero = ({
                         });
                     }}
                 >
-                    <img
-                        ref={dragRef}
+                    <div
                         className={cn(
-                            ` w-[80%] h-[80%] object-contain ${!pieceAttr?.creature ? "invisible" : ""} `,
-                            { "opacity-25": pieceAttr?.isOverride }
+                            "w-full h-full flex justify-center items-center",
+                            {
+                                "opacity-25": pieceAttr?.isOverride,
+                                invisible: !pieceAttr?.creature,
+                            }
                         )}
-                        src={pieceAttr?.thumb}
-                        alt={pieceAttr?.thumb}
-                    />
+                    >
+                        <img
+                            src={`/assets/ui/${Level_Image_Map[pieceAttr?.level ?? 1]}`}
+                            className={cn("absolute top-1 w-[80%]", {})}
+                        ></img>
+                        <img
+                            ref={dragRef}
+                            className={cn(
+                                `mt-2 w-[70%] h-[70%] object-contain `
+                            )}
+                            src={pieceAttr?.thumb}
+                            alt={pieceAttr?.thumb}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

@@ -18,6 +18,8 @@ export function TopBar() {
     const gameStatus = useComponentValue(GameStatus, zeroEntity);
     const player = useComponentValue(Player, playerEntity);
 
+    const hasCurse = (gameStatus?.currentRound ?? 0) >= 4;
+
     useHotkeys("esc", () => {
         Object.values(ShowItem).map((v) => {
             setShow(v as ShowItem, false);
@@ -29,13 +31,22 @@ export function TopBar() {
             <div
                 className={cn(
                     "flex justify-between items-center align-middle px-2 py-1 w-[40rem] h-12 bg-black border-x-2 border-t-2 border-[#06FF00] font-bold",
-                    { "text-[#FF3D00] border-[#FF3D00]": gameStatus?.dangerous }
+                    {
+                        "text-[#FF3D00] border-[#FF3D00]":
+                            gameStatus?.dangerous,
+                    },
+                    { "border-b-2": !hasCurse }
                 )}
             >
                 <div className="">Round {gameStatus?.currentRound}</div>
                 <div className="">{numToStatus(gameStatus?.status)}</div>
             </div>
-            <div className="flex justify-between items-center align-middle top-1 w-[40rem] h-8 bg-black border-x-2 border-b-2 border-[#FF3D00] border-2  ">
+            <div
+                className={cn(
+                    "flex justify-between items-center align-middle top-1 w-[40rem] h-8 bg-black border-x-2 border-b-2 border-[#FF3D00] border-2",
+                    { invisible: !hasCurse }
+                )}
+            >
                 <div className="bg-[#FF3D00] h-full flex items-center justify-center w-40 hover:cursor-pointer">
                     <img
                         className="h-4 filter grayscale brightness-[0.2] "

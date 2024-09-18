@@ -8,21 +8,15 @@ import {
     usePlaySoundSegment,
 } from "../../hooks/usePlaySoundSegment";
 import { cn } from "../../lib/utils";
+import { usePlayerExpProgress } from "../../hooks/usePlayerExpProgress";
 
 export function ExpButton() {
     const {
-        account: { playerEntity, account },
-        clientComponents: { Player, LevelConfig },
+        account: { account },
         systemCalls: { buyExp },
     } = useDojo();
 
     const [loading, setLoading] = useState(false);
-
-    const player = useComponentValue(Player, playerEntity);
-    const levelConfig = useComponentValue(
-        LevelConfig,
-        getEntityIdFromKeys([BigInt(player?.level || 0)])
-    );
 
     const { play } = usePlaySoundSegment(SoundType.Click);
 
@@ -37,12 +31,12 @@ export function ExpButton() {
         });
     }, [buyExp, account, play, loading]);
 
-    const percent = ((player?.exp || 0) / (levelConfig?.expForNext || 1)) * 100;
+    const { percentage, exp, level, expForNext } = usePlayerExpProgress();
 
     return (
         <div className="absolute flex  flex-col left-[10%] bottom-[5%] select-none z-20">
-            <div className="mb-2 self-center text-sm font-bold">
-                EXP : {player?.exp} / {levelConfig?.expForNext}
+            <div className="mb-2 self-center text-sm font-bold transition-all">
+                EXP : {exp} / {expForNext}
             </div>
             <div
                 onClick={handleClick}
@@ -73,11 +67,15 @@ export function ExpButton() {
                     <div className="self-center text-sm ">Buy 4 exp</div>
                 </div>
             </div>
-            <div className="-mt-[8.75rem] -ml-[0.75rem] ">
-                <ProgressBar size={152} strokeWidth={8} percentage={percent} />
+            <div className="-mt-[8.75rem] -ml-[0.75rem] z-10 pointer-events-none">
+                <ProgressBar
+                    size={152}
+                    strokeWidth={8}
+                    percentage={percentage}
+                />
             </div>
-            <div className="absolute flex justify-center -right-2 -bottom-6 rounded-full h-12 w-12 border border-[#06FF00] ">
-                <div className="self-center text-xs">Lv {player?.level}</div>
+            <div className="absolute flex justify-center -right-2 -bottom-6 rounded-full h-12 w-12 border border-[#06FF00] transition-all">
+                <div className="self-center text-xs">Lv. {level}</div>
             </div>
         </div>
     );
