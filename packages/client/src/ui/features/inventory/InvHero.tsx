@@ -62,21 +62,28 @@ export const InvHero = ({
     ]);
 
     useDrag(pieceAttr, dragRef, {
+        dragImage: { image: "/undefined" },
         onDragStart: (e) => {
             if (pieceAttr?.isOverride) {
                 e.preventDefault();
-                console.log(" piece is optimisticly updated, prevent");
+                console.log("piece is optimistically updated, prevent");
 
                 return;
             }
-            e.dataTransfer.setData(
-                "text/plain",
-                pieceAttr?.gid.toString() || ""
-            );
+
+            updateComponent(UserOperation, zeroEntity, {
+                dragging: true,
+                draggingGid: pieceAttr?.gid,
+            });
         },
 
         onDragEnd: (e) => {
             e.preventDefault();
+            updateComponent(UserOperation, zeroEntity, {
+                dragging: false,
+                draggingGid: 0,
+            });
+
             if (pieceAttr?.isOverride) {
                 return;
             }

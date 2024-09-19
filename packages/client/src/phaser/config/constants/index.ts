@@ -81,6 +81,8 @@ export enum Sprites {
     LevelOneRed,
     LevelTwoRed,
     LevelThreeRed,
+    BoardFull,
+    BoardNotFull,
 }
 
 export const AnimationIndex: Record<number, number> = {

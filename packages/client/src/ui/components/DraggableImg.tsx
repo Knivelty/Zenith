@@ -30,8 +30,8 @@ export function DraggableImg() {
     }, []);
 
     useEffect(() => {
-        if (userO?.dragging) {
-            logDebug("user Operation",userO)
+        if (userO?.dragging && userO.draggingFromBoard) {
+            logDebug("user Operation", userO);
             const piece = getComponentValueStrict(
                 LocalPiece,
                 getEntityIdFromKeys([BigInt(userO.draggingGid)])

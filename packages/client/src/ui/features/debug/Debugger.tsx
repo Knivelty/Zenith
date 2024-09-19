@@ -33,7 +33,7 @@ export function Debugger() {
             getCoin,
             exit,
         },
-        clientComponents: { Player, UserOperation, Piece, PlayerPiece },
+        clientComponents: { Player, UserOperation, Piece, PlayerPiece, Hint },
         clientComponents,
         phaserLayer: { scenes },
         networkLayer: { toriiClient },
@@ -62,19 +62,7 @@ export function Debugger() {
         };
     }, [toriiClient]);
 
-    // const player = useComponentValue(
-    //     Player,
-    //     getEntityIdFromKeys([BigInt(account.address)])
-    // );
-    //
-    // const setLoggedIn = usePersistUIStore((state) => state.setLoggedIn);
     const setShow = useUIStore((state) => state.setShow);
-
-    // useEffect(() => {
-    //     if (player?.inMatch && player?.inMatch > 0) {
-    //         setLoggedIn();
-    //     }
-    // }, [player?.inMatch, setLoggedIn]);
 
     const userOp = useComponentValue(UserOperation, zeroEntity);
 
@@ -299,6 +287,16 @@ export function Debugger() {
                 }}
             >
                 Exit Game
+            </Button>
+            <Button
+                onClick={async () => {
+                    const hint = getComponentValueStrict(Hint, zeroEntity);
+                    updateComponent(Hint, zeroEntity, {
+                        showBoardFull: !hint.showBoardFull,
+                    });
+                }}
+            >
+                Show Board Hint
             </Button>
         </div>
     );

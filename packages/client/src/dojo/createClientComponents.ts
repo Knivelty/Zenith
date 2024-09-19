@@ -140,6 +140,7 @@ export function createClientComponents({
             {
                 dragging: Type.Boolean,
                 draggingGid: Type.Number,
+                draggingFromBoard: Type.Boolean,
                 selected: Type.Boolean,
                 selectGid: Type.Number,
                 selectedTrait: Type.String,
@@ -147,6 +148,14 @@ export function createClientComponents({
                 animationSpeed: Type.Number,
             },
             { metadata: { name: "UserOperation" } }
+        ),
+        Hint: defineComponent(
+            world,
+            {
+                showBoardFull: Type.Boolean,
+                showBoardNotFull: Type.Boolean,
+            },
+            { metadata: { name: "Hint" } }
         ),
     };
 }

@@ -13,6 +13,7 @@ import { initialize } from "./initialize";
 import { synergy } from "./animation/synergy";
 import { followIndexSystem } from "./local/followIndexSystem";
 import { entityStatusBar } from "./animation/entityStatusBar";
+import { boardHint } from "./animation/boardHint";
 
 export const registerSystems = (layer: PhaserLayer) => {
     initialize(layer);
@@ -25,6 +26,7 @@ export const registerSystems = (layer: PhaserLayer) => {
     health(layer);
     synergy(layer);
     entityStatusBar(layer);
+    boardHint(layer);
 
     merge(layer);
 

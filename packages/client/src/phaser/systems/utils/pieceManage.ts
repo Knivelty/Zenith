@@ -200,6 +200,7 @@ export const pieceManage = (layer: PhaserLayer) => {
                             updateComponent(UserOperation, zeroEntity, {
                                 dragging: true,
                                 draggingGid: gid,
+                                draggingFromBoard: true,
                             });
                         }
                     );
@@ -207,20 +208,18 @@ export const pieceManage = (layer: PhaserLayer) => {
                     sprite.removeAllListeners("dragend");
                     sprite.on("dragend", (p: Phaser.Input.Pointer) => {
                         logDebug("drag end");
-                        if (p.distance < DRAG_DISTANCE_THRESHOLD) {
-                            updateComponent(UserOperation, zeroEntity, {
-                                dragging: false,
-                                draggingGid: 0,
-                            });
-                            return;
-                        }
-                        sprite.clearTint(); // clear tint color
 
                         // set dragging to false
                         updateComponent(UserOperation, zeroEntity, {
                             dragging: false,
                             draggingGid: 0,
+                            draggingFromBoard: false,
                         });
+
+                        if (p.distance < DRAG_DISTANCE_THRESHOLD) {
+                            return;
+                        }
+                        sprite.clearTint(); // clear tint color
 
                         const { posX, posY } = worldToChainCoord({
                             worldX: p.worldX,

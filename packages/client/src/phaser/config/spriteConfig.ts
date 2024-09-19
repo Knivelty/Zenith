@@ -29,10 +29,17 @@ const baseSprites = {
         assetKey: Assets.MainAtlas,
         frame: "statusBar/levelThreeRed.png",
     },
-
     [Sprites.LevelStar]: {
         assetKey: Assets.MainAtlas,
         frame: "statusBar/star.png",
+    },
+    [Sprites.BoardFull]: {
+        assetKey: Assets.MainAtlas,
+        frame: "boardHint/boardFull.png",
+    },
+    [Sprites.BoardNotFull]: {
+        assetKey: Assets.MainAtlas,
+        frame: "boardHint/boardNotFull.png",
     },
 } as Record<number | string, { assetKey: Assets; frame: string }>;
 
