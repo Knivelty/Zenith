@@ -53,13 +53,14 @@ export const useInitializeAudio = () => {
                     async ([id, { type, src, jsonPath }]) => {
                         if (type === SoundFileType.Sprite) {
                             const json = await (await fetch(jsonPath!)).json();
-                            loadSprite(id, src, json["sprite"]);
+                            await loadSprite(id, src, json["sprite"]);
                         } else {
-                            load(id, src);
+                            await load(id, src);
                         }
                     }
                 )
             ).then(() => {
+                console.log("finish sound load");
                 setIsLoaded(true);
 
                 Object.values(dangerRangeRangeMap).forEach((v) => {

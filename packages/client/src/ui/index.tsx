@@ -1,5 +1,6 @@
 import { store } from "../store";
 import { Loading } from "./features/login/Loading";
+import useAudioStore from "./hooks/useAudioStore";
 import { Main } from "./Main";
 
 export const UI = () => {
@@ -10,7 +11,10 @@ export const UI = () => {
         };
     });
 
-    if (!layers.networkLayer || !layers.phaserLayer) return <Loading />;
+    const { isLoaded } = useAudioStore();
+
+    if (!layers.networkLayer || !layers.phaserLayer || !isLoaded)
+        return <Loading />;
 
     return <Main />;
 };

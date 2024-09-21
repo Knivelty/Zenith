@@ -2,16 +2,17 @@ import { create } from "zustand";
 import { Howl, SoundSpriteDefinitions } from "howler";
 import { logDebug } from "../lib/utils";
 import { SoundFile } from "./usePlaySoundSegment";
+import { deferred } from "@latticexyz/utils";
 
 interface AudioStore {
     sounds: Record<string, Howl>;
     isLoaded: boolean;
-    load: (id: string, src: string) => void;
+    load: (id: string, src: string) => Promise<void>;
     loadSprite: (
         id: string,
         src: string,
         spriteMap: SoundSpriteDefinitions
-    ) => void;
+    ) => Promise<void>;
     play: (id: SoundFile) => void;
     playSprite: (id: SoundFile, segment: string, volume?: number) => void;
     playInit: (id: SoundFile) => void;
@@ -24,11 +25,12 @@ interface AudioStore {
 const useAudioStore = create<AudioStore>()((set, get) => ({
     sounds: {},
     isLoaded: false,
-    loadSprite: (
+    loadSprite: async (
         id: string,
         src: string,
         spriteMap: SoundSpriteDefinitions
     ) => {
+        const [resolve, , promise] = deferred<void>();
         set((state: any) => ({
             sounds: {
                 ...state.sounds,
@@ -36,20 +38,31 @@ const useAudioStore = create<AudioStore>()((set, get) => ({
                     src: [src],
                     preload: true,
                     sprite: spriteMap,
+                    onload: () => {
+                        resolve();
+                    },
                 }),
             },
         }));
+
+        return promise;
     },
-    load: (id: string, src: string) => {
+    load: async (id: string, src: string) => {
+        const [resolve, , promise] = deferred<void>();
+
         set((state: any) => ({
             sounds: {
                 ...state.sounds,
                 [id]: new Howl({
                     src: [src],
                     preload: true,
+                    onload: () => {
+                        resolve();
+                    },
                 }),
             },
         }));
+        return promise;
     },
     play: (id: SoundFile) => {
         const { sounds } = get();

@@ -47,21 +47,6 @@ export function Debugger() {
         setDebugShow(!debugShow);
     });
 
-    useEffect(() => {
-        const t = setInterval(async () => {
-            try {
-                await toriiClient.getEntities(1, 0);
-            } catch (e) {
-                alert("network disconnect, please refresh the page");
-                clearInterval(t);
-            }
-        }, 5000);
-
-        return () => {
-            clearInterval(t);
-        };
-    }, [toriiClient]);
-
     const setShow = useUIStore((state) => state.setShow);
 
     const userOp = useComponentValue(UserOperation, zeroEntity);
