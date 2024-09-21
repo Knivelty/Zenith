@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { NetworkLayer } from "../dojo/createNetworkLayer";
-import { UIStore, store, usePersistUIStore, useUIStore } from "../store";
+import { store, usePersistUIStore } from "../store";
 import { usePhaserLayer } from "../ui/hooks/usePhaserLayer";
 
 type Props = {
@@ -25,10 +25,10 @@ export const PhaserLayer = ({ networkLayer }: Props) => {
             }}
             style={{
                 position: "absolute",
-                top: "13%",
+                top: "4%",
                 left: "50%",
-                width: "40rem",
-                height: "40rem",
+                width: "50rem",
+                height: "50rem",
                 transform: "translateX(-50%)",
                 zIndex: "5",
             }}

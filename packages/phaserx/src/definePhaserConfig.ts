@@ -7,7 +7,7 @@ export function definePhaserConfig(options: {
   return {
     type: Phaser.WEBGL,
     scale: options.scale,
-
+    transparent: true,
     // pixelArt: false,
     // autoFocus: true,
     // antialias: false,
