@@ -6,14 +6,7 @@ export function mapSystem(layer: PhaserLayer) {
         scenes: {
             Main: {
                 maps: {
-                    Main: {
-                        putTileAt,
-                        setTileAlpha,
-                        size,
-                        tiles,
-                        tileHeight,
-                        tileWidth,
-                    },
+                    Main: { putTileAt, size, tiles, tileHeight, tileWidth },
                 },
             },
         },
