@@ -1,7 +1,7 @@
 import { ClientComponents } from "./createClientComponents";
 import { IWorld } from "./generated/typescript/contracts.gen";
 import { Account, RpcProvider } from "starknet";
-import { updateComponent } from "@dojoengine/recs";
+import { getComponentValueStrict, updateComponent } from "@dojoengine/recs";
 import { utf8StringToBigInt, zeroEntity } from "../utils";
 import { opBuyHero } from "./opRender/opBuyHero";
 import { opSellHero } from "./opRender/opSellHero";
@@ -21,7 +21,7 @@ export type SystemCalls = ReturnType<typeof createSystemCalls>;
 export function createSystemCalls(
     { client }: { client: IWorld },
     clientComponents: ClientComponents,
-    { GameStatus }: ClientComponents,
+    { GameStatus, Player }: ClientComponents,
     rpcProvider: RpcProvider
 ) {
     const spawn = async (account: Account) => {
@@ -125,6 +125,12 @@ export function createSystemCalls(
     const buyExp = async (account: Account) => {
         try {
             const playerEntity = getEntityIdFromKeys([BigInt(account.address)]);
+
+            const playerValue = getComponentValueStrict(Player, playerEntity);
+            if (playerValue.coin < 4) {
+                alert("no enough coins");
+                return;
+            }
             await waitForPromiseOrTxRevert(
                 rpcProvider,
                 client.home.buyExp({

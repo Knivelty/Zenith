@@ -1209,6 +1209,9 @@ mod home {
                 player.refreshed = true;
             } else {
                 // player coin minus 1
+                if (player.coin < 2) {
+                    panic!("player coin not enough");
+                }
                 player.coin -= 2;
             }
 
