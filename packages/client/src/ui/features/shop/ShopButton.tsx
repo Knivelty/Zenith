@@ -30,7 +30,7 @@ export function ShopButton() {
     const player = useComponentValue(Player, playerEntity);
 
     return (
-        <div className="absolute right-[10%] bottom-[5%] z-20">
+        <div className="absolute right-[10%] bottom-[4%] z-20">
             <button
                 className="w-32 h-32 bg-black border-[#06FF00] border rounded-full
                  transition duration-300 text-lg"

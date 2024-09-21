@@ -38,7 +38,7 @@ export function TopBar() {
                         "text-[#FF3D00] border-[#FF3D00]":
                             gameStatus?.dangerous,
                     },
-                    { "border-b-2": !hasCurse }
+                    { "border-b-2 h-16": !hasCurse }
                 )}
             >
                 <div className="">Round {gameStatus?.currentRound}</div>

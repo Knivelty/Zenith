@@ -35,8 +35,8 @@ export function ExpButton() {
     const { percentage, exp, level, expForNext } = usePlayerExpProgress();
 
     return (
-        <div className="absolute flex  flex-col left-[10%] bottom-[5%] select-none z-20">
-            <div className="mb-2 self-center text-sm font-bold transition-all">
+        <div className="absolute flex  flex-col left-[10%] bottom-[4%] select-none z-20">
+            <div className="mb-1 self-center text-sm font-bold transition-all">
                 EXP : <CountUp end={exp || 0} preserveValue={true} /> /
                 {expForNext}
             </div>

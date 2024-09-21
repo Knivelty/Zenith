@@ -33,7 +33,7 @@ function PlayerStatus({
             }`}
         >
             <div className="flex flex-row justify-center items-center">
-                <div className="flex items-center w-40">
+                <div className="flex items-center w-32">
                     <img className="" src="/assets/ui/default_icon.png"></img>
                     <div className="text-center">Lv. {level}</div>
                 </div>
@@ -94,9 +94,9 @@ export const PlayerList: React.FC = () => {
     }
 
     return (
-        <div className="fixed right-4 top-[5rem] h-[32.5rem] border border-[#06FF00] bg-black bg-contain bg-no-repeat ">
+        <div className="fixed right-4 top-[5rem] h-[38rem] w-60 border border-[#06FF00] bg-black bg-contain bg-no-repeat ">
             <div className="ml-4 mt-6">Players Info</div>
-            <div className="pl-2 pr-2 mt-2 w-72 h-20 ">
+            <div className="pl-2 pr-2 mt-2 w-60 h-20 ">
                 <PlayerStatus
                     id={address}
                     name={shortenAddress(address)}

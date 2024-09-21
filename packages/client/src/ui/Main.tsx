@@ -6,7 +6,7 @@ import { TopBar } from "./features/info/TopBar";
 import { CommitButton } from "./components/CommitButton";
 import { ExpButton } from "./features/exp/ExpButton";
 import { PieceLimit } from "./features/board/PieceLimit";
-import { PlayerList } from "./features/info/Playlist";
+import { PlayerList } from "./features/info/PlayerList";
 import { SettleDialog } from "./features/settle/SettleDialog";
 import { DangerBorder } from "./features/effects/DangerBorder";
 import { Shade } from "./features/effects/Shade";
