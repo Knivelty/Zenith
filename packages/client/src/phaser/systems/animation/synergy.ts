@@ -17,7 +17,10 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import * as R from "ramda";
 import { getAllSynergies } from "../../../ui/hooks/useAllSynergies";
 import { getAllBoardPiecesWithAllTraits } from "../../../ui/hooks/usePieceCountWithTrait";
-import { encodeGroundEntity } from "../utils/entityEncoder";
+import {
+    encodeGroundEntity,
+    encodeRandomGroundEntity,
+} from "../utils/entityEncoder";
 import { getAnimation, playAnimationForOnce } from "../utils/animationHelper";
 import {
     Assets,
@@ -164,7 +167,10 @@ export const synergy = (layer: PhaserLayer) => {
                     const groundX = piece.x - 1;
                     const groundY = 8 - piece.y;
 
-                    const groundEntity = encodeGroundEntity(groundX, groundY);
+                    const groundEntity = encodeRandomGroundEntity(
+                        groundX,
+                        groundY
+                    );
 
                     const groundSprite = objectPool.get(groundEntity, "Sprite");
                     groundSprite.setComponent({

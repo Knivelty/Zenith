@@ -58,8 +58,6 @@ const Shop = () => {
         getEntityIdFromKeys([BigInt(playerValue?.level || 0n)])
     );
 
-    logDebug("heroAltar: ", heroAltar);
-
     const { ref } = useClickOutside(() => {
         setShow(ShowItem.Shop, false);
     });
@@ -67,7 +65,7 @@ const Shop = () => {
     return (
         <Dialog
             ref={ref}
-            className={`relative flex justify-center select-none transform duration-700 z-10 w-4/5 h-[58%] top-1/4 ${
+            className={`absolute flex justify-center select-none transform duration-700 z-10 w-4/5 h-[58%] top-[20rem] ${
                 shopShow ? "scale-100" : "scale-0 pointer-events-none"
             } z-30`}
         >

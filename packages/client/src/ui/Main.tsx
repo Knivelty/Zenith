@@ -27,6 +27,7 @@ import { SynergyDetail } from "./features/info/SynergyDetail";
 import { useShowFollowValue } from "./hooks/useShowFollowValue";
 import { Setting } from "./features/manage/Setting";
 import { usePlayBackGroundMusic } from "./hooks/usePlayBackGroundMusic";
+import { useCheckNetworkHealth } from "./hooks/useCheckNetworkHealth";
 
 export function Main() {
     const {
@@ -38,6 +39,7 @@ export function Main() {
 
     useShowFollowValue();
     usePlayBackGroundMusic();
+    useCheckNetworkHealth();
 
     if (!inGame) {
         return <Home />;
