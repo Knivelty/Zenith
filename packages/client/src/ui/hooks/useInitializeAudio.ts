@@ -38,7 +38,7 @@ const audioFiles: Record<SoundFile, AudioFile> = {
     },
     [SoundFile.Forest]: {
         type: SoundFileType.File,
-        src: "/assets/sounds/music/forest.mp3",
+        src: "/assets/sounds/music/forest.opus",
     },
 };
 
