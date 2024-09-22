@@ -113,3 +113,21 @@
             inset 0 0 5rem rgba(255, 61, 0, 0.2);
     }
 }
+
+@keyframes wiggle {
+    0% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-8px);
+    }
+    50% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(8px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}

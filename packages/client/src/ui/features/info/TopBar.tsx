@@ -23,14 +23,8 @@ export function TopBar() {
 
     const hasCurse = (gameStatus?.currentRound ?? 0) >= 4;
 
-    useHotkeys("esc", () => {
-        Object.values(ShowItem).map((v) => {
-            setShow(v as ShowItem, false);
-        });
-    });
-
     return (
-        <div className="absolute left-1/2 transform -translate-x-1/2 flex flex-col justify-center items-center w-[40rem]">
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex flex-col justify-center items-center w-[40rem] z-10">
             <div
                 className={cn(
                     "flex justify-between items-center align-middle px-2 py-1 w-[40rem] h-12 bg-black border-x-2 border-t-2 border-[#06FF00] font-bold",
@@ -70,8 +64,11 @@ export function TopBar() {
 
                 <div
                     className={cn(
-                        "absolute flex flex-row justify-center items-center transform left-1/2  h-full ml-2 transition-all opacity-100 duration-2000 delay-2000",
-                        { "opacity-0": !gameStatus?.dangerous }
+                        "absolute flex flex-row justify-center items-center transform left-1/2 h-full ml-2 transition-all opacity-100 duration-2000 delay-3000 ",
+                        {
+                            "opacity-0 delay-500 duration-500":
+                                !gameStatus?.dangerous,
+                        }
                     )}
                 >
                     <img className="h-4" src="/assets/ui/skull.png"></img>
@@ -82,18 +79,22 @@ export function TopBar() {
 
                 <div
                     className={cn(
-                        "absolute flex flex-row justify-start items-center transform left-40 h-full ml-2 transition-all opacity-100 scale-100 duration-2000 delay-2000",
-                        { "opacity-0 ": !!gameStatus?.dangerous }
+                        "absolute flex flex-row justify-start items-center transform left-40 h-full ml-2 transition-all opacity-100 scale-100 delay-500 duration-500 ",
+                        {
+                            "opacity-0  animate-[wiggle_0.1s_ease-in-out_20] duration-2000 delay-2000":
+                                !!gameStatus?.dangerous,
+                        }
                     )}
+                    style={{ animationDuration: "0.05s" }}
                 >
                     <img className="h-4" src="/assets/ui/skull.png"></img>
                     <div className=" text-[#FF3D00] text-[0.6rem] ml-2">
                         Danger value:
                         <CountUp
                             preserveValue={true}
-                            end={player?.danger || 0}
-                            delay={0.5}
-                            duration={2}
+                            end={Math.min(100, player?.danger || 0)}
+                            delay={2}
+                            duration={3}
                         ></CountUp>
                         /100
                     </div>

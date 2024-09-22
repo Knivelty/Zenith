@@ -28,6 +28,7 @@ import { useShowFollowValue } from "./hooks/useShowFollowValue";
 import { Setting } from "./features/manage/Setting";
 import { usePlayBackGroundMusic } from "./hooks/usePlayBackGroundMusic";
 import { useCheckNetworkHealth } from "./hooks/useCheckNetworkHealth";
+import { useEscCloseDialog } from "./hooks/useEscCloseDialog";
 
 export function Main() {
     const {
@@ -40,6 +41,7 @@ export function Main() {
     useShowFollowValue();
     usePlayBackGroundMusic();
     useCheckNetworkHealth();
+    useEscCloseDialog();
 
     if (!inGame) {
         return <Home />;

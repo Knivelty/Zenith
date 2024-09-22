@@ -3,6 +3,7 @@ import { useDojo } from "../../hooks/useDojo";
 import { zeroEntity } from "../../../utils";
 import { cn } from "../../lib/utils";
 import { ShowItem, UIStore, useUIStore } from "../../../store";
+import { useClickOutside } from "../../hooks/useClickOutside";
 
 export function CurseDetails() {
     const {
@@ -13,13 +14,19 @@ export function CurseDetails() {
     const curseDetailShow = useUIStore((state: UIStore) =>
         state.getShow(ShowItem.CurseDetail)
     );
+    const setShow = useUIStore((state) => state.setShow);
 
     const playerV = useComponentValue(Player, playerEntity);
     const gameStatus = useComponentValue(GameStatus, zeroEntity);
     const dangerous = gameStatus?.dangerous;
 
+    const { ref } = useClickOutside(() => {
+        setShow(ShowItem.CurseDetail, false);
+    });
+
     return (
         <div
+            ref={ref}
             className={cn(
                 "absolute bg-black z-50 border w-1/2 h-2/3 left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 flex flex-col items-center justify-start duration-700",
                 { "text-[#FF3D00]": dangerous },
