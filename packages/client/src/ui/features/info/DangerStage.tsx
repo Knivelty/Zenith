@@ -3,24 +3,44 @@ import { ShowItem, useUIStore } from "../../../store";
 import { GreenButton } from "../../components/GreenButton";
 import { Dialog } from "../../components/Dialog";
 import { useDojo } from "../../hooks/useDojo";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import {
+    SoundType,
+    usePlaySoundSegment,
+} from "../../hooks/usePlaySoundSegment";
+import { zeroEntity } from "../../../utils";
 
 export function DangerStage() {
     const show = useUIStore((state) => state.getShow(ShowItem.DangerStage));
     const setShow = useUIStore((state) => state.setShow);
 
     const {
-        clientComponents: { Player },
+        clientComponents: { Player, GameStatus },
         account: { playerEntity },
     } = useDojo();
 
     const playerV = useComponentValue(Player, playerEntity);
+    const gameStatus = useComponentValue(GameStatus, zeroEntity);
+    const [roundPlayed, setRoundPlayed] = useState(new Map<number, boolean>());
+
+    const { play: playDangerHint } = usePlaySoundSegment(SoundType.DangerHint);
 
     useMemo(() => {
         if (playerV?.danger && playerV?.danger > 100) {
-            setTimeout(() => setShow(ShowItem.DangerStage, true), 4000);
+            setTimeout(() => {
+                setShow(ShowItem.DangerStage, true);
+            }, 4000);
         }
     }, [playerV?.danger, setShow]);
+
+    useEffect(() => {
+        if (show && !roundPlayed.get(gameStatus?.currentRound ?? 0)) {
+            playDangerHint();
+            setRoundPlayed(
+                roundPlayed.set(gameStatus?.currentRound ?? 0, true)
+            );
+        }
+    }, [show, playDangerHint, gameStatus?.currentRound, roundPlayed]);
 
     if (!show) {
         return null;

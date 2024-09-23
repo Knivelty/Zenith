@@ -1,6 +1,6 @@
 import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "./useDojo";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import {
     SoundFile,
     SoundType,
@@ -58,12 +58,6 @@ export function usePlayBackGroundMusic() {
         fadeOut,
         soundVolumes.music,
     ]);
-
-    useEffect(() => {
-        if ((playerValue?.danger ?? 0) >= 100) {
-            playDangerHint();
-        }
-    }, [playerValue?.danger, playDangerHint]);
 
     useEffect(() => {
         if (!playerValue?.inMatch) {

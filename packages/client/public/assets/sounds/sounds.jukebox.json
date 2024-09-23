@@ -35,82 +35,82 @@
     },
     "dangerHint": {
       "start": 16,
-      "end": 26.16764172335601,
+      "end": 31.521020408163267,
       "loop": false
     },
     "hit": {
-      "start": 28,
-      "end": 28.095986394557823,
+      "start": 33,
+      "end": 33.095986394557826,
       "loop": false
     },
     "brute": {
-      "start": 30,
-      "end": 30.385986394557822,
+      "start": 35,
+      "end": 35.385986394557825,
       "loop": false
     },
     "cunning": {
-      "start": 32,
-      "end": 32.71206349206349,
+      "start": 37,
+      "end": 37.71206349206349,
       "loop": false
     },
     "dark": {
-      "start": 34,
-      "end": 35.78426303854875,
+      "start": 39,
+      "end": 40.78426303854875,
       "loop": false
     },
     "hunter": {
-      "start": 37,
-      "end": 38.1274149659864,
+      "start": 42,
+      "end": 43.1274149659864,
       "loop": false
     },
     "imaginary": {
-      "start": 40,
-      "end": 40.59800453514739,
+      "start": 45,
+      "end": 45.59800453514739,
       "loop": false
     },
     "light": {
-      "start": 42,
-      "end": 42.72959183673469,
+      "start": 47,
+      "end": 47.72959183673469,
       "loop": false
     },
     "magical": {
-      "start": 44,
-      "end": 45.45231292517007,
+      "start": 49,
+      "end": 50.45231292517007,
       "loop": false
     },
     "strength": {
-      "start": 47,
-      "end": 48.612925170068024,
+      "start": 52,
+      "end": 53.612925170068024,
       "loop": false
     },
     "barbariansRage": {
-      "start": 50,
-      "end": 52.47850340136054,
+      "start": 55,
+      "end": 57.47850340136054,
       "loop": false
     },
     "burningBurst": {
-      "start": 54,
-      "end": 56.89850340136054,
+      "start": 59,
+      "end": 61.89850340136054,
       "loop": false
     },
     "interlockedInferno": {
-      "start": 58,
-      "end": 60.24351473922903,
+      "start": 63,
+      "end": 65.24351473922903,
       "loop": false
     },
     "mountainCollapse": {
-      "start": 62,
-      "end": 62.893514739229026,
+      "start": 67,
+      "end": 67.89351473922902,
       "loop": false
     },
     "penetrationInfection": {
-      "start": 64,
-      "end": 67.56850340136054,
+      "start": 69,
+      "end": 72.56850340136054,
       "loop": false
     },
     "spikeShell": {
-      "start": 69,
-      "end": 69.65351473922902,
+      "start": 74,
+      "end": 74.65351473922902,
       "loop": false
     }
   }
