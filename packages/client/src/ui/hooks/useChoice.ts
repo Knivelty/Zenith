@@ -23,8 +23,9 @@ export function useChoice() {
     }, [CurseOption.update$, setValue]);
 
     const choices = useMemo(() => {
+        value;
         return getChoices(ChoiceProfile, CurseOption, address);
-    }, [address, ChoiceProfile, CurseOption]);
+    }, [address, ChoiceProfile, CurseOption, value]);
 
     return choices;
 }
@@ -41,6 +42,8 @@ export function getChoices(
         );
 
         logDebug(`choice profile: ${i} ${co?.order}`, co);
+
+        if (!co?.order) return undefined;
         return getComponentValue(
             ChoiceProfile,
             getEntityIdFromKeys([BigInt(i), BigInt(co?.order || 0)])

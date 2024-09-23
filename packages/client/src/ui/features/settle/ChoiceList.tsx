@@ -25,6 +25,9 @@ export function ChoiceList() {
     return (
         <div className="flex w-full justify-center mt-12">
             {choices.map((c, i) => {
+                if (!c) {
+                    return;
+                }
                 return <Choice {...c} key={i} order={i + 1} />;
             })}
         </div>
