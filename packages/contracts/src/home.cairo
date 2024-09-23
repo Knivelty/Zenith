@@ -1396,6 +1396,11 @@ mod home {
                 dangerous = true;
             }
 
+            // add player curse when enter round 4
+            if (newRound == 4) {
+                player.curse = 10;
+            }
+
             set!(
                 world,
                 (
