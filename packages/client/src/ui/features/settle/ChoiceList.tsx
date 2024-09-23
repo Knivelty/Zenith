@@ -90,7 +90,7 @@ export function Choice({
         <div
             className={cn(
                 "relative pixelated bg-contain bg-no-repeat w-72 h-auto mx-2 flex flex-col items-center text-center justify-start overflow-hidden",
-                "bg-[url(assets/ui/choice_bg.png)] bg-contain"
+                "bg-[url(/assets/ui/choice_bg.png)] bg-contain"
             )}
             {...props}
         >
