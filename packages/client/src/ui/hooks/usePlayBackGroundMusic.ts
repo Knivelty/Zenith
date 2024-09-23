@@ -1,7 +1,11 @@
 import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "./useDojo";
 import { useEffect } from "react";
-import { SoundFile, SoundType } from "./usePlaySoundSegment";
+import {
+    SoundFile,
+    SoundType,
+    usePlaySoundSegment,
+} from "./usePlaySoundSegment";
 import useAudioStore from "./useAudioStore";
 import { usePersistUIStore } from "../../store";
 
@@ -23,7 +27,8 @@ export function usePlayBackGroundMusic() {
     const playerValue = useComponentValue(Player, playerEntity);
     const soundVolumes = usePersistUIStore((state) => state.soundVolumes);
 
-    const { play, playSprite, fadeIn, fadeOut, isLoaded } = useAudioStore();
+    const { play, fadeIn, fadeOut, isLoaded } = useAudioStore();
+    const { play: playDangerHint } = usePlaySoundSegment(SoundType.DangerHint);
 
     useEffect(() => {
         if (!isLoaded) return;
@@ -56,13 +61,9 @@ export function usePlayBackGroundMusic() {
 
     useEffect(() => {
         if ((playerValue?.danger ?? 0) >= 100) {
-            playSprite(
-                SoundFile.Main,
-                SoundType.DangerHint,
-                soundVolumes.music / 100
-            );
+            playDangerHint();
         }
-    }, [playerValue?.danger, playSprite, soundVolumes.music]);
+    }, [playerValue?.danger, playDangerHint]);
 
     useEffect(() => {
         if (!playerValue?.inMatch) {
