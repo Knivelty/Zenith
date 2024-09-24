@@ -1396,9 +1396,10 @@ mod home {
                 dangerous = true;
             }
 
-            // add player curse when enter round 4
+            // add base curse and danger when enter round 4
             if (newRound == 4) {
                 player.curse = 10;
+                player.danger = 10;
             }
 
             set!(
