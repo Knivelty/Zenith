@@ -14,8 +14,8 @@ export interface IChoice extends React.HTMLAttributes<HTMLDivElement> {
     coinInc?: number;
     curseDec?: number;
     curseInc?: number;
-    deterDec?: number;
-    deterInc?: number;
+    dangerDec?: number;
+    dangerInc?: number;
     healthDec?: number;
     order: number;
 }
@@ -39,8 +39,8 @@ export function Choice({
     coinInc,
     curseDec,
     curseInc,
-    deterDec,
-    deterInc,
+    dangerDec,
+    dangerInc,
     healthDec,
     order,
     ...props
@@ -76,13 +76,13 @@ export function Choice({
         imgPath = "/assets/ui/curse.png";
 
         statusChangeText += `+ ${curseInc} curses `;
-    } else if (deterDec) {
+    } else if (dangerDec) {
         imgPath = "/assets/ui/danger.png";
 
-        statusChangeText += `- ${deterDec} danger `;
-    } else if (deterInc) {
+        statusChangeText += `- ${dangerDec} danger `;
+    } else if (dangerInc) {
         imgPath = "/assets/ui/danger.png";
-        statusChangeText += `+ ${deterInc} danger `;
+        statusChangeText += `+ ${dangerInc} danger `;
     } else if (healthDec) {
         imgPath = "/assets/ui/curse.png";
         statusChangeText += `- ${healthDec} health`;
