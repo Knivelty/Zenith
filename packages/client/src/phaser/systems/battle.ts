@@ -118,12 +118,13 @@ export const battle = (layer: PhaserLayer) => {
         ({ entity, type, value: [v, preV] }) => {
             // if change from other to true, play the animation
             if (v?.shouldPlay === true && preV?.shouldPlay !== true) {
+                const inningBattleEntity = getEntityIdFromKeys([
+                    BigInt(v.currentMatch),
+                    BigInt(v.currentRound),
+                ]);
                 const inningBattle = getComponentValueStrict(
                     InningBattle,
-                    getEntityIdFromKeys([
-                        BigInt(v.currentMatch),
-                        BigInt(v.currentRound),
-                    ])
+                    inningBattleEntity
                 );
 
                 console.log(
@@ -163,11 +164,20 @@ export const battle = (layer: PhaserLayer) => {
 
                     // after play, set status to wait for next round
                     setTimeout(() => {
-                        updateComponent(GameStatus, entity, {
-                            shouldPlay: false,
-                            played: true,
-                            status: GameStatusEnum.WaitForNextRound,
-                        });
+                        const check = setInterval(() => {
+                            if (
+                                !InningBattle.isEntityOverride(
+                                    inningBattleEntity
+                                )
+                            ) {
+                                updateComponent(GameStatus, entity, {
+                                    shouldPlay: false,
+                                    played: true,
+                                    status: GameStatusEnum.WaitForNextRound,
+                                });
+                                clearInterval(check);
+                            }
+                        }, 100);
                     }, BATTLE_END_WAIT_TIME);
                 });
             }
