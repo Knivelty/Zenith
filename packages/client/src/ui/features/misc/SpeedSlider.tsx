@@ -22,21 +22,29 @@ export const SpeedSlider = () => {
 
     return (
         <div className="fixed top-1 z-20 left-4 w-60">
-            <input
-                type="range"
-                min={0}
-                max={allowedValues.length - 1}
-                step={1}
-                value={index}
-                onChange={handleChange}
-                className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-            />
-            <div className="flex justify-between text-xs mt-1">
-                {allowedValues.map((value, i) => (
-                    <span key={i} className={i === index ? "font-bold" : ""}>
-                        {value}
-                    </span>
-                ))}
+            <div className="relative pb-6">
+                <input
+                    type="range"
+                    min={0}
+                    max={allowedValues.length - 1}
+                    step={1}
+                    value={index}
+                    onChange={handleChange}
+                    className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                />
+                <div className="absolute w-full flex justify-between text-xs mt-1">
+                    {allowedValues.map((value, i) => (
+                        <span
+                            key={i}
+                            className={`${i === index ? "font-bold" : ""} absolute -translate-x-1/2`}
+                            style={{
+                                left: `${(i / (allowedValues.length - 1)) * 100}%`,
+                            }}
+                        >
+                            {value}
+                        </span>
+                    ))}
+                </div>
             </div>
             <div className="text-center mt-1 text-[0.5rem]">
                 Animation Speed: {allowedValues[index]}
