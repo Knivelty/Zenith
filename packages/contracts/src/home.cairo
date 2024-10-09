@@ -596,7 +596,6 @@ mod home {
 
         set!(world, (player));
 
-        _prepareExit(world);
     }
 
     fn _settleComplete(world: IWorldDispatcher) {
@@ -624,8 +623,6 @@ mod home {
         player.inMatch = 0;
 
         set!(world, (player));
-
-        _prepareExit(world);
     }
 
     fn _settleExit(world: IWorldDispatcher) {
@@ -652,32 +649,6 @@ mod home {
     }
 
     fn _confirmExit(world: IWorldDispatcher) {
-        let playerAddr = get_caller_address();
-
-        // reset player attr
-        set!(
-            world,
-            Player {
-                player: playerAddr,
-                health: 0,
-                heroesCount: 0,
-                inventoryCount: 0,
-                level: 0,
-                coin: 0,
-                exp: 0,
-                winStreak: 0,
-                loseStreak: 0,
-                locked: 0,
-                inMatch: 0,
-                refreshed: false,
-                curse: 0,
-                danger: 0,
-            }
-        );
-    }
-
-
-    fn _prepareExit(world: IWorldDispatcher) {
         let playerAddr = get_caller_address();
 
         let mut player = get!(world, playerAddr, Player);
@@ -715,6 +686,27 @@ mod home {
 
             idx -= 1;
         };
+
+        // reset player attr
+        set!(
+            world,
+            Player {
+                player: playerAddr,
+                health: 0,
+                heroesCount: 0,
+                inventoryCount: 0,
+                level: 0,
+                coin: 0,
+                exp: 0,
+                winStreak: 0,
+                loseStreak: 0,
+                locked: 0,
+                inMatch: 0,
+                refreshed: false,
+                curse: 0,
+                danger: 0,
+            }
+        );
     }
 
 
@@ -1448,8 +1440,7 @@ mod home {
         fn exit(world: IWorldDispatcher) {
             // settle exit result
             _settleExit(world);
-
-            _prepareExit(world);
+            _confirmExit(world);
         }
     }
 }

@@ -1,14 +1,34 @@
-import { setComponent } from "@dojoengine/recs";
+import { getComponentValueStrict, setComponent } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
 import { zeroEntity } from "../../utils";
+import { logDebug } from "../../ui/lib/utils";
+import { GameStatusEnum } from "../../dojo/types";
 
 // initialize some obj
 export const initialize = (layer: PhaserLayer) => {
     const {
         networkLayer: {
-            clientComponents: { UserOperation, Hint },
+            clientComponents: { UserOperation, Hint, Player, GameStatus },
+            playerEntity,
+            account: { address },
         },
     } = layer;
+
+    const playerV = getComponentValueStrict(Player, playerEntity);
+
+    logDebug("init player value:", playerV);
+
+    setComponent(GameStatus, zeroEntity, {
+        played: false,
+        shouldPlay: false,
+        status: GameStatusEnum.Prepare,
+        currentRound: 1,
+        currentMatch: playerV.inMatch,
+        dangerous: false,
+        homePlayer: BigInt(address),
+        awayPlayer: 1n,
+        ended: false,
+    });
 
     setComponent(UserOperation, zeroEntity, {
         dragging: false,

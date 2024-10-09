@@ -33,7 +33,9 @@ export function QuitConfirmation() {
                 <GreenButton
                     className="w-40 h-10 ml-20 bg-black text-[#06FF00] opacity-35 border border-[#06FF00]"
                     onClick={() => {
-                        exit(account);
+                        exit(account).then(() => {
+                            setShow(ShowItem.QuitConfirmation, false);
+                        });
                     }}
                 >
                     Confirm

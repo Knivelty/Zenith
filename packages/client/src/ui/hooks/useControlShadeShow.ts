@@ -9,7 +9,6 @@ const withShadeItems = [
     ShowItem.DangerStage,
     ShowItem.SettleDialog,
     ShowItem.HeroInfoDialog,
-    ShowItem.GuestTips,
     ShowItem.ConnectWalletDialog,
     ShowItem.QuitConfirmation,
     ShowItem.Shop,

@@ -27,7 +27,7 @@ sozo --profile $PROFILE auth grant writer $AUTH_MODELS
 
 echo "Default authorizations have been successfully set."
 
-# run intialize function
+# run initialize function
 sleep 1
 sozo --profile $PROFILE execute $HOME_ADDRESS "initialize"
 echo "Initialize permission successfully"

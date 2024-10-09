@@ -65,57 +65,6 @@ export const prepare = (layer: PhaserLayer) => {
         }
     );
 
-    // initialize and sync match status
-    defineSystemST<typeof Player.schema>(
-        world,
-        [Has(Player)],
-        ({ entity, type, value: [v, preV] }) => {
-            if (!v) {
-                return;
-            }
-
-            logDebug("incoming player change: ", [v, preV]);
-
-            if (v.player === BigInt(account.address)) {
-                if (!getComponentValue(GameStatus, zeroEntity)) {
-                    const playerValue = getComponentValueStrict(
-                        Player,
-                        playerEntity
-                    );
-
-                    setComponent(GameStatus, zeroEntity, {
-                        played: false,
-                        shouldPlay: false,
-                        status: GameStatusEnum.Prepare,
-                        currentRound: 1,
-                        currentMatch: v.inMatch,
-                        dangerous: false,
-                        homePlayer: BigInt(address),
-                        awayPlayer: 1n,
-                        ended: false,
-                    });
-                } else {
-                    const playerValue = getComponentValueStrict(
-                        Player,
-                        playerEntity
-                    );
-                    updateComponent(GameStatus, zeroEntity, {
-                        currentMatch: playerValue?.inMatch,
-                    });
-                }
-
-                if (v.inMatch == 0) {
-                    logDebug("user exit or not in game");
-                    updateComponent(GameStatus, zeroEntity, {
-                        currentMatch: 0,
-                        status: GameStatusEnum.Invalid,
-                        currentRound: 0,
-                    });
-                }
-            }
-        }
-    );
-
     // spawn piece according to game status
     defineSystemST<typeof GameStatus.schema>(
         world,
