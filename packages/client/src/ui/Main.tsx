@@ -29,6 +29,8 @@ import { Setting } from "./features/manage/Setting";
 import { usePlayBackGroundMusic } from "./hooks/usePlayBackGroundMusic";
 import { useCheckNetworkHealth } from "./hooks/useCheckNetworkHealth";
 import { useEscCloseDialog } from "./hooks/useEscCloseDialog";
+import { GameOverDialog } from "./features/gameover/GameOverDialog";
+import { useControlGameEnd } from "./hooks/useControlGameEnd";
 
 export function Main() {
     const {
@@ -42,6 +44,7 @@ export function Main() {
     usePlayBackGroundMusic();
     useCheckNetworkHealth();
     useEscCloseDialog();
+    useControlGameEnd();
 
     if (!inGame) {
         return <Home />;
@@ -78,6 +81,7 @@ export function Main() {
             <DangerStage />
             <OptionMenu />
             <Setting />
+            <GameOverDialog />
         </div>
     );
 }

@@ -16,6 +16,7 @@ const withShadeItems = [
     ShowItem.OptionMenuUnfold,
     ShowItem.SynergyDetail,
     ShowItem.Setting,
+    ShowItem.GameOverDialog,
 ];
 
 export function useControlShadeShow() {

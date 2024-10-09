@@ -28,7 +28,6 @@ export function usePlayBackGroundMusic() {
     const soundVolumes = usePersistUIStore((state) => state.soundVolumes);
 
     const { play, fadeIn, fadeOut, isLoaded } = useAudioStore();
-    const { play: playDangerHint } = usePlaySoundSegment(SoundType.DangerHint);
 
     useEffect(() => {
         if (!isLoaded) return;

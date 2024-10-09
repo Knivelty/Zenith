@@ -15,21 +15,24 @@ import {
 } from "../../utils";
 import { GameStatusEnum } from "../../dojo/types";
 import { pieceManage } from "./utils/pieceManage";
-import {
-    getComponentValueUtilNotNull,
-    getPlayerBoardPieceEntity,
-    logDebug,
-} from "../../ui/lib/utils";
+import { getComponentValueUtilNotNull, logDebug } from "../../ui/lib/utils";
+import { Game } from "phaser";
 
 export const prepare = (layer: PhaserLayer) => {
     const {
         world,
         scenes: {
-            Main: { config, objectPool },
+            Main: { objectPool },
             Main,
         },
         networkLayer: {
-            clientComponents: { Player, InningBattle, GameStatus, LocalPiece },
+            clientComponents: {
+                Player,
+                InningBattle,
+                GameStatus,
+                LocalPiece,
+                MatchResult,
+            },
             account: { address },
             account,
             playerEntity,
@@ -37,6 +40,30 @@ export const prepare = (layer: PhaserLayer) => {
     } = layer;
 
     const { spawnPiece } = pieceManage(layer);
+
+    // listen whether the match is end
+    defineSystemST<typeof MatchResult.schema>(
+        world,
+        [Has(MatchResult)],
+        ({ entity, type, value: [v, preV] }) => {
+            if (!v) {
+                return;
+            }
+
+            if (v.player !== BigInt(address)) {
+                return;
+            }
+
+            // const gameStatus = getComponentValueStrict(GameStatus, zeroEntity);
+            //
+            // if (v.index === gameStatus.currentMatch) {
+            //     updateComponent(GameStatus, zeroEntity, {
+            //         status: GameStatusEnum.WaitForConfirmEnd,
+            //         ended: true,
+            //     });
+            // }
+        }
+    );
 
     // initialize and sync match status
     defineSystemST<typeof Player.schema>(
@@ -65,6 +92,7 @@ export const prepare = (layer: PhaserLayer) => {
                         dangerous: false,
                         homePlayer: BigInt(address),
                         awayPlayer: 1n,
+                        ended: false,
                     });
                 } else {
                     const playerValue = getComponentValueStrict(

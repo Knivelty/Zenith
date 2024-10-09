@@ -106,6 +106,15 @@ export function createSystemCalls(
         }
     };
 
+    const confirmExit = async (account: Account) => {
+        try {
+            return await client.home.confirmExit({ account });
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    };
+
     const buyHero = async (
         account: Account,
         altarSlot: number,
@@ -262,5 +271,6 @@ export function createSystemCalls(
         cheatAndSkipRound,
         exit,
         setName,
+        confirmExit,
     };
 }

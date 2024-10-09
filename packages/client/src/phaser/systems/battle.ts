@@ -17,7 +17,6 @@ import {
     EventMap,
     EventWithName,
 } from "@zenith/simulator/src/event/createEventSystem";
-import { Game } from "phaser";
 
 export const battle = (layer: PhaserLayer) => {
     const {

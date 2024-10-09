@@ -271,6 +271,21 @@ export async function setupWorld(provider: DojoProvider) {
             }
         };
 
+        // Call the `confirmExit` system with the specified Account and calldata
+        const confirmExit = async (props: { account: Account }) => {
+            try {
+                return await provider.execute(
+                    props.account,
+                    contract_name,
+                    "confirmExit",
+                    []
+                );
+            } catch (error) {
+                console.error("Error executing spawn:", error);
+                throw error;
+            }
+        };
+
         // Call the `getCoin` system with the specified Account and calldata
         const getCoin = async (props: { account: Account }) => {
             try {
@@ -330,6 +345,7 @@ export async function setupWorld(provider: DojoProvider) {
             commitPreparation,
             nextRound,
             getCoin,
+            confirmExit,
             exit,
             dojoResource,
             setName,

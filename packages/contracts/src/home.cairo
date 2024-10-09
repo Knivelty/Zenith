@@ -31,6 +31,7 @@ trait IHome {
     fn sellHero(gid: u32);
     fn commitPreparation(changes: Array<PieceChange>, result: RoundResult);
     fn nextRound(choice: CurseOptionType);
+    fn confirmExit();
 
 
     // debug func
@@ -593,11 +594,9 @@ mod home {
             )
         );
 
-        player.inMatch = 0;
-
         set!(world, (player));
 
-        _exit(world);
+        _prepareExit(world);
     }
 
     fn _settleComplete(world: IWorldDispatcher) {
@@ -626,7 +625,7 @@ mod home {
 
         set!(world, (player));
 
-        _exit(world);
+        _prepareExit(world);
     }
 
     fn _settleExit(world: IWorldDispatcher) {
@@ -652,8 +651,33 @@ mod home {
         set!(world, (player));
     }
 
+    fn _confirmExit(world: IWorldDispatcher) {
+        let playerAddr = get_caller_address();
 
-    fn _exit(world: IWorldDispatcher) {
+        // reset player attr
+        set!(
+            world,
+            Player {
+                player: playerAddr,
+                health: 0,
+                heroesCount: 0,
+                inventoryCount: 0,
+                level: 0,
+                coin: 0,
+                exp: 0,
+                winStreak: 0,
+                loseStreak: 0,
+                locked: 0,
+                inMatch: 0,
+                refreshed: false,
+                curse: 0,
+                danger: 0,
+            }
+        );
+    }
+
+
+    fn _prepareExit(world: IWorldDispatcher) {
         let playerAddr = get_caller_address();
 
         let mut player = get!(world, playerAddr, Player);
@@ -691,27 +715,6 @@ mod home {
 
             idx -= 1;
         };
-
-        // reset player attr
-        set!(
-            world,
-            Player {
-                player: playerAddr,
-                health: 0,
-                heroesCount: 0,
-                inventoryCount: 0,
-                level: 0,
-                coin: 0,
-                exp: 0,
-                winStreak: 0,
-                loseStreak: 0,
-                locked: 0,
-                inMatch: 0,
-                refreshed: false,
-                curse: 0,
-                danger: 0,
-            }
-        );
     }
 
 
@@ -1436,12 +1439,17 @@ mod home {
             set!(world, (player));
         }
 
+
+        fn confirmExit(world: IWorldDispatcher) {
+            _confirmExit(world);
+        }
+
         // exit current game
         fn exit(world: IWorldDispatcher) {
             // settle exit result
             _settleExit(world);
 
-            _exit(world);
+            _prepareExit(world);
         }
     }
 }

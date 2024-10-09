@@ -28,6 +28,7 @@ export enum ShowItem {
     OptionMenuUnfold,
     SynergyDetail,
     Setting,
+    GameOverDialog,
 }
 
 export type Volume = {

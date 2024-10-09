@@ -2,10 +2,16 @@ procs:
   contracts:
     cwd: packages/contracts
     shell: sozo build && pnpm wait-port 5050 && sozo --dev migrate apply && pnpm run init:dev
+
   client:
     cwd: packages/client
     shell: pnpm run dev
+
   katana:
     shell: katana --disable-fee --invoke-max-steps 4500000
+
   torii:
-    shell: test -e "indexer.db" && rm indexer.db; pnpm wait-port 5050; torii --world "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0" --database indexer.db
+    shell: >
+      test -e "indexer.db" && rm indexer.db;
+      pnpm wait-port 5050;
+      torii --world "0x645cb3e9b4d7ae1afd34d64085e61519e431c39d4811f4e6bbc5f16b66fb0" --database indexer.db

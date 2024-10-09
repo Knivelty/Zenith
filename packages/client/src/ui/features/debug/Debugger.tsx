@@ -31,7 +31,6 @@ export function Debugger() {
             commitPreparation,
             cheatAndSkipRound,
             getCoin,
-            exit,
         },
         clientComponents: { Player, UserOperation, Piece, PlayerPiece, Hint },
         clientComponents,
@@ -48,6 +47,7 @@ export function Debugger() {
     });
 
     const setShow = useUIStore((state) => state.setShow);
+    const getShow = useUIStore((state) => state.getShow);
 
     const userOp = useComponentValue(UserOperation, zeroEntity);
 
@@ -275,13 +275,13 @@ export function Debugger() {
             </Button>
             <Button
                 onClick={async () => {
-                    const hint = getComponentValueStrict(Hint, zeroEntity);
-                    updateComponent(Hint, zeroEntity, {
-                        showBoardFull: !hint.showBoardFull,
-                    });
+                    setShow(
+                        ShowItem.GameOverDialog,
+                        !getShow(ShowItem.GameOverDialog)
+                    );
                 }}
             >
-                Show Board Hint
+                Show Game Result
             </Button>
         </div>
     );
