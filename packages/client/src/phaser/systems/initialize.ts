@@ -1,4 +1,4 @@
-import { getComponentValueStrict, setComponent } from "@dojoengine/recs";
+import { getComponentValue, setComponent } from "@dojoengine/recs";
 import { PhaserLayer } from "..";
 import { zeroEntity } from "../../utils";
 import { logDebug } from "../../ui/lib/utils";
@@ -14,7 +14,7 @@ export const initialize = (layer: PhaserLayer) => {
         },
     } = layer;
 
-    const playerV = getComponentValueStrict(Player, playerEntity);
+    const playerV = getComponentValue(Player, playerEntity);
 
     logDebug("init player value:", playerV);
 
@@ -23,7 +23,7 @@ export const initialize = (layer: PhaserLayer) => {
         shouldPlay: false,
         status: GameStatusEnum.Prepare,
         currentRound: 1,
-        currentMatch: playerV.inMatch,
+        currentMatch: playerV?.inMatch || 0,
         dangerous: false,
         homePlayer: BigInt(address),
         awayPlayer: 1n,

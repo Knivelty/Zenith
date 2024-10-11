@@ -35,11 +35,33 @@ export const prepare = (layer: PhaserLayer) => {
             },
             account: { address },
             account,
-            playerEntity,
         },
     } = layer;
 
     const { spawnPiece } = pieceManage(layer);
+
+    // listen match update
+    defineSystemST<typeof Player.schema>(
+        world,
+        [Has(Player)],
+        ({ entity, type, value: [v, preV] }) => {
+            if (!v) {
+                return;
+            }
+
+            if (v.player !== BigInt(address)) {
+                return;
+            }
+
+            const s = getComponentValueStrict(GameStatus, zeroEntity);
+
+            if (v.inMatch > s.currentMatch) {
+                updateComponent(GameStatus, zeroEntity, {
+                    currentMatch: v.inMatch,
+                });
+            }
+        }
+    );
 
     // listen whether the match is end
     defineSystemST<typeof MatchResult.schema>(
