@@ -22,11 +22,7 @@ export function useGameEnd() {
     const end = useMemo(() => {
         let e = false;
 
-        if (
-            !playerValue?.inMatch &&
-            result?.index == playerValue?.inMatch &&
-            s?.played === true
-        ) {
+        if (result?.index === playerValue?.inMatch && s?.played === true) {
             e = true;
         }
         return e;

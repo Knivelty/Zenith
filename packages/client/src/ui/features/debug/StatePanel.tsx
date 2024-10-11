@@ -2,9 +2,15 @@ import { useComponentValue, useEntityQuery } from "@dojoengine/react";
 import { useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useDojo } from "../../hooks/useDojo";
-import { getComponentValue, HasValue, NotValue } from "@dojoengine/recs";
+import {
+    getComponentValue,
+    getEntitiesWithValue,
+    HasValue,
+    NotValue,
+} from "@dojoengine/recs";
 import { getPlayerBoardPieceEntity } from "../../lib/utils";
 import { zeroEntity } from "../../../utils";
+import { getEntityIdFromKeys } from "@dojoengine/utils";
 
 export function StatesPanel() {
     const {
@@ -15,6 +21,7 @@ export function StatesPanel() {
             PlayerInvPiece,
             Player,
             GameStatus,
+            MatchResult,
         },
         account: {
             account: { address },
@@ -24,6 +31,11 @@ export function StatesPanel() {
     const [statesShow, setStatesShow] = useState(false);
 
     const s = useComponentValue(GameStatus, zeroEntity);
+
+    const matchResult = useComponentValue(
+        MatchResult,
+        getEntityIdFromKeys([BigInt(s?.currentMatch || 0)])
+    );
 
     useHotkeys("p", () => {
         setStatesShow(!statesShow);
@@ -150,6 +162,11 @@ export function StatesPanel() {
 
             <div>CurrentMatch {s?.currentMatch}</div>
             <div>CurrentRound {s?.currentRound}</div>
+            <div>Played {s?.played.toString()}</div>
+            <div>Player Value in match {playerValue?.inMatch}</div>
+            <div>
+                MatchResult score {matchResult?.score} {matchResult?.index}{" "}
+            </div>
         </div>
     );
 }
