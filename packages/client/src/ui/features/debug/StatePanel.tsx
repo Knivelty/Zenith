@@ -4,6 +4,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { useDojo } from "../../hooks/useDojo";
 import { getComponentValue, HasValue, NotValue } from "@dojoengine/recs";
 import { getPlayerBoardPieceEntity } from "../../lib/utils";
+import { zeroEntity } from "../../../utils";
 
 export function StatesPanel() {
     const {
@@ -13,6 +14,7 @@ export function StatesPanel() {
             PlayerPiece,
             PlayerInvPiece,
             Player,
+            GameStatus,
         },
         account: {
             account: { address },
@@ -20,6 +22,8 @@ export function StatesPanel() {
         },
     } = useDojo();
     const [statesShow, setStatesShow] = useState(false);
+
+    const s = useComponentValue(GameStatus, zeroEntity);
 
     useHotkeys("p", () => {
         setStatesShow(!statesShow);
@@ -143,6 +147,9 @@ export function StatesPanel() {
                     </div>
                 </div>
             </div>
+
+            <div>CurrentMatch {s?.currentMatch}</div>
+            <div>CurrentRound {s?.currentRound}</div>
         </div>
     );
 }

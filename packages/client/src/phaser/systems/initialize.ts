@@ -21,7 +21,7 @@ export const initialize = (layer: PhaserLayer) => {
     setComponent(GameStatus, zeroEntity, {
         played: false,
         shouldPlay: false,
-        status: GameStatusEnum.Prepare,
+        status: GameStatusEnum.Invalid,
         currentRound: 1,
         currentMatch: playerV?.inMatch || 0,
         dangerous: false,

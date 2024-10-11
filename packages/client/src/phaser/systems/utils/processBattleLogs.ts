@@ -206,14 +206,6 @@ export const processBattle = (component: ClientComponents) => {
 
         const status = getComponentValueStrict(GameStatus, zeroEntity);
 
-        const v = getComponentValueStrict(
-            InningBattle,
-            getEntityIdFromKeys([
-                BigInt(status.currentMatch),
-                BigInt(status.currentRound),
-            ])
-        );
-
         const { calculateBattleLogs, getEmittedEvents } = await createSimulator(
             { ...fetchSimulatorInput(), overrides }
         );
@@ -222,16 +214,24 @@ export const processBattle = (component: ClientComponents) => {
 
         const allEvents = getEmittedEvents();
 
-        console.log("set battle logs: ", v.currentMatch, v.round, allEvents);
+        console.log(
+            "set battle logs: ",
+            status.currentMatch,
+            status.currentRound,
+            allEvents
+        );
 
         setComponent(
             BattleLogs,
-            getEntityIdFromKeys([BigInt(v.currentMatch), BigInt(v.round)]),
+            getEntityIdFromKeys([
+                BigInt(status.currentMatch),
+                BigInt(status.currentRound),
+            ]),
             {
-                matchId: v.currentMatch,
-                inningBattleId: v.round,
+                matchId: status.currentMatch,
+                inningBattleId: status.currentRound,
                 logs: JSON.stringify(allEvents),
-                winner: result.win ? v.homePlayer : v.awayPlayer,
+                winner: result.win ? status.homePlayer : status.awayPlayer,
                 healthDecrease: result.healthDecrease ?? 0,
             }
         );

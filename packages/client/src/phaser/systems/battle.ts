@@ -54,7 +54,10 @@ export const battle = (layer: PhaserLayer) => {
             const status = getComponentValueStrict(GameStatus, zeroEntity);
 
             // ignore other match's round
-            if (v.currentMatch !== status.currentMatch) {
+            if (
+                v.currentMatch !== status.currentMatch ||
+                status.currentMatch === 0
+            ) {
                 return;
             }
 
