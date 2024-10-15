@@ -3,7 +3,7 @@ import { getComponentValueStrict } from "@dojoengine/recs";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { Monster } from "../../phaser/config/constants";
 import { ClientComponents } from "../../dojo/createClientComponents";
-import { getPieceEntity, logDebug } from "../lib/utils";
+import { getPieceEntity } from "../lib/utils";
 import { getOrder, getOrigins } from "../../utils";
 
 export const SELL_PRICE: Record<number, Record<number, number>> = {

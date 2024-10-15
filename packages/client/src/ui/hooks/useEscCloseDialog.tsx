@@ -6,6 +6,7 @@ const BLOCK_ESC_SHOW_ITEM = [
     ShowItem.CurseNotice,
     ShowItem.DangerStage,
     ShowItem.SettleDialog,
+    ShowItem.HeroInfoDialog,
 ];
 
 export function useEscCloseDialog() {

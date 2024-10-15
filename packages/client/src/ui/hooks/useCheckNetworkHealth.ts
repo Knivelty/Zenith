@@ -1,24 +1,26 @@
 import { useEffect } from "react";
-import { useDojo } from "./useDojo";
+import { logDebug } from "../lib/utils";
 
 export function useCheckNetworkHealth() {
-    const {
-        networkLayer: { toriiClient },
-    } = useDojo();
-
     useEffect(() => {
-        const t = setInterval(async () => {
-            try {
-                await toriiClient.getEntities(1, 0);
-            } catch (e) {
-                alert("network disconnect, please refresh the page");
-                clearInterval(t);
+        const errorHandler = (event: ErrorEvent): void => {
+            logDebug("Global error:", event.error);
+
+            if (
+                event.error &&
+                event.error.toString().includes("RuntimeError: unreachable")
+            ) {
+                alert("network disconnect, page will be refreshed");
+                location.reload();
             }
-        }, 5000);
+        };
+
+        window.addEventListener("error", errorHandler);
 
         return () => {
-            clearInterval(t);
+            window.removeEventListener("error", errorHandler);
         };
-    }, [toriiClient]);
+    }, []);
+
     return;
 }
