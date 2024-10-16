@@ -86,6 +86,7 @@ const Shop = () => {
                         }}
                         altarSlot={1}
                         setLoading={setLoading}
+                        loading={loading}
                     />
                     <HeroCard
                         creatureKey={{
@@ -94,6 +95,7 @@ const Shop = () => {
                         }}
                         altarSlot={2}
                         setLoading={setLoading}
+                        loading={loading}
                     />
                     <HeroCard
                         creatureKey={{
@@ -102,6 +104,7 @@ const Shop = () => {
                         }}
                         altarSlot={3}
                         setLoading={setLoading}
+                        loading={loading}
                     />
                     <HeroCard
                         creatureKey={{
@@ -110,6 +113,7 @@ const Shop = () => {
                         }}
                         altarSlot={4}
                         setLoading={setLoading}
+                        loading={loading}
                     />
                     <HeroCard
                         creatureKey={{
@@ -118,6 +122,7 @@ const Shop = () => {
                         }}
                         altarSlot={5}
                         setLoading={setLoading}
+                        loading={loading}
                     />
                 </div>
 

@@ -2,12 +2,13 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { useChoice } from "../../hooks/useChoice";
 import { useDojo } from "../../hooks/useDojo";
 import { cn } from "../../lib/utils";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { ShowItem, UIStore, useUIStore } from "../../../store";
 import {
     SoundType,
     usePlaySoundSegment,
 } from "../../hooks/usePlaySoundSegment";
+import { LoadingShade } from "../../components/LoadingShade";
 
 export interface IChoice extends React.HTMLAttributes<HTMLDivElement> {
     coinDec?: number;
@@ -51,13 +52,17 @@ export function Choice({
     } = useDojo();
 
     const getShow = useUIStore((state: UIStore) => state.getShow);
+    const [loading, setLoading] = useState(false);
 
     const { play } = usePlaySoundSegment(SoundType.Click);
 
     const nextRoundFn = useCallback(() => {
         if (!order) return;
+        setLoading(true);
         play();
-        nextRound(account, order);
+        nextRound(account, order).finally(() => {
+            setLoading(false);
+        });
     }, [order, nextRound, account, play]);
 
     useHotkeys(order.toString(), () => {
@@ -109,10 +114,15 @@ export function Choice({
                 {statusChangeText.trim() || "no change"}
             </div>
             <div
-                className="mt-4 cursor-pointer text-black bg-[#06FF00] w-[50%] h-8 flex flex-col justify-center z-20"
+                className="mt-4 cursor-pointer text-black bg-[#06FF00] w-[50%] h-8 flex flex-col justify-center z-20 relative"
                 onClick={nextRoundFn}
             >
                 <div>{coinChangeText}</div>
+                <LoadingShade
+                    className=""
+                    gifClassName="h-2/3"
+                    loading={loading}
+                />
             </div>
 
             <div className="mt-10"></div>

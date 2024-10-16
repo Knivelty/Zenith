@@ -8,7 +8,10 @@ export function useCheckNetworkHealth() {
 
             if (
                 event.error &&
-                event.error.toString().includes("RuntimeError: unreachable")
+                (event.error.toString().includes("RuntimeError: unreachable") ||
+                    event.error
+                        .toString()
+                        .includes("js api error:TypeError:network error"))
             ) {
                 alert("network disconnect, page will be refreshed");
                 location.reload();

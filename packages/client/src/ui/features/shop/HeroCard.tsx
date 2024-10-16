@@ -24,10 +24,16 @@ const rarityBgColor: Record<number, string> = {
 interface IHeroCard {
     creatureKey: CreatureKey;
     altarSlot: number;
+    loading: boolean;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const HeroCard = ({ creatureKey, altarSlot, setLoading }: IHeroCard) => {
+export const HeroCard = ({
+    creatureKey,
+    altarSlot,
+    loading,
+    setLoading,
+}: IHeroCard) => {
     const {
         clientComponents: { GameStatus, Player },
         systemCalls: { buyHero, buyAndMerge },
@@ -49,6 +55,10 @@ export const HeroCard = ({ creatureKey, altarSlot, setLoading }: IHeroCard) => {
     const buyHeroFn = useCallback(() => {
         if (gameStatus?.status != GameStatusEnum.Prepare) {
             alert("can only buy piece during prepare");
+            return;
+        }
+        if (loading) {
+            alert("don't operate too fast");
             return;
         }
         setLoading(true);
@@ -88,6 +98,8 @@ export const HeroCard = ({ creatureKey, altarSlot, setLoading }: IHeroCard) => {
         mergeAble,
         playClick,
         playUpgrade,
+        setLoading,
+        loading,
     ]);
 
     const shouldBorderBlink = mergeAble.haveSameCid;
