@@ -24,9 +24,10 @@ const rarityBgColor: Record<number, string> = {
 interface IHeroCard {
     creatureKey: CreatureKey;
     altarSlot: number;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
+export const HeroCard = ({ creatureKey, altarSlot, setLoading }: IHeroCard) => {
     const {
         clientComponents: { GameStatus, Player },
         systemCalls: { buyHero, buyAndMerge },
@@ -50,6 +51,7 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
             alert("can only buy piece during prepare");
             return;
         }
+        setLoading(true);
         playClick();
 
         if (mergeAble.canMerge) {
@@ -64,11 +66,17 @@ export const HeroCard = ({ creatureKey, altarSlot }: IHeroCard) => {
                 y: mergeAble.onBoardCoord.y,
                 invSlot: mergeAble.invSlot,
                 onBoardIdx: mergeAble.boardIdx,
-            }).then(() => {
-                playUpgrade();
-            });
+            })
+                .then(() => {
+                    playUpgrade();
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
         } else {
-            buyHero(account, altarSlot, firstEmptyInv);
+            buyHero(account, altarSlot, firstEmptyInv).finally(() => {
+                setLoading(false);
+            });
         }
     }, [
         account,

@@ -85,6 +85,7 @@ const Shop = () => {
                             level: 1,
                         }}
                         altarSlot={1}
+                        setLoading={setLoading}
                     />
                     <HeroCard
                         creatureKey={{
@@ -92,6 +93,7 @@ const Shop = () => {
                             level: 1,
                         }}
                         altarSlot={2}
+                        setLoading={setLoading}
                     />
                     <HeroCard
                         creatureKey={{
@@ -99,6 +101,7 @@ const Shop = () => {
                             level: 1,
                         }}
                         altarSlot={3}
+                        setLoading={setLoading}
                     />
                     <HeroCard
                         creatureKey={{
@@ -106,6 +109,7 @@ const Shop = () => {
                             level: 1,
                         }}
                         altarSlot={4}
+                        setLoading={setLoading}
                     />
                     <HeroCard
                         creatureKey={{
@@ -113,6 +117,7 @@ const Shop = () => {
                             level: 1,
                         }}
                         altarSlot={5}
+                        setLoading={setLoading}
                     />
                 </div>
 
