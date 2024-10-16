@@ -7,7 +7,7 @@ const args = process.argv.slice(2);
 const profile = args[0];
 
 const homeJson = fs.readFileSync(
-  `./manifests/${profile}/manifest.json`
+  `./manifests/${profile}/manifest.json`,
 ) as unknown as string;
 
 const homeJsonData = JSON.parse(homeJson);
@@ -74,7 +74,7 @@ function initializeSynergyProfile() {
       const name = utf8StringToHexString(row["Name"]);
       const requiredPieces = numberToHexString(
         Number(row["RequiredPieces"]),
-        2
+        2,
       );
       const metadata = numberToHexString(Number(row["Metadata"]), 2);
 
@@ -211,7 +211,7 @@ function initializeSellPriceConfig() {
       const level = numberToHexString(Number(row["level"]), 2);
       const price = numberToHexString(Number(row["price"]), 2);
 
-      const callDataStr = [rarity, level, price].join(",");
+      const callDataStr = [level, rarity, price].join(",");
 
       callData.push(callDataStr);
     })
