@@ -62,7 +62,6 @@ export const InvHero = ({
     ]);
 
     useDrag(pieceAttr, dragRef, {
-        dragImage: { image: "/undefined" },
         onDragStart: (e) => {
             if (pieceAttr?.isOverride) {
                 e.preventDefault();

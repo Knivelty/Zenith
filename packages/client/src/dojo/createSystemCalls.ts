@@ -66,6 +66,7 @@ export function createSystemCalls(
 
     const nextRound = async (account: Account, choice: number) => {
         try {
+            // TODO: check when object received
             logDebug(`call next round, ${choice}`);
             return await client.home.nextRound({ account, choice });
         } catch (e) {
