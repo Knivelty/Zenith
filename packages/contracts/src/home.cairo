@@ -717,11 +717,14 @@ mod home {
         // TODO: set as real args
 
         fn initialize(world: IWorldDispatcher) {
+
+            let mut gState = get!(world, 1, GlobalState);
+
             set!(
                 world,
                 GlobalState {
                     index: 1,
-                    totalMatch: 0,
+                    totalMatch: if gState.totalMatch > 0 { gState.totalMatch } else { 0 },
                     totalCreature: 26,
                     totalR1Creature: 10,
                     totalR2Creature: 10,
