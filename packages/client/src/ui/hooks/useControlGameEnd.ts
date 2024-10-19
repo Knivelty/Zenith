@@ -4,6 +4,7 @@ import { zeroEntity } from "../../utils";
 import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { useEffect, useMemo } from "react";
 import { ShowItem, useUIStore } from "../../store";
+import { logDebug } from "../lib/utils";
 
 export function useGameEnd() {
     const {
@@ -17,6 +18,13 @@ export function useGameEnd() {
     const result = useComponentValue(
         MatchResult,
         getEntityIdFromKeys([BigInt(s?.currentMatch ?? 0)])
+    );
+
+    logDebug(
+        "check player in match and game end",
+        playerValue,
+        s?.currentMatch,
+        result
     );
 
     const end = useMemo(() => {

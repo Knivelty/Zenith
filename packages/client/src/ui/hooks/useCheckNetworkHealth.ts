@@ -6,7 +6,10 @@ export function useCheckNetworkHealth() {
         const errorHandler = (event: ErrorEvent): void => {
             logDebug("Global error:", event.error);
 
+            logDebug("readyState: ", document.readyState);
+
             if (
+                document.readyState !== "loading" &&
                 event.error &&
                 (event.error.toString().includes("RuntimeError: unreachable") ||
                     event.error
@@ -18,10 +21,16 @@ export function useCheckNetworkHealth() {
             }
         };
 
+        const beforeReloadHandler = (): void => {
+            window.removeEventListener("error", errorHandler);
+        };
+
         window.addEventListener("error", errorHandler);
+        window.addEventListener("beforeunload", beforeReloadHandler);
 
         return () => {
             window.removeEventListener("error", errorHandler);
+            window.removeEventListener("beforeunload", beforeReloadHandler);
         };
     }, []);
 
