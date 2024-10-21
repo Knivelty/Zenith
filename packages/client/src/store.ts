@@ -3,8 +3,6 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 import { NetworkLayer } from "./dojo/createNetworkLayer";
 import { PhaserLayer } from "./phaser";
-import { num } from "starknet";
-import { battle } from "./phaser/systems/battle";
 
 export type Store = {
     networkLayer: NetworkLayer | null;
@@ -29,6 +27,7 @@ export enum ShowItem {
     SynergyDetail,
     Setting,
     GameOverDialog,
+    GuidePage,
 }
 
 export type Volume = {
@@ -42,6 +41,9 @@ export type UIStore = {
     shows: Map<ShowItem, boolean>;
     getShow: (i: ShowItem) => boolean;
     setShow: (i: ShowItem, shouldShow: boolean) => void;
+    guideIndex: number;
+    guideRun: boolean;
+    setField: <K extends keyof UIStore>(field: K, value: UIStore[K]) => void;
 };
 
 export type PersistUIStore = {
@@ -49,6 +51,8 @@ export type PersistUIStore = {
     setLoggedIn: (loggedIn: boolean) => void;
     agreeTerm: boolean;
     setAgreeTerm: (agreeTerm: boolean) => void;
+    skipGuide: boolean;
+    setSkipGuide: (skipGuide: boolean) => void;
     soundVolumes: Volume;
     setVolume: (v: Partial<Volume>) => void;
 };
@@ -65,6 +69,8 @@ export const persistUIStore = createStore(
             setLoggedIn: (loggedIn: boolean) => set(() => ({ loggedIn })),
             agreeTerm: false,
             setAgreeTerm: (agreeTerm: boolean) => set(() => ({ agreeTerm })),
+            skipGuide: false,
+            setSkipGuide: (skipGuide: boolean) => set(() => ({ skipGuide })),
             soundVolumes: { music: 100, effect: 100 },
             setVolume: (v: Partial<Volume>) =>
                 set(({ soundVolumes }) => ({
@@ -95,4 +101,8 @@ export const useUIStore = create<UIStore>()((set, get) => ({
             return { shows: newMap };
         });
     },
+    guideRun: false,
+    guideIndex: 0,
+    setField: <K extends keyof UIStore>(field: K, value: UIStore[K]) =>
+        set({ [field]: value }),
 }));

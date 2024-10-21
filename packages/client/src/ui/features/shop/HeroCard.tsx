@@ -26,6 +26,8 @@ interface IHeroCard {
     altarSlot: number;
     loading: boolean;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    className?: string;
+    onClick?: () => void;
 }
 
 export const HeroCard = ({
@@ -33,6 +35,8 @@ export const HeroCard = ({
     altarSlot,
     loading,
     setLoading,
+    className,
+    onClick,
 }: IHeroCard) => {
     const {
         clientComponents: { GameStatus, Player },
@@ -122,13 +126,17 @@ export const HeroCard = ({
 
     return (
         <div
-            onClick={buyHeroFn}
+            onClick={() => {
+                buyHeroFn();
+                onClick && onClick();
+            }}
             className={cn(
                 "relative flex flex-col  border-1 items-center  h-[20rem] w-[15rem] overflow-hidden border-4 hover:border-white border-transparent box-content hover:cursor-pointer ",
                 {
                     "animate-[border-flash_1s_linear_infinite]":
                         shouldBorderBlink,
-                }
+                },
+                className
             )}
         >
             <div

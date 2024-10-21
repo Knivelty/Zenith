@@ -35,6 +35,7 @@ export function QuitConfirmation() {
                     onClick={() => {
                         exit(account).then(() => {
                             setShow(ShowItem.QuitConfirmation, false);
+                            location.reload();
                         });
                     }}
                 >

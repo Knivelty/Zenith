@@ -31,6 +31,8 @@ import { useCheckNetworkHealth } from "./hooks/useCheckNetworkHealth";
 import { useEscCloseDialog } from "./hooks/useEscCloseDialog";
 import { GameOverDialog } from "./features/gameover/GameOverDialog";
 import { useControlGameEnd } from "./hooks/useControlGameEnd";
+import { Guide } from "./features/guide/Guide";
+import { GuidePage } from "./features/guide/GuidePage";
 
 export function Main() {
     const {
@@ -57,6 +59,7 @@ export function Main() {
             }}
             className="relative w-screen h-screen overflow-hidden select-none"
         >
+            <GuidePage />
             <TopBar />
             <Debugger />
             <PlayerList />
@@ -82,6 +85,7 @@ export function Main() {
             <OptionMenu />
             <Setting />
             <GameOverDialog />
+            <Guide />
         </div>
     );
 }

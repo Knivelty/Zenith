@@ -17,12 +17,17 @@ export function ShopButton() {
     const getShow = useUIStore((state: UIStore) => {
         return state.getShow;
     });
-
+    const { guideIndex, guideRun, setField } = useUIStore((state) => state);
     const { play } = usePlaySoundSegment(SoundType.Click);
 
     const handleClick = () => {
         setShow(ShowItem.Shop, !getShow(ShowItem.Shop));
         play();
+        if (guideRun) {
+            setTimeout(() => {
+                setField("guideIndex", guideIndex + 1);
+            }, 1000);
+        }
     };
 
     useHotkeys("b", handleClick);
@@ -30,7 +35,7 @@ export function ShopButton() {
     const player = useComponentValue(Player, playerEntity);
 
     return (
-        <div className="absolute right-20 bottom-[4%] z-20">
+        <div className="guide-step-1 absolute right-20 bottom-[4%] z-20">
             <button
                 className="w-32 h-32 bg-black border-[#06FF00] border rounded-full
                  transition duration-300 text-lg"

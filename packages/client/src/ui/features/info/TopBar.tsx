@@ -44,7 +44,7 @@ export function TopBar() {
                     { invisible: !hasCurse }
                 )}
             >
-                <div className="bg-[#FF3D00] h-full flex items-center justify-center w-40 hover:cursor-pointer">
+                <div className="guide-step-7  bg-[#FF3D00] h-full flex items-center justify-center w-40 hover:cursor-pointer">
                     <img
                         className="h-4 filter grayscale brightness-[0.2] "
                         src="/assets/ui/curse.png"
@@ -64,7 +64,7 @@ export function TopBar() {
 
                 <div
                     className={cn(
-                        "absolute flex flex-row justify-center items-center transform left-1/2 h-full ml-2 transition-all opacity-100 duration-2000 delay-3000 ",
+                        "guide-step-9 absolute flex flex-row justify-center items-center transform left-1/2 h-full ml-2 transition-all opacity-100 duration-2000 delay-3000 ",
                         {
                             "opacity-0 delay-500 duration-500":
                                 !gameStatus?.dangerous,
@@ -79,7 +79,7 @@ export function TopBar() {
 
                 <div
                     className={cn(
-                        "absolute flex flex-row justify-start items-center transform left-40 h-full ml-2 transition-all opacity-100 scale-100 delay-500 duration-500 ",
+                        "guide-step-8 absolute flex flex-row justify-start items-center transform left-40 h-full ml-2 transition-all opacity-100 scale-100 delay-500 duration-500 ",
                         {
                             "opacity-0  animate-[wiggle_0.1s_ease-in-out_20] duration-2000 delay-2000":
                                 !!gameStatus?.dangerous,

@@ -19,7 +19,7 @@ export function PieceLimit() {
 
     return (
         <div
-            className={`relative flex justify-center -mt-[7.25rem] ${visible} select-none pointer-events-none z-10`}
+            className={`guide-step-6 absolute flex justify-center top-[26rem] left-1/2 -translate-x-1/2 ${visible} select-none pointer-events-none z-20 `}
         >
             <div className=" w-80 h-10 text-white/50 text-lg rounded-lg flex flex-col justify-center">
                 <div className="self-center text-[#F2A316] text-sm">

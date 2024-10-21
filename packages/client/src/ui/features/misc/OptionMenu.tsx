@@ -7,6 +7,7 @@ export function OptionMenu() {
         state.getShow(ShowItem.OptionMenuUnfold)
     );
     const setShow = useUIStore((state) => state.setShow);
+    const setField = useUIStore((state) => state.setField);
 
     const { ref } = useClickOutside(() => {
         setShow(ShowItem.OptionMenuUnfold, false);
@@ -63,7 +64,15 @@ export function OptionMenu() {
                 Setting
             </OptionMenuItem>
             <OptionMenuItem>Picture</OptionMenuItem>
-            <OptionMenuItem>Game Help</OptionMenuItem>
+            <OptionMenuItem
+                onClick={() => {
+                    setField("guideRun", true);
+                    setField("guideIndex", 0);
+                    setShow(ShowItem.OptionMenuUnfold, false);
+                }}
+            >
+                Game Help
+            </OptionMenuItem>
             <OptionMenuItem
                 onClick={() => {
                     setShow(ShowItem.QuitConfirmation, true);

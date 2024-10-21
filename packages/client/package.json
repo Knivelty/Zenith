@@ -57,6 +57,7 @@
     "react-countup": "^6.5.3",
     "react-dom": "^18.2.0",
     "react-hotkeys-hook": "^4.5.0",
+    "react-joyride": "^2.9.2",
     "react-spinners": "^0.14.1",
     "rxjs": "^7.8.1",
     "simplex-noise": "^4.0.1",

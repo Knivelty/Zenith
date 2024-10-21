@@ -31,6 +31,8 @@ const Shop = () => {
     );
     const setShow = useUIStore((state) => state.setShow);
 
+    const { guideIndex, guideRun, setField } = useUIStore();
+
     const [loading, setLoading] = useState<boolean>(false);
 
     const { play: playRefresh } = usePlaySoundSegment(SoundType.Refresh);
@@ -80,6 +82,7 @@ const Shop = () => {
             <div className="flex flex-col justify-center items-start">
                 <div className="flex items-center justify-around ml-4 mt-4 space-x-2">
                     <HeroCard
+                        className="guide-step-2"
                         creatureKey={{
                             id: heroAltar?.slot1,
                             level: 1,
@@ -87,6 +90,11 @@ const Shop = () => {
                         altarSlot={1}
                         setLoading={setLoading}
                         loading={loading}
+                        onClick={() => {
+                            if (guideRun) {
+                                setShow(ShowItem.Shop, false);
+                            }
+                        }}
                     />
                     <HeroCard
                         creatureKey={{
