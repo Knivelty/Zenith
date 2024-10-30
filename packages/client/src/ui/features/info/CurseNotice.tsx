@@ -16,6 +16,7 @@ export function CurseNotice() {
     } = useDojo();
 
     const gStatus = useComponentValue(GameStatus, zeroEntity);
+    const { setField, guideIndex } = useUIStore();
 
     useMemo(() => {
         if (
@@ -43,6 +44,9 @@ export function CurseNotice() {
                 className="w-80 h-20 mt-20"
                 onClick={() => {
                     setShow(ShowItem.CurseNotice, false);
+                    if (guideIndex === 6) {
+                        setField("guideRun", true);
+                    }
                 }}
             >
                 Continue Battle

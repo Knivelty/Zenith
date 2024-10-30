@@ -28,6 +28,8 @@ export enum ShowItem {
     Setting,
     GameOverDialog,
     GuidePage,
+    GeneralGuide,
+    InterActiveGuide,
 }
 
 export type Volume = {

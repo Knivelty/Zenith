@@ -1,22 +1,19 @@
 import { useComponentValue } from "@dojoengine/react";
 import { useDojo } from "../hooks/useDojo";
 import { zeroEntity } from "../../utils";
-import { ShowItem, UIStore, useUIStore } from "../../store";
+import { ShowItem, useUIStore } from "../../store";
 import { useCallback } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { SoundType, usePlaySoundSegment } from "../hooks/usePlaySoundSegment";
 
 export function CommitButton() {
     const {
-        systemCalls: { commitPreparation, nextRound },
-        account: {
-            account,
-            account: { address },
-        },
-        clientComponents: { GameStatus, BattleLogs },
+        systemCalls: { commitPreparation },
+        account: { account },
+        clientComponents: { GameStatus },
     } = useDojo();
 
-    const setShopShow = useUIStore((state: UIStore) => state.setShow);
+    const { setShow, guideIndex, guideRun, setField } = useUIStore();
 
     const status = useComponentValue(GameStatus, zeroEntity);
 
@@ -25,8 +22,21 @@ export function CommitButton() {
     const commitPreparationFn = useCallback(() => {
         play();
         commitPreparation(account);
-        setShopShow(ShowItem.Shop, false);
-    }, [account, commitPreparation, setShopShow, play]);
+        setShow(ShowItem.Shop, false);
+
+        if (guideRun && guideIndex === 3) {
+            setField("guideIndex", guideIndex + 1);
+            setField("guideRun", false);
+        }
+    }, [
+        account,
+        commitPreparation,
+        setShow,
+        play,
+        guideIndex,
+        guideRun,
+        setField,
+    ]);
 
     useHotkeys("enter", () => {
         if (status?.status === 1) {
@@ -46,27 +56,6 @@ export function CommitButton() {
     } else {
         return <div></div>;
     }
-
-    // if (status?.status === 3) {
-    //     let winText = "";
-    //     // get battle result
-
-    //     if (battleResult?.winner === BigInt(address)) {
-    //         winText = "You Win.";
-    //     } else {
-    //         winText = `You Lose  ${battleResult?.healthDecrease} Health. `;
-    //     }
-    //     return (
-    //         <OperationButton
-    //             onClick={() => {
-    //                 nextRound(account);
-    //             }}
-    //             text={`${winText} Next Round`}
-    //         />
-    //     );
-    // } else {
-    //     return <OperationButton visible={"invisible"} />;
-    // }
 }
 
 export function CommitOperationButton({

@@ -31,8 +31,9 @@ import { useCheckNetworkHealth } from "./hooks/useCheckNetworkHealth";
 import { useEscCloseDialog } from "./hooks/useEscCloseDialog";
 import { GameOverDialog } from "./features/gameover/GameOverDialog";
 import { useControlGameEnd } from "./hooks/useControlGameEnd";
-import { Guide } from "./features/guide/Guide";
+import { GeneralGuide } from "./features/guide/GeneralGuide";
 import { GuidePage } from "./features/guide/GuidePage";
+import { InterActiveGuide } from "./features/guide/InteractiveGuide";
 
 export function Main() {
     const {
@@ -85,7 +86,8 @@ export function Main() {
             <OptionMenu />
             <Setting />
             <GameOverDialog />
-            <Guide />
+            <GeneralGuide />
+            <InterActiveGuide />
         </div>
     );
 }

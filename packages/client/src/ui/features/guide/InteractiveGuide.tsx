@@ -1,18 +1,22 @@
-import Joyride, { Step } from "react-joyride";
-import { useUIStore } from "../../../store";
-import { logDebug } from "../../lib/utils";
-import { getComponentValueStrict, updateComponent } from "@dojoengine/recs";
-import { useDojo } from "../../hooks/useDojo";
-import { zeroEntity } from "../../../utils";
 import { useState } from "react";
+import { ShowItem, usePersistUIStore, useUIStore } from "../../../store";
+import { useDojo } from "../../hooks/useDojo";
+import ReactJoyride, { Step } from "react-joyride";
+import { getComponentValueStrict, updateComponent } from "@dojoengine/recs";
+import { zeroEntity } from "../../../utils";
+import { logDebug } from "../../lib/utils";
 
-export function Guide() {
+export function InterActiveGuide() {
     const { setField, guideIndex, guideRun } = useUIStore();
     const {
         clientComponents: { GameStatus },
     } = useDojo();
-    const [rightRound, setRightRound] = useState(1);
-    const [rightDanger, setRightDanger] = useState(false);
+    const show = useUIStore((state) =>
+        state.getShow(ShowItem.InterActiveGuide)
+    );
+
+    const { setSkipGuide } = usePersistUIStore((state) => state);
+
     const steps: Step[] = [
         {
             target: ".guide-step-1",
@@ -22,12 +26,10 @@ export function Guide() {
                 </div>
             ),
             disableBeacon: true,
-            // hideFooter: true,
             disableOverlayClose: true,
             spotlightClicks: true,
             hideFooter: true,
-
-            styles: { buttonNext: { visibility: "hidden" } },
+            styles: {},
         },
         {
             target: ".guide-step-2",
@@ -95,7 +97,7 @@ export function Guide() {
             ),
             disableBeacon: true,
             hideFooter: false,
-            disableOverlayClose: true,
+            disableOverlayClose: false,
             spotlightClicks: true,
             spotlightPadding: 10,
         },
@@ -116,6 +118,13 @@ export function Guide() {
             disableOverlayClose: true,
             spotlightClicks: true,
             spotlightPadding: 10,
+            styles: {
+                buttonNext: {
+                    visibility: "visible",
+                    backgroundColor: "#03FF00",
+                    color: "black",
+                },
+            },
         },
 
         {
@@ -133,6 +142,13 @@ export function Guide() {
             disableOverlayClose: true,
             spotlightClicks: true,
             spotlightPadding: 10,
+            styles: {
+                buttonNext: {
+                    visibility: "visible",
+                    backgroundColor: "#03FF00",
+                    color: "black",
+                },
+            },
         },
 
         {
@@ -147,53 +163,49 @@ export function Guide() {
             disableOverlayClose: true,
             spotlightClicks: true,
             spotlightPadding: 10,
+            styles: {
+                buttonNext: {
+                    visibility: "visible",
+                    backgroundColor: "#03FF00",
+                    color: "black",
+                },
+            },
         },
     ];
 
+    if (!show) {
+        return null;
+    }
+
     return (
         <div>
-            <Joyride
+            <ReactJoyride
                 run={guideRun}
                 callback={(data) => {
                     const { lifecycle, index } = data;
 
-                    if (index === 5 && lifecycle === "complete") {
-                        const s = getComponentValueStrict(
-                            GameStatus,
-                            zeroEntity
-                        );
-                        updateComponent(GameStatus, zeroEntity, {
-                            currentRound: Math.max(5, s.currentRound),
-                        });
-                        setRightRound(s.currentRound);
+                    if (guideIndex === 5) {
+                        setTimeout(() => {
+                            setField("guideIndex", guideIndex + 1);
+                            setField("guideRun", false);
+                        }, 1000);
                     }
 
-                    if (index === 7 && lifecycle === "complete") {
-                        const s = getComponentValueStrict(
-                            GameStatus,
-                            zeroEntity
-                        );
-                        if (!s.dangerous) {
-                            updateComponent(GameStatus, zeroEntity, {
-                                dangerous: true,
-                            });
-                            setRightDanger(false);
-                        }
-                    }
-
-                    if (
-                        [1, 2, 3, 4, 5, 6, 7].indexOf(index) !== -1 &&
-                        lifecycle === "complete"
-                    ) {
+                    if (guideIndex === 6 && lifecycle == "complete") {
                         setField("guideIndex", guideIndex + 1);
+                        setField("guideRun", true);
                     }
+
+                    if (guideIndex === 7 && lifecycle == "complete") {
+                        setField("guideIndex", guideIndex + 1);
+                        setField("guideRun", false);
+                    }
+
                     if (index === steps.length - 1 && lifecycle == "complete") {
                         logDebug("Guide ended");
+                        setSkipGuide(true);
+                        setField("guideIndex", 0);
                         setField("guideRun", false);
-                        updateComponent(GameStatus, zeroEntity, {
-                            currentRound: rightRound,
-                            dangerous: rightDanger,
-                        });
                     }
                 }}
                 continuous
@@ -213,16 +225,12 @@ export function Guide() {
                         beaconSize: 14,
                         overlayColor: "rgba(0, 0, 0, 0.5)",
                     },
-                    // tooltip: {
-                    //     border: "4px solid white",
-                    //     borderRadius: "0px",
-                    // },
                     spotlight: {
                         border: "4px solid white",
                         boxShadow: "0 0 0 9999px rgba(0, 0, 0, 0.5)",
                     },
                     tooltipFooter: { backgroundColor: "transparent" },
-                    buttonNext: { backgroundColor: "#03FF00", color: "black" },
+                    buttonNext: { visibility: "hidden" },
                 }}
             />
         </div>

@@ -23,6 +23,8 @@ export function DangerStage() {
     const gameStatus = useComponentValue(GameStatus, zeroEntity);
     const [roundPlayed, setRoundPlayed] = useState(new Map<number, boolean>());
 
+    const { setField, guideIndex } = useUIStore();
+
     const { play: playDangerHint } = usePlaySoundSegment(SoundType.DangerHint);
 
     useMemo(() => {
@@ -66,6 +68,10 @@ export function DangerStage() {
                 className="bg-[#FF3D00] mt-20"
                 onClick={() => {
                     setShow(ShowItem.DangerStage, false);
+
+                    if (guideIndex === 8) {
+                        setField("guideRun", true);
+                    }
                 }}
             >
                 Continue Battle

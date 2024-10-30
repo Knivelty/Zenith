@@ -46,8 +46,7 @@ export function Debugger() {
         setDebugShow(!debugShow);
     });
 
-    const setShow = useUIStore((state) => state.setShow);
-    const getShow = useUIStore((state) => state.getShow);
+    const { getShow, setShow, setField } = useUIStore();
 
     const userOp = useComponentValue(UserOperation, zeroEntity);
 
@@ -114,6 +113,16 @@ export function Debugger() {
                 }}
             >
                 Skip Make Choice
+            </Button>
+            <Button
+                onClick={() => {
+                    setField("guideRun", true);
+                    setField("guideIndex", 0);
+                    setShow(ShowItem.GuidePage, false);
+                    setShow(ShowItem.InterActiveGuide, true);
+                }}
+            >
+                Start InterActive Guide
             </Button>
             <Button
                 onClick={async () => {

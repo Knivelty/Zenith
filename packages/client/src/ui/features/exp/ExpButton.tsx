@@ -1,6 +1,4 @@
 import { useDojo } from "../../hooks/useDojo";
-import { useComponentValue } from "@dojoengine/react";
-import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { ProgressBar } from "../../components/ProgressBar";
 import { useCallback, useState } from "react";
 import {
@@ -10,6 +8,7 @@ import {
 import { cn } from "../../lib/utils";
 import { usePlayerExpProgress } from "../../hooks/usePlayerExpProgress";
 import CountUp from "react-countup";
+import { useUIStore } from "../../../store";
 
 export function ExpButton() {
     const {
@@ -18,6 +17,7 @@ export function ExpButton() {
     } = useDojo();
 
     const [loading, setLoading] = useState(false);
+    const { guideRun, guideIndex, setField } = useUIStore();
 
     const { play } = usePlaySoundSegment(SoundType.Click);
 
@@ -29,8 +29,12 @@ export function ExpButton() {
         setLoading(true);
         buyExp(account).finally(() => {
             setLoading(false);
+
+            if (guideRun && guideIndex === 4) {
+                setField("guideIndex", guideIndex + 1);
+            }
         });
-    }, [buyExp, account, play, loading]);
+    }, [buyExp, account, play, loading, guideIndex, guideRun, setField]);
 
     const { percentage, exp, level, expForNext } = usePlayerExpProgress();
 

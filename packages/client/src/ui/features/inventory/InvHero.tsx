@@ -54,6 +54,8 @@ export const InvHero = ({
 
     const phaserRect = useUIStore((s) => s.phaserRect);
 
+    const { setField, guideRun, guideIndex } = useUIStore();
+
     const invPieceEntities = useEntityQuery([
         HasValue(LocalPiece, {
             owner: BigInt(address),
@@ -153,6 +155,10 @@ export const InvHero = ({
             logPlayerAction(
                 `move piece ${piece.gid} from slot ${id} to on board ${player.heroesCount} ${posX},${posY}`
             );
+
+            if (guideRun && guideIndex === 2 && player.heroesCount === 1) {
+                setField("guideIndex", guideIndex + 1);
+            }
         },
     });
 

@@ -68,6 +68,7 @@ export function OptionMenu() {
                 onClick={() => {
                     setField("guideRun", true);
                     setField("guideIndex", 0);
+                    setShow(ShowItem.GeneralGuide, true);
                     setShow(ShowItem.OptionMenuUnfold, false);
                 }}
             >

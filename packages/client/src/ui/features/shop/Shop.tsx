@@ -29,9 +29,8 @@ const Shop = () => {
     const shopShow = useUIStore((state: UIStore) =>
         state.getShow(ShowItem.Shop)
     );
-    const setShow = useUIStore((state) => state.setShow);
 
-    const { guideIndex, guideRun, setField } = useUIStore();
+    const { guideRun, setField, getShow, setShow, guideIndex } = useUIStore();
 
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -91,8 +90,12 @@ const Shop = () => {
                         setLoading={setLoading}
                         loading={loading}
                         onClick={() => {
-                            if (guideRun) {
+                            if (
+                                guideRun &&
+                                getShow(ShowItem.InterActiveGuide)
+                            ) {
                                 setShow(ShowItem.Shop, false);
+                                setField("guideIndex", guideIndex + 1);
                             }
                         }}
                     />
