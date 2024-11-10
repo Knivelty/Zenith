@@ -60,7 +60,9 @@ const Shop = () => {
     );
 
     const { ref } = useClickOutside(() => {
-        setShow(ShowItem.Shop, false);
+        if (!guideRun) {
+            setShow(ShowItem.Shop, false);
+        }
     });
 
     return (
