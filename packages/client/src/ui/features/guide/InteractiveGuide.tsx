@@ -1,16 +1,9 @@
-import { useState } from "react";
 import { ShowItem, usePersistUIStore, useUIStore } from "../../../store";
-import { useDojo } from "../../hooks/useDojo";
 import ReactJoyride, { Step } from "react-joyride";
-import { getComponentValueStrict, updateComponent } from "@dojoengine/recs";
-import { zeroEntity } from "../../../utils";
 import { logDebug } from "../../lib/utils";
 
 export function InterActiveGuide() {
     const { setField, guideIndex, guideRun } = useUIStore();
-    const {
-        clientComponents: { GameStatus },
-    } = useDojo();
     const show = useUIStore((state) =>
         state.getShow(ShowItem.InterActiveGuide)
     );
