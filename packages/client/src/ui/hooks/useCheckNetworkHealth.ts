@@ -9,7 +9,6 @@ export function useCheckNetworkHealth() {
             logDebug("readyState: ", document.readyState);
 
             if (
-                document.readyState !== "loading" &&
                 event.error &&
                 (event.error.toString().includes("RuntimeError: unreachable") ||
                     event.error
