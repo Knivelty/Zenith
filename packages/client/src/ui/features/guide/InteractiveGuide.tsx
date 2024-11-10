@@ -1,12 +1,25 @@
 import { ShowItem, usePersistUIStore, useUIStore } from "../../../store";
 import ReactJoyride, { Step } from "react-joyride";
 import { logDebug } from "../../lib/utils";
+import { useDojo } from "../../hooks/useDojo";
+import { useComponentValue } from "@dojoengine/react";
+import { zeroEntity } from "../../../utils";
+import { useEffect } from "react";
+import { GameStatusEnum } from "../../../dojo/types";
 
 export function InterActiveGuide() {
-    const { setField, guideIndex, guideRun } = useUIStore();
+    const { setField, guideIndex, guideRun, getShow, shows } = useUIStore();
     const show = useUIStore((state) =>
         state.getShow(ShowItem.InterActiveGuide)
     );
+
+    const {
+        clientComponents: { Player, GameStatus },
+        account: { playerEntity },
+    } = useDojo();
+    const playerValue = useComponentValue(Player, playerEntity);
+    const gStatus = useComponentValue(GameStatus, zeroEntity);
+    const shadeShow = getShow(ShowItem.Shade);
 
     const { setSkipGuide } = usePersistUIStore((state) => state);
 
@@ -165,6 +178,27 @@ export function InterActiveGuide() {
             },
         },
     ];
+    useEffect(() => {
+        if (
+            (playerValue?.coin ?? 0) >= 4 &&
+            guideIndex === 4 &&
+            guideRun === false &&
+            gStatus?.status == GameStatusEnum.Prepare &&
+            !shadeShow
+        ) {
+            setField("guideRun", true);
+        }
+    }, [
+        guideIndex,
+        guideRun,
+        playerValue?.coin,
+        setField,
+        gStatus?.status,
+        gStatus?.dangerous,
+        getShow,
+        shadeShow,
+        shows,
+    ]);
 
     if (!show) {
         return null;
@@ -180,7 +214,11 @@ export function InterActiveGuide() {
                     if (guideIndex === 5) {
                         setTimeout(() => {
                             setField("guideIndex", guideIndex + 1);
-                            setField("guideRun", false);
+
+                            // resolve when buy exp conflict with enter round 4
+                            if (gStatus?.currentRound !== 4) {
+                                setField("guideRun", false);
+                            }
                         }, 1000);
                     }
 
