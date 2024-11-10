@@ -219,7 +219,7 @@ export function InterActiveGuide() {
                             if (gStatus?.currentRound !== 4) {
                                 setField("guideRun", false);
                             }
-                        }, 1000);
+                        }, 4000);
                     }
 
                     if (guideIndex === 6 && lifecycle == "complete") {
