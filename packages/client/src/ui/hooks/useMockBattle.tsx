@@ -49,8 +49,8 @@ export function useMockBattle() {
             owner: status.awayPlayer,
             x: 4,
             y: 5,
-            level: 3,
-            creature_index: 3004,
+            level: 4,
+            creature_index: 2,
             idx: 1,
             slot: 0,
         });
@@ -62,7 +62,7 @@ export function useMockBattle() {
             x: 3,
             y: 3,
             level: 1,
-            creature_index: 1001,
+            creature_index: 3001,
             idx: 1,
             slot: 0,
         });
@@ -108,35 +108,35 @@ export function useMockBattle() {
         });
 
         processBattleLogs({
-            battleEntity: [
-                {
-                    entity: getPieceEntity(1),
-                    mana: 100,
-                    spell_amp: 200,
-                    initiative: 999,
-                    health: 1700,
-                },
-                {
-                    entity: getPieceEntity(2),
-                    health: 300,
-                },
-                {
-                    entity: getPieceEntity(3),
-                    health: 500,
-                },
-                {
-                    entity: getPieceEntity(4),
-                    health: 400,
-                },
-                {
-                    entity: getPieceEntity(5),
-                    health: 200,
-                },
-                {
-                    entity: getPieceEntity(6),
-                    health: 50,
-                },
-            ],
+            // battleEntity: [
+            //     {
+            //         entity: getPieceEntity(1),
+            //         mana: 100,
+            //         spell_amp: 200,
+            //         initiative: 999,
+            //         health: 1700,
+            //     },
+            //     {
+            //         entity: getPieceEntity(2),
+            //         health: 300,
+            //     },
+            //     {
+            //         entity: getPieceEntity(3),
+            //         health: 500,
+            //     },
+            //     {
+            //         entity: getPieceEntity(4),
+            //         health: 400,
+            //     },
+            //     {
+            //         entity: getPieceEntity(5),
+            //         health: 200,
+            //     },
+            //     {
+            //         entity: getPieceEntity(6),
+            //         health: 50,
+            //     },
+            // ],
         });
 
         updateComponent(GameStatus, zeroEntity, {

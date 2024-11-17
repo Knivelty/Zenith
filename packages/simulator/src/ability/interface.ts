@@ -5,6 +5,7 @@ export interface AbilityMap {
   interlockedInferno: { actionPieceId: string };
   penetrationInfection: { actionPieceId: string };
   spikeShell: { actionPieceId: string };
+  spellSteal: { actionPieceId: string };
 }
 export type AbilityNameType = keyof AbilityMap;
 export type AbilityParamType = AbilityMap[keyof AbilityMap];

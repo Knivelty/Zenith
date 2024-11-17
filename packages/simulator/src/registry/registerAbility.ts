@@ -9,6 +9,7 @@ import {
   jiangshi_penetrationInfection_passive,
 } from "../ability/jiangshi";
 import { spikeShell, spikeShellPassive } from "../ability/spikeShell";
+import { spellStealPassive } from "../ability/spellSteal";
 
 export function registerAbilities() {
   registerSingleAbility("burningBurst", burningBurst);
@@ -21,11 +22,12 @@ export function registerAbilities() {
   jiangshi_penetrationInfection_passive();
 
   spikeShellPassive();
+  spellStealPassive();
 }
 
 function registerSingleAbility(
   name: AbilityNameType,
-  handler: AbilityFunction
+  handler: AbilityFunction,
 ) {
   const eventSystem = globalThis.Simulator.eventSystem;
 
