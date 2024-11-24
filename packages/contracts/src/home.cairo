@@ -620,8 +620,6 @@ mod home {
             )
         );
 
-        player.inMatch = 0;
-
         set!(world, (player));
     }
 
