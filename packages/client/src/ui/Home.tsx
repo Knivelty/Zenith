@@ -14,6 +14,7 @@ import { SessionWalletCreate } from "./features/login/SessionWalletCreate";
 import { HomeBg } from "./components/HomeBg";
 import { logDebug } from "./lib/utils";
 import { Rank } from "./features/info/Rank";
+import { ScaleCheck } from "./features/scaleCheck/scaleCheck";
 
 export const Home = () => {
     const {
@@ -21,8 +22,7 @@ export const Home = () => {
         clientComponents: { PlayerProfile },
     } = useDojo();
 
-    const agreeTerm = usePersistUIStore((state) => state.agreeTerm);
-    const loggedIn = usePersistUIStore((state) => state.loggedIn);
+    const { agreeTerm, loggedIn, didScaleCheck } = usePersistUIStore((state) => state);
 
     const sessionWalletShow = useUIStore((state: UIStore) =>
         state.getShow(ShowItem.SessionWalletCreate)
@@ -41,8 +41,13 @@ export const Home = () => {
 
     logDebug("sessionWalletShow: ", sessionWalletShow);
 
+    if (!didScaleCheck) {
+        return <ScaleCheck />
+    }
+
     return (
         <HomeBg>
+
             {sessionWalletShow && <SessionWalletCreate />}
 
             {!agreeTerm && <AgreeTerm />}

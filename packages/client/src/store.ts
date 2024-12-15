@@ -53,6 +53,8 @@ export type PersistUIStore = {
     setLoggedIn: (loggedIn: boolean) => void;
     agreeTerm: boolean;
     setAgreeTerm: (agreeTerm: boolean) => void;
+    didScaleCheck: boolean;
+    setDidScaleCheck: (didScaleCheck: boolean) => void;
     skipGuide: boolean;
     setSkipGuide: (skipGuide: boolean) => void;
     soundVolumes: Volume;
@@ -71,6 +73,8 @@ export const persistUIStore = createStore(
             setLoggedIn: (loggedIn: boolean) => set(() => ({ loggedIn })),
             agreeTerm: false,
             setAgreeTerm: (agreeTerm: boolean) => set(() => ({ agreeTerm })),
+            didScaleCheck: false,
+            setDidScaleCheck: (didScaleCheck: boolean) => set(() => ({ didScaleCheck })),
             skipGuide: false,
             setSkipGuide: (skipGuide: boolean) => set(() => ({ skipGuide })),
             soundVolumes: { music: 100, effect: 100 },
