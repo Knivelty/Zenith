@@ -22,7 +22,9 @@ export const Home = () => {
         clientComponents: { PlayerProfile },
     } = useDojo();
 
-    const { agreeTerm, loggedIn, didScaleCheck } = usePersistUIStore((state) => state);
+    const { agreeTerm, loggedIn, didScaleCheck } = usePersistUIStore(
+        (state) => state
+    );
 
     const sessionWalletShow = useUIStore((state: UIStore) =>
         state.getShow(ShowItem.SessionWalletCreate)
@@ -41,16 +43,17 @@ export const Home = () => {
 
     logDebug("sessionWalletShow: ", sessionWalletShow);
 
+    if (!agreeTerm) {
+        return <AgreeTerm />;
+    }
+
     if (!didScaleCheck) {
-        return <ScaleCheck />
+        return <ScaleCheck />;
     }
 
     return (
         <HomeBg>
-
             {sessionWalletShow && <SessionWalletCreate />}
-
-            {!agreeTerm && <AgreeTerm />}
 
             <div className="w-1/2 p-4">
                 {!loggedIn ? <UnConnected /> : <Connected />}

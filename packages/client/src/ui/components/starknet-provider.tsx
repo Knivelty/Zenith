@@ -13,7 +13,7 @@ import {
 export function StarknetProvider({ children }: { children: React.ReactNode }) {
     const { connectors } = useInjectedConnectors({
         // Show these connectors if the user has no connector installed.
-        recommended: [braavos()],
+        recommended: [braavos(), argent()],
         // Hide recommended connectors if the user has any connector installed.
         includeRecommended: "onlyIfNoConnectors",
         // Randomize the order of the connectors.

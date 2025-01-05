@@ -74,7 +74,8 @@ export const persistUIStore = createStore(
             agreeTerm: false,
             setAgreeTerm: (agreeTerm: boolean) => set(() => ({ agreeTerm })),
             didScaleCheck: false,
-            setDidScaleCheck: (didScaleCheck: boolean) => set(() => ({ didScaleCheck })),
+            setDidScaleCheck: (didScaleCheck: boolean) =>
+                set(() => ({ didScaleCheck })),
             skipGuide: false,
             setSkipGuide: (skipGuide: boolean) => set(() => ({ skipGuide })),
             soundVolumes: { music: 100, effect: 100 },
