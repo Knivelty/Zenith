@@ -21,14 +21,14 @@ export function UnConnected() {
                 <img src="/assets/ui/zenith.png" />
             </div>
 
-            <GreenButton
+            {/* <GreenButton
                 className="self-center w-[60%] h-16 mt-20 text-xl"
                 onClick={() => {
                     setShow(ShowItem.GuestTips, true);
                 }}
             >
                 Login As Guest
-            </GreenButton>
+            </GreenButton> */}
 
             <GreenButton
                 className="self-center w-[60%] h-16 mt-12 text-xl"

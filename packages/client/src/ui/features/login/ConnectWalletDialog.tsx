@@ -1,9 +1,16 @@
-import { braavos, argent, useAccount, useConnect } from "@starknet-react/core";
+import {
+    braavos,
+    argent,
+    useAccount,
+    useConnect,
+    useDisconnect,
+} from "@starknet-react/core";
 import { ShowItem, usePersistUIStore, useUIStore } from "../../../store";
 import { Dialog } from "../../components/Dialog";
 import { useMemo } from "react";
 import { usePlayerProfile } from "../../hooks/usePlayerProfile";
 import { logDebug } from "../../lib/utils";
+import { isInWhiteList } from "../../../utils/validateWhitelist";
 
 export function ConnectWalletDialog() {
     const show = useUIStore((state) =>
@@ -14,7 +21,8 @@ export function ConnectWalletDialog() {
     const setLoggedIn = usePersistUIStore((state) => state.setLoggedIn);
 
     const { connect } = useConnect();
-    const { isConnected } = useAccount();
+    const { disconnect } = useDisconnect();
+    const { isConnected, account } = useAccount();
     const { playerName } = usePlayerProfile();
 
     logDebug(
@@ -29,6 +37,14 @@ export function ConnectWalletDialog() {
 
     useMemo(() => {
         if (isConnected) {
+            if (!isInWhiteList(account)) {
+                alert(
+                    "Sorry, your wallet is not in the whitelist yet. Please stay tuned for future updates!"
+                );
+                disconnect();
+                setShow(ShowItem.ConnectWalletDialog, false);
+                return;
+            }
             setLoggedIn(true);
             setShow(ShowItem.ConnectWalletDialog, false);
             if (!playerName) {
@@ -36,7 +52,7 @@ export function ConnectWalletDialog() {
                 setShow(ShowItem.SessionWalletCreate, true);
             }
         }
-    }, [isConnected, setLoggedIn, setShow, playerName]);
+    }, [isConnected, setLoggedIn, setShow, playerName, account, disconnect]);
 
     if (!show) return null;
 
